@@ -1,0 +1,20 @@
+{
+    "name": "jaimecruz/aesa",
+    "description": "Plugin para WordPress para la generaci\u0000n de anuarios estad\u0000sticos",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Aesa\\": "src"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jaime Cruz",
+            "email": "jaimecruz.inbox@gmail.com"
+        }
+    ],
+    "require": {
+        "phpoffice/phpword": "^1.1"
+    }
+}

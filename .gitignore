@@ -1,0 +1,13 @@
+# Node dependencies
+**/node_modules
+
+# Composer dependencies
+/vendor
+
+# IDE files
+/.vscode
+/.idea
+
+# Logs
+
+*.log
