@@ -32,12 +32,13 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { columnsTest } from '../utils/data';
+import DebouncedInput from './DebouncedInput';
 
 
 
 
 
-function TableUI({items}) {
+function TableUI({items, isIndicador}) {
 
   
   const columnHelper = createColumnHelper();
@@ -49,6 +50,7 @@ function TableUI({items}) {
 
 //este const columns debe ser igual su key como en los datos  
 
+//Columnas de la tabla indicadores
  const columns = [
    columnHelper.accessor("N", {
      cell: (info) => <span>{info.row.index + 1}</span>,
@@ -86,7 +88,11 @@ function TableUI({items}) {
    }),
  ];
  
+ //Columnas de la tabla plantilla
 
+
+
+ //constates extras
   const [data, setData] = useState(items);
   const [globalFilter, setGlobalFilter] = useState("");
 
@@ -105,6 +111,7 @@ function TableUI({items}) {
     setData(items)
     //   console.log(items)
   }, []);
+  
 
   return (
     <div style={{ overflowX: "auto" }}>
@@ -168,6 +175,15 @@ function TableUI({items}) {
                   ))}
               </TableBody>
           </Table> */}
+        <div className="w-full flex items-center gap-1">
+          <EditRegular/>
+          <DebouncedInput
+            value={globalFilter ?? ""}
+            onChange={(value) => setGlobalFilter(String(value))}
+            className="p-2 bg-transparent outline-none border-b-2 w-1/5 focus:w-1/3 duration-300 border-indigo-500"
+            placeholder="Search all columns..."
+          />
+        </div>
       <table className="border border-solid border-gray-200 w-full text-left">
         <thead className="bg-white">
           {table.getHeaderGroups().map((headerGroup) => (
