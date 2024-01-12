@@ -8,8 +8,7 @@ function MainLayout({children}) {
     <>
     <Navbar/>
     {children}
-    {/* <Search/>
-    <Table/> */}
+    
     </>
   )
 }

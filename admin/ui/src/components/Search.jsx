@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import { SearchBox } from "@fluentui/react-search-preview";
 import { makeStyles,Field, Button,ButtonProps,Input } from "@fluentui/react-components";
 import { SearchBoxProps } from "@fluentui/react-search-preview";
+import ButtonUI from "./ButtonUI"
+import { Link } from 'react-router-dom';
+import Modal from './Modal';
 
 const useStyles = makeStyles({
   searchContainer: {
@@ -25,12 +28,16 @@ const useStyles = makeStyles({
   }
 });
 
-function Search() {
+function Search({ isIndicadores }) {
   const classes = useStyles();
   const [value, setValue] = useState("");
   const [valid, setValid] = useState(true);
 
   
+const onClickBtn=()=>{
+
+}
+
   const onChange = (ev, data) => {
     if (data.value.length <= 100) {
       setValue(data.value);
@@ -52,9 +59,19 @@ function Search() {
             value={value}
             onChange={onChange}
           />
-          <Button className={classes.btn} appearance='secondary' size='medium'>
-            Registrar
-          </Button>
+           {/*  condicional para determinar la ruta */}
+          {isIndicadores ? (
+            <Link to="/indicadores/editar">
+              <Button className={classes.btn} appearance='secondary' size='medium'>
+                Registrar
+              </Button>
+            </Link>
+          ) : (
+            
+            <Modal/>
+          )}
+          
+          {/* <ButtonUI variant="secondary" classNameComponent="" id="btnRegisterIndicador" onClick={onClickBtn} children="Registrar" size="medium"/> */}
         </div>
       </Field>
       

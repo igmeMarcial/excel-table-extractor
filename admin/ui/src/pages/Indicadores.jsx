@@ -10,7 +10,7 @@ import { columnsTest, itemsTest } from '../utils/data'
 function Indicadores() {
   return (
     <MainLayout>
-      <Search/>
+      <Search isIndicadores={true}/>
       <TableUI items={itemsTest} columns={columnsTest}/>
     </MainLayout>
   )

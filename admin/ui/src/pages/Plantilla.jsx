@@ -7,7 +7,7 @@ import { columnsTest, itemsTest } from '../utils/data'
 function Plantilla() {
   return (
     <MainLayout>
-      <Search/>
+      <Search isIndicadores={false}/>
       <TableUI items={itemsTest} columns={columnsTest}/>
     </MainLayout>
   )
