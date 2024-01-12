@@ -9,6 +9,7 @@ import {
    Button
 } from "@fluentui/react-components";
 import { useForm } from '../hooks/useForm';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles({
   root: {
@@ -212,7 +213,9 @@ function Form() {
             <Button className={styles.btn} appearance="secondary" type="submit" shape="square">
               Guardar
             </Button>
-            <Button shape="square">Cancelar</Button>
+            <Link to="/indicadores">
+              <Button shape="square">Cancelar</Button>
+            </Link>
           </div>
         </div>
       </form>

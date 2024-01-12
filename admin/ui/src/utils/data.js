@@ -65,6 +65,78 @@ export const itemsTest = [
       "Estado": { label: "En espera" },
      
     },
+     {
+      "N": { label: "9" },
+      "Componente": { label: "Meeting notes" },
+      "Indicador": { label: "7h ago" },
+      "UltimaActualizacion": { label: "You edited this" },
+      "Estado": { label: "Disponible" },
+     
+    },
+    {
+      "N": { label: "10" },
+      "Componente": { label: "Document" },
+      "Indicador": { label: "Yesterday at 1:45 PM" },
+      "UltimaActualizacion": { label: "You recently opened this" },
+      "Estado": { label: "Ocupado" },
+      
+    },
+    {
+      "N": { label: "11" },
+      "Componente": { label: "Video" },
+      "Indicador": { label: "Yesterday at 1:45 PM" },
+      "UltimaActualizacion": { label: "You recently opened this" },
+      "Estado": { label: "Fuera" },
+      
+    },
+    {
+      "N": { label: "12" },
+      "Componente": { label: "Purchase order" },
+      "Indicador": { label: "Tue at 9:30 AM" },
+      "UltimaActualizacion": { label: "You shared this in a Teams chat" },
+      "Estado": { label: "Desconectado" },
+      
+    },
+    {
+      "N": { label: "13" },
+      "Componente": { label: "Another Component" },
+      "Indicador": { label: "3h ago" },
+      "UltimaActualizacion": { label: "Someone edited this" },
+      "Estado": { label: "En proceso" },
+      
+    },
+    {
+      "N": { label: "14" },
+      "Componente": { label: "New Component" },
+      "Indicador": { label: "Today at 10:30 AM" },
+      "UltimaActualizacion": { label: "You created this" },
+      "Estado": { label: "Disponible" },
+      
+    },
+    {
+      "N": { label: "15" },
+      "Componente": { label: "Presentation" },
+      "Indicador": { label: "Yesterday at 3:15 PM" },
+      "UltimaActualizacion": { label: "You opened this" },
+      "Estado": { label: "Ocupado" },
+      
+    },
+    {
+      "N": { label: "16" },
+      "Componente": { label: "Report" },
+      "Indicador": { label: "Wed at 11:20 AM" },
+      "UltimaActualizacion": { label: "You updated this" },
+      "Estado": { label: "En espera" },
+     
+    },
+     {
+      "N": { label: "20" },
+      "Componente": { label: "Marcial" },
+      "Indicador": { label: "Wed at 11:20 AM" },
+      "UltimaActualizacion": { label: "You updated this" },
+      "Estado": { label: "En espera" },
+     
+    },
   ];
   
   

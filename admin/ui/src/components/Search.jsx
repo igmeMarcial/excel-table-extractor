@@ -32,6 +32,7 @@ function Search({ isIndicadores }) {
   const classes = useStyles();
   const [value, setValue] = useState("");
   const [valid, setValid] = useState(true);
+  const [globalFilter, setGlobalFilter] = useState("");
 
   
 const onClickBtn=()=>{
