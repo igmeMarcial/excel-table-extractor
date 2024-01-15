@@ -71,7 +71,7 @@ const onClickBtn=()=>{
                   <SearchBox
                       className={classes.searchBox}
                       appearance="outline"
-                      size="medium"
+                      size="large"
                       placeholder="Buscar"
                       value={value}
                       onChange={onChange}
