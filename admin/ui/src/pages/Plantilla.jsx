@@ -1,17 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import MainLayout from '../layout/MainLayout'
 import Search from '../components/Search'
-import TableUI from '../components/TableUI'
-import { columnsTest, itemsTest } from '../utils/data'
+
+import { columnsTestPlantilla, itemsTestPlantilla } from '../utils/data'
+import TablePlantilla from '../components/TablePlantilla'
+import { SearchInput } from '../components/SearchInput'
 
 
 function Plantilla() {
 
+  const[value,setValue] = useState("");
 
   return (
     <MainLayout>
-      <Search isIndicadores={false}/>
-      <TableUI items={itemsTest} isIndicador={true}/>
+      <SearchInput type="search" label="inputPlantilla" value={value} name="inputPlantilla" placeholder="Buscar" error={false} disabled={false} onChange={(e)=>{setValue(e.target.value)}} isAnuario={false}/>
+      <TablePlantilla items={itemsTestPlantilla}  columns={columnsTestPlantilla}/>
     </MainLayout>
   )
 }

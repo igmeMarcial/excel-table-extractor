@@ -151,30 +151,55 @@ export const itemsTest = [
   ];
 
   export const columnsTestAnuarios = [
-  { columnKey: "Anio", label: "Año" },
+  { columnKey: "N", label: "N°" },
+  { columnKey: "Nombre", label: "Nombre" },
+  { columnKey: "Tamanio", label: "Tamaño" },
   { columnKey: "FechaRegistro", label: "Fecha de registro" },
+  { columnKey: "Acciones", label: "Acciones" },
  
   ];
 
   export const itemsTestAnuarios = [
-    {
-      "Anio": { label: "2002" },
-      "FechaRegistro": { label: "23-34-4554" },
-     
+     {
+      "N": { label: "1" },
+      "Nombre": { label: "Documento anonimo " },
+      "Tamanio": { label: "3MB" },
+      "FechaRegistro": { label: "12/12/2023" },
      
     },
-    {
-      "Anio": { label: "2004" },
-      "FechaRegistro": { label: "23-45-2001" },
-      
-      
+     {
+      "N": { label: "2" },
+      "Nombre": { label: "Documento anonimo" },
+      "Tamanio": { label: "3GB" },
+      "FechaRegistro": { label: "12/12/2023" },
+     
     },
-    {
-      "Anio": { label: "3004" },
-      "FechaRegistro": { label: "23-45-6666" },
-      
-      
-    }
+     {
+      "N": { label: "3" },
+      "Nombre": { label: "Documento anonimo" },
+      "Tamanio": { label: "3MB" },
+      "FechaRegistro": { label: "12/12/2023" },
+     
+    },
     
   ];
   
+   export const columnsTestPlantilla = [
+  { columnKey: "N", label: "N°",size:"10px" },
+  { columnKey: "Nombre", label: "Nombre",size:"" },
+  { columnKey: "Tamanio", label: "Tamaño",size:"30px" },
+  { columnKey: "FechaRegistro", label: "Fecha de registro",size:"40px" },
+  { columnKey: "Acciones", label: "Acciones",size:"10px" },
+ 
+  ];
+export const itemsTestPlantilla = [
+    {
+      "N": { label: "1" },
+      "Nombre": { label: "Documento anonimo" },
+      "Tamanio": { label: "3mb" },
+      "FechaRegistro": { label: "12/12/2023" },
+     
+    },
+]
+   
+ 

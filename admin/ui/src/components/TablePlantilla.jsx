@@ -17,11 +17,13 @@ import {
   useFocusableGroup,
 } from "@fluentui/react-components";
 
-function TableAnuario({items,columns}) {
+function TablePlantilla({items,columns}) {
      const keyboardNavAttr = useArrowNavigationGroup({ axis: "grid" });
   const focusableGroupAttr = useFocusableGroup({
     tabBehavior: "limited-trap-focus",
   });
+
+  console.log(items)
   return (
     <div style={{ overflowX: "auto" }}>
           <Table
@@ -39,7 +41,8 @@ function TableAnuario({items,columns}) {
                           <TableHeaderCell
                               key={column.columnKey}
                               as="th"
-                              className="border-l-[1px] border-r-[1px] py-2"
+                              className="border-l-[1px] border-r-[1px] py-2 w-1/4"
+                              style={{width:`${column.size}`}}
                           >
                               {column.label}
                           </TableHeaderCell>
@@ -50,7 +53,8 @@ function TableAnuario({items,columns}) {
               <TableBody as="tbody">
                   {items.map((item, index) => (
                       <TableRow appearance="outline" key={index}>
-                           <TableCell>{item.N.label}</TableCell>
+                        
+                          <TableCell>{item.N.label}</TableCell>
                           <TableCell>{item.Nombre.label}</TableCell>
                           <TableCell>{item.Tamanio.label}</TableCell>
                           <TableCell>{item.FechaRegistro.label}</TableCell>
@@ -78,4 +82,4 @@ function TableAnuario({items,columns}) {
   )
 }
 
-export default TableAnuario
+export default TablePlantilla

@@ -24,10 +24,20 @@ const useStyles = makeStyles({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    // marginLeft:"auto",
+    // marginRight:"auto",
+    // textAlign:"center",
+    // placeItems:"center",
+    // alignItems:"center",
+    // justifyContent:"center"
+  
   },
   nav: {
     // height: '40px', // Altura
     // padding: '5px 16px 5px 16px', // Relleno
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   ul: {
     listStyleType: 'none',
@@ -81,7 +91,7 @@ export default function Navbar() {
             </Link>
           </li>
           <li className={classes.li}>
-            <Link to="/configuracion" className={classes.link}>
+            <Link to="/configuracion" className={classes.link }>
               Configuracion
             </Link>
           </li>

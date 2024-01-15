@@ -13,24 +13,24 @@ function EditorIndicadores() {
           </h2>
         </div>
         <div>
-          <nav className="bg-white  dark:bg-gray-800">
+          <nav className="bg-white  dark:bg-white">
             <div className="container flex items-start justify-start py-6 mx-auto text-gray-600 capitalize dark:text-gray-300">
               <Link
                 to="#"
-                className="text-gray-800 dark:text-gray-200 border-b-2 border-blue-500 mx-1.5 sm:mx-3"
+                className="text-gray-800 dark:text-gray-800 border-b-2 border-blue-500 mx-1.5 sm:mx-3"
               >
                 Definición
               </Link>
 
               <Link
                 to="#"
-                className="border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-3"
+                className="text-gray-500 border-b-2 border-transparent hover:text-gray-800 dark:hover:border-blue-500 hover:border-blue-500 mx-1.5 sm:mx-3"
               >
                 Datos
               </Link>
               <Link
                 to="#"
-                className="border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-3"
+                className="text-gray-500 border-b-2 border-transparent hover:text-gray-800 dark:hover:border-blue-500 hover:border-blue-500 mx-1.5 sm:mx-3"
               >
                 Presentación
               </Link>

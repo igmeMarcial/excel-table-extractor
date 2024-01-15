@@ -1,15 +1,13 @@
-import React, { useState } from 'react'
 import { SearchBox } from "@fluentui/react-search-preview";
 import { makeStyles,Field, Button,ButtonProps,Input,CompoundButton } from "@fluentui/react-components";
 import { SearchBoxProps } from "@fluentui/react-search-preview";
-import ButtonUI from "./ButtonUI"
 import { Link } from 'react-router-dom';
-import Modal from './Modal';
 
 import {
  Add24Filled,
  ArrowImport24Regular
 } from "@fluentui/react-icons";
+import Modal from "./Modal";
 
 const useStyles = makeStyles({
   searchContainer: {
@@ -44,42 +42,39 @@ const useStyles = makeStyles({
   }
 });
 
-function Search({ isIndicadores }) {
-  const classes = useStyles();
-  const [value, setValue] = useState("");
-  const [valid, setValid] = useState(true);
-  const [globalFilter, setGlobalFilter] = useState("");
 
-  
-const onClickBtn=()=>{
+export const SearchInput = ({type,
+  label,
+  value,
+  name,
+  placeholder,
+  error,
+  disabled,
+  onChange,
+isAnuario}) => {
+     const classes = useStyles();
 
-}
-
-  const onChange = (ev, data) => {
-    if (data.value.length <= 100) {
-      setValue(data.value);
-      setValid(true);
-    } else {
-      setValid(false);
-    }
-  };
-
-  return (
-      <div className="p-6">
+    return (
+       <div className="p-6">
           <Field label="">
               <div className={`${classes.searchContainer} ${classes.gap}`}>
                   <SearchBox
                       className={classes.searchBox}
                       appearance="outline"
-                      size="medium"
-                      placeholder="Buscar"
+                      size="large"
+                      placeholder={placeholder}
                       value={value}
                       onChange={onChange}
+                      name={name}
+                      type={type}
+                      id={label}
+                disabled={disabled}
                   />
+                  
                   {/*  condicional para determinar la ruta */}
-                  {isIndicadores ? (
-                     <div>
-                      <Link to="/indicadores/editar">
+                 {
+                    isAnuario ? (
+                         <Link to="#">
                           <CompoundButton
                           
                           size='small'
@@ -87,29 +82,18 @@ const onClickBtn=()=>{
                               icon={<Add24Filled />}
                               className={classes.btnComponent}
                           >
-                              Registrar
+                              Subir Anuario
                           </CompoundButton>
                           
-                      </Link>
-                      <CompoundButton
-                          
-                          size='small'
-                              as='button'
-                              icon={<ArrowImport24Regular/>}
-                              className={classes.btnComponent}
-                          >
-                              Importar
-                          </CompoundButton>
-                     </div>
-                  ) : (
-                      <Modal />
-                  )}
-
-                  {/* <ButtonUI variant="secondary" classNameComponent="" id="btnRegisterIndicador" onClick={onClickBtn} children="Registrar" size="medium"/> */}
+                    </Link>
+                    ):(
+                         <Modal/>
+                    )
+                 }
+                  
               </div>
           </Field>
+          {error && <p className="error">Input filed can't be empty!</p>}
       </div>
-  );
+    )
 }
-
-export default Search

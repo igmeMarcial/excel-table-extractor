@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import MainLayout from '../layout/MainLayout'
 import ButtonUI from '../components/ButtonUI'
 import { makeStyles, CompoundButton } from "@fluentui/react-components";
 import TableUI from '../components/TableUI';
 import { columnsTestAnuarios, itemsTestAnuarios } from '../utils/data';
 import TableAnuario from '../components/TableAnuario';
+import { SearchInput } from '../components/SearchInput';
 
 const useStyles = makeStyles({
   wrapper: {
@@ -17,7 +18,7 @@ const useStyles = makeStyles({
 
 function Anuarios() {
   const styles = useStyles();
-  
+  const[value,setValue] = useState("");
   // lo onClick estan de prueba para manipular cada boton
   const OnClickSubirAnuario= ()=>{
   console.log("Diste Click a un button subirAnuario")
@@ -25,7 +26,7 @@ function Anuarios() {
 
   return (
       <MainLayout>
-          <div className="flex flex-col md:flex-row md:items-center justify-between py-8 px-8">
+          {/* <div className="flex flex-col md:flex-row md:items-center justify-between py-8 px-8">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-20">
                   <div className="">
                       <h2 className="text-2xl md:text-3xl font-bold">
@@ -67,8 +68,9 @@ function Anuarios() {
                       Borrar
                   </ButtonUI>
               </div>
-          </div>
-         <TableAnuario items={itemsTestAnuarios} columns={columnsTestAnuarios}></TableAnuario>
+          </div>*/}
+    <SearchInput type="search" label="inputIndicador" value={value} name="inputIndicador" placeholder="Buscar" error={false} disabled={false} onChange={(e)=>{setValue(e.target.value)}} isAnuario={true}/>
+         <TableAnuario items={itemsTestAnuarios} columns={columnsTestAnuarios}></TableAnuario> 
       </MainLayout>
   );
 }

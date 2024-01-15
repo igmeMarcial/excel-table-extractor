@@ -33,10 +33,15 @@ import {
 } from "@tanstack/react-table";
 import { columnsTest } from '../utils/data';
 import DebouncedInput from './DebouncedInput';
+import { makeStyles } from "@fluentui/react-components";
 
 
 
-
+ const useStyles = makeStyles({
+    icon:{
+      border: 0,
+    }
+  })
 
 function TableUI({items, isIndicador}) {
 
@@ -48,6 +53,7 @@ function TableUI({items, isIndicador}) {
     tabBehavior: "limited-trap-focus",
   });
 
+ 
 //este const columns debe ser igual su key como en los datos  
 
 //Columnas de la tabla indicadores
@@ -75,13 +81,14 @@ function TableUI({items, isIndicador}) {
    columnHelper.accessor("Acciones", {
      cell: (info) => (
        <>
-         <Button className="mx-4" icon={<EditRegular />} aria-label="Edit" />
+         <Button className="mx-4  " appearance='subtle' icon={<OpenRegular className='border-0' />} aria-label="Edit" />
          <Button
            className="mx-4"
            icon={<DeleteRegular />}
            aria-label="Delete"
+           appearance='subtle'
          />
-         <Button className="mx-4" icon={<OpenRegular />} aria-label="Open" />
+         
        </>
      ),
      header: "Acciones",
@@ -106,6 +113,8 @@ function TableUI({items, isIndicador}) {
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
+  
 
    useEffect(() => {
     setData(items)
@@ -175,7 +184,7 @@ function TableUI({items, isIndicador}) {
                   ))}
               </TableBody>
           </Table> */}
-        <div className="w-full flex items-center gap-1">
+        {/* <div className="w-full flex items-center gap-1">
           <EditRegular/>
           <DebouncedInput
             value={globalFilter ?? ""}
@@ -183,7 +192,7 @@ function TableUI({items, isIndicador}) {
             className="p-2 bg-transparent outline-none border-b-2 w-1/5 focus:w-1/3 duration-300 border-indigo-500"
             placeholder="Search all columns..."
           />
-        </div>
+        </div> */}
       <table className="border border-solid border-gray-200 w-full text-left">
         <thead className="bg-white">
           {table.getHeaderGroups().map((headerGroup) => (
@@ -209,7 +218,7 @@ function TableUI({items, isIndicador}) {
                 `}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-3.5 py-2">
+                  <td key={cell.id} className="px-3.5 py-2 ">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}

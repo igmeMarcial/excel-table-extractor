@@ -7,8 +7,15 @@ import {
   Button,
   tokens,
   Title2,
+  CompoundButton
 } from "@fluentui/react-components";
 import FileUploadSingle from './FileUploadSingle';
+import {
+ Add24Filled,
+ ArrowImport24Regular
+} from "@fluentui/react-icons";
+
+
 const useStyles = makeStyles({
   dialog: {
     position: "fixed",
@@ -32,6 +39,16 @@ const useStyles = makeStyles({
     justifyContent: "end",
     ...shorthands.gap("5px"),
   },
+  btnComponent:{
+    paddingLeft:"0",
+    // paddingRight:"0",
+    paddingTop:"0",
+  paddingBottom:"0",
+   fontWeight: 600,
+    fontSize: '14px',
+    lineHeight: '20px',
+    marginLeft:"10px"
+  }
 });
 
 
@@ -69,33 +86,44 @@ function Modal() {
 
 
   return (
-    <>
-      <Button appearance='secondary' ref={triggerRef} {...triggerAttributes} onClick={onClickTrigger}>
-        Registrar
-      </Button>
-      {open && (
-        <div 
-          onKeyDown={onDialogKeydown}
-          ref={dialogRef}
-          {...modalAttributes}
-          aria-modal="true"
-          role="dialog"
-          className={styles.dialog}
-          aria-label="Example dialog"
-        >
-          <Title2 as="h2">Subir archivo word</Title2>
-          <div>
-            <FileUploadSingle/>
+      <>
+          <CompoundButton
+              size="small"
+              as="button"
+              icon={<Add24Filled />}
+              className={styles.btnComponent}
+              ref={triggerRef} 
+              {...triggerAttributes} 
+              onClick={onClickTrigger}
+          >
+              Subir plantilla
+          </CompoundButton>
 
-          </div>
-          <div className={styles.footer}>
-            <Button>Subir</Button>
-            <Button onClick={onClickClose}>Cerrar</Button>
-          </div>
-        </div>
-      )}
-    </>
-  )
+          {/* <Button appearance='secondary' ref={triggerRef} {...triggerAttributes} onClick={onClickTrigger}>
+        Subir Plantilla
+      </Button> */}
+          {open && (
+              <div
+                  onKeyDown={onDialogKeydown}
+                  ref={dialogRef}
+                  {...modalAttributes}
+                  aria-modal="true"
+                  role="dialog"
+                  className={styles.dialog}
+                  aria-label="Example dialog"
+              >
+                  <Title2 as="h2">Subir archivo word</Title2>
+                  <div>
+                      <FileUploadSingle />
+                  </div>
+                  <div className={styles.footer}>
+                      <Button>Subir</Button>
+                      <Button onClick={onClickClose}>Cerrar</Button>
+                  </div>
+              </div>
+          )}
+      </>
+  );
 }
 
 export default Modal
