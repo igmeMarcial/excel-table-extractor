@@ -1,16 +1,13 @@
-import React from 'react'
-import Navbar from '../components/Navbar'
-import Search from '../components/Search'
+import React from 'react';
+import Navbar from '../components/Navbar';
 
-
-function MainLayout({children}) {
+function MainLayout({ children }) {
   return (
     <>
-    <Navbar/>
-    {children}
-    
+      <Navbar />
+      {children}
     </>
-  )
+  );
 }
 
-export default MainLayout
+export default MainLayout;
