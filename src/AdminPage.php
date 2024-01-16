@@ -10,6 +10,7 @@ class AdminPage
     }
     public function renderAppWrapper()
     {
+        print '<div id="aesa-wrapper"></div>' . get_rest_url(null, AESA_API_REST_NAMESPACE);
         print '<div id="aesa-wrapper"></did>';
     }
     public function enqueueAdminScripts($hook)

@@ -2,6 +2,9 @@
 
 namespace Aesa;
 
+use Aesa\Rest\Router;
+use Aesa\Rest\Routes;
+
 class Plugin
 {
     /**
@@ -11,11 +14,14 @@ class Plugin
 
     private Menu $menu;
     private AdminPage $adminPage;
-
+    private Router $router;
+    private Routes $routes;
     private function __construct()
     {
         $this->adminPage = new AdminPage();
         $this->menu = new Menu($this->adminPage);
+        $this->router = new Router();
+        $this->routes = new Routes($this->router);
     }
 
     /**
@@ -34,5 +40,6 @@ class Plugin
         $me = self::getInstance();
         $me->menu->init();
         $me->adminPage->init();
+        $me->routes->init();
     }
 }
