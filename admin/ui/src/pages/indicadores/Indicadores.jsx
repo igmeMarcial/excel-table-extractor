@@ -1,14 +1,11 @@
 import React from 'react';
 import MainLayout from '../../layout/MainLayout';
-import Search from '../../components/Search';
-import TableUI from '../../components/TableUI';
-import { itemsTest } from '../../utils/data';
+import Toolbar from './Toolbar';
 
 function Indicadores() {
   return (
     <MainLayout>
-      <Search isIndicadores={true} />
-      <TableUI items={itemsTest} isIndicador={false} />
+     <Toolbar/>
     </MainLayout>
   );
 }

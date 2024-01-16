@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { SearchBox } from "@fluentui/react-search-preview";
 import { makeStyles,Field, Button,ButtonProps,Input,CompoundButton } from "@fluentui/react-components";
 import { SearchBoxProps } from "@fluentui/react-search-preview";
-import ButtonUI from "./ButtonUI"
+import ButtonUI from "../../components/ButtonUI"
 import { Link } from 'react-router-dom';
-import Modal from './Modal';
+import Modal from '../../components/Modal';
 
 import {
  Add24Filled,
