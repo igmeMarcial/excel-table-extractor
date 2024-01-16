@@ -38,7 +38,15 @@ const useStyles = makeStyles({
    fontWeight: 600,
     fontSize: '14px',
     lineHeight: '20px',
-    marginLeft:"10px"
+    marginLeft:"10px",
+    ":hover":{
+      color:"#2271B1"
+    }
+  },
+  icon:{
+    ":hover":{
+      color:"#2271B1"
+    }
   }
 });
 
@@ -76,10 +84,10 @@ isAnuario}) => {
                     isAnuario ? (
                          <Link to="#">
                           <CompoundButton
-                          
+                          appearance="subtle"
                           size='small'
                               as='button'
-                              icon={<Add24Filled />}
+                              icon={<Add24Filled className={classes.icon}/>}
                               className={classes.btnComponent}
                           >
                               Subir Anuario

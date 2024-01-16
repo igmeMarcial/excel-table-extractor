@@ -8,7 +8,8 @@ import Modal from './Modal';
 
 import {
  Add24Filled,
- ArrowImport24Regular
+ ArrowImport24Regular,
+ MoreVertical24Filled
 } from "@fluentui/react-icons";
 
 const useStyles = makeStyles({
@@ -40,7 +41,15 @@ const useStyles = makeStyles({
    fontWeight: 600,
     fontSize: '14px',
     lineHeight: '20px',
-    marginLeft:"10px"
+    marginLeft:"10px",
+     ":hover":{
+      color:"#2271B1"
+    }
+  },
+  icon:{
+    ":hover":{
+      color:"#2271B1"
+    }
   }
 });
 
@@ -78,29 +87,38 @@ const onClickBtn=()=>{
                   />
                   {/*  condicional para determinar la ruta */}
                   {isIndicadores ? (
-                     <div>
-                      <Link to="/indicadores/editar">
+                      <div>
+                          <Link to="/indicadores/editar">
+                              <CompoundButton
+                                  appearance="subtle"
+                                  size="small"
+                                  as="button"
+                                  icon={<Add24Filled className={classes.icon}/>}
+                                  className={classes.btnComponent}
+                              >
+                                  Registrar
+                              </CompoundButton>
+                          </Link>
                           <CompoundButton
-                          
-                          size='small'
-                              as='button'
-                              icon={<Add24Filled />}
-                              className={classes.btnComponent}
-                          >
-                              Registrar
-                          </CompoundButton>
-                          
-                      </Link>
-                      <CompoundButton
-                          
-                          size='small'
-                              as='button'
-                              icon={<ArrowImport24Regular/>}
+                              appearance="subtle"
+                              size="small"
+                              as="button"
+                              icon={<ArrowImport24Regular className={classes.icon} />}
                               className={classes.btnComponent}
                           >
                               Importar
                           </CompoundButton>
-                     </div>
+                           <CompoundButton
+                              appearance="subtle"
+                              size="small"
+                              as="button"
+                              icon={<MoreVertical24Filled className={classes.icon} />}
+                              className={classes.btnComponent}
+                          >
+                              
+                          </CompoundButton>
+
+                      </div>
                   ) : (
                       <Modal />
                   )}

@@ -47,7 +47,10 @@ const useStyles = makeStyles({
    fontWeight: 600,
     fontSize: '14px',
     lineHeight: '20px',
-    marginLeft:"10px"
+    marginLeft:"10px",
+     ":hover":{
+      color:"#2271B1"
+    }
   }
 });
 
@@ -88,6 +91,7 @@ function Modal() {
   return (
       <>
           <CompoundButton
+          appearance='subtle'
               size="small"
               as="button"
               icon={<Add24Filled />}
