@@ -1,164 +1,5 @@
 // Este const item es solo una prueba de datos 
 
-export const itemsTest = [
-    {
-      "N": { label: "1" },
-      "Componente": { label: "Meeting notes" },
-      "Indicador": { label: "7h ago" },
-      "UltimaActualizacion": { label: "You edited this" },
-      "Estado": { label: "Disponible" },
-     
-    },
-    {
-      "N": { label: "2" },
-      "Componente": { label: "Document" },
-      "Indicador": { label: "Yesterday at 1:45 PM" },
-      "UltimaActualizacion": { label: "You recently opened this" },
-      "Estado": { label: "Ocupado" },
-      
-    },
-    {
-      "N": { label: "3" },
-      "Componente": { label: "Video" },
-      "Indicador": { label: "Yesterday at 1:45 PM" },
-      "UltimaActualizacion": { label: "You recently opened this" },
-      "Estado": { label: "Fuera" },
-      
-    },
-    {
-      "N": { label: "4" },
-      "Componente": { label: "Purchase order" },
-      "Indicador": { label: "Tue at 9:30 AM" },
-      "UltimaActualizacion": { label: "You shared this in a Teams chat" },
-      "Estado": { label: "Desconectado" },
-      
-    },
-    {
-      "N": { label: "5" },
-      "Componente": { label: "Another Component" },
-      "Indicador": { label: "3h ago" },
-      "UltimaActualizacion": { label: "Someone edited this" },
-      "Estado": { label: "En proceso" },
-      
-    },
-    {
-      "N": { label: "6" },
-      "Componente": { label: "New Component" },
-      "Indicador": { label: "Today at 10:30 AM" },
-      "UltimaActualizacion": { label: "You created this" },
-      "Estado": { label: "Disponible" },
-      
-    },
-    {
-      "N": { label: "7" },
-      "Componente": { label: "Presentation" },
-      "Indicador": { label: "Yesterday at 3:15 PM" },
-      "UltimaActualizacion": { label: "You opened this" },
-      "Estado": { label: "Ocupado" },
-      
-    },
-    {
-      "N": { label: "8" },
-      "Componente": { label: "Report" },
-      "Indicador": { label: "Wed at 11:20 AM" },
-      "UltimaActualizacion": { label: "You updated this" },
-      "Estado": { label: "En espera" },
-     
-    },
-     {
-      "N": { label: "9" },
-      "Componente": { label: "Meeting notes" },
-      "Indicador": { label: "7h ago" },
-      "UltimaActualizacion": { label: "You edited this" },
-      "Estado": { label: "Disponible" },
-     
-    },
-    {
-      "N": { label: "10" },
-      "Componente": { label: "Document" },
-      "Indicador": { label: "Yesterday at 1:45 PM" },
-      "UltimaActualizacion": { label: "You recently opened this" },
-      "Estado": { label: "Ocupado" },
-      
-    },
-    {
-      "N": { label: "11" },
-      "Componente": { label: "Video" },
-      "Indicador": { label: "Yesterday at 1:45 PM" },
-      "UltimaActualizacion": { label: "You recently opened this" },
-      "Estado": { label: "Fuera" },
-      
-    },
-    {
-      "N": { label: "12" },
-      "Componente": { label: "Purchase order" },
-      "Indicador": { label: "Tue at 9:30 AM" },
-      "UltimaActualizacion": { label: "You shared this in a Teams chat" },
-      "Estado": { label: "Desconectado" },
-      
-    },
-    {
-      "N": { label: "13" },
-      "Componente": { label: "Another Component" },
-      "Indicador": { label: "3h ago" },
-      "UltimaActualizacion": { label: "Someone edited this" },
-      "Estado": { label: "En proceso" },
-      
-    },
-    {
-      "N": { label: "14" },
-      "Componente": { label: "New Component" },
-      "Indicador": { label: "Today at 10:30 AM" },
-      "UltimaActualizacion": { label: "You created this" },
-      "Estado": { label: "Disponible" },
-      
-    },
-    {
-      "N": { label: "15" },
-      "Componente": { label: "Presentation" },
-      "Indicador": { label: "Yesterday at 3:15 PM" },
-      "UltimaActualizacion": { label: "You opened this" },
-      "Estado": { label: "Ocupado" },
-      
-    },
-    {
-      "N": { label: "16" },
-      "Componente": { label: "Report" },
-      "Indicador": { label: "Wed at 11:20 AM" },
-      "UltimaActualizacion": { label: "You updated this" },
-      "Estado": { label: "En espera" },
-     
-    },
-     {
-      "N": { label: "20" },
-      "Componente": { label: "Marcial" },
-      "Indicador": { label: "Wed at 11:20 AM" },
-      "UltimaActualizacion": { label: "You updated this" },
-      "Estado": { label: "En espera" },
-     
-    },
-  ];
-  
-  
-  
-  export const columnsTest = [
-  { columnKey: "N°", label: "Numero" },
-  { columnKey: "Componente", label: "Conponente" },
-  { columnKey: "Indicador", label: "Indicador" },
-  { columnKey: "UltimaActualización", label: "Última Actulizacion" },
-  { columnKey: "Estado", label: "Estado" },
-  { columnKey: "Acciones", label: "Acciones" },
-  ];
-
-  export const columnsTestAnuarios = [
-  { columnKey: "N", label: "N°" },
-  { columnKey: "Nombre", label: "Nombre" },
-  { columnKey: "Tamanio", label: "Tamaño" },
-  { columnKey: "FechaRegistro", label: "Fecha de registro" },
-  { columnKey: "Acciones", label: "Acciones" },
- 
-  ];
-
   export const itemsTestAnuarios = [
      {
       "N": { label: "1" },
@@ -203,3 +44,130 @@ export const itemsTestPlantilla = [
 ]
    
  
+
+export const data = [
+  {
+    id: '1',
+    
+    numero: '261 ',
+    componente: 'Kentucky',
+    indicador: '1.1.1.1 Radiación ultravioleta, promedio mensual, anual y máximo mensual',
+    ultimaActualizacion: 'Last Update 1',
+    estado: 'Active',
+  },
+  {
+    id: '2',
+   
+    numero: '769 ',
+    componente: 'Ohio',
+    indicador: 'United States',
+    ultimaActualizacion: 'Last Update 2',
+    estado: 'Inactive',
+  },
+  {
+    id: '3',
+    
+    numero: '564',
+    componente: 'West Virginia',
+    indicador: 'United States',
+    ultimaActualizacion: 'Last Update 3',
+    estado: 'Active',
+  },
+  {
+    id: '4',
+   
+    numero: '722 ',
+    componente: 'Nebraska',
+    indicador: 'United States',
+    ultimaActualizacion: 'Last Update 4',
+    estado: 'Inactive',
+  },
+  {
+    id: '5',
+    
+    numero: '32188 ',
+    componente: 'South Carolina',
+    indicador: 'United States',
+    ultimaActualizacion: 'Last Update 5',
+    estado: 'Active',
+  },
+  {
+    id: '6',
+   
+    numero: '5660 ',
+    componente: 'British Columbia',
+    indicador: 'Canada',
+    ultimaActualizacion: 'Last Update 6',
+    estado: 'Active',
+  },
+  {
+    id: '7',
+    acciones: 'Vancouver',
+    numero: '5660 ',
+    componente: 'British Columbia',
+    indicador: 'Canada',
+    ultimaActualizacion: 'Last Update 6',
+    estado: 'Active',
+  },
+  {
+    id: '8',
+    numero: '261 ',
+    componente: 'Kentucky',
+    indicador: 'United States',
+    ultimaActualizacion: 'Last Update 1',
+    estado: 'Active',
+  },
+  {
+    id: '9',
+    numero: '769 ',
+    componente: 'Ohio',
+    indicador: 'United States',
+    ultimaActualizacion: 'Last Update 2',
+    estado: 'Inactive',
+  },
+  {
+    id: '10',
+    
+    numero: '564',
+    componente: 'West Virginia',
+    indicador: 'United States',
+    ultimaActualizacion: 'Last Update 3',
+    estado: 'Active',
+  },
+  {
+    id: '11',
+    
+    numero: '722 ',
+    componente: 'Nebraska',
+    indicador: 'United States',
+    ultimaActualizacion: 'Last Update 4',
+    estado: 'Inactive',
+  },
+  {
+    id: '12',
+ 
+    numero: '32188 ',
+    componente: 'South Carolina',
+    indicador: 'United States',
+    ultimaActualizacion: 'Last Update 5',
+    estado: 'Active',
+  },
+  {
+    id: '13',
+    
+    numero: '5660 ',
+    componente: 'British Columbia',
+    indicador: 'Canada',
+    ultimaActualizacion: 'Last Update 6',
+    estado: 'Active',
+  },
+  {
+    id: '14',
+    
+    numero: '5660 ',
+    componente: 'British Columbia',
+    indicador: 'Canada',
+    ultimaActualizacion: 'Last Update 6',
+    estado: 'Active',
+  },
+];

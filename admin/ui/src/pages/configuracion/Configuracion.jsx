@@ -1,8 +1,12 @@
 import React from 'react'
+import MainLayout from '../../layout/MainLayout'
+import Search from '../indicadores/Search'
 
 function Configuracion() {
   return (
-    <div>Configuracion</div>
+    <MainLayout>
+      <Search isIndicadores={true}/>
+    </MainLayout>
   )
 }
 

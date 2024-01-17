@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState} from 'react'
 import {
   useModalAttributes,
   useFocusFinders,
@@ -12,7 +12,6 @@ import {
 import FileUploadSingle from './FileUploadSingle';
 import {
  Add24Filled,
- ArrowImport24Regular
 } from "@fluentui/react-icons";
 
 
@@ -89,44 +88,44 @@ function Modal() {
 
 
   return (
-      <>
-          <CompoundButton
-          appearance='subtle'
-              size="small"
-              as="button"
-              icon={<Add24Filled />}
-              className={styles.btnComponent}
-              ref={triggerRef} 
-              {...triggerAttributes} 
-              onClick={onClickTrigger}
-          >
-              Subir plantilla
-          </CompoundButton>
+    <>
+      <CompoundButton
+        appearance="subtle"
+        size="small"
+        as="button"
+        icon={<Add24Filled />}
+        className={styles.btnComponent}
+        ref={triggerRef}
+        {...triggerAttributes}
+        onClick={onClickTrigger}
+      >
+        Subir plantilla
+      </CompoundButton>
 
-          {/* <Button appearance='secondary' ref={triggerRef} {...triggerAttributes} onClick={onClickTrigger}>
+      {/* <Button appearance='secondary' ref={triggerRef} {...triggerAttributes} onClick={onClickTrigger}>
         Subir Plantilla
       </Button> */}
-          {open && (
-              <div
-                  onKeyDown={onDialogKeydown}
-                  ref={dialogRef}
-                  {...modalAttributes}
-                  aria-modal="true"
-                  role="dialog"
-                  className={styles.dialog}
-                  aria-label="Example dialog"
-              >
-                  <Title2 as="h2">Subir archivo word</Title2>
-                  <div>
-                      <FileUploadSingle />
-                  </div>
-                  <div className={styles.footer}>
-                      <Button>Subir</Button>
-                      <Button onClick={onClickClose}>Cerrar</Button>
-                  </div>
-              </div>
-          )}
-      </>
+      {open && (
+        <div
+          onKeyDown={onDialogKeydown}
+          ref={dialogRef}
+          {...modalAttributes}
+          aria-modal="true"
+          role="dialog"
+          className={styles.dialog}
+          aria-label="Example dialog"
+        >
+          <Title2 as="h2">Subir archivo word</Title2>
+          <div>
+            <FileUploadSingle />
+          </div>
+          <div className={styles.footer}>
+            <Button>Subir</Button>
+            <Button onClick={onClickClose}>Cerrar</Button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

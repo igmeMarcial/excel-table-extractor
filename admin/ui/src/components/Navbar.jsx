@@ -54,7 +54,9 @@ export default function Navbar() {
     queryParams.set('tab', tab);
     return '?' + queryParams.toString();
   };
-
+  const tabParam = new URLSearchParams(location.search).get('tab');
+  {
+  }
   return (
     <div className={`${classes.root} p-4`}>
       <nav className={classes.nav}>
@@ -62,8 +64,10 @@ export default function Navbar() {
           <li className={classes.li}>
             <NavLink
               to={getNewUrl('indicadores')}
-              className={({ isActive }) =>
-                isActive ? `${classes.linkActive} ` : ` ${classes.link}`
+              className={
+                tabParam === 'indicadores'
+                  ? `${classes.linkActive} `
+                  : ` ${classes.link}`
               }
             >
               Indicadores
@@ -72,8 +76,10 @@ export default function Navbar() {
           <li className={classes.li}>
             <NavLink
               to={getNewUrl('anuarios')}
-              className={({ isActive }) =>
-                isActive ? `${classes.linkActive} ` : ` ${classes.link}`
+              className={
+                tabParam === 'anuarios'
+                  ? `${classes.linkActive} `
+                  : ` ${classes.link}`
               }
             >
               Anuarios
@@ -82,8 +88,10 @@ export default function Navbar() {
           <li className={classes.li}>
             <NavLink
               to={getNewUrl('plantillas')}
-              className={({ isActive }) =>
-                isActive ? `${classes.linkActive} ` : ` ${classes.link}`
+              className={
+                tabParam === 'plantillas'
+                  ? `${classes.linkActive} `
+                  : ` ${classes.link}`
               }
             >
               Plantilla
@@ -92,8 +100,10 @@ export default function Navbar() {
           <li className={classes.li}>
             <NavLink
               to={getNewUrl('configuracion')}
-              className={({ isActive }) =>
-                isActive ? `${classes.linkActive} ` : ` ${classes.link}`
+              className={
+                tabParam === 'configuracion'
+                  ? `${classes.linkActive} `
+                  : ` ${classes.link}`
               }
             >
               Configuracion
