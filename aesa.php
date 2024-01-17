@@ -15,9 +15,10 @@ define('AESA_PLUGIN_VERSION',  '0.0.1');
 define('AESA_ADMIN_PAGE_SLUG', 'aesa');
 define('AESA_PLUGIN_DIR',      __DIR__);
 define('AESA_PLUGIN_URL',      plugins_url('', __FILE__));
+define('AESA_PLUGIN_FILE',    __FILE__);
 define('AESA_API_REST_NAMESPACE', 'aesa/v1');
 // Prefijo utilizado para las opciones del plugin
-define('AESA_PREFIX', 'ndcada');
+define('AESA_PREFIX', 'aesa');
 // Variable global en JavaScript para exportar variable usadas en el front
 define('AESA_JS_INFO_VAR', 'AesaInfo');
 

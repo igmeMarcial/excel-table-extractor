@@ -16,11 +16,14 @@ class Plugin
     private AdminPage $adminPage;
     private Routes $apiRoutes;
 
+    private Installer $installer;
+
     private function __construct()
     {
         $this->adminPage = new AdminPage();
         $this->menu = new Menu($this->adminPage);
         $this->apiRoutes = new Routes(new RestRouter(AESA_API_REST_NAMESPACE));
+        $this->installer = new Installer();
     }
 
     /**
@@ -42,6 +45,7 @@ class Plugin
         if (self::$initialized) {
             return;
         }
+        $this->installer->init();
         $this->menu->init();
         $this->adminPage->init();
         $this->apiRoutes->init();
