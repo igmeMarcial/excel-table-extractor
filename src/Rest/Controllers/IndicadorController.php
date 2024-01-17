@@ -4,7 +4,7 @@ namespace Aesa\Rest\Controllers;
 
 class IndicadorController
 {
-    public static function listIndicadores()
+    public function listIndicadores()
     {
         return [
             ['id' => 1, 'name'=> 'Indicador 1'],

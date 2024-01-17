@@ -1,3 +1,13 @@
+#aesa-wrapper {
+  padding: 10px 20px 10px 0px;
+}
+
+/**
+ * WordPress overrides
+ */
+#wpbody-content {
+  padding-bottom: 30px !important;
+}
+
 @tailwind base;
-@tailwind components;
 @tailwind utilities;

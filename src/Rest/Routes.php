@@ -2,13 +2,16 @@
 
 namespace Aesa\Rest;
 
+use Aesa\Core\RestRouter;
+
 use Aesa\Rest\Controllers\IndicadorController;
+use Aesa\Rest\Controllers\PlantillaController;
 
 class Routes
 {
-    private Router $router;
+    private RestRouter $router;
 
-    public function __construct(Router $router)
+    public function __construct(RestRouter $router)
     {
         $this->router = $router;
     }
@@ -25,6 +28,7 @@ class Routes
      */
     private function doRegisterRoutes()
     {
-        $this->router->get('/indicadores', IndicadorController::class . '::listIndicadores');
+        $this->router->get('/indicadores', IndicadorController::class . ':listIndicadores');
+        $this->router->get('/plantillas',  PlantillaController::class . ':listarPlantillas');
     }
 }

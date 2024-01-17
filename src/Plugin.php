@@ -2,30 +2,29 @@
 
 namespace Aesa;
 
-use Aesa\Rest\Router;
+use Aesa\Core\RestRouter;
 use Aesa\Rest\Routes;
 
 class Plugin
 {
-    /**
-     * A reference to an instance of this class.
-     */
+    // Singleton plugin instance
     private static $instance;
+    // Flag to check if the plugin has been initialized
+    private static $initialized = false;
 
     private Menu $menu;
     private AdminPage $adminPage;
-    private Router $router;
-    private Routes $routes;
+    private Routes $apiRoutes;
+
     private function __construct()
     {
         $this->adminPage = new AdminPage();
         $this->menu = new Menu($this->adminPage);
-        $this->router = new Router();
-        $this->routes = new Routes($this->router);
+        $this->apiRoutes = new Routes(new RestRouter(AESA_API_REST_NAMESPACE));
     }
 
     /**
-     * Returns an instance of this class.
+     * Returns the plugin instance.
      */
     public static function getInstance(): Plugin
     {
@@ -34,12 +33,18 @@ class Plugin
         }
         return self::$instance;
     }
+
+    /**
+     * Initializes the plugin.
+     */
     public function init()
     {
-        // Init Menu
-        $me = self::getInstance();
-        $me->menu->init();
-        $me->adminPage->init();
-        $me->routes->init();
+        if (self::$initialized) {
+            return;
+        }
+        $this->menu->init();
+        $this->adminPage->init();
+        $this->apiRoutes->init();
+        self::$initialized = true;
     }
 }

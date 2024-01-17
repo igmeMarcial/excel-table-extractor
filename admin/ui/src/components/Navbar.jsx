@@ -1,8 +1,6 @@
-import React from 'react'
-import {
-  makeStyles,
-} from "@fluentui/react-components";
-import { Link,NavLink } from 'react-router-dom';
+import React from 'react';
+import { makeStyles } from '@fluentui/react-components';
+import { NavLink, useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles({
   root: {
@@ -11,8 +9,6 @@ const useStyles = makeStyles({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-   
-  
   },
   nav: {
     display: 'flex',
@@ -29,58 +25,82 @@ const useStyles = makeStyles({
     width: '83px', // Ancho
     alignItems: 'center', // Centrar verticalmente
     justifyContent: 'space-between', // Alinear elementos internos
-    
   },
-  link: {  // Puedes ajustar el color del texto según tus necesidades
+  link: {
+    // Puedes ajustar el color del texto según tus necesidades
     fontFamily: 'Segoe UI', // Agrega la fuente Segoe UI
     fontWeight: 600, // Peso de la fuente
     fontSize: '14px', // Tamaño de la fuente
     lineHeight: '17.29px', // Altura de línea
-    textDecorationLine: 'none', 
-    color:"#CFE4FA" 
-
+    textDecorationLine: 'none',
+    color: '#CFE4FA',
   },
-  linkActive:{
+  linkActive: {
     fontFamily: 'Segoe UI', // Agrega la fuente Segoe UI
     fontWeight: 700, // Peso de la fuente
     fontSize: '14px', // Tamaño de la fuente
     lineHeight: '17.29px', // Altura de línea
-    textDecorationLine: 'none', 
-    color:"#ffffff"
-  }
+    textDecorationLine: 'none',
+    color: '#ffffff',
+  },
 });
 
 export default function Navbar() {
   const classes = useStyles();
+  // Get the current location params
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const getNewUrl = (tab) => {
+    queryParams.set('tab', tab);
+    return '?' + queryParams.toString();
+  };
 
   return (
     <div className={`${classes.root} p-4`}>
-     
       <nav className={classes.nav}>
         <ul className={classes.ul}>
           <li className={classes.li}>
-            <NavLink  className={({ isActive }) => (isActive ? `${classes.linkActive} ` : ` ${classes.link}`)}  to="/indicadores" >
+            <NavLink
+              to={getNewUrl('indicadores')}
+              className={({ isActive }) =>
+                isActive ? `${classes.linkActive} ` : ` ${classes.link}`
+              }
+            >
               Indicadores
             </NavLink>
           </li>
           <li className={classes.li}>
-            <NavLink to="/anuarios" className={({ isActive }) => (isActive ? `${classes.linkActive} ` : ` ${classes.link}`)}>
+            <NavLink
+              to={getNewUrl('anuarios')}
+              className={({ isActive }) =>
+                isActive ? `${classes.linkActive} ` : ` ${classes.link}`
+              }
+            >
               Anuarios
             </NavLink>
           </li>
           <li className={classes.li}>
-            <NavLink to="/plantilla" className={({ isActive }) => (isActive ? `${classes.linkActive} ` : ` ${classes.link}`)}>
+            <NavLink
+              to={getNewUrl('plantillas')}
+              className={({ isActive }) =>
+                isActive ? `${classes.linkActive} ` : ` ${classes.link}`
+              }
+            >
               Plantilla
             </NavLink>
           </li>
           <li className={classes.li}>
-            <NavLink to="/configuracion" className={({ isActive }) => (isActive ? `${classes.linkActive} ` : ` ${classes.link}`)}>
+            <NavLink
+              to={getNewUrl('configuracion')}
+              className={({ isActive }) =>
+                isActive ? `${classes.linkActive} ` : ` ${classes.link}`
+              }
+            >
               Configuracion
             </NavLink>
           </li>
         </ul>
       </nav>
-      
     </div>
   );
 }

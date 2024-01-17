@@ -6,11 +6,11 @@ class AdminPage
 {
     public function init()
     {
-        add_action('admin_enqueue_scripts',  array($this, 'enqueueAdminScripts'));
+        add_action('admin_enqueue_scripts', [$this, 'enqueueAdminScripts']);
+        add_action('admin_enqueue_scripts', [$this, 'enqueueInfoScript']);
     }
     public function renderAppWrapper()
     {
-        print '<div id="aesa-wrapper"></div>' . get_rest_url(null, AESA_API_REST_NAMESPACE);
         print '<div id="aesa-wrapper"></did>';
     }
     public function enqueueAdminScripts($hook)
@@ -57,5 +57,29 @@ class AdminPage
                 true
             );
         }
+    }
+
+    public function enqueueInfoScript()
+    {
+        $data = $this->getPluginBasicInfo();
+        $configScriptName = AESA_PREFIX . '-config-script';
+        // Variables de configuración usadas en el front
+        wp_register_script(
+            $configScriptName,
+            AESA_PLUGIN_URL . '/public/assets/js/info.js',
+            array(),
+            AESA_PLUGIN_VERSION,
+            false
+        );
+        wp_localize_script($configScriptName, AESA_JS_INFO_VAR, $data);
+        wp_enqueue_script($configScriptName);
+    }
+    private function getPluginBasicInfo()
+    {
+        return array(
+            'pluginVersion' => AESA_PLUGIN_VERSION,
+            'pluginUrl'     => AESA_PLUGIN_URL,
+            'apiUrl'        => get_rest_url(null, AESA_API_REST_NAMESPACE),
+        );
     }
 }
