@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 import {
   makeStyles,
@@ -6,84 +6,76 @@ import {
   useId,
   Input,
   Label,
-   Button
-} from "@fluentui/react-components";
+  Button,
+} from '@fluentui/react-components';
 import { useForm } from '../hooks/useForm';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles({
   root: {
-    display: "flex",
-    flexDirection: "column",
-    ...shorthands.gap("20px"),
-    maxWidth: "400px",
+    display: 'flex',
+    flexDirection: 'column',
+    ...shorthands.gap('20px'),
+    maxWidth: '400px',
     // Stack the label above the field (with 2px gap per the design system)
-    "> div": {
-      display: "flex",
-      flexDirection: "column",
-      ...shorthands.gap("2px"),
+    '> div': {
+      display: 'flex',
+      flexDirection: 'column',
+      ...shorthands.gap('2px'),
     },
-    overflowY:"auto"
+    overflowY: 'auto',
   },
   wrapper: {
-    columnGap: "15px",
-    display: "flex",
+    columnGap: '15px',
+    display: 'flex',
   },
-  btn:{
+  btn: {
     fontWeight: 600,
     fontSize: '14px',
     lineHeight: '20px',
     color: '#f8f8f8',
     backgroundColor: '#2271B1',
-  
-  }
+  },
 });
 
 const initialForm = {
-  temaEstadistico: "",
-  nombre: "",
-  descripcion: "",
-  finalidad: "",
-  limitaciones: "",
-  metodologia: "",
-  fuenteDeInformacion: "",
+  temaEstadistico: '',
+  nombre: '',
+  descripcion: '',
+  finalidad: '',
+  limitaciones: '',
+  metodologia: '',
+  fuenteDeInformacion: '',
 };
 const validationsForm = (form) => {
-//   let errors = {};
-//   let regexName = /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/;
-//   let regexEmail = /^(\w+[/./-]?){1,}@[a-z]+[/.]\w{2,}$/;
-//   let regexComments = /^.{1,255}$/;
-
-//   if (!form.name.trim()) {
-//     errors.name = "El campo 'Nombre' es requerido";
-//   } else if (!regexName.test(form.name.trim())) {
-//     errors.name = "El campo 'Nombre' sólo acepta letras y espacios en blanco";
-//   }
-
-//   if (!form.email.trim()) {
-//     errors.email = "El campo 'Email' es requerido";
-//   } else if (!regexEmail.test(form.email.trim())) {
-//     errors.email = "El campo 'Email' es incorrecto";
-//   }
-
-//   if (!form.subject.trim()) {
-//     errors.subject = "El campo 'Asunto a tratar' es requerido";
-//   }
-
-//   if (!form.comments.trim()) {
-//     errors.comments = "El campo 'Comentarios' es requerido";
-//   } else if (!regexComments.test(form.comments.trim())) {
-//     errors.comments =
-//       "El campo 'Comentarios' no debe exceder los 255 caracteres";
-//   }
-
-//   return errors;
+  //   let errors = {};
+  //   let regexName = /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/;
+  //   let regexEmail = /^(\w+[/./-]?){1,}@[a-z]+[/.]\w{2,}$/;
+  //   let regexComments = /^.{1,255}$/;
+  //   if (!form.name.trim()) {
+  //     errors.name = "El campo 'Nombre' es requerido";
+  //   } else if (!regexName.test(form.name.trim())) {
+  //     errors.name = "El campo 'Nombre' sólo acepta letras y espacios en blanco";
+  //   }
+  //   if (!form.email.trim()) {
+  //     errors.email = "El campo 'Email' es requerido";
+  //   } else if (!regexEmail.test(form.email.trim())) {
+  //     errors.email = "El campo 'Email' es incorrecto";
+  //   }
+  //   if (!form.subject.trim()) {
+  //     errors.subject = "El campo 'Asunto a tratar' es requerido";
+  //   }
+  //   if (!form.comments.trim()) {
+  //     errors.comments = "El campo 'Comentarios' es requerido";
+  //   } else if (!regexComments.test(form.comments.trim())) {
+  //     errors.comments =
+  //       "El campo 'Comentarios' no debe exceder los 255 caracteres";
+  //   }
+  //   return errors;
 };
 
-
 function Form() {
-
-     const {
+  const {
     form,
     errors,
     loading,
@@ -93,16 +85,56 @@ function Form() {
     handleSubmit,
   } = useForm(initialForm, validationsForm);
 
-   
   const styles = useStyles();
 
   return (
     <div className="border border-solid border-white ">
-      <form onSubmit={handleSubmit} className='h-full flex flex-col justify-between'>
-        <div className='divScroll overflow-x-auto bg-white max-h-96' style={{scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+      <form
+        onSubmit={handleSubmit}
+        className="h-full flex flex-col justify-between"
+      >
+        <table className="form-table">
+          <tbody>
+            <tr>
+              <th scope="row">
+                <label for="blogname">Tema estadístico</label>
+              </th>
+              <td>
+                <input
+                  name="temaEstadistico"
+                  type="text"
+                  class="regular-text"
+                />
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <label for="blogname">
+                  Nombre del indicador o estadística ambiental
+                </label>
+              </th>
+              <td>
+                <Input
+                  size="large"
+                  id="temaEstadistico"
+                  type="text"
+                  name="temaEstadistico"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={form.temaEstadistico}
+                  required
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div
+          className="divScroll overflow-x-auto bg-white max-h-96"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
           <div className={styles.root}>
-            <div className='mt-3'>
-              <Label  size="large" htmlFor="temaEstadistico">
+            <div className="mt-3">
+              <Label size="large" htmlFor="temaEstadistico">
                 Tema estadístico
               </Label>
               <Input
@@ -116,7 +148,7 @@ function Form() {
                 required
               />
             </div>
-            <div className=''>
+            <div className="">
               <Label size="large" htmlFor="nombre">
                 Nombre
               </Label>
@@ -131,7 +163,7 @@ function Form() {
                 required
               />
             </div>
-            <div className=''>
+            <div className="">
               <Label size="large" htmlFor="descripcion">
                 Descripción
               </Label>
@@ -146,7 +178,7 @@ function Form() {
                 required
               />
             </div>
-            <div className=''>
+            <div className="">
               <Label size="large" htmlFor="finalidad">
                 Finalidad
               </Label>
@@ -161,7 +193,7 @@ function Form() {
                 required
               />
             </div>
-            <div className=''>
+            <div className="">
               <Label size="large" htmlFor="limitaciones">
                 Limitaciones
               </Label>
@@ -176,7 +208,7 @@ function Form() {
                 required
               />
             </div>
-            <div className=''>
+            <div className="">
               <Label size="large" htmlFor="metodologia">
                 Metodología
               </Label>
@@ -191,7 +223,7 @@ function Form() {
                 required
               />
             </div>
-            <div className=''>
+            <div className="">
               <Label size="large" htmlFor="fuenteDeInformacion">
                 Fuente de Información
               </Label>
@@ -207,10 +239,16 @@ function Form() {
               />
             </div>
           </div>
+          <button type='hidden'   ></button>
         </div>
-        <div className='mt-6 bg-gray-100 py-3'>
+        <div className="mt-6 bg-gray-100 py-3">
           <div className={styles.wrapper}>
-            <Button className={styles.btn} appearance="secondary" type="submit" shape="square">
+            <Button
+              className={styles.btn}
+              appearance="secondary"
+              type="submit"
+              shape="square"
+            >
               Guardar
             </Button>
             <Link to="/indicadores">
@@ -223,4 +261,4 @@ function Form() {
   );
 }
 
-export default Form
+export default Form;

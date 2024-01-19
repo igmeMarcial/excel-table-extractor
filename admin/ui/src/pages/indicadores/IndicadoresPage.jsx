@@ -2,7 +2,7 @@ import React from 'react';
 import MainLayout from '../../layout/MainLayout';
 import Toolbar from './Toolbar';
 
-function Indicadores() {
+function IndicadoresPage() {
   return (
     <MainLayout>
      <Toolbar/>
@@ -10,4 +10,4 @@ function Indicadores() {
   );
 }
 
-export default Indicadores;
+export default IndicadoresPage;

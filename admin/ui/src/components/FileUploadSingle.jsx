@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
 function FileUploadSingle() {
-    const [file, setFile] = useState(null);
+  const [file, setFile] = useState(null);
 
-     const handleFileChange = (e) => {
+  const handleFileChange = (e) => {
     if (e.target.files) {
       setFile(e.target.files[0]);
     }
@@ -13,7 +13,7 @@ function FileUploadSingle() {
     if (!file) {
       return;
     }
-// 👇 Uploading the file using the fetch API to the server
+    // 👇 Uploading the file using the fetch API to the server
     fetch('https://httpbin.org/post', {
       method: 'POST',
       body: file,
@@ -33,7 +33,7 @@ function FileUploadSingle() {
       <div className="extraOutline p-4 bg-white  bg-whtie w-full m-auto ">
         <div
           className="file_upload p-5 relative border-4 border-dotted border-gray-300 rounded-lg"
-          style={{ width: "100%" }}
+          style={{ width: '100%' }}
         >
           <svg
             className="text-#2271B1 w-24 mx-auto mb-4"
@@ -56,6 +56,7 @@ function FileUploadSingle() {
                 type="file"
                 multiple
                 onChange={handleFileChange}
+                accept=".xlsx"
               />
               <div className="text bg-blue-500 text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-blue-600">
                 Selecionar
@@ -64,9 +65,7 @@ function FileUploadSingle() {
 
             <div className="text-sm text-gray-500 uppercase">
               {/* {file && `${file.name} - ${file.type}`} */}
-              {
-                console.log(file && `${file.name} - ${file.type}`)
-              }
+              {console.log(file && `${file.name} - ${file.type}`)}
             </div>
           </div>
         </div>
@@ -75,4 +74,4 @@ function FileUploadSingle() {
   );
 }
 
-export default FileUploadSingle
+export default FileUploadSingle;

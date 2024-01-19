@@ -8,6 +8,7 @@ class AdminPage
     {
         add_action('admin_enqueue_scripts', [$this, 'enqueueAdminScripts']);
         add_action('admin_enqueue_scripts', [$this, 'enqueueInfoScript']);
+        add_action('admin_menu', [$this, 'desactivar_estilos_admin_wordpress']);
     }
     public function renderAppWrapper()
     {
@@ -58,7 +59,29 @@ class AdminPage
             );
         }
     }
+    public function desactivar_estilos_admin_wordpress() {
+        global $wp_styles;
 
+        // Desencola los estilos que pueden interferir
+        //wp_dequeue_style('wp-block-library'); // Desencola los estilos del editor de bloques
+        //wp_dequeue_style('wp-block-library-theme'); // Desencola los estilos del tema del editor de bloques
+
+        // Desactiva los estilos de WordPress admin
+        $styles_to_remove = array(
+            //'wp-admin',
+            //'buttons',
+            //'forms',
+           // 'dashicons',
+            //'admin-bar',
+        );
+
+        foreach ($styles_to_remove as $style) {
+            if (isset($wp_styles->registered[$style])) {
+                //wp_dequeue_style($style);
+                wp_deregister_style($style);
+            }
+        }
+    }
     public function enqueueInfoScript()
     {
         $data = $this->getPluginBasicInfo();
