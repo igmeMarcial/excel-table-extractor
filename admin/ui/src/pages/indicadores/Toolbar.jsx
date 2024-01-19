@@ -1,11 +1,12 @@
 import React from 'react'
-import Search from './Search'
+
 import IndicadoresList from './IndicadoresList'
+import SearchIndicadores from './SearchIndicadores'
 
 function Toolbar() {
   return (
     <>
-     <Search isIndicadores={true} />
+     <SearchIndicadores isIndicadores={true} />
       <IndicadoresList/>
     </>
   )

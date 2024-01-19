@@ -52,9 +52,9 @@ const AccionesCell = () => (
         if (!res.err) {
           setDb(res.data);
           setError(null);
-          console.log(res.data)
-          console.log("data::::.")
-          console.log(db)
+          // console.log(res.data)
+          // console.log("data::::.")
+          // console.log(db)
         } else {
           setDb(null);
           setError(res);
@@ -114,7 +114,7 @@ const AccionesCell = () => (
       muiTableContainerProps: { sx: { maxHeight: '500px' } },
 
       initialState: {
-        columnPinning: { right: ['acciones'] },
+        columnPinning: { left:['numero'],right: ['acciones'] },
       },
       muiTableProps: {
         sx: {

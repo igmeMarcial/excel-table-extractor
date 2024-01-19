@@ -31,10 +31,6 @@ const useStyles = makeStyles({
   
   },
   btnComponent:{
-    paddingLeft:"0",
-    // paddingRight:"0",
-    paddingTop:"0",
-  paddingBottom:"0",
    fontWeight: 600,
     fontSize: '14px',
     lineHeight: '20px',
@@ -69,7 +65,7 @@ isAnuario}) => {
                   <SearchBox
                       className={classes.searchBox}
                       appearance="outline"
-                      size="large"
+                      size="medium"
                       placeholder={placeholder}
                       value={value}
                       onChange={onChange}
@@ -83,15 +79,15 @@ isAnuario}) => {
                  {
                     isAnuario ? (
                          <Link to="#">
-                          <CompoundButton
+                          <Button
                           appearance="subtle"
-                          size='small'
+                          size='medium'
                               as='button'
                               icon={<Add24Filled className={classes.icon}/>}
                               className={classes.btnComponent}
                           >
                               Subir Anuario
-                          </CompoundButton>
+                          </Button>
                           
                     </Link>
                     ):(

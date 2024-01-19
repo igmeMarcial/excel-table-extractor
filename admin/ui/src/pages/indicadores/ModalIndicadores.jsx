@@ -7,12 +7,11 @@ import {
   Button,
   tokens,
   Title2,
-  CompoundButton
-} from "@fluentui/react-components";
-import FileUploadSingle from './FileUploadSingle';
+} from '@fluentui/react-components';
 import {
- Add24Filled,
+ ArrowImport24Regular
 } from "@fluentui/react-icons";
+import MultipleFileUploader from './MultipleFileUploader';
 
 
 const useStyles = makeStyles({
@@ -25,32 +24,52 @@ const useStyles = makeStyles({
     ...shorthands.borderStyle("none"),
     ...shorthands.overflow("unset"),
     boxShadow: tokens.shadow16,
-    width: "450px",
-    height: "350px",
+    width: "750px",
+    height: "470px",
     display: "flex",
     flexDirection: "column",
-    zIndex:"999"
+    zIndex:"999",
+    paddingLeft:"24px",
+    paddingTop:"24px",
+    paddingRight:"24px",
+    paddingBottom:"24px"
+    
   },
 
   footer: {
     display: "flex",
     marginTop: "auto",
-    justifyContent: "end",
+    justifyContent: "start",
     ...shorthands.gap("5px"),
   },
-  btnComponent:{
-   fontWeight: 600,
+ btnComponent: {
+    paddingLeft: '0',
+    // paddingRight:"0",
+    fontWeight: 600,
     fontSize: '14px',
     lineHeight: '20px',
-    marginLeft:"10px",
-     ":hover":{
-      color:"#2271B1"
-    }
+    marginLeft: '10px',
+    ':hover': {
+      color: '#2271B1',
+    },
+  },
+  icon: {
+    ':hover': {
+      color: '#2271B1',
+    },
+  },
+  title:{
+    lineHeight: "28px",
+    fontWeight:"600",
+    fontSize:"20px"
+  },
+  btnImport:{
+    backgroundColor:"#B8B8B8"
   }
 });
 
 
-function Modal() {
+function ModalIndicadores() {
 
     const styles = useStyles();
   const [open, setOpen] =useState(false);
@@ -86,21 +105,16 @@ function Modal() {
   return (
     <>
       <Button
-        appearance="subtle"
         size="medium"
-        as="button"
-        icon={<Add24Filled />}
         className={styles.btnComponent}
+        appearance="subtle"
+        icon={<ArrowImport24Regular className={styles.icon} />}
         ref={triggerRef}
         {...triggerAttributes}
         onClick={onClickTrigger}
       >
-        Subir plantilla
+        Importar
       </Button>
-
-      {/* <Button appearance='secondary' ref={triggerRef} {...triggerAttributes} onClick={onClickTrigger}>
-        Subir Plantilla
-      </Button> */}
       {open && (
         <div
           onKeyDown={onDialogKeydown}
@@ -111,13 +125,15 @@ function Modal() {
           className={styles.dialog}
           aria-label="Example dialog"
         >
-          <Title2 as="h2">Subir archivo word</Title2>
-          <div>
-            <FileUploadSingle />
+          <Title2 as="h2" className={styles.title}>
+            Importar indicadores
+          </Title2>
+          <div className="h-full">
+            <MultipleFileUploader />
           </div>
           <div className={styles.footer}>
-            <Button>Subir</Button>
-            <Button onClick={onClickClose}>Cerrar</Button>
+            <Button className={styles.btnImport}>Importar</Button>
+            <Button onClick={onClickClose}>Cancelar</Button>
           </div>
         </div>
       )}
@@ -125,4 +141,4 @@ function Modal() {
   );
 }
 
-export default Modal
+export default ModalIndicadores

@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import MainLayout from '../../layout/MainLayout'
 import { makeStyles, CompoundButton } from "@fluentui/react-components";
-import { columnsTestAnuarios, itemsTestAnuarios } from '../../utils/data';
+
 import TableAnuario from './TableAnuario';
 import { SearchInput } from '../../components/SearchInput';
+import { columnsTestPlantilla, itemsTestAnuarios } from '../../utils/data';
 
 const useStyles = makeStyles({
   wrapper: {
@@ -17,7 +18,8 @@ const useStyles = makeStyles({
 function Anuarios() {
   const styles = useStyles();
   const[value,setValue] = useState("");
-  // lo onClick estan de prueba para manipular cada boton
+  // console.log(columnsTestAnuarios,itemsTestAnuarios)
+  // // lo onClick estan de prueba para manipular cada boton
   const OnClickSubirAnuario= ()=>{
   console.log("Diste Click a un button subirAnuario")
 }
@@ -39,7 +41,7 @@ function Anuarios() {
       />
       <TableAnuario
         items={itemsTestAnuarios}
-        columns={columnsTestAnuarios}
+        columns={columnsTestPlantilla}
       ></TableAnuario>
     </MainLayout>
   );
