@@ -36,6 +36,7 @@ const handleFileChange = (e) => {
       Promise.all(promises).then((values) => {
         setCellValues(values);
         console.log(values);
+        setFiles(true)
       });
     }
   };
@@ -46,7 +47,7 @@ const handleFileChange = (e) => {
   return (
     <section className="h-full py-3 overflow-auto  w-full  flex flex-col">
       {files ? (
-        <FilesIndicadoresCell arr="arrdddd"/>
+        <FilesIndicadoresCell arr={cellValues}/>
       ) : (
         
           <header

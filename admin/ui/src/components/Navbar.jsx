@@ -9,6 +9,7 @@ const useStyles = makeStyles({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    height:"48px"
   },
   nav: {
     display: 'flex',

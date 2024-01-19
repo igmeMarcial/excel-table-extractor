@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { makeStyles,Field, Button } from "@fluentui/react-components";
-import { Link, } from 'react-router-dom';
+import { Link, useLocation} from 'react-router-dom';
 import {
  Add24Filled,
  ArrowImport24Regular,
@@ -51,17 +51,16 @@ const useStyles = makeStyles({
 function ButtonsIndicadores() {
   const classes = useStyles();
 
-  //  const location = useLocation();
-  // const queryParams = new URLSearchParams(location.search);
-  // const getNewUrl = (tab) => {
-  //   queryParams.set('tab', tab);
-  //   return '?' + queryParams.toString();
-  // };
-  // const tabParam = new URLSearchParams(location.search).get('tab');
+   const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const getNewUrl = (tab) => {
+    queryParams.set('tab', tab);
+    return '?' + queryParams.toString();
+  };
 
   return (
     <>
-      <Link to="/indicadores/editar">
+      <Link to={getNewUrl('indicadores/editar')}>
         <Button
           style={{ color: '#2271B1' }}
           size="medium"

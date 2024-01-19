@@ -9,7 +9,7 @@ import "./index.css"
 const root = createRoot(document.getElementById("aesa-wrapper"));
 root.render(
   <React.StrictMode>
-    <FluentProvider theme={teamsLightTheme}>
+    <FluentProvider style={{"height":"100%"}} theme={teamsLightTheme}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
