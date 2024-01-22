@@ -2,47 +2,28 @@ import React from 'react';
 import { makeStyles } from '@fluentui/react-components';
 import { NavLink, useLocation } from 'react-router-dom';
 
+const items = [
+  { text: 'Indicadores', path: 'indicadores' },
+  { text: 'Anuarios', path: 'anuarios' },
+  { text: 'Plantilla', path: 'plantillas' },
+  { text: 'Configuracion', path: 'configuracion' },
+];
+
 const useStyles = makeStyles({
-  root: {
-    backgroundColor: '#2271B1', // Fondo gris
+  bar: {
+    backgroundColor: '#2271B1',
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    height:"48px"
+    justifyContent: 'start',
   },
-  nav: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  ul: {
-    listStyleType: 'none',
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  li: {
-    marginRight: '20px',
-    width: '83px', // Ancho
-    alignItems: 'center', // Centrar verticalmente
-    justifyContent: 'space-between', // Alinear elementos internos
-  },
-  link: {
-    // Puedes ajustar el color del texto según tus necesidades
-    fontFamily: 'Segoe UI', // Agrega la fuente Segoe UI
-    fontWeight: 600, // Peso de la fuente
-    fontSize: '14px', // Tamaño de la fuente
-    lineHeight: '17.29px', // Altura de línea
-    textDecorationLine: 'none',
+  item: {
     color: '#CFE4FA',
+    ':hover': {
+      color: '#FFFFFF',
+    },
   },
-  linkActive: {
-    fontFamily: 'Segoe UI', // Agrega la fuente Segoe UI
-    fontWeight: 700, // Peso de la fuente
-    fontSize: '14px', // Tamaño de la fuente
-    lineHeight: '17.29px', // Altura de línea
-    textDecorationLine: 'none',
-    color: '#ffffff',
+  active: {
+    fontWeight: 600,
+    color: '#FFFFFF',
   },
 });
 
@@ -51,67 +32,28 @@ export default function Navbar() {
   // Get the current location params
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
+  const currentTab = queryParams.get('tab');
   const getNewUrl = (tab) => {
     queryParams.set('tab', tab);
     return '?' + queryParams.toString();
   };
-  const tabParam = new URLSearchParams(location.search).get('tab');
-  {
-  }
+
   return (
-    <div className={`${classes.root} p-4`}>
-      <nav className={classes.nav}>
-        <ul className={classes.ul}>
-          <li className={classes.li}>
-            <NavLink
-              to={getNewUrl('indicadores')}
-              className={
-                tabParam === 'indicadores'
-                  ? `${classes.linkActive} `
-                  : ` ${classes.link}`
-              }
-            >
-              Indicadores
-            </NavLink>
-          </li>
-          <li className={classes.li}>
-            <NavLink
-              to={getNewUrl('anuarios')}
-              className={
-                tabParam === 'anuarios'
-                  ? `${classes.linkActive} `
-                  : ` ${classes.link}`
-              }
-            >
-              Anuarios
-            </NavLink>
-          </li>
-          <li className={classes.li}>
-            <NavLink
-              to={getNewUrl('plantillas')}
-              className={
-                tabParam === 'plantillas'
-                  ? `${classes.linkActive} `
-                  : ` ${classes.link}`
-              }
-            >
-              Plantilla
-            </NavLink>
-          </li>
-          <li className={classes.li}>
-            <NavLink
-              to={getNewUrl('configuracion')}
-              className={
-                tabParam === 'configuracion'
-                  ? `${classes.linkActive} `
-                  : ` ${classes.link}`
-              }
-            >
-              Configuracion
-            </NavLink>
-          </li>
-        </ul>
-      </nav>
-    </div>
+    <nav className={'flex justify-start items-center h-10 px-4 ' + classes.bar}>
+      {items.map((item, index) => {
+        return (
+          <NavLink
+            to={getNewUrl(item.path)}
+            key={index}
+            className={
+              `block px-2 text-white ${classes.item} ` +
+              (currentTab === item.path ? classes.active : '')
+            }
+          >
+            {item.text}
+          </NavLink>
+        );
+      })}
+    </nav>
   );
 }

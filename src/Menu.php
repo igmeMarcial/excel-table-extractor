@@ -18,11 +18,13 @@ class Menu
     public function addMenu()
     {
         add_menu_page(
-            'Anuarios',                            // page title
-            'Anuarios',                            // menu title
-            'manage_options',                      // capability
-            AESA_ADMIN_PAGE_SLUG,                  // menu slug
-            [$this->adminPage, 'renderAppWrapper'] // callback function
+            'Anuarios',                             // page title
+            'Anuarios',                             // menu title
+            'manage_options',                       // capability
+            AESA_ADMIN_PAGE_SLUG,                   // menu slug
+            [$this->adminPage, 'renderAppWrapper'], // callback function
+            'dashicons-welcome-widgets-menus',
+            2
         );
     }
 }
