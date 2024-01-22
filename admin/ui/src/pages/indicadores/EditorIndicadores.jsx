@@ -2,20 +2,35 @@ import React from 'react'
 import MainLayout from '../../layout/MainLayout'
 import { Link } from 'react-router-dom'
 import Form from '../indicadores/Form';
+import { makeStyles, Button } from "@fluentui/react-components";
+
+const useStyles = makeStyles({
+  wrapper: {
+    columnGap: "15px",
+    display: "flex",
+  },
+  btn: {
+    backgroundColor:"#0F6CBD",
+    ":hover":{
+      backgroundColor:"#0d599b"
+    }
+  },
+});
 
 function EditorIndicadores() {
-  
+   const styles = useStyles();
+
   return (
     <MainLayout>
-      <div className="flex flex-col min-h-full ">
-        <div className="bg-gray-100 px-12">
+      <div className="border border-red flex flex-col h-full">
+        <div className="bg-gray-100 px-12 pt-3 ">
           <h2 className="text-2xl md:text-2xl font-bold">
             Registrar Indicador
           </h2>
         </div>
-        <div className="px-12 bg-gray-100">
+        <div className="px-12 bg-gray-100  ">
           <nav className="bg-gray-100">
-            <div className="container flex items-start justify-start py-6 mx-auto text-gray-600 capitalize dark:text-gray-300">
+            <div className="container flex items-start justify-start py-4 mx-auto text-gray-600 capitalize dark:text-gray-300">
               <Link
                 to="#"
                 className="text-gray-800 dark:text-gray-800 border-b-2 border-blue-500 mx-1.5 sm:mx-3 sm:ml-0"
@@ -38,13 +53,19 @@ function EditorIndicadores() {
             </div>
           </nav>
         </div>
-        <div className="flex-grow pl-12">
+        <div className="flex-1 h-full pl-12 b  overflow-auto scroll-container">
           <Form />
+         
         </div>
-        <div className="bg-gray-100 h-10 bottom-0 w-full  px-12">
-          <button style={{"backgroundColor":"#0F6CBD"}} className="text-white font-bold py-2 px-3 rounded">
-            Guardar
-          </button>
+        <div className="bg-gray-100  bottom-0 w-full mt-2  px-12 ">
+          <div className={styles.wrapper}>
+            <Button className={styles.btn} appearance="primary">
+              Guardar
+            </Button>
+            <Button className="" appearance="outline">
+              Cancelar
+            </Button>
+          </div>
         </div>
       </div>
     </MainLayout>
