@@ -12,8 +12,6 @@ const items = [
 const useStyles = makeStyles({
   bar: {
     backgroundColor: '#2271B1',
-    display: 'flex',
-    justifyContent: 'start',
   },
   item: {
     color: '#CFE4FA',
