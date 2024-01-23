@@ -6,6 +6,7 @@ use Aesa\Core\RestRouter;
 
 use Aesa\Rest\Controllers\IndicadorController;
 use Aesa\Rest\Controllers\PlantillaController;
+use Aesa\Rest\Controllers\DevController;
 
 class Routes
 {
@@ -30,5 +31,6 @@ class Routes
     {
         $this->router->get('/indicadores', IndicadorController::class . ':listIndicadores');
         $this->router->get('/plantillas',  PlantillaController::class . ':listarPlantillas');
+        $this->router->get('/dev/reset-database',  DevController::class . ':resetDatabase');
     }
 }

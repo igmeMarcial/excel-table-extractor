@@ -4,6 +4,7 @@ namespace Aesa;
 
 class AdminPage
 {
+    private $aesaCssHandler;
     private $wpMinimalStyles = [
         'dashicons',
         'admin-bar',
@@ -34,36 +35,24 @@ class AdminPage
         $json = json_decode($json, true);
 
         // Get js and css files
-        $entrypoints = $json['entrypoints'];
-        // CSS Regex
-        $cssRegex = '/\.css$/';
-        // JS Regex
-        $jsRegex = '/\.js$/';
-        // Filter css files
-        $cssFiles = array_filter($entrypoints, function ($file) use ($cssRegex) {
-            return preg_match($cssRegex, $file);
-        });
-        // Filter js files
-        $jsFiles = array_filter($entrypoints, function ($file) use ($jsRegex) {
-            return preg_match($jsRegex, $file);
-        });
-        foreach ($cssFiles as $cssFile) {
-            wp_enqueue_style(
-                'aesa-admin-css-' . $cssFile,
-                AESA_PLUGIN_URL . '/admin/ui/build/' . $cssFile,
-                [],
-                AESA_PLUGIN_VERSION
-            );
-        }
-        foreach ($jsFiles as $jsFile) {
-            wp_enqueue_script(
-                'aesa-admin-js-' . $jsFile,
-                AESA_PLUGIN_URL . '/admin/ui/build/' . $jsFile,
-                [],
-                AESA_PLUGIN_VERSION,
-                true
-            );
-        }
+        $files = $json['files'];
+        // main css file
+        $this->aesaCssHandler = AESA_ADMIN_PAGE_SLUG . '-admin-css' . $files['main.css'];
+
+        wp_enqueue_style(
+            $this->aesaCssHandler,
+            AESA_PLUGIN_URL . '/admin/ui/build/' . $files['main.css'],
+            [],
+            AESA_PLUGIN_VERSION
+        );
+        // main js file
+        wp_enqueue_script(
+            AESA_ADMIN_PAGE_SLUG . '-admin-js-' . $files['main.js'],
+            AESA_PLUGIN_URL . '/admin/ui/build/' . $files['main.js'],
+            [],
+            AESA_PLUGIN_VERSION,
+            true
+        );
     }
     /**
      * Remueve aquellos estilos de wordpress que no son necesarios en la página de administración
@@ -72,7 +61,12 @@ class AdminPage
     {
         global $plugin_page;
         if ($plugin_page == AESA_ADMIN_PAGE_SLUG  && !empty($styles)) {
-            $styles = $this->wpMinimalStyles;
+            $newStyles = array_merge([], $this->wpMinimalStyles);
+            // Mantenter css de la página de administración
+            if (in_array($this->aesaCssHandler, $styles)) {
+                $newStyles[] = $this->aesaCssHandler;
+            }
+            $styles = $newStyles;
         }
         return $styles;
     }
