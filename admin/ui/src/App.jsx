@@ -7,6 +7,7 @@ import Plantillas from './pages/plantillas/Plantillas';
 import ParamRoutes from './ParamRoutes';
 import ParamRoute from './ParamRoute';
 import EditorIndicadores from './pages/indicadores/EditorIndicadores';
+import Dev from './pages/dev/Dev';
 
 function App() {
   return (
@@ -15,8 +16,9 @@ function App() {
       <ParamRoute value="indicadores" element={<IndicadoresPage />} />
       <ParamRoute value="anuarios" element={<Anuarios />} />
       <ParamRoute value="plantillas" element={<Plantillas />} />
-      <ParamRoute value="indicadores/editar" element={<EditorIndicadores/>} />
+      <ParamRoute value="indicadores/editar" element={<EditorIndicadores />} />
       <ParamRoute value="configuracion" element={<Configuracion />} />
+      <ParamRoute value="dev" element={<Dev />} />
     </ParamRoutes>
   );
 }

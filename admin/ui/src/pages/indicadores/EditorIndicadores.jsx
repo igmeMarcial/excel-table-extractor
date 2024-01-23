@@ -19,8 +19,12 @@ const useStyles = makeStyles({
 
 function EditorIndicadores() {
   const styles = useStyles();
-  const handleGuardarClick = () => {
-    console.log('clickeado');
+
+  const componente2Ref = useRef();
+
+  const handleClick = () => {
+    // Accede al botón del Componente 2 y simula un clic
+    componente2Ref.current.click();
   };
 
   return (
@@ -57,14 +61,14 @@ function EditorIndicadores() {
           </nav>
         </div>
         <div className="flex-1 h-full pl-12 b  overflow-auto scroll-container">
-          <Form />
+          <Form ref={componente2Ref} />
         </div>
         <div className="bg-gray-100  bottom-0 w-full pt-2 pb-2 px-12 ">
           <div className={styles.wrapper}>
             <Button
               className={styles.btn}
               appearance="primary"
-              onClick={handleGuardarClick}
+              onClick={handleClick}
             >
               Guardar
             </Button>

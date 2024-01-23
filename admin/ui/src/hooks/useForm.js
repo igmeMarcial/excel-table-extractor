@@ -12,7 +12,6 @@ export const useForm = (initialForm, validateForm) => {
   // Función que maneja los cambios en los campos del formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
-//console.log(e.target.value)
 // Actualiza el estado del formulario con los nuevos valores
 console.log(e.target.value)
     setForm({
@@ -32,6 +31,7 @@ console.log(e.target.value)
     e.preventDefault();
     setErrors(validateForm(form));
     console.log(form);
+    console.log("datos guardados correctamente")
   };
 
 

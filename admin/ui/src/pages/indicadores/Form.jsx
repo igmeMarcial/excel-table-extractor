@@ -1,12 +1,9 @@
-import React, { useRef } from 'react';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 
-import {
-  makeStyles,
-  shorthands,
-  Select,
-} from '@fluentui/react-components';
+import { makeStyles, shorthands, Select } from '@fluentui/react-components';
 import { useForm } from '../../hooks/useForm';
 import CustomInput from './CustomInput';
+import { helpHttp } from '../../helpers/helpHttp';
 
 const useStyles = makeStyles({
   root: {
@@ -32,9 +29,9 @@ const useStyles = makeStyles({
     color: '#f8f8f8',
     backgroundColor: '#2271B1',
   },
-  selectInput:{
-    width:"25em"
-  }
+  selectInput: {
+    width: '25em',
+  },
 });
 
 const initialForm = {
@@ -62,36 +59,132 @@ const initialForm = {
 };
 
 const validationsForm = (form) => {
-  console.log("manejo de errores aqui, validaciones")
+  console.log('manejo de errores aqui, validaciones');
 };
 
 const fields = [
-  { name: 'componente', label: 'Componente', type: 'select', options: ['componente 1', 'componente 2', 'componente 3'] },
-  { name: 'subComponente', label: 'Sub componente', type: 'select', options: ['subComponente 1', 'subComponente 2', 'subComponente 3'] },
-  { name: 'temaEstadistico', label: 'Tema estadístico', type: 'select', options: ['6.1.2 Gasto de empresas privadas...', '6.1.2 Gasto de empresas privadas...', '6.1.2 Gasto de empresas privadas...'] },
-  { name: 'nombreIndicador', label: 'Nombre del indicador o estadística ambiental', type: 'text', required: false },
-  { name: 'descripcionDefinicion', label: 'Descripción/Definición', type: 'text', required: true },
-  { name: 'unidadDeMedida', label: 'Unidad de medida', type: 'text', required: true },
-  { name: 'formulaCalculo', label: 'Fórmula de cálculo', type: 'text', required: true },
-  { name: 'metodologiaCalculo', label: 'Metodología de cálculo', type: 'text', required: true },
+  {
+    name: 'componente',
+    label: 'Componente',
+    type: 'select',
+    options: ['componente 1', 'componente 2', 'componente 3'],
+  },
+  {
+    name: 'subComponente',
+    label: 'Sub componente',
+    type: 'select',
+    options: ['subComponente 1', 'subComponente 2', 'subComponente 3'],
+  },
+  {
+    name: 'temaEstadistico',
+    label: 'Tema estadístico',
+    type: 'select',
+    options: [
+      '6.1.2 Gasto de empresas privadas...',
+      '6.1.2 Gasto de empresas privadas...',
+      '6.1.2 Gasto de empresas privadas...',
+    ],
+  },
+  {
+    name: 'nombreIndicador',
+    label: 'Nombre del indicador o estadística ambiental',
+    type: 'text',
+    required: false,
+  },
+  {
+    name: 'descripcionDefinicion',
+    label: 'Descripción/Definición',
+    type: 'text',
+    required: true,
+  },
+  {
+    name: 'unidadDeMedida',
+    label: 'Unidad de medida',
+    type: 'text',
+    required: true,
+  },
+  {
+    name: 'formulaCalculo',
+    label: 'Fórmula de cálculo',
+    type: 'text',
+    required: true,
+  },
+  {
+    name: 'metodologiaCalculo',
+    label: 'Metodología de cálculo',
+    type: 'text',
+    required: true,
+  },
   { name: 'fuente', label: 'Fuente', type: 'text', required: true },
-  { name: 'unidadOrganicaGeneradora', label: 'Unidad orgánica generadora', type: 'text', required: true },
+  {
+    name: 'unidadOrganicaGeneradora',
+    label: 'Unidad orgánica generadora',
+    type: 'text',
+    required: true,
+  },
   { name: 'url', label: 'URL', type: 'url', required: true },
-  { name: 'periodicidadGeneracion', label: 'Periodicidad de generación', type: 'text', required: true },
-  { name: 'periodicidadEntregaRegistro', label: 'Periodicidad de entrega/registro', type: 'text', required: true },
-  { name: 'periodoSerieTiempo', label: 'Periodo de serie de tiempo', type: 'text', required: true },
-  { name: 'ambitoGeografico', label: 'Ámbito geográfico', type: 'text', required: true },
+  {
+    name: 'periodicidadGeneracion',
+    label: 'Periodicidad de generación',
+    type: 'text',
+    required: true,
+  },
+  {
+    name: 'periodicidadEntregaRegistro',
+    label: 'Periodicidad de entrega/registro',
+    type: 'text',
+    required: true,
+  },
+  {
+    name: 'periodoSerieTiempo',
+    label: 'Periodo de serie de tiempo',
+    type: 'text',
+    required: true,
+  },
+  {
+    name: 'ambitoGeografico',
+    label: 'Ámbito geográfico',
+    type: 'text',
+    required: true,
+  },
   { name: 'limitaciones', label: 'Limitaciones', type: 'text', required: true },
-  { name: 'relacionObjetivos', label: 'Relación con objetivos nacionales', type: 'text', required: true },
-  { name: 'relacionIniciativasInternacionales', label: 'Relación con iniciativas internacionales', type: 'text', required: true },
-  { name: 'correoElectronico', label: 'Correo electrónico', type: 'email', required: true },
-  { name: 'wpDefaultFieldLabel', label: 'WP/default-field-label', type: 'text', required: true },
-  { name: 'telefonoCelular', label: 'Teléfono/celular', type: 'text', required: true },
+  {
+    name: 'relacionObjetivos',
+    label: 'Relación con objetivos nacionales',
+    type: 'text',
+    required: true,
+  },
+  {
+    name: 'relacionIniciativasInternacionales',
+    label: 'Relación con iniciativas internacionales',
+    type: 'text',
+    required: true,
+  },
+  {
+    name: 'correoElectronico',
+    label: 'Correo electrónico',
+    type: 'email',
+    required: true,
+  },
+  {
+    name: 'wpDefaultFieldLabel',
+    label: 'WP/default-field-label',
+    type: 'text',
+    required: true,
+  },
+  {
+    name: 'telefonoCelular',
+    label: 'Teléfono/celular',
+    type: 'text',
+    required: true,
+  },
 ];
 
-function Form() {
-  
-  
+const Form = forwardRef((props, ref) => {
+  const [db, setDb] = useState(null);
+  const [loadingData, setLoadingData] = useState(false);
+  const [error, setError] = useState(null);
+
   const {
     form,
     errors,
@@ -102,11 +195,72 @@ function Form() {
     handleSubmit,
   } = useForm(initialForm, validationsForm);
 
+  let url = 'http://localhost:8089/componentes';
+  console.log(url);
+
+  useEffect(() => {
+    setLoadingData(true);
+    helpHttp()
+      .get(url)
+      .then((res) => {
+        if (!res.err) {
+          setDb(res);
+
+          const componenteOptions = res.map((item) => item.nombre);
+          fields.forEach((field) => {
+            if (field.name === 'componente') {
+              field.options = componenteOptions;
+              initialForm.componente = componenteOptions[0];
+            }
+          });
+
+          setError(null);
+        } else {
+          setDb(null);
+          setError(res);
+          console.log(res);
+        }
+        setLoadingData(false);
+      });
+  }, [url]);
+
+  const updateSubcomponentes = (selectedComponente) => {
+    const selectedComponenteObj = db.find(
+      (item) => item.nombre === selectedComponente
+    );
+    if (selectedComponenteObj) {
+      const subComponenteOptions = selectedComponenteObj.subcomponentes.map(
+        (subComp) => subComp.nombre
+      );
+      fields.forEach((field) => {
+        if (field.name === 'subComponente') {
+          field.options = subComponenteOptions;
+          initialForm.subComponente = subComponenteOptions[0];
+        }
+      });
+    }
+  };
+  const updateTemasEstadisticos = (selectedSubComponente) => {
+    const selectedSubComponenteObj = db
+      .flatMap((item) => item.subcomponentes)
+      .find((subComp) => subComp.nombre === selectedSubComponente);
+
+    if (selectedSubComponenteObj) {
+      const temasEstadisticosOptions =
+        selectedSubComponenteObj.temasEstadisticos;
+      fields.forEach((field) => {
+        if (field.name === 'temaEstadistico') {
+          field.options = temasEstadisticosOptions;
+          initialForm.temaEstadistico = temasEstadisticosOptions[0];
+        }
+      });
+    }
+  };
+
   const styles = useStyles();
 
   return (
     <form
-    
       style={{ height: '100%' }}
       onSubmit={handleSubmit}
       className="h-full flex flex-col justify-between  
@@ -151,9 +305,8 @@ function Form() {
           ))}
         </tbody>
       </table>
-      <button type="submit" style={{ display: 'none' }}  />
+      <button ref={ref} type="submit" style={{ visibility: 'hidden' }} />
     </form>
   );
-}
-
+});
 export default Form;

@@ -7,6 +7,7 @@ const items = [
   { text: 'Anuarios', path: 'anuarios' },
   { text: 'Plantilla', path: 'plantillas' },
   { text: 'Configuracion', path: 'configuracion' },
+  { text: 'Dev', path: 'dev' },
 ];
 
 const useStyles = makeStyles({

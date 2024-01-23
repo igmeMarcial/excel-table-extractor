@@ -6,7 +6,6 @@ import {
 import { Box, IconButton, Tooltip } from '@mui/material';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined';
-
 import { helpHttp } from '../../helpers/helpHttp';
 
 const AccionesCell = () => (
@@ -35,11 +34,11 @@ function IndicadorList() {
   const [db, setDb] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [isRefetching, setIsRefetching] = useState(false);
 
-  let url = 'http://localhost:8085/indicadores';
-  console.log(url);
+  let api = helpHttp();
+  let url = 'http://localhost:8089/indicadores';
 
+  //Get api
   useEffect(() => {
     setLoading(true);
     helpHttp()
@@ -47,7 +46,6 @@ function IndicadorList() {
       .then((res) => {
         if (!res.err) {
           setDb(res);
-
           setError(null);
         } else {
           setDb(null);
@@ -98,7 +96,6 @@ function IndicadorList() {
   const table = useMaterialReactTable({
     columns,
     data: db ?? [],
-
     enableTopToolbar: false,
     enableColumnActions: false,
     enableStickyHeader: true,
@@ -106,7 +103,6 @@ function IndicadorList() {
     enableSorting: false,
     layoutMode: 'grid-no-grow', //constant column widths
     muiTableContainerProps: { sx: { maxHeight: '460px' } },
-
     initialState: {
       columnPinning: { left: ['idComponente'], right: ['acciones'] },
     },
