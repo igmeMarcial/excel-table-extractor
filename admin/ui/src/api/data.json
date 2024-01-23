@@ -1,0 +1,248 @@
+{
+  "indicadores":[
+  {
+    "id": "1",
+    "idComponente": "1",
+    "nombre": "Indicador 1",
+    "componenteNombre": "Condiciones y calidad ambiental",
+    "ultimaActualizacion": "2022-01-01",
+    "estado": "Activo"
+  },
+  {
+    "id": "2",
+    "idComponente": "2",
+    "nombre": "Indicador 2",
+    "componenteNombre": "Condiciones y calidad ambiental",
+    "ultimaActualizacion": "2022-02-01",
+    "estado": "Inactivo"
+  },
+  {
+    "id": "3",
+    "idComponente": "3",
+    "nombre": "Indicador 3",
+    "componenteNombre": "Recursos ambientales y su uso",
+    "ultimaActualizacion": "2022-03-01",
+    "estado": "Activo"
+  },
+  {
+    "id": "4",
+    "idComponente": "4",
+    "nombre": "Indicador 4",
+    "componenteNombre": "Residuos",
+    "ultimaActualizacion": "2022-04-01",
+    "estado": "Inactivo"
+  },
+  {
+    "id": "5",
+    "idComponente": "5",
+    "nombre": "Indicador 5",
+    "componenteNombre": "Eventos extremos y desastres",
+    "ultimaActualizacion": "2022-05-01",
+    "estado": "Activo"
+  },
+   {
+      "id": "6",
+      "idComponente": "2",
+      "nombre": "Indicador 6",
+      "componenteNombre": "Condiciones y calidad ambiental",
+      "ultimaActualizacion": "2022-06-01",
+      "estado": "Activo"
+    },
+    {
+      "id": "7",
+      "idComponente": "3",
+      "nombre": "Indicador 7",
+      "componenteNombre": "Recursos ambientales y su uso",
+      "ultimaActualizacion": "2022-07-01",
+      "estado": "Inactivo"
+    },
+    {
+      "id": "8",
+      "idComponente": "1",
+      "nombre": "Indicador 8",
+      "componenteNombre": "Condiciones y calidad ambiental",
+      "ultimaActualizacion": "2022-08-01",
+      "estado": "Activo"
+    },
+    {
+      "id": "9",
+      "idComponente": "4",
+      "nombre": "Indicador 9",
+      "componenteNombre": "Residuos",
+      "ultimaActualizacion": "2022-09-01",
+      "estado": "Inactivo"
+    },
+    {
+      "id": "10",
+      "idComponente": "5",
+      "nombre": "Indicador 10",
+      "componenteNombre": "Eventos extremos y desastres",
+      "ultimaActualizacion": "2022-10-01",
+      "estado": "Activo"
+    }
+],"componentes": [
+    {
+      "nombre": "Condiciones y Calidad Ambiental",
+      "subcomponentes": [
+        {
+          "nombre": "Condiciones Físicas",
+          "temasEstadisticos": [
+            "Atmósfera, clima y condiciones meteorológicas",
+            "Características Hidrográficas",
+            "Información geológica y geográfica",
+            "Características del suelo"
+          ]
+        },
+        {
+          "nombre": "Cobertura Terrestre, Ecosistemas y Biodiversidad",
+          "temasEstadisticos": [
+            "Coberturas terrestres",
+            "Ecosistemas",
+            "Biodiversidad",
+            "Bosques"
+          ]
+        },
+        {
+          "nombre": "Calidad Ambiental",
+          "temasEstadisticos": [
+            "Calidad del aire",
+            "Calidad del agua dulce",
+            "Calidad del agua marina",
+            "Contaminación del suelo",
+            "Ruido"
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "Recursos Ambientales y su Uso",
+      "subcomponentes": [
+        {
+          "nombre": "Recursos minerales no energéticos",
+          "temasEstadisticos": [
+            "Stocks y cambios de los recursos minerales no energéticos",
+            "Producción y comercio de minerales no energéticos"
+          ]
+        },
+        {
+          "nombre": "Recursos Energéticos",
+          "temasEstadisticos": [
+            "Stocks y cambios de los recursos minerales energéticos",
+            "Producción y consumo de energía de fuentes renovables y no renovables"
+          ]
+        },
+        {
+          "nombre": "Tierra",
+          "temasEstadisticos": [
+            "Uso de la Tierra"
+          ]
+        },
+        {
+          "nombre": "Recursos del suelo",
+          "temasEstadisticos": [
+            "Recursos del suelo"
+          ]
+        },
+        {
+          "nombre": "Recursos Biológicos",
+          "temasEstadisticos": [
+            "Recursos maderables",
+            "Recursos Acuáticos",
+            "Cultivos",
+            "Ganado",
+            "Recursos biológicos silvestres, no cultivados (excepto los de pescado y madera)"
+          ]
+        },
+        {
+          "nombre": "Recursos Hídricos",
+          "temasEstadisticos": [
+            "Recursos Hídricos",
+            "Extracción, uso y devolución de agua"
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "Residuos",
+      "subcomponentes": [
+        {
+          "nombre": "Emisiones al Aire",
+          "temasEstadisticos": [
+            "Emisiones de gases efecto invernadero",
+            "Consumo de sustancias agotadoras de la capa de ozono",
+            "Emisiones de otras sustancias"
+          ]
+        },
+        {
+          "nombre": "Generación y Gestión de Aguas Residuales",
+          "temasEstadisticos": [
+            "Generación y contenido contaminante de las aguas residuales",
+            "Recolección y tratamiento de aguas residuales",
+            "Descargas de agua residual al ambiente"
+          ]
+        },
+        {
+          "nombre": "Generación y Gestión de Desechos",
+          "temasEstadisticos": [
+            "Generación de desechos",
+            "Manejo de residuos"
+          ]
+        },
+        {
+          "nombre": "Aplicación de Químicos",
+          "temasEstadisticos": [
+            "Aplicación de bioquímicos"
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "Eventos Extremos y Desastres",
+      "subcomponentes": [
+        {
+          "nombre": "Eventos naturales extremos y desastres",
+          "temasEstadisticos": [
+            "Ocurrencia de eventos naturales extremos y desastres",
+            "Impacto de los eventos naturales extremos y desastres"
+          ]
+        },
+        {
+          "nombre": "Desastres Tecnológicos",
+          "temasEstadisticos": [
+            "Ocurrencia de desastres tecnológicos",
+            "Impacto de los desastres tecnológicos"
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "Asentamientos Humanos y Salud Ambiental",
+      "subcomponentes": [
+        {
+          "nombre": "Asentamientos Humanos",
+          "temasEstadisticos": [
+            "Población Urbana y Rural",
+            "Acceso a agua, saneamiento y energía",
+            "Condiciones de la Vivienda",
+            "Población expuesta a la contaminación ambiental por su localización espacial",
+            "Cuestiones ambientales específicas de los asentamientos urbanos"
+          ]
+        },
+        {
+          "nombre": "Salud Ambiental",
+          "temasEstadisticos": [
+            "Enfermedades y condiciones transmitidas por el aire",
+            "Enfermedades y condiciones transmitidas por el agua",
+            "Enfermedades transmitidas por vectores",
+            "Problemas de salud asociados con la exposición excesiva a la radiación UV",
+            "Enfermedades y condiciones relacionadas con sustancias tóxicas y con radiación nuclear"
+          ]
+        }
+      ]
+    }
+   ] 
+}
+
+
+  
+

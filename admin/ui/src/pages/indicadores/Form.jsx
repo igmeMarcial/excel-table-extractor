@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 import {
   makeStyles,
@@ -6,6 +6,7 @@ import {
   Select,
 } from '@fluentui/react-components';
 import { useForm } from '../../hooks/useForm';
+import CustomInput from './CustomInput';
 
 const useStyles = makeStyles({
   root: {
@@ -13,7 +14,6 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     ...shorthands.gap('20px'),
     maxWidth: '400px',
-    // Stack the label above the field (with 2px gap per the design system)
     '> div': {
       display: 'flex',
       flexDirection: 'column',
@@ -38,6 +38,8 @@ const useStyles = makeStyles({
 });
 
 const initialForm = {
+  componente: '',
+  subComponente: '',
   temaEstadistico: '',
   nombreIndicador: '',
   descripcionDefinicion: '',
@@ -60,33 +62,36 @@ const initialForm = {
 };
 
 const validationsForm = (form) => {
-  //   let errors = {};
-  //   let regexName = /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/;
-  //   let regexEmail = /^(\w+[/./-]?){1,}@[a-z]+[/.]\w{2,}$/;
-  //   let regexComments = /^.{1,255}$/;
-  //   if (!form.name.trim()) {
-  //     errors.name = "El campo 'Nombre' es requerido";
-  //   } else if (!regexName.test(form.name.trim())) {
-  //     errors.name = "El campo 'Nombre' sólo acepta letras y espacios en blanco";
-  //   }
-  //   if (!form.email.trim()) {
-  //     errors.email = "El campo 'Email' es requerido";
-  //   } else if (!regexEmail.test(form.email.trim())) {
-  //     errors.email = "El campo 'Email' es incorrecto";
-  //   }
-  //   if (!form.subject.trim()) {
-  //     errors.subject = "El campo 'Asunto a tratar' es requerido";
-  //   }
-  //   if (!form.comments.trim()) {
-  //     errors.comments = "El campo 'Comentarios' es requerido";
-  //   } else if (!regexComments.test(form.comments.trim())) {
-  //     errors.comments =
-  //       "El campo 'Comentarios' no debe exceder los 255 caracteres";
-  //   }
-  //   return errors;
+  console.log("manejo de errores aqui, validaciones")
 };
 
+const fields = [
+  { name: 'componente', label: 'Componente', type: 'select', options: ['componente 1', 'componente 2', 'componente 3'] },
+  { name: 'subComponente', label: 'Sub componente', type: 'select', options: ['subComponente 1', 'subComponente 2', 'subComponente 3'] },
+  { name: 'temaEstadistico', label: 'Tema estadístico', type: 'select', options: ['6.1.2 Gasto de empresas privadas...', '6.1.2 Gasto de empresas privadas...', '6.1.2 Gasto de empresas privadas...'] },
+  { name: 'nombreIndicador', label: 'Nombre del indicador o estadística ambiental', type: 'text', required: false },
+  { name: 'descripcionDefinicion', label: 'Descripción/Definición', type: 'text', required: true },
+  { name: 'unidadDeMedida', label: 'Unidad de medida', type: 'text', required: true },
+  { name: 'formulaCalculo', label: 'Fórmula de cálculo', type: 'text', required: true },
+  { name: 'metodologiaCalculo', label: 'Metodología de cálculo', type: 'text', required: true },
+  { name: 'fuente', label: 'Fuente', type: 'text', required: true },
+  { name: 'unidadOrganicaGeneradora', label: 'Unidad orgánica generadora', type: 'text', required: true },
+  { name: 'url', label: 'URL', type: 'url', required: true },
+  { name: 'periodicidadGeneracion', label: 'Periodicidad de generación', type: 'text', required: true },
+  { name: 'periodicidadEntregaRegistro', label: 'Periodicidad de entrega/registro', type: 'text', required: true },
+  { name: 'periodoSerieTiempo', label: 'Periodo de serie de tiempo', type: 'text', required: true },
+  { name: 'ambitoGeografico', label: 'Ámbito geográfico', type: 'text', required: true },
+  { name: 'limitaciones', label: 'Limitaciones', type: 'text', required: true },
+  { name: 'relacionObjetivos', label: 'Relación con objetivos nacionales', type: 'text', required: true },
+  { name: 'relacionIniciativasInternacionales', label: 'Relación con iniciativas internacionales', type: 'text', required: true },
+  { name: 'correoElectronico', label: 'Correo electrónico', type: 'email', required: true },
+  { name: 'wpDefaultFieldLabel', label: 'WP/default-field-label', type: 'text', required: true },
+  { name: 'telefonoCelular', label: 'Teléfono/celular', type: 'text', required: true },
+];
+
 function Form() {
+  
+  
   const {
     form,
     errors,
@@ -101,6 +106,7 @@ function Form() {
 
   return (
     <form
+    
       style={{ height: '100%' }}
       onSubmit={handleSubmit}
       className="h-full flex flex-col justify-between  
@@ -108,352 +114,44 @@ function Form() {
     >
       <table className="form-table">
         <tbody>
-          <tr>
-            <th scope="row">
-              <label htmlFor="temaEstadistico">Tema estadístico</label>
-            </th>
-            <td>
-              <Select
-                name="temaEstadistico"
-                id="temaEstadistico"
-                className={styles.selectInput}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={form.temaEstadistico}
-                required
-                appearance="outline"
-              >
-                <option>
-                  6.1.2 Gasto de empresas privadas, instituciónes sin fines de
-                  lucro y hogares en protección ambiental y en gestión de
-                  recursos naturales
-                </option>
-                <option>
-                  6.1.2 Gasto de empresas privadas, instituciónes sin fines de
-                  lucro y hogares en protección ambiental y en gestión de
-                  recursos naturales
-                </option>
-                <option>
-                  6.1.2 Gasto de empresas privadas, instituciónes sin fines de
-                  lucro y hogares en protección ambiental y en gestión de
-                  recursos naturales
-                </option>
-              </Select>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <label htmlFor="nombreIndicador">
-                Nombre del indicador o estadística ambiental
-              </label>
-            </th>
-            <td>
-              <input
-                name="nombreIndicador"
-                type="text"
-                className="regular-text"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={form.nombreIndicador}
-                required
-              />
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">
-              <label htmlFor="descripcionDefinicion">
-                Descripción/Definición
-              </label>
-            </th>
-            <td>
-              <input
-                name="descripcionDefinicion"
-                type="text"
-                className="regular-text"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={form.descripcionDefinicion}
-                required
-              />
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">
-              <label htmlFor="unidadDeMedida">Unidad de medida</label>
-            </th>
-            <td>
-              <input
-                name="unidadDeMedida"
-                type="text"
-                className="regular-text"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={form.unidadDeMedida}
-                required
-              />
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">
-              <label htmlFor="formulaCalculo">Fórmula de cálculo</label>
-            </th>
-            <td>
-              <input
-                name="formulaCalculo"
-                type="text"
-                className="regular-text"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={form.formulaCalculo}
-                required
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <label htmlFor="metodologiaCalculo">Metodología de cálculo</label>
-            </th>
-            <td>
-              <input
-                name="metodologiaCalculo"
-                type="text"
-                className="regular-text"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={form.metodologiaCalculo}
-                required
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <label htmlFor="fuente">Fuente</label>
-            </th>
-            <td>
-              <input
-                name="fuente"
-                type="text"
-                className="regular-text"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={form.fuente}
-                required
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <label htmlFor="unidadOrganicaGeneradora">
-                Unidad orgánica generadora
-              </label>
-            </th>
-            <td>
-              <input
-                name="unidadOrganicaGeneradora"
-                type="text"
-                className="regular-text"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={form.unidadOrganicaGeneradora}
-                required
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <label htmlFor="url">URL</label>
-            </th>
-            <td>
-              <input
-                name="url"
-                type="url"
-                className="regular-text"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={form.url}
-                required
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <label htmlFor="periodicidadGeneracion">
-                Periodicidad de generación
-              </label>
-            </th>
-            <td>
-              <input
-                name="periodicidadGeneracion"
-                type="text"
-                className="regular-text"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={form.periodicidadGeneracion}
-                required
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <label htmlFor="periodicidadEntregaRegistro">
-                Periodicidad de entrega/registro
-              </label>
-            </th>
-            <td>
-              <input
-                name="periodicidadEntregaRegistro"
-                type="text"
-                className="regular-text"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={form.periodicidadEntregaRegistro}
-                required
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <label htmlFor="periodoSerieTiempo">
-                Periodo de serie de tiempo
-              </label>
-            </th>
-            <td>
-              <input
-                name="periodoSerieTiempo"
-                type="text"
-                className="regular-text"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={form.periodoSerieTiempo}
-                required
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <label htmlFor="ambitoGeografico">Ámbito geográfico</label>
-            </th>
-            <td>
-              <input
-                name="ambitoGeografico"
-                type="text"
-                className="regular-text"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={form.ambitoGeografico}
-                required
-              />
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">
-              <label htmlFor="limitaciones">Limitaciones</label>
-            </th>
-            <td>
-              <input
-                name="limitaciones"
-                type="text"
-                className="regular-text"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={form.limitaciones}
-                required
-              />
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">
-              <label htmlFor="relacionObjetivos">
-                Relación con objetivos nacionales
-              </label>
-            </th>
-            <td>
-              <input
-                name="relacionObjetivos"
-                type="text"
-                className="regular-text"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={form.relacionObjetivos}
-                required
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <label htmlFor="relacionIniciativasInternacionales">
-                Relación con iniciativas internacionales
-              </label>
-            </th>
-            <td>
-              <input
-                name="relacionIniciativasInternacionales"
-                type="text"
-                className="regular-text"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={form.relacionIniciativasInternacionales}
-                required
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <label htmlFor="correoElectronico">Correo electrónico</label>
-            </th>
-            <td>
-              <input
-                name="correoElectronico"
-                type="email"
-                className="regular-text"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={form.correoElectronico}
-                required
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <label htmlFor="wpDefaultFieldLabel">
-                WP/default-field-label
-              </label>
-            </th>
-            <td>
-              <input
-                name="wpDefaultFieldLabel"
-                type="text"
-                className="regular-text"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={form.wpDefaultFieldLabel}
-                required
-              />
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <label htmlFor="telefonoCelular">Teléfono/celular</label>
-            </th>
-            <td>
-              <input
-                name="telefonoCelular"
-                type="tel"
-                className="regular-text"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={form.telefonoCelular}
-                required
-              />
-            </td>
-          </tr>
+          {fields.map((field) => (
+            <tr key={field.name}>
+              <th scope="row">
+                <label htmlFor={field.name}>{field.label}</label>
+              </th>
+              <td>
+                {field.type === 'select' ? (
+                  <Select
+                    name={field.name}
+                    id={field.name}
+                    className={styles.selectInput}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={form[field.name]}
+                    required={field.required}
+                    appearance="outline"
+                  >
+                    {field.options.map((option, index) => (
+                      <option key={index}>{option}</option>
+                    ))}
+                  </Select>
+                ) : (
+                  <CustomInput
+                    name={field.name}
+                    type={field.type}
+                    text={field.label}
+                    handleBlur={handleBlur}
+                    onChange={handleChange}
+                    value={form[field.name]}
+                    required={field.required}
+                  />
+                )}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
+      <button type="submit" style={{ display: 'none' }}  />
     </form>
   );
 }

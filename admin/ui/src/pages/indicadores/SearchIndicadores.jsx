@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { SearchBox } from "@fluentui/react-search-preview";
-import { makeStyles,Field} from "@fluentui/react-components";
+import React, { useState } from 'react';
+import { SearchBox } from '@fluentui/react-search-preview';
+import { makeStyles, Field } from '@fluentui/react-components';
 import ButtonsIndicadores from './ButtonsIndicadores';
 
 const useStyles = makeStyles({
@@ -43,12 +43,8 @@ const useStyles = makeStyles({
 
 function SearchIndicadores({ isIndicadores }) {
   const classes = useStyles();
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   const [valid, setValid] = useState(true);
-  
-
-  
-
 
   const onChange = (ev, data) => {
     if (data.value.length <= 100) {
@@ -60,7 +56,7 @@ function SearchIndicadores({ isIndicadores }) {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4">
       <Field label="">
         <div className={`${classes.searchContainer} ${classes.gap}`}>
           <SearchBox
@@ -72,7 +68,7 @@ function SearchIndicadores({ isIndicadores }) {
             onChange={onChange}
           />
           <div>
-            <ButtonsIndicadores/>
+            <ButtonsIndicadores />
           </div>
         </div>
       </Field>
@@ -80,4 +76,4 @@ function SearchIndicadores({ isIndicadores }) {
   );
 }
 
-export default SearchIndicadores
+export default SearchIndicadores;

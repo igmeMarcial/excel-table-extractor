@@ -16,6 +16,7 @@
         "@mui/material": "^5.15.5",
         "@mui/x-date-pickers": "^6.19.0",
         "@tanstack/react-table": "^8.11.6",
+        "json-server": "^1.0.0-alpha.22",
         "material-react-table": "^2.6.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",

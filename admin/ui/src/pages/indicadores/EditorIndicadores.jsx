@@ -1,24 +1,27 @@
-import React from 'react'
-import MainLayout from '../../layout/MainLayout'
-import { Link } from 'react-router-dom'
+import React, { useRef } from 'react';
+import MainLayout from '../../layout/MainLayout';
+import { Link } from 'react-router-dom';
 import Form from '../indicadores/Form';
-import { makeStyles, Button } from "@fluentui/react-components";
+import { makeStyles, Button } from '@fluentui/react-components';
 
 const useStyles = makeStyles({
   wrapper: {
-    columnGap: "15px",
-    display: "flex",
+    columnGap: '15px',
+    display: 'flex',
   },
   btn: {
-    backgroundColor:"#0F6CBD",
-    ":hover":{
-      backgroundColor:"#0d599b"
-    }
+    backgroundColor: '#0F6CBD',
+    ':hover': {
+      backgroundColor: '#0d599b',
+    },
   },
 });
 
 function EditorIndicadores() {
-   const styles = useStyles();
+  const styles = useStyles();
+  const handleGuardarClick = () => {
+    console.log('clickeado');
+  };
 
   return (
     <MainLayout>
@@ -55,15 +58,18 @@ function EditorIndicadores() {
         </div>
         <div className="flex-1 h-full pl-12 b  overflow-auto scroll-container">
           <Form />
-         
         </div>
-        <div className="bg-gray-100  bottom-0 w-full mt-2  px-12 ">
+        <div className="bg-gray-100  bottom-0 w-full pt-2 pb-2 px-12 ">
           <div className={styles.wrapper}>
-            <Button className={styles.btn} appearance="primary">
+            <Button
+              className={styles.btn}
+              appearance="primary"
+              onClick={handleGuardarClick}
+            >
               Guardar
             </Button>
             <Button className="" appearance="outline">
-              Cancelar
+              Cerrar
             </Button>
           </div>
         </div>
@@ -72,4 +78,4 @@ function EditorIndicadores() {
   );
 }
 
-export default EditorIndicadores
+export default EditorIndicadores;

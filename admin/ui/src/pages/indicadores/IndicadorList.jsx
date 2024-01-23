@@ -6,7 +6,7 @@ import {
 import { Box, IconButton, Tooltip } from '@mui/material';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined';
-import { data } from '../../utils/data';
+
 import { helpHttp } from '../../helpers/helpHttp';
 
 const AccionesCell = () => (
@@ -35,8 +35,9 @@ function IndicadorList() {
   const [db, setDb] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isRefetching, setIsRefetching] = useState(false);
 
-  let url = AesaInfo.apiUrl + '/indicadores';
+  let url = 'http://localhost:8085/indicadores';
   console.log(url);
 
   useEffect(() => {
@@ -44,13 +45,10 @@ function IndicadorList() {
     helpHttp()
       .get(url)
       .then((res) => {
-        //console.log(res);
         if (!res.err) {
-          setDb(res.data);
+          setDb(res);
+
           setError(null);
-          // console.log(res.data)
-          // console.log("data::::.")
-          // console.log(db)
         } else {
           setDb(null);
           setError(res);
@@ -69,18 +67,18 @@ function IndicadorList() {
         Cell: AccionesCell,
       },
       {
-        accessorKey: 'numero', //this column gets pinned left by default because of the the initial state,
+        accessorKey: 'idComponente', //this column gets pinned left by default because of the the initial state,
         header: 'N°',
         size: 60,
       },
 
       {
-        accessorKey: 'componente', //this column gets pinned left by default because of the the initial state,
+        accessorKey: 'componenteNombre', //this column gets pinned left by default because of the the initial state,
         header: 'Componente',
         size: 260,
       },
       {
-        accessorKey: 'indicador', //this column gets pinned left by default because of the the initial state,
+        accessorKey: 'nombre', //this column gets pinned left by default because of the the initial state,
         header: 'Indicador',
         size: 480,
       },
@@ -99,7 +97,7 @@ function IndicadorList() {
 
   const table = useMaterialReactTable({
     columns,
-    data,
+    data: db ?? [],
 
     enableTopToolbar: false,
     enableColumnActions: false,
@@ -107,10 +105,10 @@ function IndicadorList() {
     enableColumnPinning: true,
     enableSorting: false,
     layoutMode: 'grid-no-grow', //constant column widths
-    muiTableContainerProps: { sx: { maxHeight: '500px' } },
+    muiTableContainerProps: { sx: { maxHeight: '460px' } },
 
     initialState: {
-      columnPinning: { left: ['numero'], right: ['acciones'] },
+      columnPinning: { left: ['idComponente'], right: ['acciones'] },
     },
     muiTableProps: {
       sx: {
@@ -124,11 +122,14 @@ function IndicadorList() {
         borderTop: '1px solid #C3C4C7',
         fontWeight: '500',
         color: 'black',
+        paddingY: '8px',
       },
     },
     muiTableBodyCellProps: {
       sx: {
         bgcolor: 'white',
+        paddingY: '0.5em',
+        paddingX: '1rem',
       },
     },
   });

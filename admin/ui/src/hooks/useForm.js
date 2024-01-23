@@ -14,6 +14,7 @@ export const useForm = (initialForm, validateForm) => {
     const { name, value } = e.target;
 //console.log(e.target.value)
 // Actualiza el estado del formulario con los nuevos valores
+console.log(e.target.value)
     setForm({
       ...form,
       [name]: value,
@@ -30,32 +31,7 @@ export const useForm = (initialForm, validateForm) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors(validateForm(form));
-    
- console.log(form)
-    // Si no hay errores, procede con el envío del formulario
-    /*
-    if (Object.keys(errors).length === 0) {
-      alert("Enviando Formulario");
-      setLoading(true);
-      console.log(form)
-    //   helpHttp()
-    //     .post("https://formsubmit.co/ajax/igmemarcial@gmail.com", {
-    //       body: form,
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         Accept: "application/json",
-    //       },
-    //     })
-    //     .then((res) => {
-    //       setLoading(false);
-    //       setResponse(true);
-    //       setForm(initialForm);
-    //       setTimeout(() => setResponse(false), 5000);
-    //     });
-    } else {
-      return;
-    }
-    */
+    console.log(form);
   };
 
 
