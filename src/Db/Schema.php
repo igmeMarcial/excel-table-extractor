@@ -5,6 +5,12 @@ namespace Aesa\Db;
 class Schema
 {
     private static $pluginTablePrefix = 'aesa_';
+    private $tables = [
+        'mdea_componente',
+        'mdea_subcomponente',
+        'mdea_tema_estadistico',
+        'estadistica',
+    ];
 
     public static function initDatabase()
     {
@@ -36,23 +42,30 @@ class Schema
 
     private function insertInitialData()
     {
+        foreach ($this->tables as $tableName) {
+            $this->insertInitialTableData($tableName);
+        }
+    }
+    private function insertInitialTableData($tableName)
+    {
         global $wpdb;
         $tablePrefix = self::getTablePrefix();
-        $table = $tablePrefix . 'estadistica';
+        $fullTableName = $tablePrefix . $tableName;
         $currentUserId = get_current_user_id();
-        $data = require_once AESA_PLUGIN_DIR . '/files/data/estadisticas.php';
+        $data = $this->getInitialTableData($tableName);
         foreach ($data as $row) {
             $row['id_usuario_reg'] = $currentUserId;
             $row['id_usuario_mod'] = $currentUserId;
-            $wpdb->insert($table, $row);
+            $wpdb->insert($fullTableName, $row);
         }
-        $table = $tablePrefix . 'nivel_mda';
-        $data = require_once AESA_PLUGIN_DIR . '/files/data/niveles_mda.php';
-        foreach ($data as $row) {
-            $row['id_usuario_reg'] = $currentUserId;
-            $row['id_usuario_mod'] = $currentUserId;
-            $wpdb->insert($table, $row);
+    }
+    private function getInitialTableData($tableName)
+    {
+        $fileName = AESA_PLUGIN_DIR . '/files/data/' . $tableName . '.php';
+        if (!file_exists($fileName)) {
+            return [];
         }
+        return require_once $fileName;
     }
     private function getDbCreationSql()
     {
@@ -69,6 +82,7 @@ CREATE TABLE {$tablePrefix}mdea_componente (
     fecha_mod           DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     activo              TINYINT(1) NOT NULL DEFAULT 1,
     nombre              VARCHAR(255) NOT NULL,
+    posicion            INT(11) NOT NULL,
     PRIMARY KEY  (mdea_componente_id)
 ) $charset;
 CREATE TABLE {$tablePrefix}mdea_subcomponente (
@@ -80,6 +94,7 @@ CREATE TABLE {$tablePrefix}mdea_subcomponente (
     fecha_mod              DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     activo                 TINYINT(1) NOT NULL DEFAULT 1,
     nombre                 VARCHAR(255) NOT NULL,
+    posicion               INT(11) NOT NULL,
     PRIMARY KEY (mdea_subcomponente_id),
     FOREIGN KEY (mdea_componente_id) REFERENCES {$tablePrefix}mdea_componente(mdea_componente_id)
 ) $charset;
@@ -92,35 +107,28 @@ CREATE TABLE {$tablePrefix}mdea_tema_estadistico (
     fecha_mod              DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     activo                 TINYINT(1) NOT NULL DEFAULT 1,
     nombre                 VARCHAR(255) NOT NULL,
+    posicion               INT(11) NOT NULL,
     PRIMARY KEY (mdea_tema_estadistico_id),
     FOREIGN KEY (mdea_subcomponente_id) REFERENCES {$tablePrefix}mdea_subcomponente(mdea_subcomponente_id)
 ) $charset;
 CREATE TABLE {$tablePrefix}estadistica (
-  estadistica_id    INT(11) NOT NULL AUTO_INCREMENT,
-  nivel_mdea_id     INT(11) NOT NULL,
-  nivel_mdea_n1_id  INT(11) NOT NULL,
-  id_usuario_reg    INT(11) NOT NULL,
-  id_usuario_mod    INT(11) NOT NULL,
-  fecha_reg         DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-  fecha_mod         DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-  activo            TINYINT(1) NOT NULL DEFAULT 1,
-  archivado         TINYINT(1) NOT NULL DEFAULT 0,
-  eliminado         TINYINT(1) NOT NULL DEFAULT 0,
-  nombre            VARCHAR(255) NOT NULL,
-  PRIMARY KEY (estadistica_id)
-  REFERENCES {$tablePrefix}nivel_mdea (nivel_mdea_id)
-) $charset;
-CREATE TABLE {$tablePrefix}nivel_mdea (
-    nivel_mdea_id    INT(11) NOT NULL AUTO_INCREMENT,
-    id_usuario_reg  INT(11) NOT NULL,
-    id_usuario_mod  INT(11) NOT NULL,
-    fecha_reg       DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    fecha_mod       DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    activo          TINYINT(1) NOT NULL DEFAULT 1,
-    archivado       TINYINT(1) NOT NULL DEFAULT 0,
-    eliminado       TINYINT(1) NOT NULL DEFAULT 0,
-    nombre          VARCHAR(255) NOT NULL,
-    PRIMARY KEY  (nivel_mda_id)
+  estadistica_id            INT(11) NOT NULL AUTO_INCREMENT,
+  mdea_componente_id        INT(11) NOT NULL,
+  mdea_subcomponente_id     INT(11) NOT NULL,
+  mdea_tema_estadistico_id  INT(11) NOT NULL,
+  id_usuario_reg            INT(11) NOT NULL,
+  id_usuario_mod            INT(11) NOT NULL,
+  fecha_reg                 DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  fecha_mod                 DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  activo                    TINYINT(1) NOT NULL DEFAULT 1,
+  archivado                 TINYINT(1) NOT NULL DEFAULT 0,
+  eliminado                 TINYINT(1) NOT NULL DEFAULT 0,
+  nombre                    VARCHAR(255) NOT NULL,
+  posicion                  INT(11) NOT NULL,
+  PRIMARY KEY (estadistica_id),
+  FOREIGN KEY (mdea_componente_id)       REFERENCES {$tablePrefix}mdea_componente(mdea_componente_id),
+  FOREIGN KEY (mdea_subcomponente_id)    REFERENCES {$tablePrefix}mdea_subcomponente(mdea_subcomponente_id),
+  FOREIGN KEY (mdea_tema_estadistico_id) REFERENCES {$tablePrefix}mdea_tema_estadistico(mdea_tema_estadistico_id)
 ) $charset;";
     }
 
@@ -128,11 +136,11 @@ CREATE TABLE {$tablePrefix}nivel_mdea (
     {
         $tablePrefix = self::getTablePrefix();
         return "
-DROP TABLE IF EXISTS {$tablePrefix}mdea_componente;
-DROP TABLE IF EXISTS {$tablePrefix}mdea_subcomponente;
-DROP TABLE IF EXISTS {$tablePrefix}mdea_tema_estadistico;
 DROP TABLE IF EXISTS {$tablePrefix}estadistica;
-DROP TABLE IF EXISTS {$tablePrefix}nivel_mda;";
+DROP TABLE IF EXISTS {$tablePrefix}mdea_tema_estadistico;
+DROP TABLE IF EXISTS {$tablePrefix}mdea_subcomponente;
+DROP TABLE IF EXISTS {$tablePrefix}mdea_componente;
+";
     }
     public static function getTablePrefix()
     {
