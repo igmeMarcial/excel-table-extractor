@@ -19,6 +19,7 @@ define('AESA_PLUGIN_FILE',    __FILE__);
 define('AESA_API_REST_NAMESPACE', 'aesa/v1');
 // Prefijo utilizado para las opciones del plugin
 define('AESA_PREFIX', 'aesa');
+define('AESA_DB_PREFIX', 'aesa_');
 // Variable global en JavaScript para exportar variable usadas en el front
 define('AESA_JS_INFO_VAR', 'AesaInfo');
 

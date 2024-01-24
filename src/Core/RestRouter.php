@@ -9,12 +9,16 @@
 
 namespace Aesa\Core;
 
+use Psr\Container\ContainerInterface;
+
 class RestRouter
 {
+    private ContainerInterface $container;
     private $basePath;
 
-    public function __construct(string $basePath)
+    public function __construct(ContainerInterface $container, string $basePath)
     {
+        $this->container = $container;
         $this->basePath = $basePath;
     }
 
@@ -36,7 +40,8 @@ class RestRouter
         if (is_string($callback) && preg_match('/^([a-zA-Z0-9_\\\]+):(\w+)$/', $callback, $matches)) {
             $class    = $matches[1];
             $method   = $matches[2];
-            return [new $class, $method];
+            $controller   = $this->container->get($class);
+            return [$controller, $method];
         }
         return $callback;
     }

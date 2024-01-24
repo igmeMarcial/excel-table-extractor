@@ -2,8 +2,8 @@
 
 namespace Aesa;
 
-use Aesa\Core\RestRouter;
 use Aesa\Rest\Routes;
+
 
 class Plugin
 {
@@ -12,6 +12,7 @@ class Plugin
     // Flag to check if the plugin has been initialized
     private static $initialized = false;
 
+    private \DI\Container $container;
     private Menu $menu;
     private AdminPage $adminPage;
     private Routes $apiRoutes;
@@ -20,12 +21,18 @@ class Plugin
 
     private function __construct()
     {
-        $this->adminPage = new AdminPage();
-        $this->menu = new Menu($this->adminPage);
-        $this->apiRoutes = new Routes(new RestRouter(AESA_API_REST_NAMESPACE));
-        $this->installer = new Installer();
+        $this->setupContainer();
+        $this->installer = $this->container->get(Installer::class);
+        $this->menu =      $this->container->get(Menu::class);
+        $this->adminPage = $this->container->get(AdminPage::class);
+        $this->apiRoutes = $this->container->get(Routes::class);
     }
-
+    private function setupContainer()
+    {
+        $builder = new \DI\ContainerBuilder();
+        $builder->addDefinitions(AESA_PLUGIN_DIR . '/config/config.php');
+        $this->container = $builder->build();
+    }
     /**
      * Returns the plugin instance.
      */
