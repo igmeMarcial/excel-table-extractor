@@ -1,43 +1,45 @@
 {
-    "name": "aesa-admin-ui",
-    "main": "/src/index.js",
-    "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test --env=jsdom",
-        "eject": "react-scripts eject"
-    },
-    "dependencies": {
-        "@emotion/react": "^11.11.3",
-        "@emotion/styled": "^11.11.0",
-        "@fluentui/react-components": "^9.45.0",
-        "@fluentui/react-search-preview": "^0.1.40",
-        "@mui/icons-material": "^5.14.5",
-        "@mui/material": "^5.15.5",
-        "@mui/x-date-pickers": "^6.19.0",
-        "@tanstack/react-table": "^8.11.6",
-        "json-server": "^1.0.0-alpha.22",
-        "material-react-table": "^2.6.1",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "react-router-dom": "^6.21.1",
-        "react-scripts": "^5.0.1",
-        "scheduler": "^0.23.0",
-        "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.1/xlsx-0.20.1.tgz"
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    },
-    "devDependencies": {
-        "tailwindcss": "^3.4.1"
-    }
+  "name": "aesa-admin-ui",
+  "main": "/src/index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "start-wp": "cd ../../../../../ && php -S 0.0.0.0:85",
+    "start-chrome": "start chrome http://localhost:85/wp-admin/admin.php?page=aesa",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@fluentui/react-components": "^9.45.0",
+    "@fluentui/react-search-preview": "^0.1.40",
+    "@mui/icons-material": "^5.14.5",
+    "@mui/material": "^5.15.5",
+    "@mui/x-date-pickers": "^6.19.0",
+    "@tanstack/react-table": "^8.11.6",
+    "json-server": "^1.0.0-alpha.22",
+    "material-react-table": "^2.6.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.21.1",
+    "react-scripts": "^5.0.1",
+    "scheduler": "^0.23.0",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.1/xlsx-0.20.1.tgz"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
 }

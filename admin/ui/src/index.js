@@ -8,11 +8,9 @@ import "./index.css"
 // Render the app
 const root = createRoot(document.getElementById("aesa-wrapper"));
 root.render(
-  <React.StrictMode>
-    <FluentProvider style={{"height":"100%"}} theme={teamsLightTheme}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </FluentProvider>
-  </React.StrictMode>
+  <FluentProvider style={{ "height": "100%" }} theme={teamsLightTheme}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </FluentProvider>
 );

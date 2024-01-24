@@ -1,15 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Button } from '@fluentui/react-components';
+import { MoreVertical24Filled } from '@fluentui/react-icons';
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { Box, IconButton, Tooltip } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined';
 import { helpHttp } from '../../helpers/helpHttp';
 
 const AccionesCell = () => (
-  <Box sx={{ display: 'flex', gap: '1rem' }}>
+  <div className="flex gap-2">
     <Tooltip title="Editar">
       <IconButton
         color="primary"
@@ -18,6 +20,7 @@ const AccionesCell = () => (
         <LaunchOutlinedIcon sx={{ color: '#424242' }} />
       </IconButton>
     </Tooltip>
+    <Button appearance="subtle" icon={<MoreVertical24Filled />}></Button>
     <Tooltip title="Eliminar">
       <IconButton
         color="primary"
@@ -27,7 +30,7 @@ const AccionesCell = () => (
       </IconButton>
     </Tooltip>
     {/* Otros iconos de acción si es necesario */}
-  </Box>
+  </div>
 );
 
 function IndicadorList() {
@@ -36,23 +39,15 @@ function IndicadorList() {
   const [loading, setLoading] = useState(false);
 
   let api = helpHttp();
-  let url = 'http://localhost:8089/indicadores';
+  let url = `${AesaInfo.apiUrl}/estadisticas`;
 
-  //Get api
+  //Get data from API
   useEffect(() => {
     setLoading(true);
-    helpHttp()
-      .get(url)
-      .then((res) => {
-        if (!res.err) {
-          setDb(res);
-          setError(null);
-        } else {
-          setDb(null);
-          setError(res);
-        }
-        setLoading(false);
-      });
+    api.get(url).then((res) => {
+      setDb(res.data);
+      setLoading(false);
+    });
   }, [url]);
 
   const columns = useMemo(
@@ -71,7 +66,7 @@ function IndicadorList() {
       },
 
       {
-        accessorKey: 'componenteNombre', //this column gets pinned left by default because of the the initial state,
+        accessorKey: 'mdeaComponenteNombre', //this column gets pinned left by default because of the the initial state,
         header: 'Componente',
         size: 260,
       },

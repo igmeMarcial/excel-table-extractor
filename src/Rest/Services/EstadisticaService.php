@@ -24,9 +24,12 @@ class EstadisticaService
     public function getListaEstadisticas()
     {
         $sql = "SELECT
-                  estadistica_id id,
-                  nombre
-                FROM {$this->dbMap->estadistica}";
+                  A.estadistica_id id,
+                  A.nombre,
+                  B.mdea_componente_id medeaComponenteId,
+                  B.nombre mdeaComponenteNombre
+                FROM {$this->dbMap->estadistica} A
+                INNER JOIN {$this->dbMap->mdeaComponente} B ON A.mdea_componente_id = B.mdea_componente_id";
         return $this->wpdb->get_results($sql, ARRAY_A);
     }
     public function getEstadistica($id)

@@ -4,7 +4,6 @@ namespace Aesa\Rest;
 
 use Aesa\Core\RestRouter;
 
-use Aesa\Rest\Controllers\IndicadorController;
 use Aesa\Rest\Controllers\PlantillaController;
 use Aesa\Rest\Controllers\DevController;
 use Aesa\Rest\Controllers\EstadisticaController;

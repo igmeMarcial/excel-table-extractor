@@ -17,7 +17,7 @@ class EstadisticaController
         // Return the array of objects
         return [
             'data' => $result,
-            'total' => count($result)
+            'total' => 1000
         ];
     }
     public function registrarEstadistica(\WP_REST_Request $request)
