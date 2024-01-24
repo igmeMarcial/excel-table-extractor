@@ -54,8 +54,8 @@ class Schema
         $currentUserId = get_current_user_id();
         $data = $this->getInitialTableData($tableName);
         foreach ($data as $row) {
-            $row['id_usuario_reg'] = $currentUserId;
-            $row['id_usuario_mod'] = $currentUserId;
+            $row['usuario_reg_id'] = $currentUserId;
+            $row['usuario_mod_id'] = $currentUserId;
             $wpdb->insert($fullTableName, $row);
         }
     }
@@ -76,8 +76,8 @@ class Schema
         return "
 CREATE TABLE {$tablePrefix}mdea_componente (
     mdea_componente_id  INT(11) NOT NULL AUTO_INCREMENT,
-    id_usuario_reg      INT(11) NOT NULL,
-    id_usuario_mod      INT(11) NOT NULL,
+    usuario_reg_id      INT(11) NOT NULL,
+    usuario_mod_id      INT(11) NOT NULL,
     fecha_reg           DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     fecha_mod           DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     activo              TINYINT(1) NOT NULL DEFAULT 1,
@@ -88,8 +88,8 @@ CREATE TABLE {$tablePrefix}mdea_componente (
 CREATE TABLE {$tablePrefix}mdea_subcomponente (
     mdea_subcomponente_id  INT(11) NOT NULL AUTO_INCREMENT,
     mdea_componente_id     INT(11) NOT NULL,
-    id_usuario_reg         INT(11) NOT NULL,
-    id_usuario_mod         INT(11) NOT NULL,
+    usuario_reg_id         INT(11) NOT NULL,
+    usuario_mod_id         INT(11) NOT NULL,
     fecha_reg              DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     fecha_mod              DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     activo                 TINYINT(1) NOT NULL DEFAULT 1,
@@ -101,8 +101,8 @@ CREATE TABLE {$tablePrefix}mdea_subcomponente (
 CREATE TABLE {$tablePrefix}mdea_tema_estadistico (
     mdea_tema_estadistico_id  INT(11) NOT NULL AUTO_INCREMENT,
     mdea_subcomponente_id     INT(11) NOT NULL,
-    id_usuario_reg         INT(11) NOT NULL,
-    id_usuario_mod         INT(11) NOT NULL,
+    usuario_reg_id         INT(11) NOT NULL,
+    usuario_mod_id         INT(11) NOT NULL,
     fecha_reg              DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     fecha_mod              DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     activo                 TINYINT(1) NOT NULL DEFAULT 1,
@@ -116,8 +116,8 @@ CREATE TABLE {$tablePrefix}estadistica (
   mdea_componente_id        INT(11) NOT NULL,
   mdea_subcomponente_id     INT(11) NOT NULL,
   mdea_tema_estadistico_id  INT(11) NOT NULL,
-  id_usuario_reg            INT(11) NOT NULL,
-  id_usuario_mod            INT(11) NOT NULL,
+  usuario_reg_id            INT(11) NOT NULL,
+  usuario_mod_id            INT(11) NOT NULL,
   fecha_reg                 DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
   fecha_mod                 DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
   activo                    TINYINT(1) NOT NULL DEFAULT 1,

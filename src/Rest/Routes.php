@@ -7,6 +7,7 @@ use Aesa\Core\RestRouter;
 use Aesa\Rest\Controllers\IndicadorController;
 use Aesa\Rest\Controllers\PlantillaController;
 use Aesa\Rest\Controllers\DevController;
+use Aesa\Rest\Controllers\EstadisticaController;
 use Aesa\Rest\Controllers\MdeaController;
 
 class Routes
@@ -30,7 +31,8 @@ class Routes
      */
     private function doRegisterRoutes()
     {
-        $this->router->get('/indicadores',              IndicadorController::class . ':listIndicadores');
+        $this->router->get('/estadisticas',             EstadisticaController::class . ':listarEstadisticas');
+        $this->router->post('/estadisticas',            EstadisticaController::class . ':registrarEstadistica');
         $this->router->get('/plantillas',               PlantillaController::class . ':listarPlantillas');
         $this->router->get('/mdea/componentes',         MdeaController::class . ':listarComponentes');
         $this->router->get('/mdea/subcomponentes',      MdeaController::class . ':listarSubcomponentes');

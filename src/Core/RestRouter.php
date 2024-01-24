@@ -22,7 +22,7 @@ class RestRouter
         $this->basePath = $basePath;
     }
 
-    private function registerRestRoute($route, $methods, $callback)
+    private function registerRestRoute($route, $methods, $callback, $args)
     {
         register_rest_route(
             $this->basePath,
@@ -30,6 +30,7 @@ class RestRouter
             [
                 'methods'  => $methods,
                 'callback' => $this->getRouteCallback($callback),
+                'args'     => $args,
             ]
         );
     }
@@ -46,20 +47,20 @@ class RestRouter
         return $callback;
     }
 
-    public function get($route, $callback)
+    public function get($route, $callback, $args = [])
     {
-        $this->registerRestRoute($route, 'GET', $callback);
+        $this->registerRestRoute($route, 'GET', $callback, $args);
     }
-    public function post($route, $callback)
+    public function post($route, $callback, $args = [])
     {
-        $this->registerRestRoute($route, 'POST', $callback);
+        $this->registerRestRoute($route, 'POST', $callback, $args);
     }
-    public function put($route, $callback)
+    public function put($route, $callback, $args = [])
     {
-        $this->registerRestRoute($route, 'PUT', $callback);
+        $this->registerRestRoute($route, 'PUT', $callback, $args);
     }
-    public function delete($route, $callback)
+    public function delete($route, $callback, $args = [])
     {
-        $this->registerRestRoute($route, 'DELETE', $callback);
+        $this->registerRestRoute($route, 'DELETE', $callback, $args);
     }
 }
