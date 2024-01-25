@@ -1,16 +1,7 @@
-import React, { forwardRef, useEffect, useRef, useState } from 'react';
-
-import { makeStyles, shorthands, Select } from '@fluentui/react-components';
+import React, { forwardRef, useState } from 'react';
 import { useForm } from '../../hooks/useForm';
 import CustomInput from './CustomInput';
-import { helpHttp } from '../../helpers/helpHttp';
-import SelectListForm from './SelectListForm';
-
-const useStyles = makeStyles({
-  selectInput: {
-    width: '25em',
-  },
-});
+import SelectAnidados from './SelectAnidados';
 
 const initialForm = {
   componente: '',
@@ -173,8 +164,6 @@ const Form = forwardRef((props, ref) => {
     handleSubmit,
   } = useForm(initialForm, validationsForm);
 
-  const styles = useStyles();
-
   return (
     <form
       style={{ height: '100%' }}
@@ -184,6 +173,7 @@ const Form = forwardRef((props, ref) => {
     >
       <table className="form-table">
         <tbody>
+          <SelectAnidados />
           {fields.map((field) => (
             <tr key={field.name}>
               <th scope="row">
@@ -193,25 +183,6 @@ const Form = forwardRef((props, ref) => {
                 {field.type === 'select' ? (
                   <div>en dessarrollo</div>
                 ) : (
-                  // <SelectListForm
-                  //   styles={styles}
-                  //   title={field.name}
-                  //   data={
-                  //     field.name === 'componente'
-                  //       ? componente ?? ['Cargando']
-                  //       : field.name === 'subComponente'
-                  //       ? subComponentes ?? ['Cargando']
-                  //       : field.name === 'temaEstadistico'
-                  //       ? ['ddd']
-                  //       : ['s']
-                  //   }
-                  //   handleChange={
-                  //     field.name === 'componente'
-                  //       ? handleComponenteChange
-                  //       : handleChange
-                  //   }
-                  //   value={form[field.name]}
-                  // />
                   <CustomInput
                     name={field.name}
                     type={field.type}
