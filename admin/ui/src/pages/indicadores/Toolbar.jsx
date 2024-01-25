@@ -1,7 +1,11 @@
 import React from 'react';
-import { Button } from '@fluentui/react-components';
-import { SearchBox } from '@fluentui/react-search-preview';
-import { MoreVertical24Filled, Add24Filled } from '@fluentui/react-icons';
+import { Button, Input } from '@fluentui/react-components';
+
+import {
+  MoreVertical24Filled,
+  Add24Filled,
+  Search24Regular,
+} from '@fluentui/react-icons';
 import ModalIndicadores from './ModalIndicadores';
 import { Link } from 'react-router-dom';
 import { getNewPathUrl } from '../../hooks/usePathRoute';
@@ -9,7 +13,11 @@ import { getNewPathUrl } from '../../hooks/usePathRoute';
 function Toolbar() {
   return (
     <div className="flex px-4 pt-6 pb-4 gap-2">
-      <SearchBox placeholder="Buscar" />
+      <Input
+        contentBefore={<Search24Regular />}
+        placeholder="Buscar.."
+        type="search"
+      />
       <span className="flex-1"></span>
       <Link to={getNewPathUrl('indicadores/editar')}>
         <Button

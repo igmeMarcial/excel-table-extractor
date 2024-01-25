@@ -1,35 +1,26 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Button } from '@fluentui/react-components';
-import { MoreVertical24Filled } from '@fluentui/react-icons';
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { IconButton, Tooltip } from '@mui/material';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined';
 import { helpHttp } from '../../helpers/helpHttp';
+import { OpenRegular, DeleteRegular } from '@fluentui/react-icons';
 
 const AccionesCell = () => (
   <div className="flex gap-2">
-    <Tooltip title="Editar">
-      <IconButton
-        color="primary"
-        onClick={() => console.log('disteclick a editar')}
-      >
-        <LaunchOutlinedIcon sx={{ color: '#424242' }} />
-      </IconButton>
-    </Tooltip>
-    <Button appearance="subtle" icon={<MoreVertical24Filled />}></Button>
-    <Tooltip title="Eliminar">
-      <IconButton
-        color="primary"
-        onClick={() => console.log('diste click a borrar')}
-      >
-        <DeleteOutlinedIcon sx={{ color: '#424242' }} />
-      </IconButton>
-    </Tooltip>
-    {/* Otros iconos de acción si es necesario */}
+    <Button
+      appearance="subtle"
+      onClick={() => console.log('disteclick a editar')}
+      icon={<OpenRegular />}
+      aria-label="Edit"
+    />
+    <Button
+      appearance="subtle"
+      onClick={() => console.log('diste click a borrar')}
+      icon={<DeleteRegular />}
+      aria-label="Delete"
+    />
   </div>
 );
 
@@ -60,7 +51,7 @@ function IndicadorList() {
         Cell: AccionesCell,
       },
       {
-        accessorKey: 'idComponente', //this column gets pinned left by default because of the the initial state,
+        accessorKey: 'id', //this column gets pinned left by default because of the the initial state,
         header: 'N°',
         size: 60,
       },
@@ -99,7 +90,7 @@ function IndicadorList() {
     layoutMode: 'grid-no-grow', //constant column widths
     muiTableContainerProps: { sx: { maxHeight: '460px' } },
     initialState: {
-      columnPinning: { left: ['idComponente'], right: ['acciones'] },
+      columnPinning: { left: ['id'], right: ['acciones'] },
     },
     muiTableProps: {
       sx: {
