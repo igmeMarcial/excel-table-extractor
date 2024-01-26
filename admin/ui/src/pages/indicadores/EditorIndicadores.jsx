@@ -3,6 +3,7 @@ import MainLayout from '../../layout/MainLayout';
 import { Link } from 'react-router-dom';
 import Form from '../indicadores/Form';
 import { makeStyles, Button } from '@fluentui/react-components';
+import { getNewPathUrl } from '../../hooks/usePathRoute';
 
 const useStyles = makeStyles({
   wrapper: {
@@ -69,12 +70,15 @@ function EditorIndicadores() {
               className={styles.btn}
               appearance="primary"
               onClick={handleClick}
+              disabled
             >
               Guardar
             </Button>
-            <Button className="" appearance="outline">
-              Cerrar
-            </Button>
+            <Link to={getNewPathUrl('indicadores')}>
+              <Button className="" appearance="outline">
+                Cerrar
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

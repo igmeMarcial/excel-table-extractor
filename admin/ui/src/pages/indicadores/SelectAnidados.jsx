@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useFetch } from '../../hooks/useFetch';
-import { makeStyles, shorthands, Select } from '@fluentui/react-components';
+import { makeStyles, Select } from '@fluentui/react-components';
 
 const urls = {
-  componenteUrl:
-    'http://localhost:85/index.php?rest_route=/aesa/v1/mdea/componentes',
-  subComponentesUrl:
-    'http://localhost:85/index.php?rest_route=/aesa/v1/mdea/subcomponentes',
-  temasEstadisticosUrl:
-    'http://localhost:85/index.php?rest_route=/aesa/v1/mdea/temas-estadisticos',
+  componenteUrl: `${AesaInfo.apiUrl}/mdea/componentes`,
+  subComponentesUrl: `${AesaInfo.apiUrl}/mdea/subcomponentes`,
+  temasEstadisticosUrl: `${AesaInfo.apiUrl}/mdea/temas-estadisticos`,
 };
 
 const useStyles = makeStyles({

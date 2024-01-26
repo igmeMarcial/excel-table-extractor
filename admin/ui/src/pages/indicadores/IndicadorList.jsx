@@ -1,11 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Button } from '@fluentui/react-components';
-import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from 'material-react-table';
 import { helpHttp } from '../../helpers/helpHttp';
 import { OpenRegular, DeleteRegular } from '@fluentui/react-icons';
+import Table from '../../components/Table';
 
 const AccionesCell = () => (
   <div className="flex gap-2">
@@ -47,7 +44,7 @@ function IndicadorList() {
       {
         accessorKey: 'acciones', //this column gets pinned to the right by default because of the initial state,
         header: 'Acciones',
-        size: 150,
+        size: 100,
         Cell: AccionesCell,
       },
       {
@@ -64,59 +61,26 @@ function IndicadorList() {
       {
         accessorKey: 'nombre', //this column gets pinned left by default because of the the initial state,
         header: 'Indicador',
-        size: 480,
+        size: 380,
       },
       {
         accessorKey: 'ultimaActualizacion',
         header: 'Ultima actualización',
-        size: 220,
+        size: 180,
       },
       {
         accessorKey: 'estado',
         header: 'Estado',
+        grow: true,
       },
     ],
     []
   );
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-  const table = useMaterialReactTable({
-    columns,
-    data: db ?? [],
-    enableTopToolbar: false,
-    enableColumnActions: false,
-    enableStickyHeader: true,
-    enableColumnPinning: true,
-    enableSorting: false,
-    layoutMode: 'grid-no-grow', //constant column widths
-    muiTableContainerProps: { sx: { maxHeight: '460px' } },
-    initialState: {
-      columnPinning: { left: ['id'], right: ['acciones'] },
-    },
-    muiTableProps: {
-      sx: {
-        backgroundColor: 'white',
-      },
-    },
-    muiTableHeadCellProps: {
-      sx: {
-        borderBottom: '1px solid #C3C4C7',
-        borderLeft: '1px solid #C3C4C7',
-        borderTop: '1px solid #C3C4C7',
-        fontWeight: '500',
-        color: 'black',
-        paddingY: '8px',
-      },
-    },
-    muiTableBodyCellProps: {
-      sx: {
-        bgcolor: 'white',
-        paddingY: '0.5em',
-        paddingX: '1rem',
-      },
-    },
-  });
-
-  return <MaterialReactTable table={table} />;
+  return <Table columns={columns} db={db && db} />;
 }
 
 export default IndicadorList;

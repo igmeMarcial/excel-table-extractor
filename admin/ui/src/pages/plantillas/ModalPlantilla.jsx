@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useState } from 'react';
 import {
   useModalAttributes,
   useFocusFinders,
@@ -7,54 +7,49 @@ import {
   Button,
   tokens,
   Title2,
-  CompoundButton
-} from "@fluentui/react-components";
-import FileUploadSingle from './FileUploadSingle';
-import {
- Add24Filled,
-} from "@fluentui/react-icons";
-
-
+  CompoundButton,
+} from '@fluentui/react-components';
+import FileUploadSingle from '../../components/FileUploadSingle';
+import { Add24Filled } from '@fluentui/react-icons';
 
 const useStyles = makeStyles({
   dialog: {
-    position: "fixed",
+    position: 'fixed',
     backgroundColor: tokens.colorNeutralBackground1,
     ...shorthands.inset(0),
-    ...shorthands.padding("10px"),
-    ...shorthands.margin("auto"),
-    ...shorthands.borderStyle("none"),
-    ...shorthands.overflow("unset"),
+    ...shorthands.padding('10px'),
+    ...shorthands.margin('auto'),
+    ...shorthands.borderStyle('none'),
+    ...shorthands.overflow('unset'),
     boxShadow: tokens.shadow16,
-    width: "450px",
-    height: "350px",
-    display: "flex",
-    flexDirection: "column",
-    zIndex:"999"
+    width: '450px',
+    height: '350px',
+    display: 'flex',
+    flexDirection: 'column',
+    zIndex: '999',
   },
 
   footer: {
-    display: "flex",
-    marginTop: "auto",
-    justifyContent: "end",
-    ...shorthands.gap("5px"),
+    display: 'flex',
+    marginTop: 'auto',
+    justifyContent: 'end',
+    ...shorthands.gap('5px'),
   },
-  btnComponent:{
-   fontWeight: 600,
+  btnComponent: {
+    fontWeight: 600,
     fontSize: '14px',
     lineHeight: '20px',
-    marginLeft:"10px",
-     ":hover":{
-      color:"#2271B1"
-    }
-  }
+    marginLeft: '10px',
+    color: '#0F6CBD',
+    ':hover': {
+      color: '#2271B1',
+    },
+  },
 });
 
-
 function Modal() {
-
-    const styles = useStyles();
-  const [open, setOpen] =useState(false);
+  const styles = useStyles();
+  const [open, setOpen] = useState(false);
   const { triggerAttributes, modalAttributes } = useModalAttributes({
     trapFocus: true,
   });
@@ -71,7 +66,7 @@ function Modal() {
   };
 
   const onDialogKeydown = (e) => {
-    if (e.key === "Escape") {
+    if (e.key === 'Escape') {
       setOpen(false);
       triggerRef.current?.focus();
     }
@@ -82,7 +77,6 @@ function Modal() {
       findFirstFocusable(dialogRef.current)?.focus();
     }
   }, [open, findFirstFocusable]);
-
 
   return (
     <>
@@ -98,10 +92,6 @@ function Modal() {
       >
         Subir plantilla
       </Button>
-
-      {/* <Button appearance='secondary' ref={triggerRef} {...triggerAttributes} onClick={onClickTrigger}>
-        Subir Plantilla
-      </Button> */}
       {open && (
         <div
           onKeyDown={onDialogKeydown}
@@ -126,4 +116,4 @@ function Modal() {
   );
 }
 
-export default Modal
+export default Modal;

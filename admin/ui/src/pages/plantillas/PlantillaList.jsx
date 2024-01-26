@@ -1,23 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { DeleteRegular } from '@fluentui/react-icons';
-import {
-  TableBody,
-  TableCell,
-  TableRow,
-  Table,
-  TableHeader,
-  TableHeaderCell,
-  TableCellLayout,
-  Button,
-  useArrowNavigationGroup,
-  useFocusableGroup,
-} from '@fluentui/react-components';
+import { Button } from '@fluentui/react-components';
+import Table from '../../components/Table';
 
-function PlantillaList({ columns }) {
-  const keyboardNavAttr = useArrowNavigationGroup({ axis: 'grid' });
-  const focusableGroupAttr = useFocusableGroup({
-    tabBehavior: 'limited-trap-focus',
-  });
+const AccionesCell = () => (
+  <div className="flex gap-2">
+    <Button
+      appearance="subtle"
+      onClick={() => console.log('diste click a borrar')}
+      icon={<DeleteRegular />}
+      aria-label="Delete"
+    />
+  </div>
+);
+
+function PlantillaList() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -33,58 +30,27 @@ function PlantillaList({ columns }) {
         setLoading(false);
       });
   }, []);
+
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: 'acciones',
+        header: 'Acciones',
+        size: 100,
+        Cell: AccionesCell,
+      },
+      { accessorKey: 'id', header: 'N°', size: 60 },
+      { accessorKey: 'file', header: 'Nombre', size: 260 },
+      { accessorKey: 'size', header: 'Tamaño', size: 480 },
+      { accessorKey: 'modified', header: 'Fecha de Registro', grow: true },
+    ],
+    []
+  );
   if (loading) {
     return <div>Loading...</div>;
   }
-  return (
-    <div style={{ overflowX: 'auto' }}>
-      <Table
-        {...keyboardNavAttr}
-        role="grid"
-        aria-label="Table with grid keyboard navigation"
-        sortable
-      >
-        <TableHeader as="thead">
-          <TableRow
-            appearance="none"
-            className="border border-solid border-t-[1px] border-r-[0px] border-b-[1px] border-l-[1px]"
-          >
-            {columns.map((column) => (
-              <TableHeaderCell
-                key={column.columnKey}
-                as="th"
-                className="border-l-[1px] border-r-[1px] py-2 w-1/4"
-                style={{ width: `${column.size}` }}
-              >
-                {column.label}
-              </TableHeaderCell>
-            ))}
-          </TableRow>
-        </TableHeader>
 
-        <TableBody as="tbody">
-          {data.map((item, index) => (
-            <TableRow appearance="outline" key={index}>
-              <TableCell>{index + 1}</TableCell>
-              <TableCell>{item.file}</TableCell>
-              <TableCell>{item.size}</TableCell>
-              <TableCell>{item.modified}</TableCell>
-              <TableCell role="gridcell" tabIndex={0} {...focusableGroupAttr}>
-                <TableCellLayout>
-                  <Button
-                    appearance="subtle"
-                    className="mx-4"
-                    icon={<DeleteRegular />}
-                    aria-label="Editd"
-                  />
-                </TableCellLayout>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
-  );
+  return <Table columns={columns} db={data && data} />;
 }
 
 export default PlantillaList;
