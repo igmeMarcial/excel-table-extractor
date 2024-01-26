@@ -33,28 +33,6 @@ const validationsForm = (form) => {
 
 const fields = [
   {
-    name: 'componente',
-    label: 'Componente',
-    type: 'select',
-    options: ['componente 1', 'componente 2', 'componente 3'],
-  },
-  {
-    name: 'subComponente',
-    label: 'Sub componente',
-    type: 'select',
-    options: ['subComponente 1', 'subComponente 2', 'subComponente 3'],
-  },
-  {
-    name: 'temaEstadistico',
-    label: 'Tema estadístico',
-    type: 'select',
-    options: [
-      '6.1.2 Gasto de empresas privadas...',
-      '6.1.2 Gasto de empresas privadas...',
-      '6.1.2 Gasto de empresas privadas...',
-    ],
-  },
-  {
     name: 'nombreIndicador',
     label: 'Nombre del indicador o estadística ambiental',
     type: 'text',

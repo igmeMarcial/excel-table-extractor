@@ -79,10 +79,10 @@ return [
     ['mdea_subcomponente_id' => 20, 'posicion' => 1, 'nombre' => 'Preparación ante eventos extremos naturales y gestión de desastres'],
     ['mdea_subcomponente_id' => 20, 'posicion' => 2, 'nombre' => 'Preparación y gestión de desastres tecnológicos'],
 
-    ['mdea_subcomponente_id' => 20, 'posicion' => 3, 'nombre' => 'Información Ambiental'],
-    ['mdea_subcomponente_id' => 20, 'posicion' => 4, 'nombre' => 'Educación Ambiental'],
-    ['mdea_subcomponente_id' => 20, 'posicion' => 5, 'nombre' => 'Percepción y Conciencia Ambiental'],
-    ['mdea_subcomponente_id' => 20, 'posicion' => 6, 'nombre' => 'Participación/Acción Ambiental'],
+    ['mdea_subcomponente_id' => 21, 'posicion' => 3, 'nombre' => 'Información Ambiental'],
+    ['mdea_subcomponente_id' => 21, 'posicion' => 4, 'nombre' => 'Educación Ambiental'],
+    ['mdea_subcomponente_id' => 21, 'posicion' => 5, 'nombre' => 'Percepción y Conciencia Ambiental'],
+    ['mdea_subcomponente_id' => 21, 'posicion' => 6, 'nombre' => 'Participación/Acción Ambiental'],
 
 
 

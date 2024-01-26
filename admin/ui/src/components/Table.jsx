@@ -5,7 +5,7 @@ import {
 } from 'material-react-table';
 
 function Table({ columns, db }) {
-  console.log(db);
+  // console.log(db);
   const table = useMaterialReactTable({
     columns,
     data: db ?? [],
