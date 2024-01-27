@@ -1,7 +1,13 @@
 import React from 'react';
+import MenuIndicadores from '../components/MenuIndicadores';
 
-function IndicadoresEditLayout() {
-  return <div>IndicadoresEditLayout</div>;
+function IndicadoresEditLayout({ children }) {
+  return (
+    <>
+      <MenuIndicadores />
+      {children}
+    </>
+  );
 }
 
 export default IndicadoresEditLayout;

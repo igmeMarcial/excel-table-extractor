@@ -19,7 +19,7 @@ function Toolbar() {
         type="search"
       />
       <span className="flex-1"></span>
-      <Link to={getNewPathUrl('indicadores/editar')}>
+      <Link to={getNewPathUrl('indicadores/ficha')}>
         <Button
           style={{ color: '#2271B1' }}
           appearance="subtle"
