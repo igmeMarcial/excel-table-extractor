@@ -6,7 +6,7 @@ import {
   ArrowCurveDownLeft24Regular,
 } from '@fluentui/react-icons';
 import { makeStyles, Button } from '@fluentui/react-components';
-import Form from '../Form';
+import Form from '../ficha/Form';
 import { Link } from 'react-router-dom';
 import { getNewPathUrl } from '../../../hooks/usePathRoute';
 

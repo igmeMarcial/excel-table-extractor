@@ -33,8 +33,8 @@ function MultipleFileUploader() {
       });
       // Cuando se han completado todas las promesas, actualiza el estado.
       Promise.all(promises).then((values) => {
-        setCellValues(values);
-        console.log(values);
+        const arr = values.map((fileName) => ({ file: fileName }));
+        setCellValues(arr);
         setFiles(true);
       });
     }
@@ -63,6 +63,7 @@ function MultipleFileUploader() {
               type="file"
               accept=".xlsx"
               onChange={handleFileChange}
+              multiple
             />
             <div
               style={{ borderRadius: '4px' }}

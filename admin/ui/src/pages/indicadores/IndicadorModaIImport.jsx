@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useState } from 'react';
 import {
   useModalAttributes,
   useFocusFinders,
@@ -8,41 +8,37 @@ import {
   tokens,
   Title2,
 } from '@fluentui/react-components';
-import {
- ArrowImport24Regular
-} from "@fluentui/react-icons";
+import { ArrowImport24Regular } from '@fluentui/react-icons';
 import MultipleFileUploader from './MultipleFileUploader';
-
 
 const useStyles = makeStyles({
   dialog: {
-    position: "fixed",
+    position: 'fixed',
     backgroundColor: tokens.colorNeutralBackground1,
     ...shorthands.inset(0),
-    ...shorthands.padding("10px"),
-    ...shorthands.margin("auto"),
-    ...shorthands.borderStyle("none"),
-    ...shorthands.overflow("unset"),
+    ...shorthands.padding('10px'),
+    ...shorthands.margin('auto'),
+    ...shorthands.borderStyle('none'),
+    ...shorthands.overflow('unset'),
     boxShadow: tokens.shadow16,
-    width: "750px",
-    height: "470px",
-    display: "flex",
-    flexDirection: "column",
-    zIndex:"999",
-    paddingLeft:"24px",
-    paddingTop:"24px",
-    paddingRight:"24px",
-    paddingBottom:"24px"
-    
+    width: '650px',
+    height: '450px',
+    display: 'flex',
+    flexDirection: 'column',
+    zIndex: '999',
+    paddingLeft: '24px',
+    paddingTop: '24px',
+    paddingRight: '24px',
+    paddingBottom: '24px',
   },
 
   footer: {
-    display: "flex",
-    marginTop: "auto",
-    justifyContent: "start",
-    ...shorthands.gap("5px"),
+    display: 'flex',
+    marginTop: 'auto',
+    justifyContent: 'start',
+    ...shorthands.gap('5px'),
   },
- btnComponent: {
+  btnComponent: {
     paddingLeft: '0',
     // paddingRight:"0",
     fontWeight: 600,
@@ -58,21 +54,21 @@ const useStyles = makeStyles({
       color: '#2271B1',
     },
   },
-  title:{
-    lineHeight: "28px",
-    fontWeight:"600",
-    fontSize:"20px"
+  title: {
+    lineHeight: '28px',
+    fontWeight: '600',
+    fontSize: '20px',
+    marginTop: '0px',
+    marginBottom: '0px',
   },
-  btnImport:{
-    backgroundColor:"#B8B8B8"
-  }
+  btnImport: {
+    backgroundColor: '#B8B8B8',
+  },
 });
 
-
 function ModalIndicadores() {
-
-    const styles = useStyles();
-  const [open, setOpen] =useState(false);
+  const styles = useStyles();
+  const [open, setOpen] = useState(false);
   const { triggerAttributes, modalAttributes } = useModalAttributes({
     trapFocus: true,
   });
@@ -89,7 +85,7 @@ function ModalIndicadores() {
   };
 
   const onDialogKeydown = (e) => {
-    if (e.key === "Escape") {
+    if (e.key === 'Escape') {
       setOpen(false);
       triggerRef.current?.focus();
     }
@@ -100,7 +96,6 @@ function ModalIndicadores() {
       findFirstFocusable(dialogRef.current)?.focus();
     }
   }, [open, findFirstFocusable]);
-
 
   return (
     <>
@@ -125,12 +120,12 @@ function ModalIndicadores() {
           className={styles.dialog}
           aria-label="Example dialog"
         >
-          <Title2 as="h2" className={styles.title}>
+          <Title2 as="h5" className={styles.title}>
             Importar indicadores
           </Title2>
-          <div className="h-full">
-            <MultipleFileUploader />
-          </div>
+
+          <MultipleFileUploader />
+
           <div className={styles.footer}>
             <Button className={styles.btnImport}>Importar</Button>
             <Button onClick={onClickClose}>Cancelar</Button>
@@ -141,4 +136,4 @@ function ModalIndicadores() {
   );
 }
 
-export default ModalIndicadores
+export default ModalIndicadores;

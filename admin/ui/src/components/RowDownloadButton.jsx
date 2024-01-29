@@ -29,7 +29,7 @@ function RowDownloadButton({ tooltip, onClick }) {
     />
   );
 }
-RowDownloadButton.PropTypes = {
+RowDownloadButton.propTypes = {
   tooltip: PropTypes.string,
   onClick: PropTypes.func,
 };

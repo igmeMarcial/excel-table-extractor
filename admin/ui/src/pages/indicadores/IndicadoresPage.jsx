@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import MainLayout from '../../layout/MainLayout';
-import Toolbar from './Toolbar';
 import IndicadoresPageList from './IndicadoresPageList';
+import IndicadoresPageToolbar from './IndicadoresPageToolbar';
 
 function IndicadoresPage() {
   return (
     <MainLayout>
-      <Toolbar />
+      <IndicadoresPageToolbar />
       <IndicadoresPageList />
     </MainLayout>
   );
