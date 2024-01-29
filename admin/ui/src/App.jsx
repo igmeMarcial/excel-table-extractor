@@ -1,9 +1,9 @@
 import React from 'react';
 
-import Anuarios from './pages/anuarios/Anuarios';
 import Configuracion from './pages/configuracion/Configuracion';
 import IndicadoresPage from './pages/indicadores/IndicadoresPage';
-import Plantillas from './pages/plantillas/Plantillas';
+import PlantillasPage from './pages/plantillas/PlantillasPage';
+import AnuariosPage from './pages/anuarios/AnuariosPage';
 import ParamRoutes from './ParamRoutes';
 import ParamRoute from './ParamRoute';
 import EditorIndicadores from './pages/indicadores/EditorIndicadores';
@@ -17,8 +17,8 @@ function App() {
     <ParamRoutes param="tab">
       <ParamRoute default element={<IndicadoresPage />} />
       <ParamRoute value="indicadores" element={<IndicadoresPage />} />
-      <ParamRoute value="anuarios" element={<Anuarios />} />
-      <ParamRoute value="plantillas" element={<Plantillas />} />
+      <ParamRoute value="anuarios" element={<AnuariosPage />} />
+      <ParamRoute value="plantillas" element={<PlantillasPage />} />
       <ParamRoute value="configuracion" element={<Configuracion />} />
       <ParamRoute value="dev" element={<Dev />} />
       <ParamRoute value="indicadores/editar" element={<EditorIndicadores />} />

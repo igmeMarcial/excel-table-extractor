@@ -12,7 +12,7 @@ import { getNewPathUrl } from '../../hooks/usePathRoute';
 
 function Toolbar() {
   return (
-    <div className="flex px-4 pt-6 pb-4 gap-2">
+    <div className="flex px-10 pt-6 pb-4 gap-2">
       <Input
         contentBefore={<Search24Regular />}
         placeholder="Buscar.."

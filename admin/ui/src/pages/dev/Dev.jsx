@@ -52,6 +52,26 @@ function Dev() {
         setLoading(false);
       });
   };
+  const onGenerarAnuarioClick = () => {
+    setLoading(true);
+    fetch(`${AesaInfo.apiUrl}/anuarios/generar-anuario`, {
+      method: 'GET',
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setData(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      });
+  };
   return (
     <MainLayout>
       <div className="p-6">
@@ -61,6 +81,9 @@ function Dev() {
           </Button>
           <Button onClick={onPostEstadistica} className="m-5">
             Post estadistica
+          </Button>
+          <Button onClick={onGenerarAnuarioClick} className="m-5">
+            Generar anuario
           </Button>
         </div>
         <div className="mt-10 border">

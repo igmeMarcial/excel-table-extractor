@@ -1,13 +1,13 @@
 import React from 'react';
 import MainLayout from '../../layout/MainLayout';
 import Toolbar from './Toolbar';
-import IndicadorList from './IndicadorList';
+import IndicadoresPageList from './IndicadoresPageList';
 
 function IndicadoresPage() {
   return (
     <MainLayout>
       <Toolbar />
-      <IndicadorList />
+      <IndicadoresPageList />
     </MainLayout>
   );
 }

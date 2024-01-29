@@ -2,30 +2,63 @@
 
 namespace Aesa\Rest\Controllers;
 
+use WP_REST_Request;
+use WP_REST_Response;
+use Aesa\Rest\Services\PlantillaService;
+
 class PlantillaController
 {
-    public function listarPlantillas()
+    private PlantillaService $service;
+    public function __construct(PlantillaService $service)
     {
-        $pathPlantillas = AESA_PLUGIN_DIR . '/files/templates';
-        // Get all files in the templates directory
-        $templates = scandir($pathPlantillas);
-        // Remove the first two elements of the array (.) and (..)
-        $templates = array_slice($templates, 2);
-        // Map the array of strings to an array of objects and including the file size and modified date
-        $templates = array_map(function ($template) {
-            $path = AESA_PLUGIN_DIR . '/files/templates/' . $template;
-            return (object) [
-                'id' => $template,
-                'file' => $template,
-                'size' => filesize($path),
-                'modified' => filemtime($path)
-            ];
-        }, $templates);
-
-        // Return the array of objects
+        $this->service = $service;
+    }
+    public function listar()
+    {
+        $plantillas = $this->service->listar();
         return [
-            'data' => $templates,
-            'total' => count($templates)
+            'data' => $plantillas,
+            'total' => count($plantillas)
         ];
+    }
+    public function guardarArchivo(WP_REST_Request $request)
+    {
+        $files = $request->get_file_params();
+        if (empty($files)) {
+            return new WP_REST_Response('No file uploaded', 400);
+        }
+
+        $plantilla = $files['file'];
+
+        if (!$this->service->guardarArchivo($plantilla)) {
+            return new WP_REST_Response('Error moving the uploaded file', 500);
+        }
+
+        return new WP_REST_Response();
+    }
+    public function descargarArchivo(WP_REST_Request $request)
+    {
+        // Get the hash path parameter
+        $hash = $request->get_param('hash');
+        $archivo = $this->service->getArchivoFullInfoByHash($hash);
+        if (!$archivo) {
+            return new WP_REST_Response('File not found', 404);
+        }
+        // Set headers for file download
+        header('Content-Type: application/octet-stream');
+        header("Content-Transfer-Encoding: Binary");
+        header('Content-Disposition: attachment; filename="' . $archivo->name . '"');
+        // Send the file content
+        readfile($archivo->path);
+        exit();
+    }
+    public function eliminarArchivo(WP_REST_Request $request)
+    {
+        // Get the hash path parameter
+        $hash = $request->get_param('hash');
+        if (!$this->service->eliminarArchivo($hash)) {
+            return new WP_REST_Response('Error deleting the file', 500);
+        }
+        return new WP_REST_Response();
     }
 }

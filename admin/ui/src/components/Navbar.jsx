@@ -1,13 +1,13 @@
 import React from 'react';
-import { makeStyles, tokens } from '@fluentui/react-components';
+import { makeStyles } from '@fluentui/react-components';
 import { NavLink, useLocation } from 'react-router-dom';
 
 const items = [
   { text: 'Indicadores', path: 'indicadores' },
   { text: 'Anuarios', path: 'anuarios' },
-  { text: 'Plantilla', path: 'plantillas' },
+  { text: 'Plantillas', path: 'plantillas' },
   { text: 'Configuracion', path: 'configuracion' },
-  { text: 'Dev', path: 'dev' },
+  { text: '*Dev', path: 'dev' },
 ];
 
 const useStyles = makeStyles({
@@ -38,14 +38,14 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={'flex justify-start items-center h-10 px-4 ' + classes.bar}>
+    <nav className={'flex justify-start items-center h-10 px-8 rounded-t ' + classes.bar}>
       {items.map((item, index) => {
         return (
           <NavLink
             to={getNewUrl(item.path)}
-            key={index}
+            key={item.path}
             className={
-              `block px-2 text-white ${classes.item} ` +
+              `no-underline block px-2 text-white ${classes.item} ` +
               (currentTab === item.path ? classes.active : '')
             }
           >

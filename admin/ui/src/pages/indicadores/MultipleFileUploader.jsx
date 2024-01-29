@@ -61,7 +61,7 @@ function MultipleFileUploader() {
               id="hidden-input"
               className="text-sm cursor-pointer  hidden"
               type="file"
-              multiple
+              accept=".xlsx"
               onChange={handleFileChange}
             />
             <div
