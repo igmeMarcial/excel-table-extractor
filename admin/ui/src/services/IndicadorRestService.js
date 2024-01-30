@@ -18,10 +18,12 @@ class IndicadorRestService {
     return this.handleRequest(axios.get(this.apiUrl)).then((res) => res.data);
   }
 
-  static upload(file) {
-    const formData = new FormData();
-    formData.append('file', file);
-    return this.handleRequest(axios.post(`${this.apiUrl}`, formData)).then((res) => res.data);
+  static create(model) {
+    return this.handleRequest(axios.post(`${this.apiUrl}`, model)).then((res) => res.data);
+  }
+
+  static update(id, data) {
+    return this.handleRequest(axios.put(`${this.apiUrl}/${id}`, data)).then((res) => res.data);
   }
 
   static delete(hash) {
