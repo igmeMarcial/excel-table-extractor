@@ -69,7 +69,6 @@ function FichaPage() {
               className={styles.btn}
               appearance="primary"
               onClick={handleClick}
-              disabled
             >
               Guardar
             </Button>

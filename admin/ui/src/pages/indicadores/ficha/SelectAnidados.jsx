@@ -13,9 +13,16 @@ const useStyles = makeStyles({
     width: '25em',
   },
 });
-
+// initial form select
+const initialForm = {
+  componente: '',
+  subComponente: '',
+  temaEstadistico: '',
+};
 function SelectAnidados() {
   const styles = useStyles();
+  const [formSelect, setFormSelect] = useState(initialForm);
+
   const [componente, setComponente] = useState(null);
   const [subComponentData, setSubComponentData] = useState(null);
   const [temasEstadisticoData, setTemasEstadisticoData] = useState(null);
@@ -44,6 +51,16 @@ function SelectAnidados() {
     setSubComponentes(subComponentesFiltrados);
     // setSelectedSubcomponente('');
     // setSelectedTemaEstadistico('');
+    // console.log(componente.find((c) => c.id === selectedId).nombre);
+    const selectValue = componente.find((c) => c.id === selectedId).nombre;
+    console.log(event.target.name);
+    setFormSelect({
+      ...formSelect,
+      [event.target.name]: selectValue,
+    });
+    setTimeout(() => {
+      console.log(formSelect);
+    }, 5000);
   };
   const handleSelectChangeT = (event) => {
     const selectedId = event.target.value;

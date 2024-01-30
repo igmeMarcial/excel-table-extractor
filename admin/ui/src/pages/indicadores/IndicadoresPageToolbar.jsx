@@ -30,8 +30,8 @@ function IndicadoresPageToolbar() {
           Registrar
         </Button>
       </Link>
-      {/* <IndicadorModal /> */}
-      <ModalIndicadores />
+      <IndicadorModal />
+      {/* <ModalIndicadores /> */}
       <Button appearance="subtle" icon={<MoreVertical24Filled />}></Button>
     </div>
   );

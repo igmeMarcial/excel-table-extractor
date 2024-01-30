@@ -2,7 +2,24 @@ import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 import FilesIndicadoresCell from './FilesIndicadoresCell';
 
-function MultipleFileUploader() {
+const dataTest = [
+  { file: 'arcivo1' },
+  { file: 'arcivo1' },
+  { file: 'arcivo1' },
+  { file: 'arcivo1' },
+  { file: 'arcivo1' },
+  { file: 'arcivo1' },
+  { file: 'arcivo1' },
+  { file: 'arcivo1' },
+  { file: 'arcivo1' },
+  { file: 'arcivo1' },
+  { file: 'arcivo1' },
+  { file: 'arcivo1' },
+  { file: 'arcivo1' },
+  { file: 'arcivo1' },
+];
+
+function MultipleFileUploader({ onFileChange }) {
   const [files, setFiles] = useState(false);
   const [cellValues, setCellValues] = useState(null);
 
@@ -33,21 +50,25 @@ function MultipleFileUploader() {
       });
       // Cuando se han completado todas las promesas, actualiza el estado.
       Promise.all(promises).then((values) => {
-        const arr = values.map((fileName) => ({ file: fileName }));
+        const arr = values.map((fileName) => ({
+          file: fileName,
+          key: `${Date.now()} + ${fileName}`,
+        }));
         setCellValues(arr);
         setFiles(true);
+        onFileChange(files);
       });
     }
   };
 
   return (
-    <section className="h-full py-3 overflow-auto  w-full  flex flex-col">
+    <section className="h-full min-h-60 py-3  w-full items-center ">
       {files ? (
         <FilesIndicadoresCell arr={cellValues} />
       ) : (
-        <header
+        <main
           style={{ borderColor: '#0F6CBD', backgroundColor: '#F6F7F7' }}
-          className="h-full border-dashed border-2  py-12 flex flex-col justify-center items-center"
+          className="h-full min-h-44  border-dotted border-2 rounded-md  py-12 flex flex-col justify-center items-center"
         >
           <p className="mb-3 font-semibold text-gray-900 flex flex-wrap justify-center">
             <span>
@@ -72,7 +93,7 @@ function MultipleFileUploader() {
               Seleccionar fichas técnicas
             </div>
           </label>
-        </header>
+        </main>
       )}
     </section>
   );

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Modal } from 'antd';
-import { Button } from '@fluentui/react-components';
+import { Modal, Button } from 'antd';
 import { ArrowImport24Regular } from '@fluentui/react-icons';
+import MultipleFileUploader from './MultipleFileUploader';
 
 function IndicadorModal() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [files, setFiles] = useState(true);
+
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -14,28 +16,39 @@ function IndicadorModal() {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+  const handleFileChange = (files) => {
+    console.log(files);
+    setFiles(files);
+  };
+
+  const modalStyles = {
+    footer: {
+      display: 'flex',
+    },
+  };
+
   return (
     <>
       <Button
-        size="medium"
-        appearance="subtle"
-        icon={<ArrowImport24Regular className="" />}
+        type="text"
+        icon={<ArrowImport24Regular className="align-middle" />}
         onClick={showModal}
       >
         Importar
       </Button>
       <Modal
-        title="Basic Modal"
+        title="Importar indicadores"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        styles={modalStyles}
+        width={700}
         footer={[
           <Button
+            disabled={files}
             key="submit"
             type="primary"
-            // loading={loading}
             onClick={handleOk}
-            defaultBg="#B8B8B8"
           >
             Importar
           </Button>,
@@ -44,9 +57,7 @@ function IndicadorModal() {
           </Button>,
         ]}
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <MultipleFileUploader onFileChange={handleFileChange} />
       </Modal>
     </>
   );

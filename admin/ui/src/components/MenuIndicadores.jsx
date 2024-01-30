@@ -22,9 +22,9 @@ function MenuIndicadores() {
               to={getNewPathUrl(item.path)}
               className={`${
                 currentTab === item.path
-                  ? 'text-black font-semibold dark:text-gray-800 border-b-4 border-blue-400 pb-1'
+                  ? 'text-black font-semibold dark:text-gray-800 border-b-4 border-blue-400 pb-1 '
                   : 'text-gray-500'
-              } mx-1.5 sm:mx-3 sm:ml-0`}
+              } mx-1.5 sm:mx-3 sm:ml-0 no-underline`}
             >
               {item.text}
             </Link>
