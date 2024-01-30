@@ -10,6 +10,7 @@ import Dev from './pages/dev/Dev';
 import FichaPage from './pages/indicadores/ficha/FichaPage';
 import DatosPage from './pages/indicadores/datos/DatosPage';
 import PresentacionPage from './pages/indicadores/presentacion/PresentacionPage';
+import IndicadorEditorPage from './pages/indicadores/editor/IndicadorEditorPage';
 
 function App() {
   return (
@@ -20,6 +21,10 @@ function App() {
       <ParamRoute value="plantillas" element={<PlantillasPage />} />
       <ParamRoute value="configuracion" element={<Configuracion />} />
       <ParamRoute value="dev" element={<Dev />} />
+      <ParamRoute
+        value="indicadores-editor"
+        element={<IndicadorEditorPage />}
+      />
       <ParamRoute value="indicadores/ficha" element={<FichaPage />} />
       <ParamRoute value="indicadores/datos" element={<DatosPage />} />
       <ParamRoute

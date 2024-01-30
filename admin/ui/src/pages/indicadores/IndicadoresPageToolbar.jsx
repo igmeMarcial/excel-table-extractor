@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Input } from '@fluentui/react-components';
 
 import {
   MoreVertical24Filled,
   Add24Filled,
   Search24Regular,
-  ArrowImport24Regular,
 } from '@fluentui/react-icons';
-import ModalIndicadores from './IndicadorModaIImport';
 import { Link } from 'react-router-dom';
 import { getNewPathUrl } from '../../hooks/usePathRoute';
 import IndicadorModal from './IndicadorModal';
@@ -21,13 +19,22 @@ function IndicadoresPageToolbar() {
         type="search"
       />
       <span className="flex-1"></span>
-      <Link to={getNewPathUrl('indicadores/ficha')}>
+      <Link to={getNewPathUrl('indicadores-editor')}>
         <Button
           style={{ color: '#2271B1' }}
           appearance="subtle"
           icon={<Add24Filled />}
         >
           Registrar
+        </Button>
+      </Link>
+      <Link to={getNewPathUrl('indicadores/ficha')}>
+        <Button
+          style={{ color: '#2271B1' }}
+          appearance="subtle"
+          icon={<Add24Filled />}
+        >
+          *Registrar
         </Button>
       </Link>
       <IndicadorModal />
