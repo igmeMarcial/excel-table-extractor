@@ -13,67 +13,60 @@ const useStyles = makeStyles({
     width: '25em',
   },
 });
-// initial form select
-const initialForm = {
-  componente: '',
-  subComponente: '',
-  temaEstadistico: '',
-};
-function SelectAnidados() {
-  const styles = useStyles();
-  const [formSelect, setFormSelect] = useState(initialForm);
 
-  const [componente, setComponente] = useState(null);
-  const [subComponentData, setSubComponentData] = useState(null);
-  const [temasEstadisticoData, setTemasEstadisticoData] = useState(null);
-  const [subComponentes, setSubComponentes] = useState(null);
-  const [temasEstadisticos, setTemasEstadisticos] = useState(null);
-  const [selectedComponente, setSelectedComponente] = useState('');
-  const [selectedSubcomponente, setSelectedSubcomponente] = useState('');
-  const [selectedTemaEstadistico, setSelectedTemaEstadistico] = useState('');
+function SelectAnidados({ onSelectChange }) {
+  const styles = useStyles();
+  const [formSelect, setFormSelect] = useState(null);
+  const [selectionLevels, setSelectionLevels] = useState({
+    componente: '',
+    subComponente: '',
+    temaEstadistico: '',
+  });
 
   const { data: componentApiData } = useFetch(urls.componenteUrl);
   const { data: subComponentApiData } = useFetch(urls.subComponentesUrl);
   const { data: temasEstadisticoApiData } = useFetch(urls.temasEstadisticosUrl);
 
   useEffect(() => {
-    setComponente(componentApiData?.data ?? []);
-    setSubComponentData(subComponentApiData?.data ?? []);
-    setTemasEstadisticoData(temasEstadisticoApiData?.data ?? []);
-  }, [subComponentApiData, temasEstadisticoApiData]);
+    setFormSelect(selectionLevels);
+  }, [selectionLevels]);
 
-  const handleSelectChange = (event) => {
+  const handleSelectChange = (event, level) => {
     const selectedId = event.target.value;
-    setSelectedComponente(selectedId);
-    const subComponentesFiltrados = subComponentData.filter(
-      (x) => x.componenteId === selectedId
-    );
-    setSubComponentes(subComponentesFiltrados);
-    // setSelectedSubcomponente('');
-    // setSelectedTemaEstadistico('');
-    // console.log(componente.find((c) => c.id === selectedId).nombre);
-    const selectValue = componente.find((c) => c.id === selectedId).nombre;
-    console.log(event.target.name);
-    setFormSelect({
-      ...formSelect,
-      [event.target.name]: selectValue,
-    });
-    setTimeout(() => {
-      console.log(formSelect);
-    }, 5000);
-  };
-  const handleSelectChangeT = (event) => {
-    const selectedId = event.target.value;
-    setSelectedTemaEstadistico(selectedId);
-  };
-  const handleSelectChangeSubC = (event) => {
-    const selectedId = event.target.value;
-    setSelectedSubcomponente(selectedId);
-    const temasEstadisticosFiltrados = temasEstadisticoData.filter(
-      (x) => x.subcomponenteId === selectedId
-    );
-    setTemasEstadisticos(temasEstadisticosFiltrados);
-    // setSelectedTemaEstadistico('');
+    const selectValue = event.target[event.target.selectedIndex].text;
+
+    setSelectionLevels((prevLevels) => ({
+      ...prevLevels,
+      [level]: selectedId,
+    }));
+
+    let selectedName = '';
+    // console.log(selectionLevels);
+    // console.log(level);
+    console.log(selectedId);
+    // console.log(selectValue);
+    // console.log(componentApiData);
+    if (level === 'componente') {
+      const selectedComponent = componentApiData.data.find(
+        (comp) => comp.id === selectedId
+      );
+      console.log(selectedComponent);
+      selectedName = selectedComponent ? selectedComponent.nombre : '';
+    } else if (level === 'subComponente') {
+      const selectedSubComponent = subComponentApiData.data.find(
+        (subcomp) => subcomp.id === selectedId
+      );
+      console.log(selectedSubComponent);
+      selectedName = selectedSubComponent ? selectedSubComponent.nombre : '';
+    } else if (level === 'temaEstadistico') {
+      selectedName = selectedId;
+    }
+    onSelectChange(event.target.name, selectedName);
+
+    setFormSelect((prevFormSelect) => ({
+      ...prevFormSelect,
+      [level]: selectValue,
+    }));
   };
 
   return (
@@ -84,23 +77,19 @@ function SelectAnidados() {
         </th>
         <td>
           <Select
-            onChange={handleSelectChange}
-            value={selectedComponente}
+            onChange={(e) => handleSelectChange(e, 'componente')}
+            value={selectionLevels.componente}
             name="componente"
             id="componente"
             className={styles.selectInput}
             appearance="outline"
           >
             <option value="">Seleccione un componente</option>
-            {componente && componente !== undefined ? (
-              componente.map((comp) => (
-                <option key={comp.id} value={comp.id}>
-                  {comp.nombre}
-                </option>
-              ))
-            ) : (
-              <option>No hay datos</option>
-            )}
+            {componentApiData?.data?.map((comp) => (
+              <option key={comp.id} value={comp.id}>
+                {comp.nombre}
+              </option>
+            ))}
           </Select>
         </td>
       </tr>
@@ -111,23 +100,21 @@ function SelectAnidados() {
         </th>
         <td>
           <Select
-            onChange={handleSelectChangeSubC}
-            value={selectedSubcomponente}
+            onChange={(e) => handleSelectChange(e, 'subComponente')}
+            value={selectionLevels.subComponente}
             name="subComponente"
             id="subComponente"
             className={styles.selectInput}
             appearance="outline"
           >
             <option value="">Seleccione un subcomponente</option>
-            {subComponentes && subComponentes !== undefined ? (
-              subComponentes.map((subcomp) => (
+            {subComponentApiData?.data
+              ?.filter((x) => x.componenteId === selectionLevels.componente)
+              .map((subcomp) => (
                 <option key={subcomp.id} value={subcomp.id}>
                   {subcomp.nombre}
                 </option>
-              ))
-            ) : (
-              <option>no hay datos</option>
-            )}
+              ))}
           </Select>
         </td>
       </tr>
@@ -138,24 +125,23 @@ function SelectAnidados() {
         </th>
         <td>
           <Select
-            onChange={handleSelectChangeT}
-            value={selectedTemaEstadistico}
+            onChange={(e) => handleSelectChange(e, 'temaEstadistico')}
+            value={selectionLevels.temaEstadistico}
             name="temaEstadistico"
             id="temaEstadistico"
             className={styles.selectInput}
             appearance="outline"
           >
             <option value="">Seleccione tema estadístico</option>
-
-            {temasEstadisticos && temasEstadisticos !== undefined ? (
-              temasEstadisticos.map((tema) => (
+            {temasEstadisticoApiData?.data
+              ?.filter(
+                (x) => x.subcomponenteId === selectionLevels.subComponente
+              )
+              .map((tema) => (
                 <option key={tema.nombre} value={tema.nombre}>
                   {tema.nombre}
                 </option>
-              ))
-            ) : (
-              <option>no hay datos</option>
-            )}
+              ))}
           </Select>
         </td>
       </tr>

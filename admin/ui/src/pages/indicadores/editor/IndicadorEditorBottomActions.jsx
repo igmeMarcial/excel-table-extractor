@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { forwardRef, useImperativeHandle } from 'react';
+import { Button, Flex } from 'antd';
 
-function IndicadorEditorBottomActions() {
-  return <div>Buttoms Save|Cancel goes here!</div>;
-}
+const IndicadorEditorBottomActions = forwardRef((props, ref) => {
+  const { onClick } = props;
 
+  return (
+    <Flex gap="middle" className="pl-12 bg-custom-grey py-2">
+      <Button onClick={onClick} type="primary">
+        Registrar
+      </Button>
+      <Button>Cancelar</Button>
+    </Flex>
+  );
+});
 export default IndicadorEditorBottomActions;

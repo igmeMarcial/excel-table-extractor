@@ -1,7 +1,7 @@
 import React from 'react';
 
 function IndicadorEditorTabDatos() {
-  return <div>Datos goes here!</div>;
+  return <div>datos subpage</div>;
 }
 
 export default IndicadorEditorTabDatos;

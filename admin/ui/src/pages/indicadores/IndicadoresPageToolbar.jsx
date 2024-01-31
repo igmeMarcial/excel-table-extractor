@@ -38,7 +38,6 @@ function IndicadoresPageToolbar() {
         </Button>
       </Link>
       <IndicadorModal />
-      {/* <ModalIndicadores /> */}
       <Button appearance="subtle" icon={<MoreVertical24Filled />}></Button>
     </div>
   );
