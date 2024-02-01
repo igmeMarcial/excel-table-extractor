@@ -7,7 +7,7 @@ import { getNewPathUrl } from '../../../hooks/usePathRoute';
 function IndicadorEditorBottomActions({ estadistica }) {
   console.log(estadistica);
   const handleClick = () => {
-    IndicadorRestService.create(estadisticas)
+    IndicadorRestService.create(estadistica)
       .then((response) => {
         console.log('registro exitoso');
       })

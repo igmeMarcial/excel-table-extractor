@@ -5,9 +5,39 @@ import React, {
   useState,
 } from 'react';
 import Input from '../../../components/Input';
-import SelectAnidados from '../ficha/SelectAnidados';
+import { makeStyles, Select } from '@fluentui/react-components';
+import { useFetch } from '../../../hooks/useFetch';
+
+const urls = {
+  componenteUrl: `${AesaInfo.apiUrl}/mdea/componentes`,
+  subComponentesUrl: `${AesaInfo.apiUrl}/mdea/subcomponentes`,
+  temasEstadisticosUrl: `${AesaInfo.apiUrl}/mdea/temas-estadisticos`,
+};
+const useStyles = makeStyles({
+  selectInput: {
+    width: '25em',
+  },
+});
 
 const fieldsArray = {
+  componente: {
+    label: 'Componente',
+    type: 'select',
+    required: true,
+    default: '',
+  },
+  subComponente: {
+    label: 'Sub componente',
+    type: 'select',
+    required: true,
+    default: '',
+  },
+  temaEstadistico: {
+    label: 'Tema estadístico',
+    type: 'select',
+    required: true,
+    default: '',
+  },
   nombre: {
     label: 'Nombre del indicador o estadística ambiental',
     type: 'text',
@@ -115,21 +145,56 @@ const initialForm = Object.fromEntries(
 );
 
 const IndicadorEditorTabFicha = forwardRef(({ onChange }, ref) => {
+  const styles = useStyles();
+  const [selectionLevels, setSelectionLevels] = useState({
+    componente: '',
+    subComponente: '',
+    temaEstadistico: '',
+  });
+
   const [values, setValues] = useState(initialForm);
 
-  const handleSelectChange = (event, value) => {
-    console.log(value);
-  };
+  //Lamada de apis
+  const { data: componentApiData } = useFetch(urls.componenteUrl);
+  const { data: subComponentApiData } = useFetch(urls.subComponentesUrl);
+  const { data: temasEstadisticoApiData } = useFetch(urls.temasEstadisticosUrl);
 
-  const handleChange = (e) => {
+  const handleChange = (e, fieldKey) => {
     const { name, value } = e.target;
+
+    if (fieldKey === 'componente') {
+      setSelectionLevels((prevLevels) => ({
+        ...prevLevels,
+        componente: value,
+        subComponente: '', // Reset subComponente
+        temaEstadistico: '', // Reset temaEstadistico
+      }));
+    } else if (fieldKey === 'subComponente' || fieldKey === 'temaEstadistico') {
+      setSelectionLevels((prevLevels) => ({
+        ...prevLevels,
+        [fieldKey]: value,
+      }));
+    }
+
     const updatedValues = {
       ...values,
-      [name]: value,
+      [name]:
+        fieldKey === 'componente'
+          ? buscarElementoPorId(value, componentApiData?.data)
+          : fieldKey === 'subComponente'
+          ? buscarElementoPorId(value, subComponentApiData?.data)
+          : value,
     };
+
     setValues(updatedValues);
     onChange(updatedValues);
   };
+
+  const buscarElementoPorId = (id, array) => {
+    const elemento = array.find((elemento) => elemento.id === id);
+    return elemento ? elemento.nombre : '';
+  };
+
   const getValues = () => {
     return values;
   };
@@ -141,25 +206,66 @@ const IndicadorEditorTabFicha = forwardRef(({ onChange }, ref) => {
     <div style={{ height: '380px' }}>
       <div className="h-full overflow-auto scroll-container ">
         <form
-          className="h-full flex flex-col justify-between  
+          className="h-full flex flex-col justify-between  px-12
         "
         >
           <table className="form-table">
             <tbody>
-              <SelectAnidados onSelectChange={handleSelectChange} />
               {Object.entries(fieldsArray).map(([key, field]) => (
                 <tr key={key}>
                   <th scope="row">
                     <label htmlFor={key}>{field.label}</label>
                   </th>
                   <td>
-                    <Input
-                      name={key}
-                      type={field.type}
-                      text={field.label}
-                      onChange={handleChange}
-                      required={field.required}
-                    />
+                    {field.type === 'select' ? (
+                      <Select
+                        onChange={(e) => handleChange(e, key)}
+                        value={selectionLevels[key]}
+                        name={key}
+                        id={key}
+                        className={styles.selectInput}
+                        appearance="outline"
+                      >
+                        <option value="">Seleccione {field.label}</option>
+                        {key === 'componente' &&
+                          componentApiData?.data?.map((comp) => (
+                            <option key={comp.id} value={comp.id}>
+                              {comp.nombre}
+                            </option>
+                          ))}
+                        {key === 'subComponente' &&
+                          subComponentApiData?.data
+                            ?.filter(
+                              (x) =>
+                                x.componenteId === selectionLevels.componente
+                            )
+                            .map((subcomp) => (
+                              <option key={subcomp.id} value={subcomp.id}>
+                                {subcomp.nombre}
+                              </option>
+                            ))}
+                        {key === 'temaEstadistico' &&
+                          temasEstadisticoApiData?.data
+                            ?.filter(
+                              (x) =>
+                                x.subcomponenteId ===
+                                selectionLevels.subComponente
+                            )
+                            .map((tema) => (
+                              <option key={tema.nombre} value={tema.nombre}>
+                                {tema.nombre}
+                              </option>
+                            ))}
+                      </Select>
+                    ) : (
+                      <Input
+                        name={key}
+                        type={field.type}
+                        text={field.label}
+                        onChange={(e) => handleChange(e, key)}
+                        required={field.required}
+                      />
+                    )}
                   </td>
                 </tr>
               ))}
