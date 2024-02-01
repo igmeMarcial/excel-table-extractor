@@ -28,15 +28,6 @@ function IndicadoresPageToolbar() {
           Registrar
         </Button>
       </Link>
-      <Link to={getNewPathUrl('indicadores/ficha')}>
-        <Button
-          style={{ color: '#2271B1' }}
-          appearance="subtle"
-          icon={<Add24Filled />}
-        >
-          *Registrar
-        </Button>
-      </Link>
       <IndicadorModal />
       <Button appearance="subtle" icon={<MoreVertical24Filled />}></Button>
     </div>

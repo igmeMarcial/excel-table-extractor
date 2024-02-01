@@ -4,29 +4,16 @@ import IndicadorEditorTabFicha from './IndicadorEditorTabFicha';
 import IndicadorEditorTabDatos from './IndicadorEditorTabDatos';
 import IndicadorEditorTabPresentacion from './IndicadorEditorTabPresentacion';
 
-function IndicadorEditorTabs({ formData, onChange, onSubmit }) {
-  const tabFichaRef = useRef();
-
-  const handleSubmitTabFicha = () => {
-    // la función de handleSubmit en IndicadorEditorTabFicha
-    tabFichaRef.current.handleSubmit();
-    //  la función de onSubmit en el componente padre
-    console.log(tabFichaRef.current);
-    onSubmit();
+function IndicadorEditorTabs({ onTabDataChange }) {
+  const handleFichaChange = (values) => {
+    onTabDataChange('ficha', values);
   };
 
   const items = [
     {
       key: '1',
       label: 'Ficha',
-      children: (
-        <IndicadorEditorTabFicha
-          formData={formData}
-          onChange={onChange}
-          onSubmit={onSubmit}
-          ref={tabFichaRef}
-        />
-      ),
+      children: <IndicadorEditorTabFicha onChange={handleFichaChange} />,
     },
     {
       key: '2',

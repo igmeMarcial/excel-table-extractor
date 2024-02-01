@@ -1,16 +1,33 @@
-import React, { forwardRef, useImperativeHandle } from 'react';
-import { Button, Flex } from 'antd';
+import React from 'react';
+import { Button } from 'antd';
+import IndicadorRestService from '../../../services/IndicadorRestService';
+import { Link } from 'react-router-dom';
+import { getNewPathUrl } from '../../../hooks/usePathRoute';
 
-const IndicadorEditorBottomActions = forwardRef((props, ref) => {
-  const { onClick } = props;
+function IndicadorEditorBottomActions({ estadistica }) {
+  console.log(estadistica);
+  const handleClick = () => {
+    IndicadorRestService.create(estadisticas)
+      .then((response) => {
+        console.log('registro exitoso');
+      })
+      .catch((err) => {
+        console.log('error al registrar');
+      })
+      .finally(() => {
+        console.log('finalizado');
+      });
+  };
 
   return (
-    <Flex gap="middle" className="pl-12 bg-custom-grey py-2">
-      <Button onClick={onClick} type="primary">
+    <div className="pl-12 bg-custom-grey py-2 flex space-x-4">
+      <Button onClick={handleClick} type="primary">
         Registrar
       </Button>
-      <Button>Cancelar</Button>
-    </Flex>
+      <Link to={getNewPathUrl('indicadores')}>
+        <Button>Cancelar</Button>
+      </Link>
+    </div>
   );
-});
+}
 export default IndicadorEditorBottomActions;

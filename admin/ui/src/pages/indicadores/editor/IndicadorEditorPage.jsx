@@ -4,68 +4,30 @@ import IndicadorEditorhHeader from './IndicadorEditorhHeader';
 import IndicadorEditorTabs from './IndicadorEditorTabs';
 import IndicadorEditorBottomActions from './IndicadorEditorBottomActions';
 
-const initialForm = {
-  componente: '',
-  subComponente: '',
-  temaEstadistico: '',
-  nombreIndicador: '',
-  descripcionDefinicion: '',
-  unidadDeMedida: '',
-  formulaCalculo: '',
-  metodologiaCalculo: '',
-  fuente: '',
-  unidadOrganicaGeneradora: '',
-  url: '',
-  periodicidadGeneracion: '',
-  periodicidadEntregaRegistro: '',
-  periodoSerieTiempo: '',
-  ambitoGeografico: '',
-  limitaciones: '',
-  relacionObjetivos: '',
-  relacionIniciativasInternacionales: '',
-  correoElectronico: '',
-  wpDefaultFieldLabel: '',
-  telefonoCelular: '',
-};
-
 function IndicadorEditorPage() {
-  const [formData, setFormData] = useState(initialForm);
-  const [nameIndicadorForm, setNameIndicadorForm] = useState(null);
+  const [estadistica, setEstadistica] = useState({});
 
-  const formRef = useRef({});
-  const clickBtnRef = useRef();
+  const refHeader = useRef(null);
+  const refAccions = useRef(null);
+  const refTabs = useRef(null);
 
-  const handleChange = (fieldName, value) => {
-    console.log(value);
-    setFormData((prevData) => ({
-      ...prevData,
-      [fieldName]: value,
-    }));
-    setNameIndicadorForm(formData.nombreIndicador);
-    console.log(nameIndicadorForm);
+  const handleTabFichaDataChange = (values) => {
+    setEstadistica((prevEstadistica) => {
+      return { ...prevEstadistica, ...values };
+    });
+    // console.log(estadistica);
   };
-  const handleSubmit = () => {
-    console.log(formData);
-  };
-
-  const handleClick = () => {
-    if (formRef.current && formRef.current.handleClick) {
-      formRef.current.handleClick();
-      console.log('click en registrar');
-    } // Llamada a la función handleSubmit en el componente IndicadorEditorTabs
-    console.log(formRef.current);
+  const handleTabDataChange = (tab, values) => {
+    if (tab === 'ficha') {
+      handleTabFichaDataChange(values);
+    }
   };
 
   return (
     <MainLayout>
-      <IndicadorEditorhHeader nameIndicador={nameIndicadorForm} />
-      <IndicadorEditorTabs
-        formData={formData}
-        onChange={handleChange}
-        onSubmit={handleSubmit}
-        ref={formRef}
-      />
-      <IndicadorEditorBottomActions onClick={handleClick} />
+      <IndicadorEditorhHeader estadistica={estadistica} />
+      <IndicadorEditorTabs onTabDataChange={handleTabDataChange} />
+      <IndicadorEditorBottomActions estadistica={estadistica} />
     </MainLayout>
   );
 }

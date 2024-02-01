@@ -41,16 +41,10 @@ function SelectAnidados({ onSelectChange }) {
     }));
 
     let selectedName = '';
-    // console.log(selectionLevels);
-    // console.log(level);
-    console.log(selectedId);
-    // console.log(selectValue);
-    // console.log(componentApiData);
     if (level === 'componente') {
       const selectedComponent = componentApiData.data.find(
         (comp) => comp.id === selectedId
       );
-      console.log(selectedComponent);
       selectedName = selectedComponent ? selectedComponent.nombre : '';
     } else if (level === 'subComponente') {
       const selectedSubComponent = subComponentApiData.data.find(
@@ -61,7 +55,7 @@ function SelectAnidados({ onSelectChange }) {
     } else if (level === 'temaEstadistico') {
       selectedName = selectedId;
     }
-    onSelectChange(event.target.name, selectedName);
+    onSelectChange(event, selectedName);
 
     setFormSelect((prevFormSelect) => ({
       ...prevFormSelect,
