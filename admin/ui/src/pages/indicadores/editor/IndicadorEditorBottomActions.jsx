@@ -21,7 +21,11 @@ function IndicadorEditorBottomActions({ estadistica }) {
 
   return (
     <div className="pl-12 bg-custom-grey py-2 flex space-x-4">
-      <Button onClick={handleClick} type="primary">
+      <Button
+        onClick={handleClick}
+        type="primary "
+        disabled={!Object.keys(estadistica).length}
+      >
         Registrar
       </Button>
       <Link to={getNewPathUrl('indicadores')}>

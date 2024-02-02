@@ -1,9 +1,4 @@
-import React, {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from 'react';
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import Input from '../../../components/Input';
 import { makeStyles, Select } from '@fluentui/react-components';
 import { useFetch } from '../../../hooks/useFetch';
@@ -206,7 +201,7 @@ const IndicadorEditorTabFicha = forwardRef(({ onChange }, ref) => {
     <div style={{ height: '380px' }}>
       <div className="h-full overflow-auto scroll-container ">
         <form
-          className="h-full flex flex-col justify-between  px-12
+          className="h-full flex flex-col justify-between  
         "
         >
           <table className="form-table">

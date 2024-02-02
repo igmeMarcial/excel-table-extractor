@@ -27,7 +27,7 @@ const IndicadoresPageList = forwardRef((props, ref) => {
   const addRecord = (record) => {
     setData([record, ...data]);
   };
-  // Expose the custom method to the parent component
+  // Expose the custom method to tthe parent component
   useImperativeHandle(ref, () => ({
     filterRecords,
     addRecord,
@@ -64,23 +64,28 @@ const IndicadoresPageList = forwardRef((props, ref) => {
       title: 'N°',
       fixed: 'left',
       width: 36,
+      // width: '4%',
       render: (_, record, index) => index + 1,
     },
     {
       key: 'mdeaComponenteNombre',
       title: 'Componente',
       width: 240,
+      // width: '19%',
       dataIndex: 'mdeaComponenteNombre',
     },
     {
       key: 'nombre',
       title: 'Indicador',
       dataIndex: 'nombre',
+
+      // width: '47%',
     },
     {
       key: 'fechaMod',
       title: 'Última modificación',
       width: 180,
+      // width: '14%',
       align: 'right',
       dataIndex: 'fechaMod',
       render: renderFechaMod,
@@ -90,6 +95,7 @@ const IndicadoresPageList = forwardRef((props, ref) => {
       key: 'status',
       align: 'center',
       width: 100,
+      // width: '8%',
       title: 'Estado',
       dataIndex: 'status',
     },
@@ -97,6 +103,7 @@ const IndicadoresPageList = forwardRef((props, ref) => {
       key: 'actions',
       title: 'Acciones',
       width: 80,
+      // width: '8%',
       align: 'right',
       fixed: 'right',
       render: renderActions,
@@ -112,6 +119,7 @@ const IndicadoresPageList = forwardRef((props, ref) => {
         size="small"
         bordered
         rowKey={(record) => record.id}
+        scroll={{ y: 380 }}
       />
     </>
   );

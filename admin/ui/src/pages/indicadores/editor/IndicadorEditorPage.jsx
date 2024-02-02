@@ -26,7 +26,10 @@ function IndicadorEditorPage() {
   return (
     <MainLayout>
       <IndicadorEditorhHeader estadistica={estadistica} />
-      <IndicadorEditorTabs onTabDataChange={handleTabDataChange} />
+      <div className="px-12">
+        <IndicadorEditorTabs onTabDataChange={handleTabDataChange} />
+      </div>
+
       <IndicadorEditorBottomActions estadistica={estadistica} />
     </MainLayout>
   );
