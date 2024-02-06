@@ -9,7 +9,7 @@ import {
   Title2,
 } from '@fluentui/react-components';
 import { ArrowImport24Regular } from '@fluentui/react-icons';
-import MultipleFileUploader from './MultipleFileUploader';
+import MultipleFileUploader from './IndicadorMultipleFileUploader';
 
 const useStyles = makeStyles({
   dialog: {

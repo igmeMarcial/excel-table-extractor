@@ -19,6 +19,12 @@
     font-weight: 600;
     font-size: 14px;
 }
+.form-table .th_data{
+   padding: 20px 10px 0px 0;
+}
+.form-table .td-data{
+  padding-left: 0;
+}
 .form-table input[type="text"],
 .form-table input[type="email"],
 .form-table input[type="url"] {
@@ -39,7 +45,7 @@
   .form-table td {
     margin-bottom: 0;
     padding: 4px 0 6px;
-    display: block;
+    display: block !important;
     width: auto;
     vertical-align: middle;
 

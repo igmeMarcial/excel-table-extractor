@@ -2,17 +2,14 @@ import * as XLSX from "xlsx";
 
 class ExtractDataExcelService {
   constructor() {}
-  getAllSheetNames(file) {
+  readExcelFile(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-
       reader.onload = (e) => {
         try {
           const data = new Uint8Array(e.target.result);
           const workbook = XLSX.read(data, { type: "array" });
-          const sheetNames = workbook.SheetNames;
-          console.log(sheetNames);
-          resolve(sheetNames);
+          resolve(workbook);
         } catch (error) {
           reject(error);
         }
@@ -23,6 +20,13 @@ class ExtractDataExcelService {
       };
 
       reader.readAsArrayBuffer(file);
+    });
+  }
+  getAllSheetNames(file) {
+    return this.readExcelFile(file).then((workbook) => {
+      const sheetNames = workbook.SheetNames;
+      console.log(sheetNames);
+      return sheetNames;
     });
   }
 
@@ -45,6 +49,23 @@ class ExtractDataExcelService {
           resolve({ sheetData: firstSheetData, tableData: tableData });
         };
         reader.readAsArrayBuffer(file);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+  getNameIndicador(workbook, sheetIndex) {
+    return new Promise((resolve, reject) => {
+      try {
+        // Obtener la hoja en función del índice proporcionado
+        const sheetName = workbook.SheetNames[sheetIndex];
+        const sheet = workbook.Sheets[sheetName];
+
+        // Obtener el valor de la celda D5
+        const cellD5 = sheet["D5"];
+        const cellData = cellD5 ? cellD5.v : null;
+
+        resolve(cellData);
       } catch (error) {
         reject(error);
       }

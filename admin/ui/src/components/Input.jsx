@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 const Input = (props) => {
   return (
     <input
-      className="regular-text"
+      className="regular-text -z-10 w-full"
       type={props.type}
       placeholder={props.placeholder}
       value={props.value}

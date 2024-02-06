@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'antd';
 import { ArrowImport24Regular } from '@fluentui/react-icons';
-import MultipleFileUploader from './IndicadorMultipleFileUploader';
+import EditorSingleFileUploader from './EditorSingleFileUploader';
 
-function IndicadorModal() {
+function IndicadorEditorModalImport() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [files, setFiles] = useState(true);
 
@@ -34,10 +34,10 @@ function IndicadorModal() {
         icon={<ArrowImport24Regular className="align-middle" />}
         onClick={showModal}
       >
-        Importar
+        Actualizar desde ficha técnica
       </Button>
       <Modal
-        title="Importar indicadores"
+        title="Importar ficha tecnica"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -57,10 +57,10 @@ function IndicadorModal() {
           </Button>,
         ]}
       >
-        <MultipleFileUploader onFileChange={handleFileChange} />
+        <EditorSingleFileUploader />
       </Modal>
     </>
   );
 }
 
-export default IndicadorModal;
+export default IndicadorEditorModalImport;
