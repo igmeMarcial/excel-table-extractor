@@ -32,7 +32,7 @@ function EditorSingleFileUploader() {
         //Valor de la hoja 3 estaticamente de celda definido estaticamente
         const cellVallueTitle = await extractDataExcelService.getNameIndicador(
           workbook,
-          3
+          2
         );
         setTitle(cellVallueTitle);
       }
@@ -46,12 +46,7 @@ function EditorSingleFileUploader() {
         extractDataExcelService
           .extractIndicatortechnicalSheet(workbookFile, 3)
           .then((extractedData) => {
-            // Manejar los datos extraídos de la hoja de indicadores técnicos
-            // Aquí puedes establecer el estado de sheetData o tableData según sea necesario
-            console.log(
-              'Datos extraídos de la hoja de indicadores técnicos:',
-              extractedData
-            );
+            setSheetData(extractedData);
           })
           .catch((error) => {
             console.error(
@@ -87,7 +82,7 @@ function EditorSingleFileUploader() {
         <div>
           <p className="text-blue-500">Indicador detectado en la ficha</p>
           <p>{title && title}</p>
-          <p>Slecciona los datos a importar</p>
+          <p className="text-blue-500">Selecciona los datos a importar</p>
           <div className="flex flex-col pl-4 gap-2 ">
             <Checkbox
               checked={option1}

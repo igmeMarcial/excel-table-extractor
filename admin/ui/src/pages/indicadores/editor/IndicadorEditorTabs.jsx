@@ -28,7 +28,7 @@ function IndicadorEditorTabs({ onTabDataChange }) {
   ];
 
   const onChangeTab = (key) => {
-    console.log(key);
+    // console.log(key);
   };
   return <Tabs defaultActiveKey="1" items={items} onChange={onChangeTab} />;
 }

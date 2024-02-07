@@ -14,18 +14,15 @@ class ExtractDataExcelService {
           reject(error);
         }
       };
-
       reader.onerror = (error) => {
         reject(error);
       };
-
       reader.readAsArrayBuffer(file);
     });
   }
   getAllSheetNames(file) {
     return this.readExcelFile(file).then((workbook) => {
       const sheetNames = workbook.SheetNames;
-      console.log(sheetNames);
       return sheetNames;
     });
   }
@@ -56,12 +53,70 @@ class ExtractDataExcelService {
         // Obtener la hoja en función del índice proporcionado
         const sheetName = workbook.SheetNames[sheetIndex];
         const sheet = workbook.Sheets[sheetName];
+        let data;
+        const range = XLSX.utils.decode_range(sheet["!ref"]);
+        let foundValue = false;
 
-        // Obtener el valor de la celda D5
-        const cellD5 = sheet["D5"];
-        const cellData = cellD5 ? cellD5.v : null;
+        const validarCadenaFlex = (cadena, cadenasObjetivo) => {
+          const cadenaNormalizada = cadena
+            .trim()
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
+          return cadenasObjetivo.some((objetivo) => {
+            const objetivoNormalizado = objetivo
+              .trim()
+              .toLowerCase()
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, "");
+            return cadenaNormalizada.includes(objetivoNormalizado);
+          });
+        };
 
-        resolve(cellData);
+        //iterando
+        for (let R = range.s.r; R <= range.e.r; R++) {
+          for (let C = range.s.c; C <= range.e.c; ++C) {
+            const cellref = XLSX.utils.encode_cell({ c: C, r: R });
+            const cell = sheet[cellref];
+            if (cell !== undefined && typeof cell === "object" && "v" in cell) {
+              const cellValue = String(cell.v);
+              if (
+                validarCadenaFlex(cellValue, [
+                  "Nombre del indicador",
+                  "estadística ambiental",
+                  "Nombre del indicador o estadística ambiental",
+                ])
+              ) {
+                for (let R2 = R; R2 <= range.e.r; R2++) {
+                  for (let C2 = C + 1; C2 <= range.e.c; ++C2) {
+                    const cellref2 = XLSX.utils.encode_cell({ c: C2, r: R2 });
+                    const cell2 = sheet[cellref2];
+                    if (
+                      cell2 !== undefined &&
+                      typeof cell2 === "object" &&
+                      "v" in cell2
+                    ) {
+                      console.log(cell2.v);
+                      data = cell2.v;
+                      foundValue = true;
+                      break; // Salir del bucle una vez que se encuentra un valor
+                    }
+                  }
+                  if (foundValue) break;
+                }
+              }
+            }
+            if (foundValue) break;
+          }
+          if (foundValue) break;
+        }
+        if (data === undefined) {
+          resolve(
+            "Nombre del indicador o estadística ambiental no se encuentra en esta hoja"
+          );
+        } else {
+          resolve(data);
+        }
       } catch (error) {
         reject(error);
       }
@@ -106,29 +161,28 @@ class ExtractDataExcelService {
         const sheet = workbook.Sheets[sheetName];
         const range = XLSX.utils.decode_range(sheet["!ref"]);
 
-        const extractedData = [];
-        const objectData = {};
+        let result = [];
+        let row;
+        let rowNum;
+        let colNum;
 
-        //Recorriendo el excel
-        for (let R = range.s.r; R <= range.e.r; ++R) {
-          const rowData = [];
-          for (let C = range.s.c; C <= range.e.c; ++C) {
-            const cellAddress = { c: C, r: R };
-            const cellRef = XLSX.utils.encode_cell(cellAddress);
-            const cell = sheet[cellRef] ? sheet[cellRef].v : null;
-
-            // Filtrar las celdas vacías
-            if (cell !== null && cell !== "") {
-              if (cell === 1) {
-                console.log("encontramos el numero que buscas");
-              }
-              rowData.push(cell);
+        for (rowNum = range.s.r; rowNum <= range.e.r; rowNum++) {
+          let rowHasData = false;
+          let row = [];
+          for (colNum = range.s.c; colNum <= range.e.c; colNum++) {
+            let nextCell =
+              sheet[XLSX.utils.encode_cell({ r: rowNum, c: colNum })];
+            if (nextCell && typeof nextCell !== "undefined" && nextCell.w) {
+              row.push(nextCell.w);
+              rowHasData = true;
             }
           }
-          extractedData.push(rowData);
+          if (rowHasData) {
+            result.push(row);
+          }
         }
 
-        resolve(extractedData);
+        resolve(result);
       } catch (error) {
         reject(error);
       }

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { getNewPathUrl } from '../../../hooks/usePathRoute';
 
 function IndicadorEditorBottomActions({ estadistica }) {
-  console.log(estadistica);
+  // console.log(estadistica);
   const handleClick = () => {
     IndicadorRestService.create(estadistica)
       .then((response) => {
