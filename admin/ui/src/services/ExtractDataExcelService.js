@@ -30,26 +30,22 @@ class ExtractDataExcelService {
     });
   }
 
-  async extractDataFromFile(file, sheetName) {
+  async extractDataFromFile(workbook, sheetIndex) {
     return new Promise((resolve, reject) => {
       try {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const data = new Uint8Array(e.target.result);
-          const workbook = XLSX.read(data, { type: "array" });
-          // Datos de la primera hoja seleccionada
-          const firstSheetName = workbook.SheetNames[sheetName];
-          const firstSheetData = XLSX.utils.sheet_to_json(
-            workbook.Sheets[firstSheetName]
-          );
-          // Obtener datos de la tabla
-          const sheet = workbook.Sheets[firstSheetName];
-          const tableData = this.extractTableData(sheet);
-          // Resuelvo una promesa con los datos de la hoja y la tablaa
-          resolve({ sheetData: firstSheetData, tableData: tableData });
-        };
-        reader.readAsArrayBuffer(file);
+        // Obtener el nombre de la hoja utilizando el índice proporcionado
+        const sheetName = workbook.SheetNames[sheetIndex];
+        // Datos de la primera hoja seleccionada
+        const firstSheetData = XLSX.utils.sheet_to_json(
+          workbook.Sheets[sheetName]
+        );
+        // Obtener datos de la tabla
+        const sheet = workbook.Sheets[sheetName];
+        const tableData = this.extractTableData(sheet);
+        // Resuelvo una promesa con los datos de la hoja y la tabla
+        resolve({ sheetData: firstSheetData, tableData: tableData });
       } catch (error) {
+        // Capturar cualquier error y rechazar la promesa con el error correspondiente
         reject(error);
       }
     });
@@ -102,6 +98,41 @@ class ExtractDataExcelService {
     }
 
     return tableData;
+  }
+  extractIndicatortechnicalSheet(workbook, sheetIndex) {
+    return new Promise((resolve, reject) => {
+      try {
+        const sheetName = workbook.SheetNames[sheetIndex];
+        const sheet = workbook.Sheets[sheetName];
+        const range = XLSX.utils.decode_range(sheet["!ref"]);
+
+        const extractedData = [];
+        const objectData = {};
+
+        //Recorriendo el excel
+        for (let R = range.s.r; R <= range.e.r; ++R) {
+          const rowData = [];
+          for (let C = range.s.c; C <= range.e.c; ++C) {
+            const cellAddress = { c: C, r: R };
+            const cellRef = XLSX.utils.encode_cell(cellAddress);
+            const cell = sheet[cellRef] ? sheet[cellRef].v : null;
+
+            // Filtrar las celdas vacías
+            if (cell !== null && cell !== "") {
+              if (cell === 1) {
+                console.log("encontramos el numero que buscas");
+              }
+              rowData.push(cell);
+            }
+          }
+          extractedData.push(rowData);
+        }
+
+        resolve(extractedData);
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 }
 
