@@ -4,7 +4,10 @@ import IndicatorEditorTabPresentationRight from './presentacion/IndicatorEditorT
 
 function IndicadorEditorTabDatos() {
   return (
-    <div className="flex flex-row">
+    <div
+      className="flex flex-row overflow-auto scroll-container"
+      style={{ height: '380px' }}
+    >
       <IndicatorEditorTabPresentationLeft />
       <IndicatorEditorTabPresentationRight />
     </div>

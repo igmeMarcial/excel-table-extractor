@@ -47,7 +47,6 @@ function EditorSingleFileUploader() {
           .extractIndicatortechnicalSheet(workbookFile, 3)
           .then((extractedData) => {
             setSheetData(extractedData);
-            console.log(extractedData);
           })
           .catch((error) => {
             console.error(

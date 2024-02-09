@@ -96,7 +96,7 @@ class ExtractDataExcelService {
                       typeof cell2 === "object" &&
                       "v" in cell2
                     ) {
-                      console.log(cell2.v);
+                      // console.log(cell2.v);
                       data = cell2.v;
                       foundValue = true;
                       break; // Salir del bucle una vez que se encuentra un valor
@@ -125,34 +125,164 @@ class ExtractDataExcelService {
 
   extractTableData(sheet) {
     const tableData = [];
+    const encabezado = []; //test
     const range = XLSX.utils.decode_range(sheet["!ref"]);
-    let startRow = 3; //referencia que la tabla comienza en A4
-    let startCol = 0;
-    let isEmpty = false;
-    for (let R = startRow; R <= range.e.r; ++R) {
+    let headerRowIndex = null;
+    let headerColumnEnd = null;
+    let headerColumnIndex = null;
+
+    // Analizar las filas dentro del rango de referencia
+    for (let R = range.s.r; R <= range.e.r; ++R) {
       const rowData = [];
-      isEmpty = true;
-      for (let C = startCol; C <= range.e.c; ++C) {
+      for (let C = range.s.c; C <= range.e.c; ++C) {
         const cellref = XLSX.utils.encode_cell({ c: C, r: R });
-        if (!sheet[cellref]) {
-          break;
-        }
-        const cell = sheet[cellref];
-        if (cell.v === undefined || cell.v === null || cell.v === "") {
-          continue;
-        }
-        rowData.push(cell.v);
-        isEmpty = false;
+        const cell = sheet[cellref] ? sheet[cellref].v : null;
+        rowData.push(cell);
       }
-      if (isEmpty) {
+      // Buscar un encabezado característico
+      if (this.isTableHeader(rowData)) {
+        headerRowIndex = R;
         break;
-      }
-      if (rowData.length > 0) {
-        tableData.push(rowData);
       }
     }
 
+    // Si ya se encontró el encabezado y el índice de la columna aún no se ha establecido, buscar el índice de la columna del encabezado
+    if (headerRowIndex !== null && headerColumnIndex === null) {
+      for (let C = range.s.c; C <= range.e.c; ++C) {
+        const cellref = XLSX.utils.encode_cell({ c: C, r: headerRowIndex });
+        const cell = sheet[cellref] ? sheet[cellref].v : null;
+        if (cell !== null && cell !== "") {
+          headerColumnIndex = C;
+          break;
+        }
+      }
+    }
+    if (headerRowIndex !== null && headerColumnIndex !== null) {
+      for (let C = headerColumnIndex; C <= range.e.c; ++C) {
+        const cellref = XLSX.utils.encode_cell({ c: C, r: headerRowIndex });
+        const cell = sheet[cellref] ? sheet[cellref].v : null;
+        if (cell === null || cell === "") {
+          headerColumnEnd = C - 1; // La columna anterior no tuvo datos, por lo que esta es la última columna del encabezado
+          break;
+        }
+      }
+    }
+    console.log(headerRowIndex);
+    console.log(headerColumnIndex);
+    console.log(headerColumnEnd);
+
+    // Si se encuentra el encabezado, extraerlo
+    if (headerRowIndex !== null) {
+      const startRow = headerRowIndex; // La fila siguiente al encabezado
+      const startCol = headerColumnIndex; // La primera columna del rango
+      const endRow = range.e.r; // La última fila del rango
+      const endCol = headerColumnEnd; // La última columna del rango
+
+      // Definir el nuevo rango de celdas
+      const searchStartCell = XLSX.utils.encode_cell({
+        c: startCol,
+        r: startRow,
+      });
+      const searchEndCell = XLSX.utils.encode_cell({ c: endCol, r: endRow });
+
+      // Llamar a la función setSearchArea para establecer el área de búsqueda
+      this.setSearchArea(sheet, searchStartCell, searchEndCell);
+
+      // Llamar a la función analyzeSearchArea para analizar el área de búsqueda
+      // this.analyzeSearchArea(sheet, searchStartCell, searchEndCell);
+
+      // Procesar los datos dentro del área de búsqueda y agregarlos a tableData
+    }
     return tableData;
+  }
+  setSearchArea(sheet, startCell, endCell) {
+    // Obtener el rango de celdas
+    const range = XLSX.utils.decode_range(sheet["!ref"]);
+    // Obtener las coordenadas de inicio y fin del área de búsqueda
+    const { c: startCol, r: startRow } = XLSX.utils.decode_cell(startCell);
+    const { c: endCol, r: endRow } = XLSX.utils.decode_cell(endCell);
+
+    // Actualizar el rango de celdas
+    range.s.c = startCol;
+    range.s.r = startRow;
+    range.e.c = endCol;
+    range.e.r = endRow;
+
+    // console.log(startCol);
+    // console.log(startRow);
+    // console.log(endCol);
+    // console.log(endRow);
+
+    // Actualizar el atributo "!ref" de la hoja con el nuevo rango de celdas
+    sheet["!ref"] = XLSX.utils.encode_range(range);
+  }
+  isTableHeader(rowData) {
+    // Verifica si la fila tiene al menos una cierta cantidad de celdas con datos
+    const minDataCells = 3; // Define el mínimo número de celdas con datos para considerar como encabezado
+    const dataCellsCount = rowData.filter(
+      (cell) => cell !== null && cell !== ""
+    ).length;
+    if (dataCellsCount >= minDataCells) {
+      // Si la fila tiene suficientes celdas con datos, considerarla como encabezado
+      return true;
+    } else {
+      // De lo contrario, no es un encabezado
+      return false;
+    }
+  }
+  // Función para analizar el área de búsqueda y determinar si contiene datos de la tabla
+  analyzeSearchArea(sheet, startCell, endCell) {
+    const range = XLSX.utils.decode_range(sheet["!ref"]);
+    const startCol = XLSX.utils.decode_col(startCell.replace(/\d/g, "")); // Obtener el número de columna del inicio del área de búsqueda
+    const endCol = XLSX.utils.decode_col(endCell.replace(/\d/g, "")); // Obtener el número de columna del final del área de búsqueda
+
+    let consecutiveNumericValues = 0; // Contador para valores numéricos consecutivos
+    const minConsecutiveValues = 3; // Mínimo número de valores numéricos consecutivos para considerar como datos de la tabla
+
+    // Recorrer las filas dentro del área de búsqueda
+    for (let R = range.s.r; R <= range.e.r; ++R) {
+      let consecutiveValuesInRow = 0; // Contador para valores consecutivos en la fila
+      let lastCellValue = null; // Valor de la celda anterior en la fila
+
+      // Recorrer las columnas dentro del área de búsqueda
+      for (let C = startCol; C <= endCol; ++C) {
+        const cellRef = XLSX.utils.encode_cell({ c: C, r: R });
+        const cell = sheet[cellRef] ? sheet[cellRef].v : null;
+
+        // Verificar si el valor de la celda es numérico y si es consecutivo al valor anterior
+        if (
+          !isNaN(cell) &&
+          (lastCellValue === null || cell === lastCellValue + 1)
+        ) {
+          consecutiveValuesInRow++;
+        } else {
+          consecutiveValuesInRow = 0; // Reiniciar el contador si el valor no es consecutivo
+        }
+
+        // Actualizar el valor de la celda anterior
+        lastCellValue = cell;
+
+        // Verificar si se encontraron suficientes valores numéricos consecutivos
+        if (consecutiveValuesInRow >= minConsecutiveValues) {
+          consecutiveNumericValues++;
+          break; // Salir del bucle si se encontraron suficientes valores consecutivos en la fila
+        }
+      }
+
+      // Salir del bucle si se encontraron suficientes valores numéricos consecutivos en varias filas
+      if (consecutiveNumericValues >= minConsecutiveValues) {
+        break;
+      }
+    }
+
+    // Verificar si se encontraron suficientes valores numéricos consecutivos en varias filas
+    if (consecutiveNumericValues >= minConsecutiveValues) {
+      console.log("Se encontraron datos de tabla en el área de búsqueda.");
+      // Aquí puedes realizar acciones adicionales, como retornar true o ejecutar otras funciones
+    } else {
+      console.log("No se encontraron datos de tabla en el área de búsqueda.");
+      // Aquí puedes realizar acciones adicionales, como retornar false o ejecutar otras funciones
+    }
   }
   extractIndicatortechnicalSheet(workbook, sheetIndex) {
     return new Promise((resolve, reject) => {
