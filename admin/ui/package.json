@@ -16,6 +16,7 @@
     "@fluentui/react-search-preview": "^0.1.40",
     "antd": "^5.13.2",
     "axios": "^1.6.7",
+    "chroma-js": "^2.4.2",
     "json-server": "^1.0.0-alpha.22",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",

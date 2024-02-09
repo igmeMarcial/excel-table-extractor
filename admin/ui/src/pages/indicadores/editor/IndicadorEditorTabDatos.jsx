@@ -1,5 +1,7 @@
 import React from 'react';
 import Input from '../../../components/Input';
+import IndicadorDataGrid from './IndicadorDataGrid';
+import { indicadorData } from '../../../mock/indicadorData';
 
 const fieldsArray = {
   titulo: {
@@ -33,6 +35,7 @@ const fieldsArray = {
     default: '',
   },
 };
+
 function IndicadorEditorTabDatos() {
   const handleChange = (e, key) => {
     // Lógica para manejar el cambio de valor
@@ -49,9 +52,7 @@ function IndicadorEditorTabDatos() {
                 </th>
                 <td className="td-data">
                   {field.type === 'table' ? (
-                    <div className="border border-gray-200 h-60 bg-custom-grey">
-                      es table
-                    </div>
+                    <IndicadorDataGrid data={indicadorData} />
                   ) : (
                     <Input
                       name={key}

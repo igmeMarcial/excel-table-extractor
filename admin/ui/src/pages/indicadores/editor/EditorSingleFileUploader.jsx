@@ -32,7 +32,7 @@ function EditorSingleFileUploader() {
         //Valor de la hoja 3 estaticamente de celda definido estaticamente
         const cellVallueTitle = await extractDataExcelService.getNameIndicador(
           workbook,
-          2
+          3
         );
         setTitle(cellVallueTitle);
       }
@@ -47,6 +47,7 @@ function EditorSingleFileUploader() {
           .extractIndicatortechnicalSheet(workbookFile, 3)
           .then((extractedData) => {
             setSheetData(extractedData);
+            console.log(extractedData);
           })
           .catch((error) => {
             console.error(
