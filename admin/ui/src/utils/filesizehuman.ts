@@ -1,4 +1,4 @@
-const filesizehuman = (size) => {
+const filesizehuman = (size: number) => {
   const byteLimit = 1024,
     kbLimit = 1048576,
     mbLimit = 1073741824;

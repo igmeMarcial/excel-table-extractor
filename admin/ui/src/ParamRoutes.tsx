@@ -1,7 +1,10 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
-
-const ParamRoutes = ({ param, children }) => {
+import React from "react";
+import { useLocation } from "react-router-dom";
+type ParamRoutesProps = {
+  param: string;
+  children: React.ReactNode;
+};
+const ParamRoutes: React.FC<ParamRoutesProps> = ({ param, children }) => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 

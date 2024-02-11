@@ -1,11 +1,11 @@
 import React from 'react';
 
-import Configuracion from './pages/configuracion/ConfiguracionPage';
 import IndicadoresPage from './pages/indicadores/IndicadoresPage';
 import PlantillasPage from './pages/plantillas/PlantillasPage';
 import AnuariosPage from './pages/anuarios/AnuariosPage';
 import ParamRoutes from './ParamRoutes';
 import ParamRoute from './ParamRoute';
+
 import Dev from './pages/dev/Dev';
 import FichaPage from './pages/indicadores/ficha/FichaPage';
 import DatosPage from './pages/indicadores/datos/DatosPage';
