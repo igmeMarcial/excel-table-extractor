@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import MainLayout from '../../layout/MainLayout';
 import IndicadoresPageList from './IndicadoresPageList';
 import IndicadoresPageToolbar from './IndicadoresPageToolbar';

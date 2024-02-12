@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "es2015"
+    ],
+    "jsx": "react",
+    "strict": false,
+    "esModuleInterop": true,
+  },
+  "exclude": [
+    "node_modules",
+    "build"
+  ]
+}

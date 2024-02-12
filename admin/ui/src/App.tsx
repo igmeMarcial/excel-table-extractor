@@ -1,7 +1,6 @@
 import React from 'react';
 
 import IndicadoresPage from './pages/indicadores/IndicadoresPage';
-import PlantillasPage from './pages/plantillas/PlantillasPage';
 import AnuariosPage from './pages/anuarios/AnuariosPage';
 import ParamRoutes from './ParamRoutes';
 import ParamRoute from './ParamRoute';
@@ -19,7 +18,6 @@ function App() {
       <ParamRoute default element={<IndicadoresPage />} />
       <ParamRoute value="indicadores" element={<IndicadoresPage />} />
       <ParamRoute value="anuarios" element={<AnuariosPage />} />
-      <ParamRoute value="plantillas" element={<PlantillasPage />} />
       <ParamRoute value="configuracion" element={<ConfiguracionPage />} />
       <ParamRoute value="dev" element={<Dev />} />
       <ParamRoute

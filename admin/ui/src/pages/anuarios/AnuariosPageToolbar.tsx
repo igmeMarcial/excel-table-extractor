@@ -1,21 +1,29 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, ChangeEvent } from 'react';
 import SearchBox from '../../components/SearchBox';
 import UploadFileButton from '../../components/UploadFileButton';
+import AnuarioRestService from '../../services/AnuarioRestService';
 
-function PlantillasPageToolbar({ onSearchBoxChange, onFileUploaded }) {
+interface AnuariosPageToolbarProps {
+  onSearchBoxChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onFileUploaded?: (fileInfo: { name: string; size: number; modified: number }) => void;
+}
+
+const AnuariosPageToolbar: React.FC<AnuariosPageToolbarProps> = ({
+  onSearchBoxChange = () => {},
+  onFileUploaded = () => {},
+}) => {
   const [fileUploading, setFileUploading] = useState(false);
-  const handlerSearchChange = (event) => {
+
+  const handlerSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     onSearchBoxChange(event);
   };
 
   // Handle file change
-  const handleFileChange = (file) => {
+  const handleFileChange = (file: File | null) => {
     if (!file) return;
     setFileUploading(true);
-    PlantillaRestService.upload(file)
+    AnuarioRestService.upload(file)
       .then((_) => {
-        setFileUploading(false);
         onFileUploaded({
           name: file.name,
           size: file.size,
@@ -32,22 +40,13 @@ function PlantillasPageToolbar({ onSearchBoxChange, onFileUploaded }) {
       <SearchBox onChange={handlerSearchChange} />
       <span className="flex-1"></span>
       <UploadFileButton
-        text="Subir plantilla"
-        accept=".docx"
+        text="Subir anuario"
+        accept=".pdf"
         onFileChange={handleFileChange}
         uploading={fileUploading}
       />
     </div>
   );
-}
-
-PlantillasPageToolbar.propTypes = {
-  onSearchBoxChange: PropTypes.func,
-  onFileUploaded: PropTypes.func,
-};
-PlantillasPageToolbar.defaultProps = {
-  onSearchBoxChange: () => {},
-  onFileUploaded: () => {},
 };
 
-export default PlantillasPageToolbar;
+export default AnuariosPageToolbar;
