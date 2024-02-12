@@ -3,7 +3,7 @@ import PresentationTypeGraph from './PresentationTypeGraph';
 import PresentationSeriesStacked from './PresentationSeriesStacked';
 import PresentationSeriesConfiguration from './PresentationSeriesConfiguration';
 
-function IndicatorEditorTabPresentationLeft() {
+const IndicatorEditorTabPresentationLeft: React.FC = () =>  {
   return (
     <div className="border border-red-600 w-full">
       <PresentationTypeGraph />

@@ -1,63 +1,68 @@
 import * as XLSX from "xlsx";
 
+interface Sheet {
+  [key: string]: any; // Tipo genérico para la celda
+}
+
+interface Range {
+  s: { r: number; c: number }; // Coordenadas de la primera celda en el rango
+  e: { r: number; c: number }; // Coordenadas de la última celda en el rango
+}
+
 class ExtractDataExcelService {
-  constructor() {}
-  readExcelFile(file) {
+  
+  readExcelFile(file:File):Promise<any> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = (e:ProgressEvent<FileReader>) => {
         try {
-          const data = new Uint8Array(e.target.result);
+          const data = new Uint8Array(e.target!.result as ArrayBuffer);
           const workbook = XLSX.read(data, { type: "array" });
           resolve(workbook);
         } catch (error) {
           reject(error);
         }
       };
-      reader.onerror = (error) => {
+      reader.onerror = (error:ProgressEvent<FileReader>) => {
         reject(error);
       };
       reader.readAsArrayBuffer(file);
     });
   }
-  getAllSheetNames(file) {
-    return this.readExcelFile(file).then((workbook) => {
-      const sheetNames = workbook.SheetNames;
+  getAllSheetNames(file: File):Promise<string[]> {
+    return this.readExcelFile(file).then((workbook: XLSX.WorkBook) => {
+      const sheetNames: string[] = workbook.SheetNames;
       return sheetNames;
     });
   }
 
-  async extractDataFromFile(workbook, sheetIndex) {
-    return new Promise((resolve, reject) => {
-      try {
+  async extractDataFromFile(workbook: XLSX.WorkBook, sheetIndex:number):Promise<{sheetData: any[];tableData:any}> {
+       try {
         // Obtener el nombre de la hoja utilizando el índice proporcionado
-        const sheetName = workbook.SheetNames[sheetIndex];
+        const sheetName: string = workbook.SheetNames[sheetIndex];
         // Datos de la primera hoja seleccionada
-        const firstSheetData = XLSX.utils.sheet_to_json(
-          workbook.Sheets[sheetName]
-        );
+        const firstSheetData: any[] = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
         // Obtener datos de la tabla
-        const sheet = workbook.Sheets[sheetName];
-        const tableData = this.extractTableData(sheet);
-        // Resuelvo una promesa con los datos de la hoja y la tabla
-        resolve({ sheetData: firstSheetData, tableData: tableData });
-      } catch (error) {
-        // Capturar cualquier error y rechazar la promesa con el error correspondiente
-        reject(error);
-      }
-    });
+        const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
+        const tableData: any = this.extractTableData(sheet);
+        // Retornar los datos de la hoja y la tabla
+        return { sheetData: firstSheetData, tableData: tableData };
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
   }
-  getNameIndicador(workbook, sheetIndex) {
+  getNameIndicador(workbook: XLSX.WorkBook, sheetIndex:number):Promise<string> {
     return new Promise((resolve, reject) => {
       try {
         // Obtener la hoja en función del índice proporcionado
-        const sheetName = workbook.SheetNames[sheetIndex];
-        const sheet = workbook.Sheets[sheetName];
-        let data;
+        const sheetName:string = workbook.SheetNames[sheetIndex];
+        const sheet:XLSX.WorkSheet = workbook.Sheets[sheetName];
+        let data: string | undefined;
         const range = XLSX.utils.decode_range(sheet["!ref"]);
         let foundValue = false;
 
-        const validarCadenaFlex = (cadena, cadenasObjetivo) => {
+        const validarCadenaFlex = (cadena: string, cadenasObjetivo: string[]):boolean => {
           const cadenaNormalizada = cadena
             .trim()
             .toLowerCase()
@@ -96,7 +101,7 @@ class ExtractDataExcelService {
                       typeof cell2 === "object" &&
                       "v" in cell2
                     ) {
-                      // console.log(cell2.v);
+                      
                       data = cell2.v;
                       foundValue = true;
                       break; // Salir del bucle una vez que se encuentra un valor
@@ -123,17 +128,18 @@ class ExtractDataExcelService {
     });
   }
 
-  extractTableData(sheet) {
-    const tableData = [];
-    const encabezado = []; //test
-    const range = XLSX.utils.decode_range(sheet["!ref"]);
-    let headerRowIndex = null;
-    let headerColumnEnd = null;
-    let headerColumnIndex = null;
+  extractTableData(sheet:Sheet): any[] {
+    const tableData: any[] = [];
+    const range:Range = XLSX.utils.decode_range(sheet["!ref"] );
+    let headerRowIndex: number | null = null;
+    let headerColumnEnd: number | null = null;
+    let headerColumnIndex: number | null = null;
+
+    console.log(sheet);
 
     // Analizar las filas dentro del rango de referencia
     for (let R = range.s.r; R <= range.e.r; ++R) {
-      const rowData = [];
+      const rowData: any[] = [];
       for (let C = range.s.c; C <= range.e.c; ++C) {
         const cellref = XLSX.utils.encode_cell({ c: C, r: R });
         const cell = sheet[cellref] ? sheet[cellref].v : null;
@@ -161,6 +167,7 @@ class ExtractDataExcelService {
       for (let C = headerColumnIndex; C <= range.e.c; ++C) {
         const cellref = XLSX.utils.encode_cell({ c: C, r: headerRowIndex });
         const cell = sheet[cellref] ? sheet[cellref].v : null;
+
         if (cell === null || cell === "") {
           headerColumnEnd = C - 1; // La columna anterior no tuvo datos, por lo que esta es la última columna del encabezado
           break;
@@ -176,7 +183,7 @@ class ExtractDataExcelService {
       const startRow = headerRowIndex; // La fila siguiente al encabezado
       const startCol = headerColumnIndex; // La primera columna del rango
       const endRow = range.e.r; // La última fila del rango
-      const endCol = headerColumnEnd; // La última columna del rango
+      let endCol = headerColumnEnd; // La última columna del rango
 
       // Definir el nuevo rango de celdas
       const searchStartCell = XLSX.utils.encode_cell({
@@ -192,6 +199,36 @@ class ExtractDataExcelService {
       // this.analyzeSearchArea(sheet, searchStartCell, searchEndCell);
 
       // Procesar los datos dentro del área de búsqueda y agregarlos a tableData
+      //aqui la logica de extraer datos
+      const umbral = 0.5;
+
+      const filaEsParteDeTabla = (rowData) => {
+        let countDataCells = 0;
+        for (let cell of rowData) {
+          if (cell !== null && cell !== "") {
+            countDataCells++;
+          }
+        }
+        // Calcular el porcentaje de celdas con datos
+        const dataCellPercentage = countDataCells / rowData.length;
+        // Verificar si el porcentaje supera el umbral
+        return dataCellPercentage > umbral;
+      };
+      for (let R = startRow; R <= endRow; ++R) {
+        const rowData = [];
+        for (let C = startCol; C <= endCol; ++C) {
+          const cellref = XLSX.utils.encode_cell({ c: C, r: R });
+          const cell = sheet[cellref] ? sheet[cellref].v : null;
+          rowData.push(cell);
+        }
+        // Verificar si la fila es parte de la tabla antes de agregarla a tableData
+        if (filaEsParteDeTabla(rowData)) {
+          tableData.push(rowData);
+        } else {
+          // Si una fila no es parte de la tabla, detenemos la iteración
+          break;
+        }
+      }
     }
     return tableData;
   }
@@ -284,7 +321,7 @@ class ExtractDataExcelService {
       // Aquí puedes realizar acciones adicionales, como retornar false o ejecutar otras funciones
     }
   }
-  extractIndicatortechnicalSheet(workbook, sheetIndex) {
+  extractIndicatortechnicalSheet(workbook: XLSX.WorkBook, sheetIndex: number): Promise<string[]> {
     return new Promise((resolve, reject) => {
       try {
         const sheetName = workbook.SheetNames[sheetIndex];

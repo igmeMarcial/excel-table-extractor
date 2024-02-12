@@ -1,8 +1,11 @@
-import React from 'react';
+import React from 'react'
 
-function IndicadorDataGrid({ data }) {
+type Props = {
+     readonly data: any[];
+}
+
+export default function IndicadorDataGrid({data}: Props) {
   return (
-    // <div className="border border-gray-200 h-60 bg-custom-grey">es table</div>
     <div className="flex flex-col w-full border-t border-r border-black border-solid">
       <div className="flex flex-shrink-0 bg-custom-blue text-white">
         {data[0].map((heading, index) => (
@@ -39,7 +42,6 @@ function IndicadorDataGrid({ data }) {
         ))}
       </div>
     </div>
-  );
-}
 
-export default IndicadorDataGrid;
+  )
+}

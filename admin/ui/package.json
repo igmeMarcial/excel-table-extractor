@@ -25,6 +25,7 @@
     "react-router-dom": "^6.21.1",
     "react-scripts": "^5.0.1",
     "scheduler": "^0.23.0",
+    "typescript": "^5.3.3",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.1/xlsx-0.20.1.tgz"
   },
   "browserslist": {

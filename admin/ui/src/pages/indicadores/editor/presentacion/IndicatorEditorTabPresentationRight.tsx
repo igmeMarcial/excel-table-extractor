@@ -1,6 +1,6 @@
 import React from 'react';
 
-function IndicatorEditorTabPresentationRight() {
+const IndicatorEditorTabPresentationRight: React.FC = () => {
   return (
     <div className="border border-yellow-200 w-full h-96">
       <p>Vista previa</p>

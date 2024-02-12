@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch } from '@fluentui/react-components';
 import { SwitchProps } from '@fluentui/react-components';
 
-function PresentationSeriesStacked() {
+const PresentationSeriesStacked: React.FC = () => {
   return (
     <div>
       <p>Mostrar series apiladas</p>

@@ -15,7 +15,9 @@ const AnuariosPageToolbar: React.FC<AnuariosPageToolbarProps> = ({
   const [fileUploading, setFileUploading] = useState(false);
 
   const handlerSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onSearchBoxChange(event);
+    if (onSearchBoxChange) {
+      onSearchBoxChange(event);
+    }
   };
 
   // Handle file change

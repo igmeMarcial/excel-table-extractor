@@ -7,7 +7,7 @@ import {
   DataArea24Regular,
   DataPie24Regular,
 } from '@fluentui/react-icons';
-function PresentationTypeGraph() {
+const PresentationTypeGraph: React.FC = () => {
   return (
     <div>
       <p>Tipo de gráfico</p>

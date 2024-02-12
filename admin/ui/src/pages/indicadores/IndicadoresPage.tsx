@@ -3,7 +3,7 @@ import MainLayout from '../../layout/MainLayout';
 import IndicadoresPageList from './IndicadoresPageList';
 import IndicadoresPageToolbar from './IndicadoresPageToolbar';
 
-function IndicadoresPage() {
+const IndicadoresPage: React.FC = () =>  {
   return (
     <MainLayout>
       <IndicadoresPageToolbar />

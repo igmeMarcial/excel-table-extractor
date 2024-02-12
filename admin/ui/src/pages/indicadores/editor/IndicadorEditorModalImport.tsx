@@ -3,7 +3,7 @@ import { Modal, Button } from 'antd';
 import { ArrowImport24Regular } from '@fluentui/react-icons';
 import EditorSingleFileUploader from './EditorSingleFileUploader';
 
-function IndicadorEditorModalImport() {
+const IndicadorEditorModalImport: React.FC = () => { 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [files, setFiles] = useState(true);
 
@@ -62,5 +62,6 @@ function IndicadorEditorModalImport() {
     </>
   );
 }
+
 
 export default IndicadorEditorModalImport;

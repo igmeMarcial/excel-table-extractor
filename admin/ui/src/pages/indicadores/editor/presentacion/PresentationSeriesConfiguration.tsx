@@ -4,11 +4,12 @@ import { indicadorData } from '../../../../mock/indicadorData';
 import { getChartColors } from '../../../../utils/colors';
 import chroma from 'chroma-js';
 
-function PresentationSeriesConfiguration() {
+const PresentationSeriesConfiguration: React.FC = () => {
   const [nameColumnData, setNameColumnData] = useState(indicadorData);
   const [colors, setColors] = useState(getChartColors);
-
-  const getColor = (index, colors) => {
+  
+ let number = 1;
+  const getColor = (index:number, colors:string[]) => {
     if (index < colors.length) {
       return colors[index];
     } else {
@@ -16,6 +17,9 @@ function PresentationSeriesConfiguration() {
       const darkenedColor = chroma(baseColor).darken();
       return darkenedColor.hex();
     }
+  };
+    const getNumber = () => {
+     return number++; // 
   };
 
   return (
@@ -28,6 +32,7 @@ function PresentationSeriesConfiguration() {
               key={item[0]}
               nombre={item[0]}
               color={getColor(index, colors)}
+              number={getNumber()}
             />
           ))}
         </div>

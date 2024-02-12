@@ -8,6 +8,7 @@ function AnuariosPage() {
   const listRef = useRef(null);
   const handleSearchBoxChange = (value) => {
     listRef.current.filterRecords(value);
+    console.log(value)
   };
   const handleUpload = (data) => {
     listRef.current.addRecord(data);

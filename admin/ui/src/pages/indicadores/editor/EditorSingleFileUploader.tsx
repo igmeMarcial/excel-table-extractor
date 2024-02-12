@@ -3,21 +3,20 @@ import ExtractDataExcelService from '../../../services/ExtractDataExcelService';
 import { Checkbox } from '@fluentui/react-components';
 
 function EditorSingleFileUploader() {
-  const [workbookFile, setWorkBookFile] = useState(null);
-  const [loadingFile, setLoadingFile] = useState(false);
-  const [option1, setOption1] = useState(false);
-  const [option2, setOption2] = useState(false);
+  const [workbookFile, setWorkBookFile] = useState<any>(null);
+  const [loadingFile, setLoadingFile] = useState<boolean>(false);
+  const [option1, setOption1] = useState<boolean>(false);
+  const [option2, setOption2] = useState<boolean>(false);
 
-  const [sheetIndex, setSheetIndex] = useState(3); // hoja por defecto es 3
-  const [tableData, setTableData] = useState(null);
-  const [sheetData, setSheetData] = useState(null);
+  const [sheetIndex, setSheetIndex] = useState<number>(3); // hoja por defecto es 3
+  const [tableData, setTableData] = useState<string[][] | null>(null); 
+  const [sheetData, setSheetData] = useState<string[][] | null>(null); 
 
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState<string>('');
 
   const extractDataExcelService = new ExtractDataExcelService();
-
-  const handleFileChange = async (e) => {
-    const selectedFile = e.target.files[0];
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files![0];
     try {
       const workbook = await extractDataExcelService.readExcelFile(
         selectedFile
@@ -81,7 +80,7 @@ function EditorSingleFileUploader() {
       {loadingFile ? (
         <div>
           <p className="text-blue-500">Indicador detectado en la ficha</p>
-          <p>{title && title}</p>
+          <p>{title && <p>{title}</p>}</p>
           <p className="text-blue-500">Selecciona los datos a importar</p>
           <div className="flex flex-col pl-4 gap-2 ">
             <Checkbox
