@@ -30,7 +30,7 @@ const IndicadorEditorBottomActions: React.FC<IndicadorEditorBottomActionsProps> 
     <div className="pl-12 bg-custom-grey py-2 flex space-x-4">
       <Button
         onClick={handleClick}
-        type="primary "
+        type="primary"
         disabled={!Object.keys(estadistica).length}
       >
         Registrar

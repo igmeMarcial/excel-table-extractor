@@ -30,7 +30,7 @@ const PresentationSeriesConfiguration: React.FC = () => {
           {nameColumnData?.slice(1).map((item, index) => (
             <PresentationSeriesConfigurationList
               key={item[0]}
-              nombre={item[0]}
+              nombre={String(item[0])}
               color={getColor(index, colors)}
               number={getNumber()}
             />

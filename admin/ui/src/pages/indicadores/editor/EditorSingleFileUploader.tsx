@@ -9,7 +9,7 @@ function EditorSingleFileUploader() {
   const [option2, setOption2] = useState<boolean>(false);
 
   const [sheetIndex, setSheetIndex] = useState<number>(3); // hoja por defecto es 3
-  const [tableData, setTableData] = useState<string[][] | null>(null); 
+  const [tableData, setTableData] = useState(null); 
   const [sheetData, setSheetData] = useState<string[][] | null>(null); 
 
   const [title, setTitle] = useState<string>('');
@@ -45,7 +45,7 @@ function EditorSingleFileUploader() {
         extractDataExcelService
           .extractIndicatortechnicalSheet(workbookFile, 3)
           .then((extractedData) => {
-            setSheetData(extractedData);
+            console.log(extractedData)
           })
           .catch((error) => {
             console.error(
@@ -57,14 +57,9 @@ function EditorSingleFileUploader() {
       if (option2) {
         // Opción 2 seleccionada: Datos estadísticos
         extractDataExcelService
-          .extractDataFromFile(workbookFile, 2)
+          .extractDataFromFile(workbookFile, 1)
           .then((extractedData) => {
-            // Manejar los datos extraídos de la hoja de datos estadísticos
-            // Aquí puedes establecer el estado de sheetData o tableData según sea necesario
-            console.log(
-              'Datos extraídos de la hoja de datos estadísticos:',
-              extractedData
-            );
+           setTableData(extractedData)
           })
           .catch((error) => {
             console.error(
@@ -80,7 +75,7 @@ function EditorSingleFileUploader() {
       {loadingFile ? (
         <div>
           <p className="text-blue-500">Indicador detectado en la ficha</p>
-          <p>{title && <p>{title}</p>}</p>
+          <div>{title && <p>{title}</p>}</div>
           <p className="text-blue-500">Selecciona los datos a importar</p>
           <div className="flex flex-col pl-4 gap-2 ">
             <Checkbox
