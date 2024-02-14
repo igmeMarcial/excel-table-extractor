@@ -1,10 +1,13 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React, { ReactElement } from 'react';
+import { useLocation } from 'react-router-dom';
 type ParamRoutesProps = {
   param: string;
   children: React.ReactNode;
 };
-const ParamRoutes: React.FC<ParamRoutesProps> = ({ param, children }) => {
+const ParamRoutes = ({
+  param,
+  children,
+}: ParamRoutesProps): ReactElement<any, any> => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
@@ -19,7 +22,7 @@ const ParamRoutes: React.FC<ParamRoutesProps> = ({ param, children }) => {
     return paramValue === value || (paramValue === null && child.props.default);
   });
 
-  return matchingRoute || null;
+  return (matchingRoute as React.ReactElement<any, any>) || null;
 };
 
 export default ParamRoutes;

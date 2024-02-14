@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement } from 'react';
 
 type ParamRouteProps = {
   value?: string;
@@ -6,7 +6,7 @@ type ParamRouteProps = {
   default?: boolean;
 };
 
-const ParamRoute: React.FC<ParamRouteProps> = ({ element }) => {
+const ParamRoute = ({ element }: ParamRouteProps) => {
   return element;
 };
 
