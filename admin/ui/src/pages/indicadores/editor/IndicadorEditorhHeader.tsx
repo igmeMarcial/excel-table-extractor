@@ -11,17 +11,21 @@ interface Estadistica {
 }
 interface IndicadorEditorhHeaderProps {
   estadistica?: Estadistica;
+  onTableData?:any;
 }
 
-const IndicadorEditorhHeader: React.FC<IndicadorEditorhHeaderProps> = ({
-  estadistica = { nombre: 'Nombre indicador...' },
+const IndicadorEditorhHeader: React.FC<IndicadorEditorhHeaderProps> = ({estadistica = { nombre: 'Nombre indicador...' },onTableData
 }) => { 
+
+  const handleTableData =(values)=>{
+    onTableData(values)
+  }
   return (
     <>
       <div className="bg-custom-grey flex px-12 pt-3 pb-3 gap-2 items-center">
         <p className="text-2xl md:text-2xl font-bold p-0 m-1">Indicador</p>
         <span className="flex-1"></span>
-        <IndicadorEditorModalImport />
+        <IndicadorEditorModalImport onTableData={handleTableData}/>
         <Button
           type="text"
           style={{ color: '#2271B1' }}

@@ -11,10 +11,11 @@ interface TabItem {
 }
 
 interface IndicadorEditorTabsProps {
-  onTabDataChange: (tab: string, values: any) => void; // el tipo de la función de cambio de datos de la pestaña
+  onTabDataChange: (tab: string, values: any) => void; 
+  tableData:any// el tipo de la función de cambio de datos de la pestaña
 }
 
-const IndicadorEditorTabs: React.FC<IndicadorEditorTabsProps> = ({ onTabDataChange }) => {
+const IndicadorEditorTabs: React.FC<IndicadorEditorTabsProps> = ({ onTabDataChange, tableData }) => {
   const handleFichaChange = (values:any) => {
     onTabDataChange('ficha', values);
   };
@@ -28,12 +29,12 @@ const IndicadorEditorTabs: React.FC<IndicadorEditorTabsProps> = ({ onTabDataChan
     {
       key: '2',
       label: 'Datos',
-      children: <IndicadorEditorTabDatos />,
+      children: <IndicadorEditorTabDatos tableData={tableData}/>,
     },
     {
       key: '3',
       label: 'Presentación',
-      children: <IndicadorEditorTabPresentacion />,
+      children: <IndicadorEditorTabPresentacion tableData={tableData} />,
     },
   ];
 

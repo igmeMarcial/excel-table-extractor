@@ -7,7 +7,7 @@ function ConfiguracionBottomActions() {
   };
   return (
     <div className="pl-12 bg-custom-grey py-2 flex space-x-4">
-      <Button onClick={handleClick} type="primary ">
+      <Button onClick={handleClick} type="primary">
         Guardar
       </Button>
     </div>

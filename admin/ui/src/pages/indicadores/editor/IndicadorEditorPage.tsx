@@ -10,6 +10,7 @@ interface Estadistica {
 
 function IndicadorEditorPage() {
   const [estadistica, setEstadistica] = useState({});
+  const [tableData,setTableData] = useState([]);
 
   const handleTabFichaDataChange = (values: Estadistica) => {
     setEstadistica((prevEstadistica) => {
@@ -21,12 +22,16 @@ function IndicadorEditorPage() {
       handleTabFichaDataChange(values);
     }
   };
+  const handleTableData=(values:any)=>{
+    console.log(values)
+    setTableData(values)
+  }
 
   return (
     <MainLayout>
-      <IndicadorEditorhHeader estadistica={estadistica} />
+      <IndicadorEditorhHeader estadistica={estadistica} onTableData={handleTableData}/>
       <div className="px-12 ">
-        <IndicadorEditorTabs onTabDataChange={handleTabDataChange} />
+        <IndicadorEditorTabs onTabDataChange={handleTabDataChange} tableData={tableData}/>
       </div>
 
       <IndicadorEditorBottomActions estadistica={estadistica} />

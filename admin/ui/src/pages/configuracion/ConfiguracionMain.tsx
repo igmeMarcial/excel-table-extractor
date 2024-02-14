@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { ColorPicker } from 'antd';
+import type { ColorPickerProps, GetProp } from 'antd';
 
-const colorsBase = [
+
+type Color = GetProp<ColorPickerProps, 'value'>;
+
+ const colorsBase = [
   '#EB1E23',
   '#58595B',
   '#0071BC',
@@ -13,12 +17,25 @@ const colorsBase = [
   '#A21942',
   '#FD6925',
 ];
+
+
 function ConfiguracionMain() {
-  const [colorValue, setColorValue] = useState(null);
+
+   const [selectedColors, setSelectedColors] = useState(colorsBase);
   const [valueInput, setValueInput] = useState(
     'EnteredText="https://appsinia.analyticsperu.com/portalregional/datos.do'
   );
-  console.log(colorValue);
+  const onChange = (e) => {
+    
+  };
+   const handleColorChange = (colorValue, index) => {
+    setSelectedColors(prevColors => {
+      const newColors = [...prevColors];
+      newColors[index] = colorValue;
+      return newColors;
+    });
+  };
+
   return (
     <div className="px-12  ">
       <div>
@@ -26,8 +43,8 @@ function ConfiguracionMain() {
         <div className="flex flex-row items-center gap-12">
           <h4>colores de series</h4>
           <div>
-            {colorsBase.map((color) => (
-              <ColorPicker value={color} onChange={setColorValue} />
+            {selectedColors.map((colorValue,index) => (
+              <ColorPicker key={`${colorValue}_${index}`} value={colorValue} onChange={(color) => handleColorChange(color, index)} />
             ))}
           </div>
         </div>
@@ -41,7 +58,8 @@ function ConfiguracionMain() {
             type="text"
             id="blogname"
             value={valueInput}
-            class=" leading-8 min-h-30 box-border shadow-none rounded-md border border-gray-400 bg-white text-gray-800 w-full"
+            onChange={onChange}
+            className=" leading-8 min-h-30 box-border shadow-none rounded-md border border-gray-400 bg-white text-gray-800 w-full"
           />
         </div>
       </div>

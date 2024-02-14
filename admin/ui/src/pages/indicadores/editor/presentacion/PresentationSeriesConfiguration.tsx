@@ -3,11 +3,19 @@ import PresentationSeriesConfigurationList from './PresentationSeriesConfigurati
 import { indicadorData } from '../../../../mock/indicadorData';
 import { getChartColors } from '../../../../utils/colors';
 import chroma from 'chroma-js';
+interface PresentationSeriesConfigurationProps {
+  tableData: any
+}
 
-const PresentationSeriesConfiguration: React.FC = () => {
+const PresentationSeriesConfiguration: React.FC<PresentationSeriesConfigurationProps> = ({tableData}) => {
   const [nameColumnData, setNameColumnData] = useState(indicadorData);
   const [colors, setColors] = useState(getChartColors);
   
+ if(tableData.tableData && tableData.tableData.length > 0){
+  console.log(tableData)
+ }else{
+  console.log("todavia no hay datos")
+ }
  let number = 1;
   const getColor = (index:number, colors:string[]) => {
     if (index < colors.length) {

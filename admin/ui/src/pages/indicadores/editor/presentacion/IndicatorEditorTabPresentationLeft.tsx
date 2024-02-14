@@ -3,12 +3,16 @@ import PresentationTypeGraph from './PresentationTypeGraph';
 import PresentationSeriesStacked from './PresentationSeriesStacked';
 import PresentationSeriesConfiguration from './PresentationSeriesConfiguration';
 
-const IndicatorEditorTabPresentationLeft: React.FC = () =>  {
+interface IndicatorEditorTabPresentationLeftProps{
+  tableData: any
+}
+
+const IndicatorEditorTabPresentationLeft: React.FC<IndicatorEditorTabPresentationLeftProps> = ({tableData}) =>  {
   return (
     <div className="border border-red-600 w-full">
       <PresentationTypeGraph />
       <PresentationSeriesStacked />
-      <PresentationSeriesConfiguration />
+      <PresentationSeriesConfiguration tableData={tableData}/>
     </div>
   );
 }

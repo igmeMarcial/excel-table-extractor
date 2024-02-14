@@ -2,17 +2,19 @@ import React, { useEffect, useState } from 'react';
 import ExtractDataExcelService from '../../../services/ExtractDataExcelService';
 import { Checkbox } from '@fluentui/react-components';
 
-function EditorSingleFileUploader() {
+interface EditorSingleFileUploaderProps{
+  onTableData?: any,
+  uploadFile:boolean,
+  setUploadFile:any,
+}
+const  EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> =({uploadFile,setUploadFile,onTableData}) =>{
   const [workbookFile, setWorkBookFile] = useState<any>(null);
-  const [loadingFile, setLoadingFile] = useState<boolean>(false);
   const [option1, setOption1] = useState<boolean>(false);
   const [option2, setOption2] = useState<boolean>(false);
-
-  const [sheetIndex, setSheetIndex] = useState<number>(3); // hoja por defecto es 3
-  const [tableData, setTableData] = useState(null); 
-  const [sheetData, setSheetData] = useState<string[][] | null>(null); 
-
   const [title, setTitle] = useState<string>('');
+
+
+
 
   const extractDataExcelService = new ExtractDataExcelService();
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +23,7 @@ function EditorSingleFileUploader() {
       const workbook = await extractDataExcelService.readExcelFile(
         selectedFile
       );
-      setLoadingFile(true);
+      setUploadFile(true)
       setWorkBookFile(workbook);
       if (workbook) {
         // Obtener todos los nombres de las hojas
@@ -56,10 +58,12 @@ function EditorSingleFileUploader() {
       }
       if (option2) {
         // Opción 2 seleccionada: Datos estadísticos
+        console.log("opcion2")
         extractDataExcelService
-          .extractDataFromFile(workbookFile, 1)
+          .extractDataFromFile(workbookFile, 2)
           .then((extractedData) => {
-           setTableData(extractedData)
+          //  setTableData(extractedData)
+            onTableData(extractedData);
           })
           .catch((error) => {
             console.error(
@@ -72,7 +76,7 @@ function EditorSingleFileUploader() {
   }, [option1, option2]);
   return (
     <section className="h-full min-h-60 py-3  w-full items-center ">
-      {loadingFile ? (
+      {uploadFile ? (
         <div>
           <p className="text-blue-500">Indicador detectado en la ficha</p>
           <div>{title && <p>{title}</p>}</div>

@@ -2,24 +2,35 @@ import React, { useState } from 'react';
 import { Modal, Button } from 'antd';
 import { ArrowImport24Regular } from '@fluentui/react-icons';
 import EditorSingleFileUploader from './EditorSingleFileUploader';
+interface IndicadorEditorModalImportProps{
+  onTableData?: any;
+}
 
-const IndicadorEditorModalImport: React.FC = () => { 
+const IndicadorEditorModalImport: React.FC<IndicadorEditorModalImportProps> = ({onTableData}) => { 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [files, setFiles] = useState(true);
+  const[tableData,setTableData] = useState(null)
+const [uploadFileLoading,setUploadFileLoading]  = useState<boolean>(false)
 
   const showModal = () => {
     setIsModalOpen(true);
   };
   const handleOk = () => {
     setIsModalOpen(false);
+    onTableData(tableData)
+    setUploadFileLoading(false)
   };
   const handleCancel = () => {
     setIsModalOpen(false);
+     setUploadFileLoading(false)
   };
-  const handleFileChange = (files) => {
-    console.log(files);
-    setFiles(files);
-  };
+  
+  const handleTableData=(values)=>{
+    if(values){
+    setTableData(values)
+    setFiles(false)
+    }  
+  }
 
   const modalStyles = {
     footer: {
@@ -57,7 +68,7 @@ const IndicadorEditorModalImport: React.FC = () => {
           </Button>,
         ]}
       >
-        <EditorSingleFileUploader />
+        <EditorSingleFileUploader uploadFile={uploadFileLoading} setUploadFile={setUploadFileLoading} onTableData={handleTableData}/>
       </Modal>
     </>
   );
