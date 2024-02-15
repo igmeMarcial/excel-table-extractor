@@ -60,7 +60,7 @@ const  EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> =({uplo
         // Opción 2 seleccionada: Datos estadísticos
         console.log("opcion2")
         extractDataExcelService
-          .extractDataFromFile(workbookFile, 2)
+          .extractDataFromFile(workbookFile, 0)
           .then((extractedData) => {
           //  setTableData(extractedData)
             onTableData(extractedData);
