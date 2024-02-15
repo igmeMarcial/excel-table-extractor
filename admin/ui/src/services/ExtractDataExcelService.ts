@@ -9,6 +9,12 @@ interface Range {
   e: { r: number; c: number }; // Coordenadas de la última celda en el rango
 }
 
+type TransformedSheetData = {
+  nombreIndicador: string;
+  nota: string;
+  fuente: string;
+  elaboracion: string;
+};
 class ExtractDataExcelService {
   readExcelFile(file: File): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -38,19 +44,37 @@ class ExtractDataExcelService {
   async extractDataFromFile(
     workbook: XLSX.WorkBook,
     sheetIndex: number
-  ): Promise<{ sheetData: any[]; tableData: any }> {
+  ): Promise<{ sheetData:any; tableData: any }> {
     try {
       // Obtener el nombre de la hoja utilizando el índice proporcionado
       const sheetName: string = workbook.SheetNames[sheetIndex];
       // Datos de la primera hoja seleccionada
-      const firstSheetData: any[] = XLSX.utils.sheet_to_json(
+     let firstSheetData: any[] = XLSX.utils.sheet_to_json(
         workbook.Sheets[sheetName]
       );
+       
       // Obtener datos de la tabla
       const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
       const tableData: any = this.extractTableData(sheet);
-      // Retornar los datos de la hoja y la tabla
-      return { sheetData: firstSheetData, tableData: tableData };
+      const contentCellTitle: any= this.getTitleIndicador(sheet);
+      const contentCellFuente: any= this.getContentCell(sheet,"Fuente:")
+      const contentCellNote: any= this.getContentCell(sheet,"Nota:")
+      const contentCellElaboration: any= this.getContentCell(sheet,"Elaboración:")
+
+      // console.log(contentCellTitle)
+      // console.log(contentCellNote)
+      // console.log(contentCellFuente)
+      // console.log(contentCellElaboration)
+
+      const transformedSheetData: TransformedSheetData  = {
+          nombreIndicador:contentCellTitle ?  contentCellTitle.separatedContent || contentCellTitle.description || "" : "",
+       nota:contentCellNote ? contentCellNote.separatedContent || contentCellNote.nextCell?.v || contentCellNote.cell?.v || "" : "",
+    fuente: contentCellFuente ? contentCellFuente.separatedContent || contentCellFuente.nextCell?.v || contentCellFuente.cell?.v || "":"",
+    elaboracion:contentCellElaboration ? contentCellElaboration.separatedContent || contentCellElaboration.nextCell?.v || contentCellElaboration.cell?.v || "":""
+      }
+      
+      // console.log(transformedSheetData)
+      return { sheetData: transformedSheetData, tableData };
     } catch (error) {
       console.log(error);
       throw error;
@@ -136,6 +160,57 @@ class ExtractDataExcelService {
       }
     });
   }
+
+   getTitleIndicador(sheet: Sheet): { title: string, separatedContent: string,description: string } | null {
+    // Obtener el valor de la celda A1
+    const cellA1Ref = 'A1';
+    const cellA1 = sheet[cellA1Ref];
+    if (cellA1 && cellA1.t === 's' && cellA1.v) {
+      const cellValue: string = cellA1.v;
+       const regex = /^(.*?):\s*(.*)$/;
+        const match = cellValue.match(regex);
+
+        if (match && match.length === 3) {
+            const title = match[1].trim();
+            const separatedContent = match[2].trim();
+            return { title, separatedContent,description: cellValue };
+        } else {
+            // Si no se encuentra ":" o el formato no es válido, retornar null
+            return null;
+        }
+    } else {
+      return null;
+    }
+  }
+  getContentCell(sheet: XLSX.WorkSheet, nombreBuscar: string): { cell: XLSX.CellObject; nextCell: XLSX.CellObject;separatedContent: string } | null {
+    // Obtener el rango de celdas de la hoja
+    const range = XLSX.utils.decode_range(sheet['!ref']);
+    
+    // Iterar sobre todas las celdas del rango
+    for (let R = range.s.r; R <= range.e.r; ++R) {
+      for (let C = range.s.c; C <= range.e.c; ++C) {
+        // Obtener la referencia de la celda actual
+        const cellRef = XLSX.utils.encode_cell({ r: R, c: C });
+        const cell = sheet[cellRef];
+        
+        // Verificar si el contenido de la celda es igual al nombre buscado
+        if (cell && typeof cell.v === 'string' && cell.v.includes(nombreBuscar)) {
+          // Encontramos la celda con el nombre buscado, ahora obtenemos la siguiente celda
+          const nextCellRef = XLSX.utils.encode_cell({ r: R, c: C + 1 });
+          const nextCell = sheet[nextCellRef];
+          
+          const content = cell.v;
+           const regex = new RegExp(`${nombreBuscar}\\s*\\s*(.*)`, 'i');
+          const matches = content.match(regex);
+          const separatedContent = matches && matches.length === 2 ? matches[1] : '';
+
+           return { cell: cell, nextCell: nextCell, separatedContent: separatedContent };
+        }
+      }
+    }
+    return null;
+  }
+
 
   extractTableData(sheet: Sheet): any[] {
     const tableData: any[] = [];

@@ -2,42 +2,51 @@ import React, { useState } from 'react';
 import { Modal, Button } from 'antd';
 import { ArrowImport24Regular } from '@fluentui/react-icons';
 import EditorSingleFileUploader from './EditorSingleFileUploader';
-interface IndicadorEditorModalImportProps{
+interface IndicadorEditorModalImportProps {
   onTableData?: any;
 }
 
-const IndicadorEditorModalImport: React.FC<IndicadorEditorModalImportProps> = ({onTableData}) => { 
+const IndicadorEditorModalImport: React.FC<IndicadorEditorModalImportProps> = ({
+  onTableData,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [files, setFiles] = useState(true);
-  const[tableData,setTableData] = useState(null)
-const [uploadFileLoading,setUploadFileLoading]  = useState<boolean>(false)
+  const [files, setFiles] = useState(false);
+  const [tableData, setTableData] = useState(null);
+  const [uploadFileLoading, setUploadFileLoading] = useState<boolean>(false);
+  const [option1, setOption1] = useState(false);
+  const [option2, setOption2] = useState(false);
 
   const showModal = () => {
     setIsModalOpen(true);
   };
   const handleOk = () => {
     setIsModalOpen(false);
-    onTableData(tableData)
-    setUploadFileLoading(false)
+    onTableData(tableData);
+    setUploadFileLoading(false);
+    setOption1(false); // Reiniciar estado de los checkboxes
+    setOption2(false);
+    setFiles(false);
   };
   const handleCancel = () => {
     setIsModalOpen(false);
-     setUploadFileLoading(false)
+    setUploadFileLoading(false);
+    setOption1(false); // Reiniciar estado de los checkboxes
+    setOption2(false);
+    setFiles(false);
   };
-  
-  const handleTableData=(values)=>{
-    if(values){
-    setTableData(values)
-    setFiles(false)
-    }  
-  }
+
+  const handleTableData = (values) => {
+    if (values) {
+      setTableData(values);
+      setFiles(true);
+    }
+  };
 
   const modalStyles = {
     footer: {
       display: 'flex',
     },
   };
-
   return (
     <>
       <Button
@@ -56,7 +65,7 @@ const [uploadFileLoading,setUploadFileLoading]  = useState<boolean>(false)
         width={700}
         footer={[
           <Button
-            disabled={files}
+            disabled={!files && !option1 && !option2}
             key="submit"
             type="primary"
             onClick={handleOk}
@@ -68,11 +77,19 @@ const [uploadFileLoading,setUploadFileLoading]  = useState<boolean>(false)
           </Button>,
         ]}
       >
-        <EditorSingleFileUploader uploadFile={uploadFileLoading} setUploadFile={setUploadFileLoading} onTableData={handleTableData}/>
+        <EditorSingleFileUploader
+          uploadFile={uploadFileLoading}
+          setUploadFile={setUploadFileLoading}
+          onTableData={handleTableData}
+          option1={option1}
+          setOption1={setOption1}
+          option2={option2}
+          setOption2={setOption2}
+          setFiles={setFiles}
+        />
       </Modal>
     </>
   );
-}
-
+};
 
 export default IndicadorEditorModalImport;

@@ -6,16 +6,19 @@ interface EditorSingleFileUploaderProps{
   onTableData?: any,
   uploadFile:boolean,
   setUploadFile:any,
+ option1: boolean,
+  setOption1: any,
+  option2: boolean,
+  setOption2: any,
+  setFiles:any
 }
-const  EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> =({uploadFile,setUploadFile,onTableData}) =>{
+const  EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> =({uploadFile,setUploadFile,onTableData,option1,
+  setOption1,
+  option2,
+  setOption2, setFiles}) =>{
   const [workbookFile, setWorkBookFile] = useState<any>(null);
-  const [option1, setOption1] = useState<boolean>(false);
-  const [option2, setOption2] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
-
-
-
-
+  
   const extractDataExcelService = new ExtractDataExcelService();
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files![0];
@@ -33,7 +36,7 @@ const  EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> =({uplo
         //Valor de la hoja 3 estaticamente de celda definido estaticamente
         const cellVallueTitle = await extractDataExcelService.getNameIndicador(
           workbook,
-          3
+          1
         );
         setTitle(cellVallueTitle);
       }
@@ -42,6 +45,7 @@ const  EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> =({uplo
     }
   };
   useEffect(() => {
+    setFiles(option1 || option2);
     if (workbookFile) {
       if (option1) {
         extractDataExcelService
@@ -57,12 +61,9 @@ const  EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> =({uplo
           });
       }
       if (option2) {
-        // Opción 2 seleccionada: Datos estadísticos
-        console.log("opcion2")
         extractDataExcelService
           .extractDataFromFile(workbookFile, 0)
           .then((extractedData) => {
-          //  setTableData(extractedData)
             onTableData(extractedData);
           })
           .catch((error) => {

@@ -11,14 +11,7 @@ interface FieldsArray {
     default: string;
   
 }
-// interface AesaInfo {
-//   apiUrl: string;
-// }
-// declare global {
-//   interface Window {
-//     AesaInfo: AesaInfo;
-//   }
-// }
+
 interface SelectionLevels {
   componente: string;
   subComponente: string;

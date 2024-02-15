@@ -19,6 +19,9 @@ const IndicadorEditorTabs: React.FC<IndicadorEditorTabsProps> = ({ onTabDataChan
   const handleFichaChange = (values:any) => {
     onTabDataChange('ficha', values);
   };
+  const handleDatosChange=(values:any)=>{
+    onTabDataChange('datos',values)
+  }
 
   const items:TabItem[] = [
     {
@@ -29,7 +32,7 @@ const IndicadorEditorTabs: React.FC<IndicadorEditorTabsProps> = ({ onTabDataChan
     {
       key: '2',
       label: 'Datos',
-      children: <IndicadorEditorTabDatos tableData={tableData}/>,
+      children: <IndicadorEditorTabDatos onChange={handleDatosChange} tableData={tableData}/>,
     },
     {
       key: '3',
@@ -39,7 +42,7 @@ const IndicadorEditorTabs: React.FC<IndicadorEditorTabsProps> = ({ onTabDataChan
   ];
 
   const onChangeTab = (key) => {
-    console.info("tabs: " + key)
+    // console.info("tabs: " + key)
   };
   return <Tabs defaultActiveKey="1" items={items} onChange={onChangeTab} />;
 }

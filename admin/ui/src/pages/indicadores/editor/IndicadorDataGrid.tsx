@@ -3,11 +3,14 @@ import { makeStyles } from '@fluentui/react-components';
 type Props = {
   readonly data: any[];
 };
+
+
 const useStyles = makeStyles({
   dataGrid: {
     borderCollapse: 'separate',
     borderSpacing: '0',
-    '>tr': {
+    width:"100%",
+    '> tbody >tr': {
       ':first-child': {
         '>td': {
           'border-top-width': '1px',
@@ -32,14 +35,15 @@ const useStyles = makeStyles({
 });
 
 function Cell(rowIndex: number, colIndex: number, value: any) {
-  return <td>{value}</td>;
+  return <td key={`cell-${rowIndex}-${colIndex}`}>{value}</td>;
 }
 
 export default function IndicadorDataGrid({ data }: Props) {
   const classes = useStyles();
   return (
     <table className={classes.dataGrid}>
-      <tr>{data[0].map((value, colIndex) => Cell(0, colIndex, value))}</tr>
+      <tbody>
+        <tr>{data[0].map((value, colIndex) => Cell(0, colIndex, value))}</tr>
       {data.slice(1, -1).map((itemRow, rowIndex) => (
         <tr key={`C${itemRow}-F${rowIndex}`}>
           {itemRow.map((value, colIndex) => Cell(0, colIndex, value))}
@@ -50,6 +54,8 @@ export default function IndicadorDataGrid({ data }: Props) {
           Cell(0, colIndex, value)
         )}
       </tr>
+      </tbody>
+    
     </table>
   );
 }
