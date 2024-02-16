@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from 'antd';
 import IndicadorRestService from '../../../services/IndicadorRestService';
 import { Link } from 'react-router-dom';
@@ -22,8 +22,6 @@ interface IndicadorEditorBottomActionsProps {
 const IndicadorEditorBottomActions: React.FC<IndicadorEditorBottomActionsProps> = ({
   estadistica, datos
   }) => {
-  
-  console.log(datos)
   const handleClick = () => {
     if (estadistica) {
       IndicadorRestService.create(estadistica)

@@ -12,6 +12,7 @@ function IndicadorEditorPage() {
   const [estadistica, setEstadistica] = useState({});
   const [datos,setDatos]=useState({})
   const [tableData,setTableData] = useState([]);
+  const [tabActiveKey,setTabActiveKey] = useState("1")
 
   const handleTabFichaDataChange = (values: Estadistica) => {
     setEstadistica((prevEstadistica) => {
@@ -34,12 +35,12 @@ function IndicadorEditorPage() {
   const handleTableData=(values:any)=>{
     setTableData(values)
   }
-
+  
   return (
     <MainLayout>
-      <IndicadorEditorhHeader estadistica={estadistica} onTableData={handleTableData}/>
+      <IndicadorEditorhHeader setTabActiveKey={setTabActiveKey} estadistica={estadistica} onTableData={handleTableData}/>
       <div className="px-12 ">
-        <IndicadorEditorTabs onTabDataChange={handleTabDataChange} tableData={tableData}/>
+        <IndicadorEditorTabs setTabActiveKey={setTabActiveKey} tabActiveKey={tabActiveKey} onTabDataChange={handleTabDataChange} tableData={tableData}/>
       </div>
 
       <IndicadorEditorBottomActions datos={datos} estadistica={estadistica} />

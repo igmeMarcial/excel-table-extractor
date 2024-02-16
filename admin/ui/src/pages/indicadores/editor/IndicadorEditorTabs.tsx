@@ -1,33 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tabs } from 'antd';
 import IndicadorEditorTabFicha from './IndicadorEditorTabFicha';
 import IndicadorEditorTabDatos from './IndicadorEditorTabDatos';
 import IndicadorEditorTabPresentacion from './IndicadorEditorTabPresentacion';
-
 interface TabItem {
   key: string;
   label: string;
   children: React.ReactNode;
 }
-
 interface IndicadorEditorTabsProps {
   onTabDataChange: (tab: string, values: any) => void; 
-  tableData:any// el tipo de la función de cambio de datos de la pestaña
-}
+  tableData:any;
+  tabActiveKey: string;
+  setTabActiveKey: (newKey: string) => void;
 
-const IndicadorEditorTabs: React.FC<IndicadorEditorTabsProps> = ({ onTabDataChange, tableData }) => {
+}
+const IndicadorEditorTabs: React.FC<IndicadorEditorTabsProps> = ({ onTabDataChange, tableData,tabActiveKey,setTabActiveKey }) => {
+  const [activeTabKey, setActiveTabKey] = useState(tabActiveKey);
   const handleFichaChange = (values:any) => {
     onTabDataChange('ficha', values);
   };
   const handleDatosChange=(values:any)=>{
     onTabDataChange('datos',values)
   }
-
+   useEffect(() => {
+    if(activeTabKey !== tabActiveKey){
+      setActiveTabKey(tabActiveKey)
+    }
+  }, [tabActiveKey]);
   const items:TabItem[] = [
     {
       key: '1',
       label: 'Ficha',
-      children: <IndicadorEditorTabFicha onChange={handleFichaChange} />,
+      children: <IndicadorEditorTabFicha  onChange={handleFichaChange} />,
     },
     {
       key: '2',
@@ -40,11 +45,11 @@ const IndicadorEditorTabs: React.FC<IndicadorEditorTabsProps> = ({ onTabDataChan
       children: <IndicadorEditorTabPresentacion tableData={tableData} />,
     },
   ];
-
   const onChangeTab = (key) => {
-    // console.info("tabs: " + key)
+   setActiveTabKey(key)
+   setTabActiveKey(key)
   };
-  return <Tabs defaultActiveKey="1" items={items} onChange={onChangeTab} />;
+  return <Tabs  activeKey={activeTabKey} defaultActiveKey="1" items={items} onChange={onChangeTab} />;
 }
 
 export default IndicadorEditorTabs;

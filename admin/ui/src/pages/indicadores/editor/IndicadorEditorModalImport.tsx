@@ -4,10 +4,11 @@ import { ArrowImport24Regular } from '@fluentui/react-icons';
 import EditorSingleFileUploader from './EditorSingleFileUploader';
 interface IndicadorEditorModalImportProps {
   onTableData?: any;
+  setTabActiveKey: (newKey: string) => void;
 }
 
 const IndicadorEditorModalImport: React.FC<IndicadorEditorModalImportProps> = ({
-  onTableData,
+  onTableData,setTabActiveKey
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [files, setFiles] = useState(false);
@@ -26,6 +27,7 @@ const IndicadorEditorModalImport: React.FC<IndicadorEditorModalImportProps> = ({
     setOption1(false); // Reiniciar estado de los checkboxes
     setOption2(false);
     setFiles(false);
+    setTabActiveKey("2")
   };
   const handleCancel = () => {
     setIsModalOpen(false);

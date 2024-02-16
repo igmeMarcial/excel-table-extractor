@@ -12,9 +12,10 @@ interface Estadistica {
 interface IndicadorEditorhHeaderProps {
   estadistica?: Estadistica;
   onTableData?:any;
+  setTabActiveKey: (newKey: string) => void;
 }
 
-const IndicadorEditorhHeader: React.FC<IndicadorEditorhHeaderProps> = ({estadistica = { nombre: 'Nombre indicador...' },onTableData
+const IndicadorEditorhHeader: React.FC<IndicadorEditorhHeaderProps> = ({estadistica = { nombre: 'Nombre indicador...' },onTableData,setTabActiveKey
 }) => { 
 
   const handleTableData =(values)=>{
@@ -25,7 +26,7 @@ const IndicadorEditorhHeader: React.FC<IndicadorEditorhHeaderProps> = ({estadist
       <div className="bg-custom-grey flex px-12 pt-3 pb-3 gap-2 items-center">
         <p className="text-2xl md:text-2xl font-bold p-0 m-1">Indicador</p>
         <span className="flex-1"></span>
-        <IndicadorEditorModalImport onTableData={handleTableData}/>
+        <IndicadorEditorModalImport setTabActiveKey={setTabActiveKey} onTableData={handleTableData}/>
         <Button
           type="text"
           style={{ color: '#2271B1' }}

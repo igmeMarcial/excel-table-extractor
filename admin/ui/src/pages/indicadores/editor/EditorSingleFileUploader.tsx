@@ -49,7 +49,7 @@ const  EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> =({uplo
     if (workbookFile) {
       if (option1) {
         extractDataExcelService
-          .extractIndicatortechnicalSheet(workbookFile, 3)
+          .extractIndicatortechnicalSheet(workbookFile, 1)
           .then((extractedData) => {
             console.log(extractedData)
           })
