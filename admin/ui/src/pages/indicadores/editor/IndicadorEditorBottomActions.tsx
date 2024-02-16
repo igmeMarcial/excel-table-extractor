@@ -37,6 +37,7 @@ const IndicadorEditorBottomActions: React.FC<IndicadorEditorBottomActionsProps> 
     }
     if (datos) {
       console.log('Datos enviados:', datos);
+      window.alert("Datos enviados")
     }
   };
 

@@ -415,7 +415,7 @@ class ExtractDataExcelService {
         const sheet = workbook.Sheets[sheetName];
         const range = XLSX.utils.decode_range(sheet["!ref"]);
 
-          console.log(XLSX.utils.sheet_to_html)
+          
         let result: string[][] = [];
         let patternFound = false;
         for (let rowNum = range.s.r; rowNum <= range.e.r; rowNum++) {
@@ -439,8 +439,7 @@ class ExtractDataExcelService {
               // console.log(rowData)
               patternFound = true;
             } else if (patternFound) {
-              // Si se ha encontrado el patrón y la fila actual no tiene 3 columnas,
-              // asumimos que hemos llegado al final de los datos y detenemos la iteración.
+             
               break;
             }
           }
