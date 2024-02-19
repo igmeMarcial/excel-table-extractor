@@ -62,7 +62,6 @@ const IndicadorEditorTabDatos: React.FC<IndicadorEditorTabDatosProps> = ({
 
   const [values, setValues] = useState<any>(initialForm);
 
-
   useEffect(()=>{
     if (tableData && tableData.sheetData) {
       const { nombreIndicador, nota, fuente, elaboracion } = tableData.sheetData;
@@ -109,7 +108,7 @@ const IndicadorEditorTabDatos: React.FC<IndicadorEditorTabDatosProps> = ({
                       style={{ border: '1px solid #8C8F94' }}
                       className="p-4 rounded-sm"
                     >
-                      {tableData.tableData && tableData.tableData.length > 0 ? (
+                      {tableData && tableData.tableData && tableData.tableData.length > 0 ? (
                         <IndicadorDataGrid data={tableData.tableData} />
                       ) : (
                         <div>No hay datos</div>

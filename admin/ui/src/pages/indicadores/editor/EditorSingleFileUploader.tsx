@@ -4,6 +4,7 @@ import { Checkbox } from '@fluentui/react-components';
 
 interface EditorSingleFileUploaderProps{
   onTableData?: any,
+  onIndicatorData?: any,
   uploadFile:boolean,
   setUploadFile:any,
  option1: boolean,
@@ -12,7 +13,7 @@ interface EditorSingleFileUploaderProps{
   setOption2: any,
   setFiles:any
 }
-const  EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> =({uploadFile,setUploadFile,onTableData,option1,
+const  EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> =({uploadFile,setUploadFile,onTableData,onIndicatorData,option1,
   setOption1,
   option2,
   setOption2, setFiles}) =>{
@@ -51,6 +52,7 @@ const  EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> =({uplo
         extractDataExcelService
           .extractIndicatortechnicalSheet(workbookFile, 1)
           .then((extractedData) => {
+            onIndicatorData(extractedData)
             console.log(extractedData)
           })
           .catch((error) => {

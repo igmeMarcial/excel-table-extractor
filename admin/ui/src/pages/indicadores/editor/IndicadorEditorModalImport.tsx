@@ -4,15 +4,17 @@ import { ArrowImport24Regular } from '@fluentui/react-icons';
 import EditorSingleFileUploader from './EditorSingleFileUploader';
 interface IndicadorEditorModalImportProps {
   onTableData?: any;
+  onIndicatorData?: any;
   setTabActiveKey: (newKey: string) => void;
 }
 
 const IndicadorEditorModalImport: React.FC<IndicadorEditorModalImportProps> = ({
-  onTableData,setTabActiveKey
+  onTableData,onIndicatorData,setTabActiveKey
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [files, setFiles] = useState(false);
   const [tableData, setTableData] = useState(null);
+   const [indicadorData,setIndicadorData]= useState(null);
   const [uploadFileLoading, setUploadFileLoading] = useState<boolean>(false);
   const [option1, setOption1] = useState(false);
   const [option2, setOption2] = useState(false);
@@ -23,6 +25,7 @@ const IndicadorEditorModalImport: React.FC<IndicadorEditorModalImportProps> = ({
   const handleOk = () => {
     setIsModalOpen(false);
     onTableData(tableData);
+    onIndicatorData(indicadorData)
     setUploadFileLoading(false);
     setOption1(false); // Reiniciar estado de los checkboxes
     setOption2(false);
@@ -43,6 +46,12 @@ const IndicadorEditorModalImport: React.FC<IndicadorEditorModalImportProps> = ({
       setFiles(true);
     }
   };
+  const handleIndicatorData=(values)=>{
+    if (values){
+      setIndicadorData(values)
+     
+    }
+  }
 
   const modalStyles = {
     footer: {
@@ -83,6 +92,7 @@ const IndicadorEditorModalImport: React.FC<IndicadorEditorModalImportProps> = ({
           uploadFile={uploadFileLoading}
           setUploadFile={setUploadFileLoading}
           onTableData={handleTableData}
+          onIndicatorData={handleIndicatorData}
           option1={option1}
           setOption1={setOption1}
           option2={option2}

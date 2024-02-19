@@ -46,14 +46,7 @@ class ExtractDataExcelService {
     sheetIndex: number
   ): Promise<{ sheetData: any; tableData: any }> {
     try {
-      // Obtener el nombre de la hoja utilizando el índice proporcionado
       const sheetName: string = workbook.SheetNames[sheetIndex];
-      // Datos de la primera hoja seleccionada
-      let firstSheetData: any[] = XLSX.utils.sheet_to_json(
-        workbook.Sheets[sheetName]
-      );
-
-      // Obtener datos de la tabla
       const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
       const tableData: any = this.extractTableData(sheet);
       const contentCellTitle: any = this.getTitleIndicador(sheet);
@@ -415,41 +408,80 @@ class ExtractDataExcelService {
         const sheet = workbook.Sheets[sheetName];
         const range = XLSX.utils.decode_range(sheet["!ref"]);
 
-          
         let result: string[][] = [];
         let patternFound = false;
-        for (let rowNum = range.s.r; rowNum <= range.e.r; rowNum++) {
+        let combinedData = [];
+         let start = 3;//range.s.r
+        for (let rowNum = start; rowNum <= range.e.r; rowNum++) {
           let rowHasPattern = false;
           let rowData = [];
           for (let colNum = range.s.c; colNum <= range.e.c; colNum++) {
             let cellAddress = XLSX.utils.encode_cell({ r: rowNum, c: colNum });
             let cellValue = sheet[cellAddress] ? sheet[cellAddress].w : "";
-            // console.log(cellValue)
-            // console.log(cellValue.length > 0)
-
-           if (cellValue.trim().length > 0) {
+            
+            if (cellValue.trim().length > 0) {
+              // console.log(cellValue)
               rowData.push(cellValue);
               rowHasPattern = true;
             }
           }
 
+          if (rowData.length === 0) {
+            break;
+          }
           if (rowHasPattern) {
-           if (rowData.length === 3  || rowData.length === 2 || rowData.length === 1) {
-              result.push(rowData);
-              // console.log(rowData)
-              patternFound = true;
-            } else if (patternFound) {
-             
-              break;
+            if (rowData.length > 1) {
+              
+              if (combinedData.length > 0) {
+                console.log(combinedData)
+                result.push(combinedData); // Agrega datos combinados previamente almacenados al resultado
+                combinedData = []; // Reinicia combinedData
+              }
+              combinedData = combinedData.concat(rowData); // Almacena datos combinados en combinedData
+            } else {
+              combinedData[combinedData.length - 1] += ", " + rowData.join(", ");
             }
+            patternFound = true;
           }
         }
-
+        if (combinedData.length > 0) {
+          console.log(combinedData)
+          result.push(combinedData);
+        }
+        
         resolve(result);
       } catch (error) {
         reject(error);
       }
     });
+  }
+
+  convertIndicatorData(row:[]):void{
+   const object ={
+    "componente": "",
+    "subComponente": "",
+    "temaEstadistico": "",
+    "nombre": "",
+    "descripcionDefinicion": "",
+    "unidadDeMedida": "",
+    "formulaCalculo": "",
+    "metodologiaCalculo": "",
+    "fuente": "",
+    "unidadOrganicaGeneradora": "",
+    "url": "",
+    "periodicidadGeneracion": "",
+    "periodicidadEntregaRegistro": "",
+    "periodoSerieTiempo": "",
+    "ambitoGeografico": "",
+    "limitaciones": "",
+    "relacionObjetivos": "",
+    "relacionIniciativasInternacionales": "",
+    "correoElectronico": "",
+    "wpDefaultFieldLabel": "",
+    "telefonoCelular": ""
+   }
+
+
   }
 }
 

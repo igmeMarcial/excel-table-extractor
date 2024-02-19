@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import Input from '../../../components/Input';
 import { makeStyles, Select } from '@fluentui/react-components';
 import { useFetch } from '../../../hooks/useFetch';
@@ -18,6 +18,7 @@ interface SelectionLevels {
   temaEstadistico: string;
 }
 interface IndicadorEditorTabFichaProps {
+  indicatorData:any;
   onChange: (values: any) => void; 
 }
 interface Urls {
@@ -165,7 +166,7 @@ const initialForm = Object.fromEntries(
     .map(([key, field]) => [key, field.default])
 );
 
-const IndicadorEditorTabFicha = forwardRef(({ onChange }:IndicadorEditorTabFichaProps, ref) => {
+const IndicadorEditorTabFicha = forwardRef(({ onChange,indicatorData }:IndicadorEditorTabFichaProps, ref) => {
   const styles = useStyles();
   const [selectionLevels, setSelectionLevels] = useState<SelectionLevels>({
     componente: '',
@@ -174,11 +175,20 @@ const IndicadorEditorTabFicha = forwardRef(({ onChange }:IndicadorEditorTabFicha
   });
 
   const [values, setValues] = useState<any>(initialForm);
-
+  // console.log(indicatorData)
+  
   //Lamada de apis
   const { data: componentApiData } = useFetch(urls.componenteUrl);
   const { data: subComponentApiData } = useFetch(urls.subComponentesUrl);
   const { data: temasEstadisticoApiData } = useFetch(urls.temasEstadisticosUrl);
+
+  useEffect(()=>{
+    if(indicatorData && indicatorData.length > 0 ){
+      console.log(indicatorData)
+    }
+  },[indicatorData])
+
+ 
 
   const handleChange = (e, fieldKey) => {
     const { name, value } = e.target;

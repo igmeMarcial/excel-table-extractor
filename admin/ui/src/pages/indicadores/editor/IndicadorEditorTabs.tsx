@@ -11,11 +11,12 @@ interface TabItem {
 interface IndicadorEditorTabsProps {
   onTabDataChange: (tab: string, values: any) => void; 
   tableData:any;
+  indicatorData:any;
   tabActiveKey: string;
   setTabActiveKey: (newKey: string) => void;
 
 }
-const IndicadorEditorTabs: React.FC<IndicadorEditorTabsProps> = ({ onTabDataChange, tableData,tabActiveKey,setTabActiveKey }) => {
+const IndicadorEditorTabs: React.FC<IndicadorEditorTabsProps> = ({ onTabDataChange, tableData,indicatorData,tabActiveKey,setTabActiveKey }) => {
   const [activeTabKey, setActiveTabKey] = useState(tabActiveKey);
   const handleFichaChange = (values:any) => {
     onTabDataChange('ficha', values);
@@ -32,7 +33,7 @@ const IndicadorEditorTabs: React.FC<IndicadorEditorTabsProps> = ({ onTabDataChan
     {
       key: '1',
       label: 'Ficha',
-      children: <IndicadorEditorTabFicha  onChange={handleFichaChange} />,
+      children: <IndicadorEditorTabFicha  onChange={handleFichaChange} indicatorData={indicatorData}/>,
     },
     {
       key: '2',
