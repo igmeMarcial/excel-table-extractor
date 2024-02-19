@@ -9,7 +9,7 @@ import * as dayjs from 'dayjs';
 import RowDeteteButton from '../../components/RowDeleteButton';
 import { Button } from '@fluentui/react-components';
 import { OpenRegular } from '@fluentui/react-icons';
-import IndicadorRestService from '../../services/IndicadorRestService';
+import EstadisticaService from '../../services/EstadisticaService';
 import formatTimestamp from '../../utils/formatTimestamp';
 
 const IndicadoresPageList = forwardRef((props, ref) => {
@@ -35,7 +35,7 @@ const IndicadoresPageList = forwardRef((props, ref) => {
 
   useEffect(() => {
     // Obtener lista de plantillas
-    IndicadorRestService.list()
+    EstadisticaService.list()
       .then((data) => {
         setData(data);
         setFullData(data);

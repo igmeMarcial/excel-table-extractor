@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-class IndicadorRestService {
-  static apiUrl = `${window.AesaInfo.apiUrl}/estadisticas`;
+class EstadisticaService {
+  static readonly apiUrl = `${window.AesaInfo.apiUrl}/estadisticas`;
 
   static handleRequest(requestPromise: Promise<any>) {
     try {
@@ -33,4 +33,4 @@ class IndicadorRestService {
   }
 }
 
-export default IndicadorRestService;
+export default EstadisticaService;
