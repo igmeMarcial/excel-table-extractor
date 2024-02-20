@@ -1,6 +1,6 @@
 interface FieldsArray {
   label: string;
-  type: 'select' | 'text' | 'url' | 'email'; // Añadí los tipos de campo adicionales
+  type: 'select' | 'text' | 'url' | 'email' | 'textarea'; // Añadí los tipos de campo adicionales
   required?: boolean;
   default?: string;
 }
@@ -24,11 +24,12 @@ export const ESTADISTICA_FIELDS_DEF: Record<string, FieldsArray> = {
   nombre: {
     label: 'Nombre del indicador o estadística ambiental',
     type: 'text',
-    required: false,
+    required: true,
+    
   },
   descripcionDefinicion: {
     label: 'Descripción/Definición',
-    type: 'text',
+    type: 'textarea',
     required: true,
   },
   unidadDeMedida: {
@@ -43,7 +44,7 @@ export const ESTADISTICA_FIELDS_DEF: Record<string, FieldsArray> = {
   },
   metodologiaCalculo: {
     label: 'Metodología de cálculo',
-    type: 'text',
+    type: 'textarea',
     required: true,
   },
   fuente: {
@@ -60,12 +61,12 @@ export const ESTADISTICA_FIELDS_DEF: Record<string, FieldsArray> = {
   },
   periodicidadGeneracion: {
     label: 'Periodicidad de generación',
-    type: 'text',
+    type: 'textarea',
     required: true,
   },
   periodicidadEntregaRegistro: {
     label: 'Periodicidad de entrega/registro',
-    type: 'text',
+    type: 'textarea',
     required: true,
   },
   periodoSerieTiempo: {
@@ -75,7 +76,7 @@ export const ESTADISTICA_FIELDS_DEF: Record<string, FieldsArray> = {
   },
   ambitoGeografico: {
     label: 'Ámbito geográfico',
-    type: 'text',
+    type: 'textarea',
     required: true,
   },
   limitaciones: {
@@ -98,8 +99,8 @@ export const ESTADISTICA_FIELDS_DEF: Record<string, FieldsArray> = {
     type: 'email',
     required: true,
   },
-  wpDefaultFieldLabel: {
-    label: 'WP/default-field-label',
+  datosContacto: {
+    label: 'Datos del contacto',
     type: 'text',
     required: true,
   },

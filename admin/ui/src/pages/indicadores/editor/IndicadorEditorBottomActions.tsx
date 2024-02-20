@@ -21,22 +21,27 @@ interface IndicadorEditorBottomActionsProps {
 const IndicadorEditorBottomActions: React.FC<
   IndicadorEditorBottomActionsProps
 > = ({ estadistica, datos }) => {
+ 
+  console.log(estadistica)
+
   const handleClick = () => {
     if (estadistica) {
-      EstadisticaService.create(estadistica)
-        .then((response) => {
-          console.log('Registro de estadística exitoso');
-        })
-        .catch((err) => {
-          console.error('Error al registrar estadística:', err);
-        })
-        .finally(() => {
-          console.log('Finalizado');
-        });
+      // EstadisticaService.create(estadistica)
+      //   .then((response) => {
+      //     console.log('Registro de estadística exitoso');
+      //   })
+      //   .catch((err) => {
+      //     console.error('Error al registrar estadística:', err);
+      //   })
+      //   .finally(() => {
+      //     console.log('Finalizado');
+      //   });
+      console.log("datos evvidado ........ de estadisticxas:")
+       console.log(estadistica)
     }
     if (datos) {
-      console.log('Datos enviados:', datos);
-      window.alert('Datos enviados');
+      // console.log('Datos enviados:', datos);
+      // window.alert('Datos enviados');
     }
   };
 

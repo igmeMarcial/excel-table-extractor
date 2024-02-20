@@ -7,12 +7,17 @@ interface IndicadorEditorTabPresentacionProps{
 }
 
 const IndicadorEditorTabPresentacion: React.FC<IndicadorEditorTabPresentacionProps> =({tableData})=> {
+
+
+  const handleTypeGraph = (key:any)=>{
+    console.log(key)
+  }
   return (
     <div
       className="flex flex-row overflow-auto scroll-container"
       style={{ height: '380px' }}
     >
-      <IndicatorEditorTabPresentationLeft tableData={tableData}/>
+      <IndicatorEditorTabPresentationLeft tableData={tableData} onTypeGraph={handleTypeGraph}/>
       <IndicatorEditorTabPresentationRight />
     </div>
   );

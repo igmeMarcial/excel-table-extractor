@@ -30,7 +30,7 @@ const IndicadorEditorModalImport: React.FC<IndicadorEditorModalImportProps> = ({
     setOption1(false); // Reiniciar estado de los checkboxes
     setOption2(false);
     setFiles(false);
-    setTabActiveKey("2")
+    setTabActiveKey(option1 ? "1" : option2 ? "2" : "1")
   };
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -65,7 +65,7 @@ const IndicadorEditorModalImport: React.FC<IndicadorEditorModalImportProps> = ({
         icon={<ArrowImport24Regular className="align-middle" />}
         onClick={showModal}
       >
-        Actualizar desde ficha técnica
+        Importar desde ficha técnica
       </Button>
       <Modal
         title="Importar ficha tecnica"

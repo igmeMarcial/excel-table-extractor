@@ -433,7 +433,6 @@ class ExtractDataExcelService {
             if (rowData.length > 1) {
               
               if (combinedData.length > 0) {
-                console.log(combinedData)
                 result.push(combinedData); // Agrega datos combinados previamente almacenados al resultado
                 combinedData = []; // Reinicia combinedData
               }
@@ -445,7 +444,6 @@ class ExtractDataExcelService {
           }
         }
         if (combinedData.length > 0) {
-          console.log(combinedData)
           result.push(combinedData);
         }
         
@@ -456,33 +454,6 @@ class ExtractDataExcelService {
     });
   }
 
-  convertIndicatorData(row:[]):void{
-   const object ={
-    "componente": "",
-    "subComponente": "",
-    "temaEstadistico": "",
-    "nombre": "",
-    "descripcionDefinicion": "",
-    "unidadDeMedida": "",
-    "formulaCalculo": "",
-    "metodologiaCalculo": "",
-    "fuente": "",
-    "unidadOrganicaGeneradora": "",
-    "url": "",
-    "periodicidadGeneracion": "",
-    "periodicidadEntregaRegistro": "",
-    "periodoSerieTiempo": "",
-    "ambitoGeografico": "",
-    "limitaciones": "",
-    "relacionObjetivos": "",
-    "relacionIniciativasInternacionales": "",
-    "correoElectronico": "",
-    "wpDefaultFieldLabel": "",
-    "telefonoCelular": ""
-   }
-
-
-  }
 }
 
 export default ExtractDataExcelService;

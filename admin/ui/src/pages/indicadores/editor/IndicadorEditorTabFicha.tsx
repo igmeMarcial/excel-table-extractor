@@ -2,8 +2,9 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { Select } from '@fluentui/react-components';
 import { useFetch } from '../../../hooks/useFetch';
 import { EstadisticaModel } from '../../../models/EstadisticaModel';
-import { Input } from 'antd';
+import { Input, Form } from 'antd';
 import { ESTADISTICA_FIELDS_DEF } from './EstadisticaFieldsDef';
+import { FICHA_FIELDS_MAP } from './FichaFieldsMap';
 
 interface IndicadorEditorTabFichaProps {
   indicatorData: any;
@@ -24,6 +25,7 @@ const urls: Urls = {
 };
 
 const fieldsArray = ESTADISTICA_FIELDS_DEF;
+const { TextArea } = Input;
 
 const defalultValues: EstadisticaModel = Object.fromEntries(
   Object.entries(fieldsArray)
@@ -55,7 +57,7 @@ const WPSelectField = ({ fieldName, label, options, onChange, value }) => {
   );
 };
 
-const WPInputField = ({ fieldName, label, onChange, value }) => {
+const WPInputField = ({ fieldName, label, onChange, value, required }) => {
   return (
     <tr key={fieldName}>
       <th scope="row">
@@ -66,7 +68,25 @@ const WPInputField = ({ fieldName, label, onChange, value }) => {
           name={fieldName}
           type="text"
           onChange={(e) => onChange(e, fieldName)}
-          required
+          required={required}
+        />
+      </td>
+    </tr>
+  );
+};
+
+const WPTextAreaField = ({ fieldName, label, onChange, value, required }) => {
+  return (
+    <tr key={fieldName}>
+      <th scope="row">
+        <label htmlFor={fieldName}>{label}</label>
+      </th>
+      <td>
+        <TextArea
+          name={fieldName}
+          onChange={(e) => onChange(e, fieldName)}
+          style={{ height: 100, resize: 'none', scrollbarWidth: 'thin' }}
+          required={required}
         />
       </td>
     </tr>
@@ -86,10 +106,54 @@ const IndicadorEditorTabFicha = forwardRef(
     const { data: listaTemasEstadisticos } = useFetch(
       urls.temasEstadisticosUrl
     );
-
+    console.log(values);
+    console.log(defalultValues)
+    
     useEffect(() => {
       if (indicatorData && indicatorData.length > 0) {
-        console.log(indicatorData);
+        const calculateSimilarity = (str1, str2) => {
+          const len = Math.min(str1.length, str2.length);
+          let commonChars = 0;
+          for (let i = 0; i < len; i++) {
+            if (str1[i] === str2[i]) {
+              commonChars++;
+            }
+          }
+          return commonChars / len;
+        };
+
+        const removeAccents = (string) => {
+          return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        };
+
+        const toSnakeCase = (string) => {
+          return removeAccents(string)
+            .replace(/[^a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ]+/g, '_') // Reemplaza caracteres no alfanuméricos y caracteres con tilde por _
+            .replace(/^_+|_+$/g, '') // Elimina _ del principio y del final
+            .toLowerCase();
+        };
+
+        const result = {};
+        indicatorData.forEach((row) => {
+          const firstNonNumberValue = row.find((value) => isNaN(value));
+          if (typeof firstNonNumberValue === 'string') {
+            const snakeCaseKey = toSnakeCase(firstNonNumberValue);
+            // console.log(snakeCaseKey)
+            const matchedKey = Object.keys(FICHA_FIELDS_MAP).find((key) => {
+              const camelCaseKey = toSnakeCase(key);
+              const similarity = calculateSimilarity(
+                snakeCaseKey,
+                camelCaseKey
+              );
+
+              return similarity >= 0.5;
+            });
+            if (matchedKey) {
+              result[FICHA_FIELDS_MAP[matchedKey]] = row[row.length - 1];
+            }
+          }
+        });
+        setValues(prevValues => ({ ...prevValues, ...result }));
       }
     }, [indicatorData]);
 
@@ -107,7 +171,6 @@ const IndicadorEditorTabFicha = forwardRef(
       return values;
     };
     const getSubComponentes = () => {
-      console.log('call: getSubComponentes');
       return (listaSubcomponentes?.data || []).filter(
         (x) => x.componenteId === values.componenteId
       );
@@ -133,13 +196,9 @@ const IndicadorEditorTabFicha = forwardRef(
       getValues,
     }));
 
-    const printValues = () => {
-      console.log('values', values);
-    };
-
     return (
       <div style={{ height: '380px' }}>
-        <div className="h-full overflow-auto scroll-container ">
+        <div className="h-full overflow-auto scroll-container pr-8">
           <form className="h-full flex flex-col justify-between">
             <table className="form-table">
               <tbody>
@@ -155,6 +214,17 @@ const IndicadorEditorTabFicha = forwardRef(
                         value={values[fieldName]}
                       />
                     );
+                  } else if (fieldDef.type === 'textarea') {
+                    return (
+                      <WPTextAreaField
+                        key={fieldName}
+                        label={fieldDef.label}
+                        fieldName={fieldName}
+                        onChange={handleChange}
+                        value={values[fieldName]}
+                        required={fieldDef.required}
+                      />
+                    );
                   } else {
                     return (
                       <WPInputField
@@ -163,16 +233,17 @@ const IndicadorEditorTabFicha = forwardRef(
                         fieldName={fieldName}
                         onChange={handleChange}
                         value={values[fieldName]}
+                        required={fieldDef.required}
                       />
                     );
                   }
                 })}
               </tbody>
             </table>
-            <button type="button" onClick={printValues}>
-              Print values
+            <button className="invisible" type="submit">
+              {' '}
+              enviar
             </button>
-            <button type="submit"> enviar</button>
           </form>
         </div>
       </div>

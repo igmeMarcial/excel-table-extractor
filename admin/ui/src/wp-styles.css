@@ -36,7 +36,7 @@
     border: 1px solid #8c8f94;
     background-color: #fff;
     color: #2c3338;
-    width: 25em;
+    /* width: 25em; */
     margin: 0 1px;
     font-size: 14px;
 }
@@ -49,6 +49,13 @@
     width: auto;
     vertical-align: middle;
 
+}
+
+
+}
+@media screen and (max-width: 882px){
+.form-table th{
+   display: block !important;
 }
 }
 /**
