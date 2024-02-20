@@ -1,8 +1,7 @@
 interface FieldsArray {
   label: string;
-  type: 'select' | 'text' | 'url' | 'email' | 'textarea'; 
+  type: 'select' | 'text' | 'url' | 'email' | 'textarea';
   required?: boolean;
-  default?: string;
 }
 
 export const ESTADISTICA_FIELDS_DEF: Record<string, FieldsArray> = {
@@ -25,14 +24,11 @@ export const ESTADISTICA_FIELDS_DEF: Record<string, FieldsArray> = {
     label: 'Nombre del indicador o estadística ambiental',
     type: 'text',
     required: true,
-    
-    
   },
   descripcionDefinicion: {
     label: 'Descripción/Definición',
     type: 'textarea',
     required: true,
-    
   },
   unidadDeMedida: {
     label: 'Unidad de medida',

@@ -1,9 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../../app/store';
 
+// Tab ficha
 interface EstadisticaFields {
   nombre?: string;
+  componenteId?: number;
+  subcomponenteId?: number;
 }
+
+// Tab datos
 interface EstadisticaDataFields {
   data: any[];
 }
