@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch } from '@fluentui/react-components';
-import { SwitchProps } from '@fluentui/react-components';
+
 
 const PresentationSeriesStacked: React.FC = () => {
   return (

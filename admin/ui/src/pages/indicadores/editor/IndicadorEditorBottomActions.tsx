@@ -22,7 +22,7 @@ const IndicadorEditorBottomActions: React.FC<
   IndicadorEditorBottomActionsProps
 > = ({ estadistica, datos }) => {
  
-  console.log(estadistica)
+  // console.log(estadistica)
 
   const handleClick = () => {
     if (estadistica) {

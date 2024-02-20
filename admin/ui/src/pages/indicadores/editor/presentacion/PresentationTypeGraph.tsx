@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from '@fluentui/react-components';
+import { Button,makeStyles } from '@fluentui/react-components';
 import {
   DataBarVertical24Regular,
   DataBarHorizontal24Regular,
@@ -7,23 +7,33 @@ import {
   DataArea24Regular,
   DataPie24Regular,
 } from '@fluentui/react-icons';
-const PresentationTypeGraph: React.FC = () => {
-  
-  const [selectGraph,setSelectedGraph] = useState(null)
+
+const useStyles = makeStyles({
+  active: { backgroundColor: '#E6E6E6' },
+});
+
+interface PresentationTypeGraphProps{
+  onTypeGraph: any,
+}
+
+const PresentationTypeGraph: React.FC<PresentationTypeGraphProps> = ({onTypeGraph}) => {
+  const classes = useStyles();
+  const [selectGraph,setSelectedGraph] = useState('verticalBar')
 
   const handleChange = (graphType: string)=>{
     setSelectedGraph(graphType);
+    onTypeGraph(graphType)
   }
 
   return (
     <div>
       <p>Tipo de gráfico</p>
       <div className="flex gap-3">
-        <Button appearance="subtle" icon={<DataBarVertical24Regular />} onClick={()=>handleChange('verticalBar')}/>
-        <Button appearance="subtle" icon={<DataBarHorizontal24Regular />} onClick={()=>handleChange('horizontalBar')} />
-        <Button appearance="subtle" icon={<DataLine24Regular />}  onClick={()=>handleChange('line')}/>
-        <Button appearance="subtle" icon={<DataArea24Regular />} onClick={()=>handleChange('area')} />
-        <Button appearance="subtle" icon={<DataPie24Regular />}  onClick={()=>handleChange('pie')}/>
+        <Button className={selectGraph === 'verticalBar' ? classes.active : ''} appearance="subtle" icon={<DataBarVertical24Regular />} onClick={()=>handleChange('verticalBar')}/>
+        <Button className={selectGraph === 'horizontalBar' ? classes.active : ''} appearance="subtle" icon={<DataBarHorizontal24Regular />} onClick={()=>handleChange('horizontalBar')} />
+        <Button className={selectGraph === 'line' ? classes.active : ''} appearance="subtle" icon={<DataLine24Regular />}  onClick={()=>handleChange('line')}/>
+        <Button className={selectGraph === 'area' ? classes.active : ''} appearance="subtle" icon={<DataArea24Regular />} onClick={()=>handleChange('area')} />
+        <Button className={selectGraph === 'pie' ? classes.active : ''} appearance="subtle" icon={<DataPie24Regular />}  onClick={()=>handleChange('pie')}/>
       </div>
     </div>
   );

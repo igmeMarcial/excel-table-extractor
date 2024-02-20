@@ -1,6 +1,6 @@
 interface FieldsArray {
   label: string;
-  type: 'select' | 'text' | 'url' | 'email' | 'textarea'; // Añadí los tipos de campo adicionales
+  type: 'select' | 'text' | 'url' | 'email' | 'textarea'; 
   required?: boolean;
   default?: string;
 }
@@ -26,11 +26,13 @@ export const ESTADISTICA_FIELDS_DEF: Record<string, FieldsArray> = {
     type: 'text',
     required: true,
     
+    
   },
   descripcionDefinicion: {
     label: 'Descripción/Definición',
     type: 'textarea',
     required: true,
+    
   },
   unidadDeMedida: {
     label: 'Unidad de medida',

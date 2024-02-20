@@ -93,7 +93,7 @@ const IndicadorEditorTabDatos: React.FC<IndicadorEditorTabDatosProps> = ({
 
   
   return (
-    <div className="overflow-auto scroll-container" style={{ height: '380px' }}>
+    <div className="overflow-y-auto scroll-container " style={{ height: '380px' }}>
       <form>
         <table className="form-table">
           <tbody>

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import IndicatorEditorTabPresentationLeft from './presentacion/IndicatorEditorTabPresentationLeft';
 import IndicatorEditorTabPresentationRight from './presentacion/IndicatorEditorTabPresentationRight';
+import { use } from 'echarts';
 
 interface IndicadorEditorTabPresentacionProps{
   tableData: any
@@ -8,9 +9,11 @@ interface IndicadorEditorTabPresentacionProps{
 
 const IndicadorEditorTabPresentacion: React.FC<IndicadorEditorTabPresentacionProps> =({tableData})=> {
 
+  const [typeGraph,setTypeGraph] = useState<string>(null)
+
 
   const handleTypeGraph = (key:any)=>{
-    console.log(key)
+    setTypeGraph(key)
   }
   return (
     <div
@@ -18,7 +21,7 @@ const IndicadorEditorTabPresentacion: React.FC<IndicadorEditorTabPresentacionPro
       style={{ height: '380px' }}
     >
       <IndicatorEditorTabPresentationLeft tableData={tableData} onTypeGraph={handleTypeGraph}/>
-      <IndicatorEditorTabPresentationRight />
+      <IndicatorEditorTabPresentationRight tyGraph={typeGraph} />
     </div>
   );
 }

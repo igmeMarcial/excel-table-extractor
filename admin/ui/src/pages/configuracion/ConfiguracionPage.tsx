@@ -1,13 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import MainLayout from '../../layout/MainLayout';
 import ConfiguracionMain from './ConfiguracionMain';
 import ConfiguracionBottomActions from './ConfiguracionBottomActions';
 
-function ConfiguracionPage() {
+const ConfiguracionPage: React.FC = ()=> {
+  const [ settingValue,setSettingValue] = useState(null);
+
+
+  const handleSettingChange=(values:any)=>{
+    setSettingValue(values)
+  }
+
+
   return (
     <MainLayout>
-      <ConfiguracionMain />
-      <ConfiguracionBottomActions />
+      <ConfiguracionMain onSettingChange={handleSettingChange}/>
+      <ConfiguracionBottomActions  settingValues={settingValue}/>
     </MainLayout>
   );
 }

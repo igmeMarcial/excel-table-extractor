@@ -53,7 +53,7 @@ const  EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> =({uplo
           .extractIndicatortechnicalSheet(workbookFile, 1)
           .then((extractedData) => {
             onIndicatorData(extractedData)
-            console.log(extractedData)
+           
           })
           .catch((error) => {
             console.error(

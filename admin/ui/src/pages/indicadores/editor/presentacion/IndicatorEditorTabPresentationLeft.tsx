@@ -15,7 +15,7 @@ const IndicatorEditorTabPresentationLeft: React.FC<IndicatorEditorTabPresentatio
   }
   return (
     <div className="border border-red-600 w-full">
-      <PresentationTypeGraph />
+      <PresentationTypeGraph onTypeGraph={handleTypeGraph}/>
       <PresentationSeriesStacked />
       <PresentationSeriesConfiguration tableData={tableData}/>
     </div>

@@ -2,7 +2,7 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { Select } from '@fluentui/react-components';
 import { useFetch } from '../../../hooks/useFetch';
 import { EstadisticaModel } from '../../../models/EstadisticaModel';
-import { Input, Form } from 'antd';
+import { Input } from 'antd';
 import { ESTADISTICA_FIELDS_DEF } from './EstadisticaFieldsDef';
 import { FICHA_FIELDS_MAP } from './FichaFieldsMap';
 
@@ -69,6 +69,7 @@ const WPInputField = ({ fieldName, label, onChange, value, required }) => {
           type="text"
           onChange={(e) => onChange(e, fieldName)}
           required={required}
+          value={value}
         />
       </td>
     </tr>
@@ -87,6 +88,7 @@ const WPTextAreaField = ({ fieldName, label, onChange, value, required }) => {
           onChange={(e) => onChange(e, fieldName)}
           style={{ height: 100, resize: 'none', scrollbarWidth: 'thin' }}
           required={required}
+          value={value}
         />
       </td>
     </tr>
@@ -106,46 +108,41 @@ const IndicadorEditorTabFicha = forwardRef(
     const { data: listaTemasEstadisticos } = useFetch(
       urls.temasEstadisticosUrl
     );
-    console.log(values);
-    console.log(defalultValues)
-    
+
+    const calculateSimilarity = (str1, str2) => {
+      const len = Math.min(str1.length, str2.length);
+      let commonChars = 0;
+      for (let i = 0; i < len; i++) {
+        if (str1[i] === str2[i]) {
+          commonChars++;
+        }
+      }
+      return commonChars / len;
+    };
+    const removeAccents = (string) => {
+      return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    };
+
+    const toSnakeCase = (string) => {
+      return removeAccents(string)
+        .replace(/[^a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ]+/g, '_')
+        .replace(/^(?:_+|_+)$/g, '')
+        .toLowerCase();
+    };
+
     useEffect(() => {
       if (indicatorData && indicatorData.length > 0) {
-        const calculateSimilarity = (str1, str2) => {
-          const len = Math.min(str1.length, str2.length);
-          let commonChars = 0;
-          for (let i = 0; i < len; i++) {
-            if (str1[i] === str2[i]) {
-              commonChars++;
-            }
-          }
-          return commonChars / len;
-        };
-
-        const removeAccents = (string) => {
-          return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-        };
-
-        const toSnakeCase = (string) => {
-          return removeAccents(string)
-            .replace(/[^a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ]+/g, '_') // Reemplaza caracteres no alfanuméricos y caracteres con tilde por _
-            .replace(/^_+|_+$/g, '') // Elimina _ del principio y del final
-            .toLowerCase();
-        };
-
         const result = {};
         indicatorData.forEach((row) => {
           const firstNonNumberValue = row.find((value) => isNaN(value));
           if (typeof firstNonNumberValue === 'string') {
             const snakeCaseKey = toSnakeCase(firstNonNumberValue);
-            // console.log(snakeCaseKey)
             const matchedKey = Object.keys(FICHA_FIELDS_MAP).find((key) => {
               const camelCaseKey = toSnakeCase(key);
               const similarity = calculateSimilarity(
                 snakeCaseKey,
                 camelCaseKey
               );
-
               return similarity >= 0.5;
             });
             if (matchedKey) {
@@ -153,7 +150,7 @@ const IndicadorEditorTabFicha = forwardRef(
             }
           }
         });
-        setValues(prevValues => ({ ...prevValues, ...result }));
+        setValues((prevValues) => ({ ...prevValues, ...result }));
       }
     }, [indicatorData]);
 
@@ -195,7 +192,6 @@ const IndicadorEditorTabFicha = forwardRef(
     useImperativeHandle(ref, () => ({
       getValues,
     }));
-
     return (
       <div style={{ height: '380px' }}>
         <div className="h-full overflow-auto scroll-container pr-8">

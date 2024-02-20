@@ -21,20 +21,42 @@ const colorsBase = [
   '#FD6925',
 ];
 
-function ConfiguracionMain() {
+
+interface ConfiguracionMainProps {
+  onSettingChange: (values:any)=>void;
+}
+
+const ConfiguracionMain: React.FC<ConfiguracionMainProps> = ({onSettingChange})=> {
   const [selectedColors, setSelectedColors] = useState(colorsBase);
   const [valueInput, setValueInput] = useState(
     'https://appsinia.analyticsperu.com/portalregional/datos.do'
   );
-  const onChange = (e) => {};
-  const handleColorChange = (colorValue, index) => {
-    setSelectedColors((prevColors) => {
-      const newColors = [...prevColors];
-      newColors[index] = colorValue;
-      return newColors;
+  const onChange = (e) => {
+    const newValue = e.target.value;
+    setValueInput(newValue)
+    onSettingChange({
+      colors: getColorsObject(selectedColors),
+      url: newValue,
     });
   };
+  const handleColorChange = (colorValue:any, index:number) => {
+    const newColor = colorValue.toHexString(); 
+   let updatedValues = [...selectedColors];
+   updatedValues[index] = newColor;
+    onSettingChange({
+      colors: getColorsObject(updatedValues),
+      url: valueInput,
+    });
+   setSelectedColors(updatedValues);
+  };
+    const getColorsObject = (colors) => {
+    return colors.reduce((obj, color, idx) => {
+      obj[idx] = color;
+      return obj;
+    }, {});
+  };
 
+  // console.log(selectedColors)
   return (
     <div className="px-12  ">
       <div>
@@ -44,12 +66,13 @@ function ConfiguracionMain() {
           <div>
             {selectedColors.map((colorValue, index) => (
               <ColorPicker
-                key={`${colorValue}_${index}`}
+                key={`${colorValue}_`}
                 value={colorValue}
                 onChange={(color) => handleColorChange(color, index)}
               />
             ))}
           </div>
+          
         </div>
       </div>
       <div>
