@@ -2,6 +2,7 @@
 
 namespace Aesa\Rest\Controllers;
 
+use \WP_REST_Request;
 use Aesa\Rest\Services\EstadisticaService;
 
 class EstadisticaController
@@ -20,7 +21,7 @@ class EstadisticaController
             'total' => 1000
         ];
     }
-    public function registrarEstadistica(\WP_REST_Request $request)
+    public function registrarEstadistica(WP_REST_Request $request)
     {
         $data = $request->get_body();
         $data = json_decode($data, true);
@@ -30,6 +31,17 @@ class EstadisticaController
         return [
             'data' => $data,
             'status' => 'OK'
+        ];
+    }
+
+    public function onGetEstadistica(WP_REST_Request $request)
+    {
+        $id = $request->get_param('id');
+        $result = $this->estadisticaService->getEstadistica($id);
+        // Return the array of objects
+        return [
+            'data' => $result,
+            'total' => 1
         ];
     }
 }

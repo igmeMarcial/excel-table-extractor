@@ -32,6 +32,7 @@ export default function Navbar() {
   const currentTab = queryParams.get('view');
   const getNewUrl = (view) => {
     queryParams.set('view', view);
+    queryParams.delete('rid');
     return '?' + queryParams.toString();
   };
 

@@ -33,6 +33,7 @@ class Routes
     {
         $this->router->get('/estadisticas',                   EstadisticaController::class . ':listarEstadisticas');
         $this->router->post('/estadisticas',                  EstadisticaController::class . ':registrarEstadistica');
+        $this->router->get('/estadisticas/(?P<id>[\d]+)',     EstadisticaController::class . ':onGetEstadistica');
         $this->router->get('/plantillas',                     PlantillaController::class . ':listar');
         $this->router->get('/plantillas',                     PlantillaController::class . ':listar');
         $this->router->get(

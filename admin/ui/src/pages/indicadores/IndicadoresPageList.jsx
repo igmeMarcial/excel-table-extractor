@@ -1,10 +1,13 @@
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
-import { Table } from "antd";
-import * as dayjs from "dayjs";
-import RowDeteteButton from "../../components/RowDeleteButton";
-import { Button } from "@fluentui/react-components";
-import { OpenRegular } from "@fluentui/react-icons";
-import EstadisticaService from "../../services/EstadisticaService";
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Table, Tooltip } from 'antd';
+import { Button } from '@fluentui/react-components';
+import { OpenRegular } from '@fluentui/react-icons';
+import * as dayjs from 'dayjs';
+
+import { getNewPathUrl } from '../../hooks/usePathRoute';
+import RowDeteteButton from '../../components/RowDeleteButton';
+import EstadisticaService from '../../services/EstadisticaService';
 
 const IndicadoresPageList = forwardRef((props, ref) => {
   const [fullData, setFullData] = useState([]);
@@ -41,12 +44,21 @@ const IndicadoresPageList = forwardRef((props, ref) => {
   }, []);
 
   const renderFechaMod = (value, record) => {
-    return dayjs(value).format("DD/MM/YYYY hh:mm A");
+    return dayjs(value).format('DD/MM/YYYY hh:mm A');
   };
 
   const renderActions = (_, record) => (
     <div className="flex">
-      <Button appearance="subtle" icon={<OpenRegular />} aria-label="Edit" />
+      <Link to={getNewPathUrl('indicador-editor', record.id)}>
+        <Button
+          appearance="subtle"
+          icon={
+            <Tooltip title="Ir al indicador">
+              <OpenRegular />
+            </Tooltip>
+          }
+        />
+      </Link>
       <RowDeteteButton />
     </div>
   );
@@ -54,52 +66,52 @@ const IndicadoresPageList = forwardRef((props, ref) => {
   // Columnas de la tabla
   const columns = [
     {
-      key: "number",
-      title: "N°",
-      fixed: "left",
+      key: 'number',
+      title: 'N°',
+      fixed: 'left',
       width: 36,
       // width: '4%',
       render: (_, record, index) => index + 1,
     },
     {
-      key: "mdeaComponenteNombre",
-      title: "Componente",
+      key: 'mdeaComponenteNombre',
+      title: 'Componente',
       width: 240,
       // width: '19%',
-      dataIndex: "mdeaComponenteNombre",
+      dataIndex: 'mdeaComponenteNombre',
     },
     {
-      key: "nombre",
-      title: "Indicador",
-      dataIndex: "nombre",
+      key: 'nombre',
+      title: 'Indicador',
+      dataIndex: 'nombre',
 
       // width: '47%',
     },
     {
-      key: "fechaMod",
-      title: "Última modificación",
+      key: 'fechaMod',
+      title: 'Última modificación',
       width: 180,
       // width: '14%',
-      align: "right",
-      dataIndex: "fechaMod",
+      align: 'right',
+      dataIndex: 'fechaMod',
       render: renderFechaMod,
       sorter: (a, b) => a.modified - b.modified,
     },
     {
-      key: "status",
-      align: "center",
+      key: 'status',
+      align: 'center',
       width: 100,
       // width: '8%',
-      title: "Estado",
-      dataIndex: "status",
+      title: 'Estado',
+      dataIndex: 'status',
     },
     {
-      key: "actions",
-      title: "Acciones",
+      key: 'actions',
+      title: 'Acciones',
       width: 80,
       // width: '8%',
-      align: "right",
-      fixed: "right",
+      align: 'right',
+      fixed: 'right',
       render: renderActions,
     },
   ];

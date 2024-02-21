@@ -36,6 +36,6 @@ class EstadisticaService
     public function getEstadistica($id)
     {
         $sql = "SELECT * FROM {$this->dbMap->estadistica} WHERE estadistica_id = $id";
-        return $this->wpdb->get_results($sql);
+        return $this->wpdb->get_row($sql);
     }
 }
