@@ -3,6 +3,7 @@ import MainLayout from '../../../layout/MainLayout';
 import IndicadorEditorhHeader from './IndicadorEditorhHeader';
 import IndicadorEditorTabs from './IndicadorEditorTabs';
 import IndicadorEditorBottomActions from './IndicadorEditorBottomActions';
+import { useGetEstadisticaQuery } from '../../../app/services/estadistica';
 
 interface Estadistica {
   [key: string]: any;
@@ -14,6 +15,8 @@ function IndicadorEditorPage() {
   const [tableData, setTableData] = useState([]);
   const [indicadorData, setIndicadorData] = useState([]);
   const [tabActiveKey, setTabActiveKey] = useState('1');
+  // Get data from the API
+  const { data, error, isLoading } = useGetEstadisticaQuery(1);
 
   const handleTabFichaDataChange = (values: Estadistica) => {
     setEstadistica((prevEstadistica) => {

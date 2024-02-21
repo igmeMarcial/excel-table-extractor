@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { getEstadistica } from '../../app/services/estadistica';
 import type { RootState } from '../../app/store';
 
 // Tab ficha
@@ -53,6 +54,11 @@ export const estadisticaFormSlice = createSlice({
       state.estadisticaDataFields = action.payload;
       state.hasChanges = true;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(getEstadistica.matchFulfilled, (state, action) => {
+      state.estadisticaFields = action.payload;
+    })
   },
 });
 

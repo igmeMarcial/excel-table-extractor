@@ -1,14 +1,16 @@
-import React, { FC } from "react";
-import Navbar from "../components/Navbar";
+import React from 'react';
+import Navbar from '../components/Navbar';
+import NetworkActivityIndicator from '../components/NetworkActivityIndicator';
 
 type MainLayoutProps = {
   children: React.ReactNode;
 };
 
-const MainLayout: FC<MainLayoutProps> = ({ children }) => {
+const MainLayout = ({ children }: MainLayoutProps) => {
   return (
     <>
       <Navbar />
+      <NetworkActivityIndicator />
       {children}
     </>
   );

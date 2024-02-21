@@ -1,26 +1,26 @@
-import { makeStyles } from "@fluentui/react-components";
-import { NavLink, useLocation } from "react-router-dom";
+import { makeStyles } from '@fluentui/react-components';
+import { NavLink, useLocation } from 'react-router-dom';
 
 const items = [
-  { text: "Indicadores", path: "indicadores" },
-  { text: "Anuarios", path: "anuarios" },
-  { text: "Configuracion", path: "configuracion" },
-  { text: "*Dev", path: "dev" },
+  { text: 'Indicadores', path: 'indicadores' },
+  { text: 'Anuarios', path: 'anuarios' },
+  { text: 'Configuracion', path: 'configuracion' },
+  { text: '*Dev', path: 'dev' },
 ];
 
 const useStyles = makeStyles({
   bar: {
-    backgroundColor: "#2271B1",
+    backgroundColor: '#2271B1',
   },
   item: {
-    color: "#CFE4FA",
-    ":hover": {
-      color: "#FFFFFF",
+    color: '#CFE4FA',
+    ':hover': {
+      color: '#FFFFFF',
     },
   },
   active: {
     fontWeight: 600,
-    color: "#FFFFFF",
+    color: '#FFFFFF',
   },
 });
 
@@ -29,16 +29,16 @@ export default function Navbar() {
   // Get the current location params
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const currentTab = queryParams.get("tab");
-  const getNewUrl = (tab) => {
-    queryParams.set("tab", tab);
-    return "?" + queryParams.toString();
+  const currentTab = queryParams.get('view');
+  const getNewUrl = (view) => {
+    queryParams.set('view', view);
+    return '?' + queryParams.toString();
   };
 
   return (
     <nav
       className={
-        "flex justify-start items-center h-10 px-8 rounded-t " + classes.bar
+        'flex justify-start items-center h-10 px-8 rounded-t ' + classes.bar
       }
     >
       {items.map((item) => {
@@ -48,7 +48,7 @@ export default function Navbar() {
             key={item.path}
             className={
               `no-underline block px-2 ${classes.item}  ` +
-              (currentTab === item.path ? classes.active : "")
+              (currentTab === item.path ? classes.active : '')
             }
           >
             {item.text}

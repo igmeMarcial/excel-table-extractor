@@ -1,7 +1,7 @@
-import React, { useRef } from 'react';
-import PropTypes from 'prop-types';
-import { Button } from 'antd';
-import { ArrowUpload24Filled } from '@fluentui/react-icons';
+import { useRef } from "react";
+import PropTypes from "prop-types";
+import { Button } from "antd";
+import { ArrowUpload24Filled } from "@fluentui/react-icons";
 
 function UploadFileButton({
   text,
@@ -51,10 +51,10 @@ UploadFileButton.propTypes = {
   onFileChange: PropTypes.func,
 };
 UploadFileButton.defaultProps = {
-  text: 'Subir archivo',
+  text: "Subir archivo",
   uploading: false,
-  uploadingText: 'Subiendo...',
-  accept: '*',
+  uploadingText: "Subiendo...",
+  accept: "*",
   onFileChange: () => {},
 };
 

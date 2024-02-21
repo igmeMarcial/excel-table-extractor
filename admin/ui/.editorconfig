@@ -8,10 +8,7 @@ indent_size = 2
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.jsx]
-quote_type = single
-
-[*.tsx]
+[*.{tsx,ts,js,jsx}]
 quote_type = single
 
 [*.md]

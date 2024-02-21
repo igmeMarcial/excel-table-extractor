@@ -19,7 +19,7 @@ function IndicadoresPageToolbar() {
         type="search"
       />
       <span className="flex-1"></span>
-      <Link to={getNewPathUrl('indicadores-editor')}>
+      <Link to={getNewPathUrl('indicador-editor')}>
         <Button
           style={{ color: '#2271B1' }}
           appearance="subtle"
