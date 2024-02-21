@@ -1,10 +1,9 @@
 import React, { useEffect} from 'react';
-import Input from '../../../components/Input';
 import IndicadorDataGrid from './IndicadorDataGrid';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { selectEstadisticaDataFields, selectExcelTable, setEstadisticaDataFields } from '../EstadisticaFormSlice';
 import { DATOS_FIELDS_DEF } from './EstadisticaFieldsDef';
-
+import { Input } from 'antd';
 
 const fieldsArray = DATOS_FIELDS_DEF;
 
@@ -65,7 +64,6 @@ const IndicadorEditorTabDatos: React.FC = () => {
                     <Input
                       name={fieldName}
                       type={fieldDef.type}
-                      text={fieldDef.label}
                        value={values[fieldName]}
                       onChange={(e) => handleChange(e, fieldName)}
                       required={fieldDef.required}

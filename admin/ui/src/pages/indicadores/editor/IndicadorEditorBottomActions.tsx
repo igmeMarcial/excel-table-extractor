@@ -17,6 +17,9 @@ const IndicadorEditorBottomActions = () => {
   const isCreationMode = useAppSelector(selectIsCreationMode);
   const valuesData = useAppSelector(selectEstadisticaDataFields);
   const valuesEstadisticas = useAppSelector(selectEstadisticaFields);
+
+  console.log(valuesData)
+  console.log(valuesEstadisticas)
   const handleClick = () => {
     if (valuesData) {
       // Verificar si alguna propiedad de valuesData es distinta de "" o null
