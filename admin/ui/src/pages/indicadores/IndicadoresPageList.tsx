@@ -1,15 +1,21 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Table, Tooltip } from 'antd';
+import { Link, useLocation } from 'react-router-dom';
+import { Table, TableProps, Tooltip } from 'antd';
 import { Button } from '@fluentui/react-components';
 import { OpenRegular } from '@fluentui/react-icons';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
-import { getNewPathUrl } from '../../hooks/usePathRoute';
+import { builNavPathUrl } from '../../utils/url-utils';
 import RowDeteteButton from '../../components/RowDeleteButton';
 import EstadisticaService from '../../services/EstadisticaService';
+interface ColDataType {
+  key: string;
+  name: string;
+  modified: number;
+}
 
 const IndicadoresPageList = forwardRef((props, ref) => {
+  const location = useLocation();
   const [fullData, setFullData] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -47,24 +53,22 @@ const IndicadoresPageList = forwardRef((props, ref) => {
     return dayjs(value).format('DD/MM/YYYY hh:mm A');
   };
 
-  const renderActions = (_, record) => (
-    <div className="flex">
-      <Link to={getNewPathUrl('indicador-editor', record.id)}>
-        <Button
-          appearance="subtle"
-          icon={
-            <Tooltip title="Ir al indicador">
-              <OpenRegular />
-            </Tooltip>
-          }
-        />
-      </Link>
-      <RowDeteteButton />
-    </div>
-  );
+  const renderActions = (_, record) => {
+    const newUrl = builNavPathUrl(location, 'indicador-editor', record.id);
+    return (
+      <div className="flex">
+        <Link to={newUrl}>
+          <Tooltip title="Ir al indicador">
+            <Button appearance="subtle" icon={<OpenRegular />} />
+          </Tooltip>
+        </Link>
+        <RowDeteteButton />
+      </div>
+    );
+  };
 
   // Columnas de la tabla
-  const columns = [
+  const columns: TableProps<ColDataType>['columns'] = [
     {
       key: 'number',
       title: 'N°',

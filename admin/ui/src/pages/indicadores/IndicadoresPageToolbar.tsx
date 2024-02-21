@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button, Input } from '@fluentui/react-components';
 
 import {
@@ -6,11 +5,12 @@ import {
   Add24Filled,
   Search24Regular,
 } from '@fluentui/react-icons';
-import { Link } from 'react-router-dom';
-import { getNewPathUrl } from '../../hooks/usePathRoute';
+import { Link, useLocation } from 'react-router-dom';
+import { builNavPathUrl } from '../../utils/url-utils';
 import IndicadorModal from './IndicadorModal';
 
 function IndicadoresPageToolbar() {
+  const location = useLocation();
   return (
     <div className="flex px-10 pt-6 pb-4 gap-2">
       <Input
@@ -19,7 +19,7 @@ function IndicadoresPageToolbar() {
         type="search"
       />
       <span className="flex-1"></span>
-      <Link to={getNewPathUrl('indicador-editor')}>
+      <Link to={builNavPathUrl(location, 'indicador-editor')}>
         <Button
           style={{ color: '#2271B1' }}
           appearance="subtle"

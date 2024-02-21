@@ -1,8 +1,7 @@
-import { useLocation } from 'react-router-dom';
+import { Location } from 'react-router-dom';
 
 
-export const getNewPathUrl = (view, resourceId?: number | string) => {
-  const location = useLocation();
+export const builNavPathUrl = (location: Location<any>, view, resourceId?: number | string) => {
   const queryParams = new URLSearchParams(location.search);
   queryParams.set('view', view);
   if (resourceId) {
@@ -11,8 +10,7 @@ export const getNewPathUrl = (view, resourceId?: number | string) => {
   return '?' + queryParams.toString();
 }
 
-export const getPathResourceId = () => {
-  const location = useLocation();
+export const getPathResourceId = (location: Location<any>) => {
   const queryParams = new URLSearchParams(location.search);
   return queryParams.get('rid') || null;
 }

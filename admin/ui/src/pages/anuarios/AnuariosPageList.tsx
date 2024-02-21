@@ -3,24 +3,20 @@ import React, {
   useEffect,
   useImperativeHandle,
   useState,
-} from "react";
-import { Table, Modal } from "antd";
-import type { TableProps } from "antd";
+} from 'react';
+import { Table, Modal } from 'antd';
+import type { TableProps } from 'antd';
 
-import { FilePdfOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
-import RowDeteteButton from "../../components/RowDeleteButton";
-import RowDownloadButton from "../../components/RowDownloadButton";
-import AnuarioRestService from "../../services/AnuarioRestService";
-import filesizehuman from "../../utils/filesizehuman";
-import formatTimestamp from "../../utils/formatTimestamp";
-
+import { FilePdfOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import RowDeteteButton from '../../components/RowDeleteButton';
+import RowDownloadButton from '../../components/RowDownloadButton';
+import AnuarioRestService from '../../services/AnuarioRestService';
+import filesizehuman from '../../utils/filesizehuman';
+import formatTimestamp from '../../utils/formatTimestamp';
 
 interface ColDataType {
   key: string;
   name: string;
-  age: number;
-  address: string;
-  tags: string[];
 }
 interface AnuariosPageListProps {
   // Add any additional props here
@@ -82,7 +78,7 @@ const AnuariosPageList = forwardRef((props: AnuariosPageListProps, ref) => {
   // Handle eliminar
   const handleDelete = (record: any) => {
     modal.confirm({
-      title: "Confirmar eliminación",
+      title: 'Confirmar eliminación',
       icon: <ExclamationCircleOutlined />,
       content: (
         <div>
@@ -91,7 +87,7 @@ const AnuariosPageList = forwardRef((props: AnuariosPageListProps, ref) => {
           <b>{record.name}</b>
         </div>
       ),
-      okText: "Si, eliminar",
+      okText: 'Si, eliminar',
       okButtonProps: {
         danger: true,
       },
@@ -110,7 +106,7 @@ const AnuariosPageList = forwardRef((props: AnuariosPageListProps, ref) => {
 
   const renderFilename = (_, record: any) => (
     <div className="flex">
-      <FilePdfOutlined style={{ color: "#F44336", fontSize: "16px" }} />
+      <FilePdfOutlined style={{ color: '#F44336', fontSize: '16px' }} />
       <span className="ml-1">{record.name}</span>
     </div>
   );
@@ -132,42 +128,42 @@ const AnuariosPageList = forwardRef((props: AnuariosPageListProps, ref) => {
     return formatTimestamp(value * 1000);
   };
 
-  const columns: TableProps<ColDataType>["columns"] = [
+  const columns: TableProps<ColDataType>['columns'] = [
     {
-      key: "number",
-      title: "N°",
+      key: 'number',
+      title: 'N°',
       width: 36,
       render: (_: any, record: any, index: number) => index + 1,
     },
     {
-      key: "name",
-      title: "Nombre",
+      key: 'name',
+      title: 'Nombre',
       sorter: (a: any, b: any) => a.name.localeCompare(b.name),
       render: renderFilename,
     },
     {
-      key: "size",
-      title: "Tamaño",
+      key: 'size',
+      title: 'Tamaño',
       width: 100,
-      align: "right",
-      dataIndex: "size",
+      align: 'right',
+      dataIndex: 'size',
       render: filesizehuman,
       sorter: (a: any, b: any) => a.size - b.size,
     },
     {
-      key: "modified",
-      title: "Fecha de registro",
+      key: 'modified',
+      title: 'Fecha de registro',
       width: 160,
-      align: "right",
-      dataIndex: "modified",
+      align: 'right',
+      dataIndex: 'modified',
       render: renderModified,
       sorter: (a: any, b: any) => a.modified - b.modified,
     },
     {
-      key: "actions",
-      title: "Acciones",
+      key: 'actions',
+      title: 'Acciones',
       width: 80,
-      align: "right",
+      align: 'right',
       render: renderActions,
     },
   ];

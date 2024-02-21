@@ -8,18 +8,16 @@ import {
   selectEstadisticaFields,
   selectEstadisticaDataFields,
 } from '../EstadisticaFormSlice';
-import { Link } from 'react-router-dom';
-import { getNewPathUrl } from '../../../hooks/usePathRoute';
+import { Link, useLocation } from 'react-router-dom';
+import { builNavPathUrl } from '../../../utils/url-utils';
 
-const IndicadorEditorBottomActions = () => {
+function IndicadorEditorBottomActions() {
+  const location = useLocation();
   const dispath = useAppDispatch();
   const hasChanges = useAppSelector(selectHasChanges);
   const isCreationMode = useAppSelector(selectIsCreationMode);
   const valuesData = useAppSelector(selectEstadisticaDataFields);
   const valuesEstadisticas = useAppSelector(selectEstadisticaFields);
-
-  console.log(valuesData)
-  console.log(valuesEstadisticas)
   const handleClick = () => {
     if (valuesData) {
       // Verificar si alguna propiedad de valuesData es distinta de "" o null
@@ -30,28 +28,27 @@ const IndicadorEditorBottomActions = () => {
         console.log(valuesData);
       }
     }
-     if (valuesEstadisticas) {
-    // Verificar si alguna propiedad de valuesEstadisticas es distinta de "" o null
-    const hasData = Object.values(valuesEstadisticas).some(
-      (value) => value !== '' && value !== null
-    );
-    if (hasData) {
-      console.log(valuesEstadisticas);
+    if (valuesEstadisticas) {
+      // Verificar si alguna propiedad de valuesEstadisticas es distinta de "" o null
+      const hasData = Object.values(valuesEstadisticas).some(
+        (value) => value !== '' && value !== null
+      );
+      if (hasData) {
+        console.log(valuesEstadisticas);
+      }
+
+      dispath(setHasChanges(false));
     }
-
-    dispath(setHasChanges(false));
-  }
-
-  }
+  };
   return (
     <div className="pl-12 bg-custom-grey py-2 flex space-x-4">
       <Button onClick={handleClick} type="primary" disabled={!hasChanges}>
         {isCreationMode ? 'Registrar' : 'Guardar'}
       </Button>
-      <Link to={getNewPathUrl('indicadores')}>
+      <Link to={builNavPathUrl(location, 'indicadores')}>
         <Button>Cancelar</Button>
       </Link>
     </div>
   );
-};
+}
 export default IndicadorEditorBottomActions;
