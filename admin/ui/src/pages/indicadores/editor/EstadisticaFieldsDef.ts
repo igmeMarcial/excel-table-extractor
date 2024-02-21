@@ -3,6 +3,13 @@ interface FieldsArray {
   type: 'select' | 'text' | 'url' | 'email' | 'textarea';
   required?: boolean;
 }
+type FieldType = 'text' | 'table'; 
+interface Field {
+  label: string;
+  type: FieldType;
+  required: boolean;
+}
+
 
 export const ESTADISTICA_FIELDS_DEF: Record<string, FieldsArray> = {
   componenteId: {
@@ -107,4 +114,36 @@ export const ESTADISTICA_FIELDS_DEF: Record<string, FieldsArray> = {
     type: 'text',
     required: true,
   },
+};
+
+export const DATOS_FIELDS_DEF: Record<string, Field> = {
+  nombre: {
+    label: 'Título',
+    type: 'text', 
+    required: true,
+    
+  },
+  tablaDatos: {
+    label: 'Tabla de datos',
+    type: 'table', 
+    required: true,
+    
+  },
+  nota: {
+    label: 'Nota',
+    type: 'text', 
+    required: false, 
+   
+  },
+  fuente: {
+    label: 'Fuente',
+    type: 'text', 
+    required: false, 
+   
+  },
+  elaboracion: {
+    label: 'Elaboración',
+    type: 'text', 
+    required: false,
+  }
 };

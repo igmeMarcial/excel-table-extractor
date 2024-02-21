@@ -1,18 +1,16 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Select } from '@fluentui/react-components';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import {
   setEstadisticaFields,
   selectEstadisticaFields,
+  selectExcelIndicator,
 } from '../EstadisticaFormSlice';
 import { useFetch } from '../../../hooks/useFetch';
 import { Input } from 'antd';
 import { ESTADISTICA_FIELDS_DEF } from './EstadisticaFieldsDef';
 import { FICHA_FIELDS_MAP } from './FichaFieldsMap';
 
-interface IndicadorEditorTabFichaProps {
-  indicatorData: any;
-}
 interface Urls {
   componenteUrl: string;
   subComponentesUrl: string;
@@ -93,11 +91,10 @@ const WPTextAreaField = ({ fieldName, label, onChange, value, required }) => {
   );
 };
 
-const IndicadorEditorTabFicha = ({
-  indicatorData,
-}: IndicadorEditorTabFichaProps) => {
+const IndicadorEditorTabFicha: React.FC = () => {
   const dispath = useAppDispatch();
   const values = useAppSelector(selectEstadisticaFields);
+  const indicatorData = useAppSelector(selectExcelIndicator);
 
   const setValues = (values) => {
     dispath(setEstadisticaFields(values));
@@ -130,7 +127,6 @@ const IndicadorEditorTabFicha = ({
   };
 
   useEffect(() => {
-    console.log('indicatorData', indicatorData);
     if (indicatorData && indicatorData.length > 0) {
       const result = {};
       indicatorData.forEach((row) => {

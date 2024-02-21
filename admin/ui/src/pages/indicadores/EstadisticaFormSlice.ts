@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { getEstadistica } from '../../app/services/estadistica';
 import type { RootState } from '../../app/store';
 
+
 // Tab ficha
 interface EstadisticaFields {
   nombre?: string;
@@ -11,9 +12,16 @@ interface EstadisticaFields {
 
 // Tab datos
 interface EstadisticaDataFields {
-  data: any[];
+  data?: any[];
+  nombre?:string;
+  nota?:string;
+  fuente?:string;
+  elaboracion?:string;
 }
-
+interface ExcelData {
+    sheetData: EstadisticaDataFields;
+    tableData: Array<Array<string | number>>;
+}
 interface EstadisticaFormState {
   // Indicar si hay cambios en el formulario
   hasChanges: boolean;
@@ -21,6 +29,9 @@ interface EstadisticaFormState {
   titulo: string;
   estadisticaFields: EstadisticaFields;
   estadisticaDataFields: EstadisticaDataFields;
+  activeTab:string;
+  estadisticaExcelDataTable:ExcelData;
+  estadisticaExcelIndicator:string[][];
 }
 
 const initialState: EstadisticaFormState = {
@@ -32,7 +43,18 @@ const initialState: EstadisticaFormState = {
   },
   estadisticaDataFields: {
     data: [],
+    nombre:'',
+    nota:'',
+    fuente:'',
+    elaboracion:''
   },
+   activeTab:"1",
+   estadisticaExcelDataTable:{
+    sheetData:{},
+    tableData:[],
+   },
+   estadisticaExcelIndicator: []
+
 };
 
 export const estadisticaFormSlice = createSlice({
@@ -54,6 +76,15 @@ export const estadisticaFormSlice = createSlice({
       state.estadisticaDataFields = action.payload;
       state.hasChanges = true;
     },
+    setActiveTab:(state,action :PayloadAction<string>)=>{
+      state.activeTab = action.payload
+    },
+    setEstadisticaExcelDataTable:(state,action:PayloadAction<ExcelData>)=>{
+      state.estadisticaExcelDataTable = action.payload
+    },
+    setEstadisticaExcelIndicator:(state,action:PayloadAction<string[][]>)=>{
+      state.estadisticaExcelIndicator = action.payload
+    }
   },
   extraReducers: (builder) => {
     builder.addMatcher(getEstadistica.matchFulfilled, (state, action) => {
@@ -67,6 +98,9 @@ export const {
   changeToUpdatingMode,
   setEstadisticaFields,
   setEstadisticaDataFields,
+  setActiveTab,
+  setEstadisticaExcelDataTable,
+  setEstadisticaExcelIndicator
 } = estadisticaFormSlice.actions;
 
 export const selectHasChanges = (state: RootState) => state.estadisticaForm.hasChanges;
@@ -74,4 +108,7 @@ export const selectTitulo = (state: RootState) => state.estadisticaForm.titulo;
 export const selectEstadisticaFields = (state: RootState) => state.estadisticaForm.estadisticaFields;
 export const selectEstadisticaDataFields = (state: RootState) => state.estadisticaForm.estadisticaDataFields;
 export const selectIsCreationMode = (state: RootState) => state.estadisticaForm.isCreationMode;
+export const selectActiveTab = (state:RootState)=> state.estadisticaForm.activeTab;
+export const selectExcelTable =(state:RootState)=>state.estadisticaForm.estadisticaExcelDataTable ;
+export const selectExcelIndicator =(state:RootState)=>state.estadisticaForm.estadisticaExcelIndicator ;
 export default estadisticaFormSlice.reducer;

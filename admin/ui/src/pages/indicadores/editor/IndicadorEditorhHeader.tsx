@@ -11,30 +11,17 @@ import {
   selectIsCreationMode,
 } from '../EstadisticaFormSlice';
 import IndicadorEditorModalImport from './IndicadorEditorModalImport';
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 
-interface IndicadorEditorhHeaderProps {
-  onTableData?: any;
-  onIndicatorData?: any;
-  setTabActiveKey: (newKey: string) => void;
-}
 
-const IndicadorEditorhHeader = ({
-  onTableData,
-  onIndicatorData,
-  setTabActiveKey,
-}: IndicadorEditorhHeaderProps) => {
+
+const IndicadorEditorhHeader: React.FC = () => {
   const importDialogRef = useRef(null);
   const dispath = useAppDispatch();
   const titulo = useAppSelector(selectTitulo);
   const hasChanges = useAppSelector(selectHasChanges);
   const isCreationMode = useAppSelector(selectIsCreationMode);
-  const handleTableData = (values) => {
-    onTableData(values);
-  };
-  const handleIndicatorData = (values) => {
-    onIndicatorData(values);
-  };
+  
   return (
     <>
       <div className="bg-custom-grey flex px-12 pt-3 pb-3 gap-2 items-center">
@@ -50,9 +37,7 @@ const IndicadorEditorhHeader = ({
           {isCreationMode ? 'Importar' : 'Actualizar'} desde ficha técnica
         </Button>
         <IndicadorEditorModalImport
-          setTabActiveKey={setTabActiveKey}
-          onTableData={handleTableData}
-          onIndicatorData={handleIndicatorData}
+          onTableData="borrar"
           ref={importDialogRef}
         />
         <Button

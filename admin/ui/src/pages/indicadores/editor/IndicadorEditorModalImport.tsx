@@ -1,21 +1,17 @@
 import { forwardRef, useState, useImperativeHandle } from 'react';
 import { Modal, Button } from 'antd';
 import EditorSingleFileUploader from './EditorSingleFileUploader';
+import { useAppDispatch } from '../../../app/hooks';
+import {
+  setActiveTab,
+  setEstadisticaExcelDataTable,
+  setEstadisticaExcelIndicator,
+} from '../EstadisticaFormSlice';
 interface IndicadorEditorModalImportProps {
   onTableData?: any;
-  onIndicatorData?: any;
-  setTabActiveKey: (newKey: string) => void;
 }
-
 const IndicadorEditorModalImport = forwardRef(
-  (
-    {
-      onTableData,
-      onIndicatorData,
-      setTabActiveKey,
-    }: IndicadorEditorModalImportProps,
-    ref
-  ) => {
+  ({ onTableData }: IndicadorEditorModalImportProps, ref) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [files, setFiles] = useState(false);
     const [tableData, setTableData] = useState(null);
@@ -23,6 +19,7 @@ const IndicadorEditorModalImport = forwardRef(
     const [uploadFileLoading, setUploadFileLoading] = useState<boolean>(false);
     const [option1, setOption1] = useState(false);
     const [option2, setOption2] = useState(false);
+    const dispath = useAppDispatch();
 
     const open = () => {
       setIsModalOpen(true);
@@ -33,13 +30,13 @@ const IndicadorEditorModalImport = forwardRef(
     }));
     const handleOk = () => {
       setIsModalOpen(false);
-      onTableData(tableData);
-      onIndicatorData(indicadorData);
+      dispath(setEstadisticaExcelDataTable(tableData));
+      dispath(setEstadisticaExcelIndicator(indicadorData));
       setUploadFileLoading(false);
-      setOption1(false); // Reiniciar estado de los checkboxes
+      setOption1(false);
       setOption2(false);
       setFiles(false);
-      setTabActiveKey(option1 ? '1' : option2 ? '2' : '1');
+      dispath(setActiveTab(option1 ? '1' : option2 ? '2' : '1'));
     };
     const handleCancel = () => {
       setIsModalOpen(false);

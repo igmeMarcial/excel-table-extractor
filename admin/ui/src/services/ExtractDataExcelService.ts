@@ -10,7 +10,7 @@ interface Range {
 }
 
 type TransformedSheetData = {
-  nombreIndicador: string;
+  nombre: string;
   nota: string;
   fuente: string;
   elaboracion: string;
@@ -57,7 +57,7 @@ class ExtractDataExcelService {
         "Elaboración:"
       );
       const transformedSheetData: TransformedSheetData = {
-        nombreIndicador: contentCellTitle
+        nombre: contentCellTitle
           ? contentCellTitle.separatedContent ||
             contentCellTitle.description ||
             ""
@@ -81,7 +81,7 @@ class ExtractDataExcelService {
             ""
           : "",
       };
-      return { sheetData: transformedSheetData, tableData };
+      return { sheetData: { ...transformedSheetData, data: tableData }, tableData };
     } catch (error) {
       console.log(error);
       throw error;

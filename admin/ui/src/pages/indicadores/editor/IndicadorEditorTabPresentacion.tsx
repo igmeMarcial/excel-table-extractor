@@ -20,8 +20,10 @@ const IndicadorEditorTabPresentacion: React.FC<IndicadorEditorTabPresentacionPro
       className="flex flex-row overflow-auto scroll-container"
       style={{ height: '380px' }}
     >
-      <IndicatorEditorTabPresentationLeft tableData={tableData} onTypeGraph={handleTypeGraph}/>
+      
+        <IndicatorEditorTabPresentationLeft tableData={tableData} onTypeGraph={handleTypeGraph}/>
       <IndicatorEditorTabPresentationRight tyGraph={typeGraph} />
+      
     </div>
   );
 }

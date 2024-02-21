@@ -2,24 +2,31 @@ import React, { useEffect, useState } from 'react';
 import ExtractDataExcelService from '../../../services/ExtractDataExcelService';
 import { Checkbox } from '@fluentui/react-components';
 
-interface EditorSingleFileUploaderProps{
-  onTableData?: any,
-  onIndicatorData?: any,
-  uploadFile:boolean,
-  setUploadFile:any,
- option1: boolean,
-  setOption1: any,
-  option2: boolean,
-  setOption2: any,
-  setFiles:any
+interface EditorSingleFileUploaderProps {
+  onTableData?: any;
+  onIndicatorData?: any;
+  uploadFile: boolean;
+  setUploadFile: any;
+  option1: boolean;
+  setOption1: any;
+  option2: boolean;
+  setOption2: any;
+  setFiles: any;
 }
-const  EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> =({uploadFile,setUploadFile,onTableData,onIndicatorData,option1,
+const EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> = ({
+  uploadFile,
+  setUploadFile,
+  onTableData,
+  onIndicatorData,
+  option1,
   setOption1,
   option2,
-  setOption2, setFiles}) =>{
+  setOption2,
+  setFiles,
+}) => {
   const [workbookFile, setWorkBookFile] = useState<any>(null);
   const [title, setTitle] = useState<string>('');
-  
+
   const extractDataExcelService = new ExtractDataExcelService();
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files![0];
@@ -27,7 +34,7 @@ const  EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> =({uplo
       const workbook = await extractDataExcelService.readExcelFile(
         selectedFile
       );
-      setUploadFile(true)
+      setUploadFile(true);
       setWorkBookFile(workbook);
       if (workbook) {
         // Obtener todos los nombres de las hojas
@@ -52,8 +59,7 @@ const  EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> =({uplo
         extractDataExcelService
           .extractIndicatortechnicalSheet(workbookFile, 1)
           .then((extractedData) => {
-            onIndicatorData(extractedData)
-           
+            onIndicatorData(extractedData);
           })
           .catch((error) => {
             console.error(
@@ -129,6 +135,6 @@ const  EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> =({uplo
       )}
     </section>
   );
-}
+};
 
 export default EditorSingleFileUploader;

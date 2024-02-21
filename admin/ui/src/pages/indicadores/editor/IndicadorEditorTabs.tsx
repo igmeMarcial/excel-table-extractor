@@ -1,64 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Tabs } from 'antd';
 import IndicadorEditorTabFicha from './IndicadorEditorTabFicha';
 import IndicadorEditorTabDatos from './IndicadorEditorTabDatos';
 import IndicadorEditorTabPresentacion from './IndicadorEditorTabPresentacion';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { selectActiveTab, setActiveTab } from '../EstadisticaFormSlice';
 interface TabItem {
   key: string;
   label: string;
   children: React.ReactNode;
 }
-interface IndicadorEditorTabsProps {
-  onTabDataChange: (tab: string, values: any) => void;
-  tableData: any;
-  indicatorData: any;
-  tabActiveKey: string;
-  setTabActiveKey: (newKey: string) => void;
-}
-const IndicadorEditorTabs: React.FC<IndicadorEditorTabsProps> = ({
-  onTabDataChange,
-  tableData,
-  indicatorData,
-  tabActiveKey,
-  setTabActiveKey,
-}) => {
-  const [activeTabKey, setActiveTabKey] = useState(tabActiveKey);
-  const handleFichaChange = (values: any) => {
-    onTabDataChange('ficha', values);
-  };
-  const handleDatosChange = (values: any) => {
-    onTabDataChange('datos', values);
-  };
-  useEffect(() => {
-    if (activeTabKey !== tabActiveKey) {
-      setActiveTabKey(tabActiveKey);
-    }
-  }, [tabActiveKey]);
+
+const IndicadorEditorTabs: React.FC = () => {
+  const activeTabKey = useAppSelector(selectActiveTab);
+  const dispath = useAppDispatch();
+
   const items: TabItem[] = [
     {
       key: '1',
       label: 'Ficha',
-      children: <IndicadorEditorTabFicha indicatorData={indicatorData} />,
+      children: <IndicadorEditorTabFicha />,
     },
     {
       key: '2',
       label: 'Datos',
-      children: (
-        <IndicadorEditorTabDatos
-          onChange={handleDatosChange}
-          tableData={tableData}
-        />
-      ),
+      children: <IndicadorEditorTabDatos/>,
     },
     {
       key: '3',
       label: 'Presentación',
-      children: <IndicadorEditorTabPresentacion tableData={tableData} />,
+      children: <IndicadorEditorTabPresentacion tableData={null} />,
     },
   ];
   const onChangeTab = (key) => {
-    setActiveTabKey(key);
-    setTabActiveKey(key);
+    dispath(setActiveTab(key));
   };
   return (
     <Tabs

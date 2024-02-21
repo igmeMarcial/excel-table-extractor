@@ -1,79 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect} from 'react';
 import Input from '../../../components/Input';
 import IndicadorDataGrid from './IndicadorDataGrid';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { selectEstadisticaDataFields, selectExcelTable, setEstadisticaDataFields } from '../EstadisticaFormSlice';
+import { DATOS_FIELDS_DEF } from './EstadisticaFieldsDef';
 
 
-interface IndicadorEditorTabDatosProps {
-  tableData: any;
-  onChange: (values: any) => void; 
-}
+const fieldsArray = DATOS_FIELDS_DEF;
 
-type FieldType = 'text' | 'table'; // Ajusta según tus necesidades
+const IndicadorEditorTabDatos: React.FC = () => {
 
-interface Field {
-  label: string;
-  type: FieldType;
-  required: boolean;
-  default: string | null;
-}
+  const dispath = useAppDispatch();
+  const values= useAppSelector(selectEstadisticaDataFields);
+  const tableData = useAppSelector(selectExcelTable)
 
-const fieldsArray: Record<string, Field> = {
-  titulo: {
-    label: 'Título',
-    type: 'text', 
-    required: true,
-    default: '',
-  },
-  tablaDatos: {
-    label: 'Tabla de datos',
-    type: 'table', 
-    required: true,
-    default: null,
-  },
-  nota: {
-    label: 'Nota',
-    type: 'text', 
-    required: false, 
-    default: '',
-  },
-  fuente: {
-    label: 'Fuente',
-    type: 'text', 
-    required: false, 
-    default: '',
-  },
-  elaboracion: {
-    label: 'Elaboración',
-    type: 'text', 
-    required: false,
-    default: '',
-  },
-};
-
-const initialForm = Object.fromEntries(
-  Object.entries(fieldsArray)
-    .filter(([key, field]) => field.default !== undefined)
-    .map(([key, field]) => [key, field.default])
-);
-
-const IndicadorEditorTabDatos: React.FC<IndicadorEditorTabDatosProps> = ({
-  tableData,onChange
-}) => {
-
-  const [values, setValues] = useState<any>(initialForm);
+  const setValues = (values) => {
+    dispath(setEstadisticaDataFields(values));
+  };
 
   useEffect(()=>{
-    if (tableData && tableData.sheetData) {
-      const { nombreIndicador, nota, fuente, elaboracion } = tableData.sheetData;
-     const updatedValues = {
-      ...initialForm,
-      titulo: nombreIndicador || initialForm.titulo,
-      nota: nota || initialForm.nota,
-      fuente: fuente || initialForm.fuente,
-      elaboracion: elaboracion || initialForm.elaboracion,
-    };
-    setValues(updatedValues); 
-    onChange(updatedValues); 
+    const valuesDataTable = tableData?.sheetData;
+    if (valuesDataTable) {
+      const valuesData = tableData.sheetData;
+    setValues({...values,...valuesData}); 
     }
 
   },[tableData])
@@ -87,28 +36,26 @@ const IndicadorEditorTabDatos: React.FC<IndicadorEditorTabDatosProps> = ({
     ...values,
     [key]: newValue
   };
-  onChange(updatedValues)
   setValues(updatedValues)
   };
 
-  
   return (
     <div className="overflow-y-auto scroll-container " style={{ height: '380px' }}>
       <form>
         <table className="form-table">
           <tbody>
-            {Object.entries(fieldsArray).map(([key, field]) => (
-              <tr key={key} className="flex flex-col pb-0">
+            {Object.entries(fieldsArray).map(([fieldName, fieldDef]) => (
+              <tr key={fieldName} className="flex flex-col pb-0">
                 <th scope="row" className="th_data">
-                  <label htmlFor={key}>{field.label}</label>
+                  <label htmlFor={fieldName}>{fieldDef.label}</label>
                 </th>
                 <td className="td-data">
-                  {field.type === 'table' ? (
+                  {fieldDef.type === 'table' ? (
                     <div
                       style={{ border: '1px solid #8C8F94' }}
-                      className="p-4 rounded-sm"
+                      className="p-4 rounded-sm overflow-x-auto"
                     >
-                      {tableData && tableData.tableData && tableData.tableData.length > 0 ? (
+                      { (tableData?.tableData?.length ?? 0) > 0 ? (
                         <IndicadorDataGrid data={tableData.tableData} />
                       ) : (
                         <div>No hay datos</div>
@@ -116,12 +63,12 @@ const IndicadorEditorTabDatos: React.FC<IndicadorEditorTabDatosProps> = ({
                     </div>
                   ) : (
                     <Input
-                      name={key}
-                      type={field.type}
-                      text={field.label}
-                       value={values[key]}
-                      onChange={(e) => handleChange(e, key)}
-                      required={field.required}
+                      name={fieldName}
+                      type={fieldDef.type}
+                      text={fieldDef.label}
+                       value={values[fieldName]}
+                      onChange={(e) => handleChange(e, fieldName)}
+                      required={fieldDef.required}
                     />
                   )}
                 </td>
