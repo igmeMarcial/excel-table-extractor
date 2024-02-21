@@ -13,14 +13,14 @@ interface EstadisticaFields {
 // Tab datos
 interface EstadisticaDataFields {
   data?: any[];
-  nombre?:string;
-  nota?:string;
-  fuente?:string;
-  elaboracion?:string;
+  nombre?: string;
+  nota?: string;
+  fuente?: string;
+  elaboracion?: string;
 }
 interface ExcelData {
-    sheetData: EstadisticaDataFields;
-    tableData: Array<Array<string | number>>;
+  sheetData: EstadisticaDataFields;
+  tableData: Array<Array<string | number>>;
 }
 interface EstadisticaFormState {
   // Indicar si hay cambios en el formulario
@@ -29,9 +29,9 @@ interface EstadisticaFormState {
   titulo: string;
   estadisticaFields: EstadisticaFields;
   estadisticaDataFields: EstadisticaDataFields;
-  activeTab:string;
-  estadisticaExcelDataTable:ExcelData;
-  estadisticaExcelIndicator:string[][];
+  activeTab: string;
+  estadisticaExcelDataTable: ExcelData;
+  estadisticaExcelIndicator: string[][];
 }
 
 const initialState: EstadisticaFormState = {
@@ -43,17 +43,17 @@ const initialState: EstadisticaFormState = {
   },
   estadisticaDataFields: {
     data: [],
-    nombre:'',
-    nota:'',
-    fuente:'',
-    elaboracion:''
+    nombre: '',
+    nota: '',
+    fuente: '',
+    elaboracion: ''
   },
-   activeTab:"1",
-   estadisticaExcelDataTable:{
-    sheetData:{},
-    tableData:[],
-   },
-   estadisticaExcelIndicator: []
+  activeTab: "1",
+  estadisticaExcelDataTable: {
+    sheetData: {},
+    tableData: [],
+  },
+  estadisticaExcelIndicator: []
 
 };
 
@@ -76,19 +76,22 @@ export const estadisticaFormSlice = createSlice({
       state.estadisticaDataFields = action.payload;
       state.hasChanges = true;
     },
-    setActiveTab:(state,action :PayloadAction<string>)=>{
+    setActiveTab: (state, action: PayloadAction<string>) => {
       state.activeTab = action.payload
     },
-    setEstadisticaExcelDataTable:(state,action:PayloadAction<ExcelData>)=>{
+    setEstadisticaExcelDataTable: (state, action: PayloadAction<ExcelData>) => {
       state.estadisticaExcelDataTable = action.payload
     },
-    setEstadisticaExcelIndicator:(state,action:PayloadAction<string[][]>)=>{
+    setEstadisticaExcelIndicator: (state, action: PayloadAction<string[][]>) => {
       state.estadisticaExcelIndicator = action.payload
     }
   },
   extraReducers: (builder) => {
     builder.addMatcher(getEstadistica.matchFulfilled, (state, action) => {
       state.estadisticaFields = action.payload;
+      state.isCreationMode = false;
+      state.titulo = action.payload.nombre || '';
+      state.hasChanges = false;
     })
   },
 });
@@ -108,7 +111,7 @@ export const selectTitulo = (state: RootState) => state.estadisticaForm.titulo;
 export const selectEstadisticaFields = (state: RootState) => state.estadisticaForm.estadisticaFields;
 export const selectEstadisticaDataFields = (state: RootState) => state.estadisticaForm.estadisticaDataFields;
 export const selectIsCreationMode = (state: RootState) => state.estadisticaForm.isCreationMode;
-export const selectActiveTab = (state:RootState)=> state.estadisticaForm.activeTab;
-export const selectExcelTable =(state:RootState)=>state.estadisticaForm.estadisticaExcelDataTable ;
-export const selectExcelIndicator =(state:RootState)=>state.estadisticaForm.estadisticaExcelIndicator ;
+export const selectActiveTab = (state: RootState) => state.estadisticaForm.activeTab;
+export const selectExcelTable = (state: RootState) => state.estadisticaForm.estadisticaExcelDataTable;
+export const selectExcelIndicator = (state: RootState) => state.estadisticaForm.estadisticaExcelIndicator;
 export default estadisticaFormSlice.reducer;

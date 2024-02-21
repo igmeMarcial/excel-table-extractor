@@ -13,15 +13,13 @@ import {
 import IndicadorEditorModalImport from './IndicadorEditorModalImport';
 import React, { useRef } from 'react';
 
-
-
 const IndicadorEditorhHeader: React.FC = () => {
   const importDialogRef = useRef(null);
   const dispath = useAppDispatch();
   const titulo = useAppSelector(selectTitulo);
   const hasChanges = useAppSelector(selectHasChanges);
   const isCreationMode = useAppSelector(selectIsCreationMode);
-  
+
   return (
     <>
       <div className="bg-custom-grey flex px-12 pt-3 pb-3 gap-2 items-center">
@@ -36,10 +34,7 @@ const IndicadorEditorhHeader: React.FC = () => {
         >
           {isCreationMode ? 'Importar' : 'Actualizar'} desde ficha técnica
         </Button>
-        <IndicadorEditorModalImport
-          onTableData="borrar"
-          ref={importDialogRef}
-        />
+        <IndicadorEditorModalImport ref={importDialogRef} />
         <Button
           type="text"
           //style={{ color: '#2271B1' }}
