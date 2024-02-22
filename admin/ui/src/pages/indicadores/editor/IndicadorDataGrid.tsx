@@ -7,6 +7,7 @@ type Props = {
 
 const useStyles = makeStyles({
   dataGrid: {
+    position:"absolute",
     borderCollapse: 'separate',
     borderSpacing: '0',
     width:"100%",
@@ -40,6 +41,7 @@ function Cell(rowIndex: number, colIndex: number, value: any) {
 
 export default function IndicadorDataGrid({ data }: Props) {
   const classes = useStyles();
+  
   return (
     <table className={classes.dataGrid}>
       <tbody>

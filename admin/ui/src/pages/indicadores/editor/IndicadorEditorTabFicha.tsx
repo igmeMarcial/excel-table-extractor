@@ -1,15 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Select } from '@fluentui/react-components';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import {
   setEstadisticaFields,
   selectEstadisticaFields,
-  selectExcelIndicator,
 } from '../EstadisticaFormSlice';
 import { useFetch } from '../../../hooks/useFetch';
 import { Input } from 'antd';
 import { ESTADISTICA_FIELDS_DEF } from './EstadisticaFieldsDef';
-import { FICHA_FIELDS_MAP } from './FichaFieldsMap';
+
 
 interface Urls {
   componenteUrl: string;
@@ -94,8 +93,6 @@ const WPTextAreaField = ({ fieldName, label, onChange, value, required }) => {
 const IndicadorEditorTabFicha: React.FC = () => {
   const dispath = useAppDispatch();
   const values = useAppSelector(selectEstadisticaFields);
-  const indicatorData = useAppSelector(selectExcelIndicator);
-
   const setValues = (values) => {
     dispath(setEstadisticaFields(values));
   };
@@ -104,48 +101,6 @@ const IndicadorEditorTabFicha: React.FC = () => {
   const { data: listaCoponentes } = useFetch(urls.componenteUrl);
   const { data: listaSubcomponentes } = useFetch(urls.subComponentesUrl);
   const { data: listaTemasEstadisticos } = useFetch(urls.temasEstadisticosUrl);
-
-  const calculateSimilarity = (str1, str2) => {
-    const len = Math.min(str1.length, str2.length);
-    let commonChars = 0;
-    for (let i = 0; i < len; i++) {
-      if (str1[i] === str2[i]) {
-        commonChars++;
-      }
-    }
-    return commonChars / len;
-  };
-  const removeAccents = (string) => {
-    return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  };
-
-  const toSnakeCase = (string) => {
-    return removeAccents(string)
-      .replace(/[^a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ]+/g, '_')
-      .replace(/^(?:_+|_+)$/g, '')
-      .toLowerCase();
-  };
-
-  useEffect(() => {
-    if (indicatorData && indicatorData.length > 0) {
-      const result = {};
-      indicatorData.forEach((row) => {
-        const firstNonNumberValue = row.find((value) => isNaN(value));
-        if (typeof firstNonNumberValue === 'string') {
-          const snakeCaseKey = toSnakeCase(firstNonNumberValue);
-          const matchedKey = Object.keys(FICHA_FIELDS_MAP).find((key) => {
-            const camelCaseKey = toSnakeCase(key);
-            const similarity = calculateSimilarity(snakeCaseKey, camelCaseKey);
-            return similarity >= 0.5;
-          });
-          if (matchedKey) {
-            result[FICHA_FIELDS_MAP[matchedKey]] = row[row.length - 1];
-          }
-        }
-      });
-      setValues({ ...values, ...result });
-    }
-  }, [indicatorData]);
 
   const handleChange = (e, fieldKey) => {
     const { name: fiendName, value } = e.target;

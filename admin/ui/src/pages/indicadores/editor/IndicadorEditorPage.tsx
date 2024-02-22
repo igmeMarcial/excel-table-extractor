@@ -16,7 +16,7 @@ function IndicadorEditorPage() {
   return (
     <MainLayout>
       <IndicadorEditorhHeader />
-      <div className="px-12 ">
+      <div className="px-12">
         <IndicadorEditorTabs />
       </div>
 

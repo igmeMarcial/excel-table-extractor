@@ -22,10 +22,6 @@ interface EstadisticaDataFields {
   fuente?: string;
   elaboracion?: string;
 }
-interface ExcelData {
-  sheetData: EstadisticaDataFields;
-  tableData: Array<Array<string | number>>;
-}
 interface EstadisticaFormState {
   // Indicar si hay cambios en el formulario
   hasChanges: boolean;
@@ -34,8 +30,6 @@ interface EstadisticaFormState {
   estadisticaFields: EstadisticaFields;
   estadisticaDataFields: EstadisticaDataFields;
   activeTab: string;
-  estadisticaExcelDataTable: ExcelData;
-  estadisticaExcelIndicator: string[][];
   configPubEstadistica: ConfigPubEstadistica;
 }
 
@@ -54,11 +48,6 @@ const initialState: EstadisticaFormState = {
     elaboracion: ''
   },
   activeTab: "1",
-  estadisticaExcelDataTable: {
-    sheetData: {},
-    tableData: [],
-  },
-  estadisticaExcelIndicator: [],
   configPubEstadistica: DEFAULT_ESTADISTICA_PUBLISH_SETTINGS
 };
 
@@ -83,12 +72,6 @@ export const estadisticaFormSlice = createSlice({
     },
     setActiveTab: (state, action: PayloadAction<string>) => {
       state.activeTab = action.payload
-    },
-    setEstadisticaExcelDataTable: (state, action: PayloadAction<ExcelData>) => {
-      state.estadisticaExcelDataTable = action.payload
-    },
-    setEstadisticaExcelIndicator: (state, action: PayloadAction<string[][]>) => {
-      state.estadisticaExcelIndicator = action.payload
     },
     // Gráficos
     // Actualizar la configuración de un gráfico
@@ -133,8 +116,6 @@ export const {
   setEstadisticaFields,
   setEstadisticaDataFields,
   setActiveTab,
-  setEstadisticaExcelDataTable,
-  setEstadisticaExcelIndicator,
   setConfigGrafico,
   setTipoGrafico,
 } = estadisticaFormSlice.actions;
@@ -145,8 +126,7 @@ export const selectEstadisticaFields = (state: RootState) => state.estadisticaFo
 export const selectEstadisticaDataFields = (state: RootState) => state.estadisticaForm.estadisticaDataFields;
 export const selectIsCreationMode = (state: RootState) => state.estadisticaForm.isCreationMode;
 export const selectActiveTab = (state: RootState) => state.estadisticaForm.activeTab;
-export const selectExcelTable = (state: RootState) => state.estadisticaForm.estadisticaExcelDataTable;
-export const selectExcelIndicator = (state: RootState) => state.estadisticaForm.estadisticaExcelIndicator;
+
 
 export const selectConfigGrafico = (index: number) => (state: RootState) => {
   return { ...state.estadisticaForm.configPubEstadistica.defaults.configGrafico, ...state.estadisticaForm.configPubEstadistica.graficos[index] }

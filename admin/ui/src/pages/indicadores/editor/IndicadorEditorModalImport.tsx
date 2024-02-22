@@ -4,8 +4,8 @@ import EditorSingleFileUploader from './EditorSingleFileUploader';
 import { useAppDispatch } from '../../../app/hooks';
 import {
   setActiveTab,
-  setEstadisticaExcelDataTable,
-  setEstadisticaExcelIndicator,
+  setEstadisticaDataFields,
+  setEstadisticaFields,
 } from '../EstadisticaFormSlice';
 
 const IndicadorEditorModalImport = forwardRef((_, ref) => {
@@ -27,13 +27,27 @@ const IndicadorEditorModalImport = forwardRef((_, ref) => {
   }));
   const handleOk = () => {
     setIsModalOpen(false);
-    dispath(setEstadisticaExcelDataTable(tableData));
-    dispath(setEstadisticaExcelIndicator(indicadorData));
+    if (option1 && option2) {
+      dispath(setEstadisticaDataFields(tableData));
+      dispath(setEstadisticaFields(indicadorData));
+    } else if (option1) {
+      dispath(setEstadisticaFields(indicadorData));
+    } else if (option2) {
+      dispath(setEstadisticaDataFields(tableData));
+    }
     setUploadFileLoading(false);
     setOption1(false);
     setOption2(false);
     setFiles(false);
-    dispath(setActiveTab(option1 ? '1' : option2 ? '2' : '1'));
+    let activeTabValue: string;
+    if (option1) {
+      activeTabValue = '1';
+    } else if (option2) {
+      activeTabValue = '2';
+    } else {
+      activeTabValue = '1'; // Valor por defecto si ninguna opción está seleccionada
+    }
+    dispath(setActiveTab(activeTabValue));
   };
   const handleCancel = () => {
     setIsModalOpen(false);

@@ -9,6 +9,8 @@ import {
   selectTitulo,
   selectHasChanges,
   selectIsCreationMode,
+  setEstadisticaFields,
+  setEstadisticaDataFields,
 } from '../EstadisticaFormSlice';
 import IndicadorEditorModalImport from './IndicadorEditorModalImport';
 import React, { useRef } from 'react';
@@ -20,6 +22,12 @@ const IndicadorEditorhHeader: React.FC = () => {
   const hasChanges = useAppSelector(selectHasChanges);
   const isCreationMode = useAppSelector(selectIsCreationMode);
 
+  const handleDescartarCambios =()=>{
+
+    dispath(setEstadisticaFields({ nombre: '' }))
+    dispath(setEstadisticaDataFields({ data: [], nombre: '', nota: '', fuente: '', elaboracion: '' }))
+     dispath(setHasChanges(false))
+  }
   return (
     <>
       <div className="bg-custom-grey flex px-12 pt-3 pb-3 gap-2 items-center">
@@ -45,9 +53,7 @@ const IndicadorEditorhHeader: React.FC = () => {
             />
           }
           disabled={!hasChanges}
-          onClick={() => {
-            dispath(setHasChanges(false));
-          }}
+          onClick={handleDescartarCambios}
         >
           Descartar cambios
         </Button>

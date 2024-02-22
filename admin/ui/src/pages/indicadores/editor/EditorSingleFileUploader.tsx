@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ExtractDataExcelService from '../../../services/ExtractDataExcelService';
-import { Checkbox } from '@fluentui/react-components';
-
+import { Checkbox } from 'antd';
+import { WorkBook } from 'xlsx';
 interface EditorSingleFileUploaderProps {
   onTableData?: any;
   onIndicatorData?: any;
@@ -24,7 +24,7 @@ const EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> = ({
   setOption2,
   setFiles,
 }) => {
-  const [workbookFile, setWorkBookFile] = useState<any>(null);
+  const [workbookFile, setWorkBookFile] = useState<WorkBook>(null);
   const [title, setTitle] = useState<string>('');
 
   const extractDataExcelService = new ExtractDataExcelService();
@@ -37,11 +37,6 @@ const EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> = ({
       setUploadFile(true);
       setWorkBookFile(workbook);
       if (workbook) {
-        // Obtener todos los nombres de las hojas
-        const sheetNames = await extractDataExcelService.getAllSheetNames(
-          selectedFile
-        );
-        //Valor de la hoja 3 estaticamente de celda definido estaticamente
         const cellVallueTitle = await extractDataExcelService.getNameIndicador(
           workbook,
           1
@@ -62,9 +57,9 @@ const EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> = ({
             onIndicatorData(extractedData);
           })
           .catch((error) => {
-            console.error(
-              'Error al extraer datos de la hoja de indicadores técnicos:',
-              error
+            window.alert(
+              'Error al extraer datos de la hoja de indicadores técnicos:' +
+                error
             );
           });
       }
@@ -75,9 +70,9 @@ const EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> = ({
             onTableData(extractedData);
           })
           .catch((error) => {
-            console.error(
-              'Error al extraer datos de la hoja de datos estadísticos:',
-              error
+            window.alert(
+              'Error al extraer datos de la hoja de datos estadísticos: ' +
+                error
             );
           });
       }
@@ -94,13 +89,15 @@ const EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> = ({
             <Checkbox
               checked={option1}
               onChange={() => setOption1((checked) => !checked)}
-              label="Campos de ficha técnica"
-            />
+            >
+              Campos de ficha técnica
+            </Checkbox>
             <Checkbox
               checked={option2}
               onChange={() => setOption2((checked) => !checked)}
-              label="Datos estadísticos"
-            />
+            >
+              Datos estadísticos
+            </Checkbox>
           </div>
         </div>
       ) : (

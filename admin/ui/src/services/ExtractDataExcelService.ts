@@ -1,4 +1,5 @@
-import * as XLSX from "xlsx";
+import * as XLSX from 'xlsx';
+import { FICHA_FIELDS_MAP } from '../pages/indicadores/editor/FichaFieldsMap';
 
 interface Sheet {
   [key: string]: any; // Tipo genérico para la celda
@@ -8,13 +9,16 @@ interface Range {
   s: { r: number; c: number }; // Coordenadas de la primera celda en el rango
   e: { r: number; c: number }; // Coordenadas de la última celda en el rango
 }
-
-type TransformedSheetData = {
-  nombre: string;
-  nota: string;
-  fuente: string;
-  elaboracion: string;
-};
+interface ResultObject {
+  [key: string]: string;
+}
+interface EstadisticaDataFields {
+  data?: any[];
+  nombre?: string;
+  nota?: string;
+  fuente?: string;
+  elaboracion?: string;
+}
 class ExtractDataExcelService {
   readExcelFile(file: File): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -22,7 +26,7 @@ class ExtractDataExcelService {
       reader.onload = (e: ProgressEvent<FileReader>) => {
         try {
           const data = new Uint8Array(e.target!.result as ArrayBuffer);
-          const workbook = XLSX.read(data, { type: "array" });
+          const workbook = XLSX.read(data, { type: 'array' });
           resolve(workbook);
         } catch (error) {
           reject(error);
@@ -44,44 +48,46 @@ class ExtractDataExcelService {
   async extractDataFromFile(
     workbook: XLSX.WorkBook,
     sheetIndex: number
-  ): Promise<{ sheetData: any; tableData: any }> {
+  ): Promise<EstadisticaDataFields> {
     try {
       const sheetName: string = workbook.SheetNames[sheetIndex];
       const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
       const tableData: any = this.extractTableData(sheet);
       const contentCellTitle: any = this.getTitleIndicador(sheet);
-      const contentCellFuente: any = this.getContentCell(sheet, "Fuente:");
-      const contentCellNote: any = this.getContentCell(sheet, "Nota:");
+      const contentCellFuente: any = this.getContentCell(sheet, 'Fuente:');
+      const contentCellNote: any = this.getContentCell(sheet, 'Nota:');
       const contentCellElaboration: any = this.getContentCell(
         sheet,
-        "Elaboración:"
+        'Elaboración:'
       );
-      const transformedSheetData: TransformedSheetData = {
+      const transformedSheetData: EstadisticaDataFields = {
         nombre: contentCellTitle
           ? contentCellTitle.separatedContent ||
             contentCellTitle.description ||
-            ""
-          : "",
+            ''
+          : '',
         nota: contentCellNote
           ? contentCellNote.separatedContent ||
             contentCellNote.nextCell?.v ||
             contentCellNote.cell?.v ||
-            ""
-          : "",
+            ''
+          : '',
         fuente: contentCellFuente
           ? contentCellFuente.separatedContent ||
             contentCellFuente.nextCell?.v ||
             contentCellFuente.cell?.v ||
-            ""
-          : "",
+            ''
+          : '',
         elaboracion: contentCellElaboration
           ? contentCellElaboration.separatedContent ||
             contentCellElaboration.nextCell?.v ||
             contentCellElaboration.cell?.v ||
-            ""
-          : "",
+            ''
+          : '',
+        data: tableData,
       };
-      return { sheetData: { ...transformedSheetData, data: tableData }, tableData };
+      //tranfor Data
+      return transformedSheetData;
     } catch (error) {
       console.log(error);
       throw error;
@@ -96,7 +102,7 @@ class ExtractDataExcelService {
         const sheetName: string = workbook.SheetNames[sheetIndex];
         const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
         let data: string | undefined;
-        const range = XLSX.utils.decode_range(sheet["!ref"]);
+        const range = XLSX.utils.decode_range(sheet['!ref']);
         let foundValue = false;
 
         const validarCadenaFlex = (
@@ -106,14 +112,14 @@ class ExtractDataExcelService {
           const cadenaNormalizada = cadena
             .trim()
             .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "");
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
           return cadenasObjetivo.some((objetivo) => {
             const objetivoNormalizado = objetivo
               .trim()
               .toLowerCase()
-              .normalize("NFD")
-              .replace(/[\u0300-\u036f]/g, "");
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '');
             return cadenaNormalizada.includes(objetivoNormalizado);
           });
         };
@@ -123,13 +129,13 @@ class ExtractDataExcelService {
           for (let C = range.s.c; C <= range.e.c; ++C) {
             const cellref = XLSX.utils.encode_cell({ c: C, r: R });
             const cell = sheet[cellref];
-            if (cell !== undefined && typeof cell === "object" && "v" in cell) {
+            if (cell !== undefined && typeof cell === 'object' && 'v' in cell) {
               const cellValue = String(cell.v);
               if (
                 validarCadenaFlex(cellValue, [
-                  "Nombre del indicador",
-                  "estadística ambiental",
-                  "Nombre del indicador o estadística ambiental",
+                  'Nombre del indicador',
+                  'estadística ambiental',
+                  'Nombre del indicador o estadística ambiental',
                 ])
               ) {
                 for (let R2 = R; R2 <= range.e.r; R2++) {
@@ -138,8 +144,8 @@ class ExtractDataExcelService {
                     const cell2 = sheet[cellref2];
                     if (
                       cell2 !== undefined &&
-                      typeof cell2 === "object" &&
-                      "v" in cell2
+                      typeof cell2 === 'object' &&
+                      'v' in cell2
                     ) {
                       data = cell2.v;
                       foundValue = true;
@@ -156,7 +162,7 @@ class ExtractDataExcelService {
         }
         if (data === undefined) {
           resolve(
-            "Nombre del indicador o estadística ambiental no se encuentra en esta hoja"
+            'Nombre del indicador o estadística ambiental no se encuentra en esta hoja'
           );
         } else {
           resolve(data);
@@ -171,9 +177,9 @@ class ExtractDataExcelService {
     sheet: Sheet
   ): { title: string; separatedContent: string; description: string } | null {
     // Obtener el valor de la celda A1
-    const cellA1Ref = "A1";
+    const cellA1Ref = 'A1';
     const cellA1 = sheet[cellA1Ref];
-    if (cellA1 && cellA1.t === "s" && cellA1.v) {
+    if (cellA1 && cellA1.t === 's' && cellA1.v) {
       const cellValue: string = cellA1.v;
       const regex = /^(.*?):\s*(.*)$/;
       const match = cellValue.match(regex);
@@ -184,7 +190,7 @@ class ExtractDataExcelService {
         return { title, separatedContent, description: cellValue };
       } else {
         // Si no se encuentra ":" o el formato no es válido, retornar null
-        return null;
+        return { title: '', separatedContent: '', description: cellValue };
       }
     } else {
       return null;
@@ -199,7 +205,7 @@ class ExtractDataExcelService {
     separatedContent: string;
   } | null {
     // Obtener el rango de celdas de la hoja
-    const range = XLSX.utils.decode_range(sheet["!ref"]);
+    const range = XLSX.utils.decode_range(sheet['!ref']);
 
     // Iterar sobre todas las celdas del rango
     for (let R = range.s.r; R <= range.e.r; ++R) {
@@ -211,7 +217,7 @@ class ExtractDataExcelService {
         // Verificar si el contenido de la celda es igual al nombre buscado
         if (
           cell &&
-          typeof cell.v === "string" &&
+          typeof cell.v === 'string' &&
           cell.v.includes(nombreBuscar)
         ) {
           // Encontramos la celda con el nombre buscado, ahora obtenemos la siguiente celda
@@ -219,10 +225,10 @@ class ExtractDataExcelService {
           const nextCell = sheet[nextCellRef];
 
           const content = cell.v;
-          const regex = new RegExp(`${nombreBuscar}\\s*\\s*(.*)`, "i");
+          const regex = new RegExp(`${nombreBuscar}\\s*\\s*(.*)`, 'i');
           const matches = content.match(regex);
           const separatedContent =
-            matches && matches.length === 2 ? matches[1] : "";
+            matches && matches.length === 2 ? matches[1] : '';
 
           return {
             cell: cell,
@@ -237,7 +243,7 @@ class ExtractDataExcelService {
 
   extractTableData(sheet: Sheet): any[] {
     const tableData: any[] = [];
-    const range: Range = XLSX.utils.decode_range(sheet["!ref"]);
+    const range: Range = XLSX.utils.decode_range(sheet['!ref']);
     let headerRowIndex: number | null = null;
     let headerColumnIndex: number | null = null;
     let headerColumnEnd: number | null = null;
@@ -260,7 +266,7 @@ class ExtractDataExcelService {
       for (let C = range.s.c; C <= range.e.c; ++C) {
         const cellref = XLSX.utils.encode_cell({ c: C, r: headerRowIndex });
         const cell = sheet[cellref] ? sheet[cellref].v : null;
-        if (cell !== null && cell !== "") {
+        if (cell !== null && cell !== '') {
           headerColumnIndex = C;
           break;
         }
@@ -272,7 +278,7 @@ class ExtractDataExcelService {
       for (let C = headerColumnIndex; C <= range.e.c; ++C) {
         const cellref = XLSX.utils.encode_cell({ c: C, r: headerRowIndex });
         const cell = sheet[cellref] ? sheet[cellref].v : null;
-        if (cell === null || cell === "") {
+        if (cell === null || cell === '') {
           // Si la celda está vacía, establece headerColumnEnd en el valor anterior de C
           headerColumnEnd = C - 1;
           emptyCellFound = true; // Marca que se encontró una celda vacía
@@ -308,7 +314,7 @@ class ExtractDataExcelService {
       const filaEsParteDeTabla = (rowData) => {
         let countDataCells = 0;
         for (let cell of rowData) {
-          if (cell !== null && cell !== "") {
+          if (cell !== null && cell !== '') {
             countDataCells++;
           }
         }
@@ -341,7 +347,7 @@ class ExtractDataExcelService {
     // Verifica si la fila tiene al menos una cierta cantidad de celdas con datos
     const minDataCells = 3; // Define el mínimo número de celdas con datos para considerar como encabezado
     const dataCellsCount = rowData.filter(
-      (cell) => cell !== null && cell !== ""
+      (cell) => cell !== null && cell !== ''
     ).length;
     if (dataCellsCount >= minDataCells) {
       // Si la fila tiene suficientes celdas con datos, considerarla como encabezado
@@ -353,9 +359,9 @@ class ExtractDataExcelService {
   }
   // Función para analizar el área de búsqueda y determinar si contiene datos de la tabla
   analyzeSearchArea(sheet: any, startCell: any, endCell: any): void {
-    const range = XLSX.utils.decode_range(sheet["!ref"]);
-    const startCol = XLSX.utils.decode_col(startCell.replace(/\d/g, "")); // Obtener el número de columna del inicio del área de búsqueda
-    const endCol = XLSX.utils.decode_col(endCell.replace(/\d/g, "")); // Obtener el número de columna del final del área de búsqueda
+    const range = XLSX.utils.decode_range(sheet['!ref']);
+    const startCol = XLSX.utils.decode_col(startCell.replace(/\d/g, '')); // Obtener el número de columna del inicio del área de búsqueda
+    const endCol = XLSX.utils.decode_col(endCell.replace(/\d/g, '')); // Obtener el número de columna del final del área de búsqueda
     let consecutiveNumericValues = 0; // Contador para valores numéricos consecutivos
     const minConsecutiveValues = 3; // Mínimo número de valores numéricos consecutivos para considerar como datos de la tabla
     // Recorrer las filas dentro del área de búsqueda
@@ -391,34 +397,33 @@ class ExtractDataExcelService {
     }
     // Verificar si se encontraron suficientes valores numéricos consecutivos en varias filas
     if (consecutiveNumericValues >= minConsecutiveValues) {
-      console.log("Se encontraron datos de tabla en el área de búsqueda.");
+      console.log('Se encontraron datos de tabla en el área de búsqueda.');
       // Aquí puedes realizar acciones adicionales, como retornar true o ejecutar otras funciones
     } else {
-      console.log("No se encontraron datos de tabla en el área de búsqueda.");
+      console.log('No se encontraron datos de tabla en el área de búsqueda.');
       // Aquí puedes realizar acciones adicionales, como retornar false o ejecutar otras funciones
     }
   }
   extractIndicatortechnicalSheet(
     workbook: XLSX.WorkBook,
     sheetIndex: number
-  ): Promise<string[][]> {
+  ): Promise<ResultObject> {
     return new Promise((resolve, reject) => {
       try {
         const sheetName = workbook.SheetNames[sheetIndex];
         const sheet = workbook.Sheets[sheetName];
-        const range = XLSX.utils.decode_range(sheet["!ref"]);
-
+        const range = XLSX.utils.decode_range(sheet['!ref']);
+        const resultObject: ResultObject = {};
         let result: string[][] = [];
-        let patternFound = false;
-        let combinedData = [];
-         let start = 3;//range.s.r
+        let combinedData: string[] = [];
+        let start = 3; //range.s.r
         for (let rowNum = start; rowNum <= range.e.r; rowNum++) {
           let rowHasPattern = false;
-          let rowData = [];
+          let rowData: string[] = [];
           for (let colNum = range.s.c; colNum <= range.e.c; colNum++) {
             let cellAddress = XLSX.utils.encode_cell({ r: rowNum, c: colNum });
-            let cellValue = sheet[cellAddress] ? sheet[cellAddress].w : "";
-            
+            let cellValue = sheet[cellAddress] ? sheet[cellAddress].w : '';
+
             if (cellValue.trim().length > 0) {
               // console.log(cellValue)
               rowData.push(cellValue);
@@ -431,29 +436,71 @@ class ExtractDataExcelService {
           }
           if (rowHasPattern) {
             if (rowData.length > 1) {
-              
               if (combinedData.length > 0) {
                 result.push(combinedData); // Agrega datos combinados previamente almacenados al resultado
                 combinedData = []; // Reinicia combinedData
               }
               combinedData = combinedData.concat(rowData); // Almacena datos combinados en combinedData
             } else {
-              combinedData[combinedData.length - 1] += ", " + rowData.join(", ");
+              combinedData[combinedData.length - 1] +=
+                ', ' + rowData.join(', ');
             }
-            patternFound = true;
           }
         }
         if (combinedData.length > 0) {
           result.push(combinedData);
         }
-        
-        resolve(result);
+
+        //transforData
+        const calculateSimilarity = (str1, str2) => {
+          const len = Math.min(str1.length, str2.length);
+          let commonChars = 0;
+          for (let i = 0; i < len; i++) {
+            if (str1[i] === str2[i]) {
+              commonChars++;
+            }
+          }
+          return commonChars / len;
+        };
+        const removeAccents = (string) => {
+          return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        };
+
+        const toSnakeCase = (string) => {
+          return removeAccents(string)
+            .replace(/[^a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ]+/g, '_')
+            .replace(/^(?:_+|_+)$/g, '')
+            .toLowerCase();
+        };
+
+        if (result && result.length > 0) {
+          result.forEach((row) => {
+            const firstNonNumberValue = row.find((value) =>
+              isNaN(Number(value))
+            );
+            if (typeof firstNonNumberValue === 'string') {
+              const snakeCaseKey = toSnakeCase(firstNonNumberValue);
+              const matchedKey = Object.keys(FICHA_FIELDS_MAP).find((key) => {
+                const camelCaseKey = toSnakeCase(key);
+                const similarity = calculateSimilarity(
+                  snakeCaseKey,
+                  camelCaseKey
+                );
+                return similarity >= 0.5;
+              });
+              if (matchedKey) {
+                resultObject[FICHA_FIELDS_MAP[matchedKey]] =
+                  row[row.length - 1];
+              }
+            }
+          });
+        }
+        resolve(resultObject);
       } catch (error) {
         reject(error);
       }
     });
   }
-
 }
 
 export default ExtractDataExcelService;
