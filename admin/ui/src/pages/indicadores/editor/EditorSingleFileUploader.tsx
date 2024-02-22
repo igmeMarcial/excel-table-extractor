@@ -51,30 +51,14 @@ const EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> = ({
     setFiles(option1 || option2);
     if (workbookFile) {
       if (option1) {
-        extractDataExcelService
-          .extractIndicatortechnicalSheet(workbookFile, 1)
-          .then((extractedData) => {
-            onIndicatorData(extractedData);
-          })
-          .catch((error) => {
-            window.alert(
-              'Error al extraer datos de la hoja de indicadores técnicos:' +
-                error
-            );
-          });
+        const dataIndicator = extractDataExcelService.getEstadisticaFieldsFichaTecnica(workbookFile,1)
+        onIndicatorData(dataIndicator)
+       console.log(dataIndicator)
       }
       if (option2) {
-        extractDataExcelService
-          .extractDataFromFile(workbookFile, 0)
-          .then((extractedData) => {
-            onTableData(extractedData);
-          })
-          .catch((error) => {
-            window.alert(
-              'Error al extraer datos de la hoja de datos estadísticos: ' +
-                error
-            );
-          });
+        const dataTable = extractDataExcelService.extractDataFromFile(workbookFile,0);
+        onTableData(dataTable);
+        console.log(dataTable)
       }
     }
   }, [option1, option2]);

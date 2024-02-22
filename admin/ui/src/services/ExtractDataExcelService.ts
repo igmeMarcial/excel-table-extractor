@@ -1,10 +1,20 @@
 import * as XLSX from 'xlsx';
 import { FICHA_FIELDS_MAP } from '../pages/indicadores/editor/FichaFieldsMap';
+import { Estadistica, FichaTecnicaFields } from '../types/Estadistica';
+import { TablaDatos } from '../types/TablaDatos';
+
 
 interface Sheet {
   [key: string]: any; // Tipo genérico para la celda
 }
+interface DataCell {
+  value: string | number;
+  row: number;
+  col:number;
+  colspan?:number;
+  rowspan?:number
 
+}
 interface Range {
   s: { r: number; c: number }; // Coordenadas de la primera celda en el rango
   e: { r: number; c: number }; // Coordenadas de la última celda en el rango
@@ -12,14 +22,9 @@ interface Range {
 interface ResultObject {
   [key: string]: string;
 }
-interface EstadisticaDataFields {
-  data?: any[];
-  nombre?: string;
-  nota?: string;
-  fuente?: string;
-  elaboracion?: string;
-}
+//TODO: Fusionar models
 class ExtractDataExcelService {
+  //Get wor
   readExcelFile(file: File): Promise<any> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -38,29 +43,31 @@ class ExtractDataExcelService {
       reader.readAsArrayBuffer(file);
     });
   }
-  getAllSheetNames(file: File): Promise<string[]> {
+  //
+  getExcelSheetNames(file: File): Promise<string[]> {
     return this.readExcelFile(file).then((workbook: XLSX.WorkBook) => {
       const sheetNames: string[] = workbook.SheetNames;
       return sheetNames;
     });
   }
-
-  async extractDataFromFile(
+  //
+  extractDataFromFile(
     workbook: XLSX.WorkBook,
     sheetIndex: number
-  ): Promise<EstadisticaDataFields> {
+  ): TablaDatos {
     try {
       const sheetName: string = workbook.SheetNames[sheetIndex];
       const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
       const tableData: any = this.extractTableData(sheet);
-      const contentCellTitle: any = this.getTitleIndicador(sheet);
+      const contentCellTitle: any = this.getTablaDatosTitulo(sheet);
       const contentCellFuente: any = this.getContentCell(sheet, 'Fuente:');
       const contentCellNote: any = this.getContentCell(sheet, 'Nota:');
       const contentCellElaboration: any = this.getContentCell(
         sheet,
         'Elaboración:'
       );
-      const transformedSheetData: EstadisticaDataFields = {
+      console.log(contentCellTitle)
+      const transformedSheetData: TablaDatos = {
         nombre: contentCellTitle
           ? contentCellTitle.separatedContent ||
             contentCellTitle.description ||
@@ -84,7 +91,7 @@ class ExtractDataExcelService {
             contentCellElaboration.cell?.v ||
             ''
           : '',
-        data: tableData,
+        datos: tableData,
       };
       //tranfor Data
       return transformedSheetData;
@@ -173,7 +180,7 @@ class ExtractDataExcelService {
     });
   }
 
-  getTitleIndicador(
+  getTablaDatosTitulo(
     sheet: Sheet
   ): { title: string; separatedContent: string; description: string } | null {
     // Obtener el valor de la celda A1
@@ -183,11 +190,11 @@ class ExtractDataExcelService {
       const cellValue: string = cellA1.v;
       const regex = /^(.*?):\s*(.*)$/;
       const match = cellValue.match(regex);
-
       if (match && match.length === 3) {
         const title = match[1].trim();
         const separatedContent = match[2].trim();
         return { title, separatedContent, description: cellValue };
+
       } else {
         // Si no se encuentra ":" o el formato no es válido, retornar null
         return { title: '', separatedContent: '', description: cellValue };
@@ -241,7 +248,8 @@ class ExtractDataExcelService {
     return null;
   }
 
-  extractTableData(sheet: Sheet): any[] {
+  // 
+  extractTableData(sheet: Sheet): DataCell[][] {
     const tableData: any[] = [];
     const range: Range = XLSX.utils.decode_range(sheet['!ref']);
     let headerRowIndex: number | null = null;
@@ -339,7 +347,7 @@ class ExtractDataExcelService {
         }
       }
     }
-
+// console.log(tableData)
     return tableData;
   }
 
@@ -404,11 +412,10 @@ class ExtractDataExcelService {
       // Aquí puedes realizar acciones adicionales, como retornar false o ejecutar otras funciones
     }
   }
-  extractIndicatortechnicalSheet(
+  getEstadisticaFieldsFichaTecnica(
     workbook: XLSX.WorkBook,
     sheetIndex: number
-  ): Promise<ResultObject> {
-    return new Promise((resolve, reject) => {
+  ): FichaTecnicaFields {
       try {
         const sheetName = workbook.SheetNames[sheetIndex];
         const sheet = workbook.Sheets[sheetName];
@@ -495,11 +502,12 @@ class ExtractDataExcelService {
             }
           });
         }
-        resolve(resultObject);
+        return resultObject;
       } catch (error) {
-        reject(error);
+         console.log(error);
+        throw error;
       }
-    });
+    
   }
 }
 

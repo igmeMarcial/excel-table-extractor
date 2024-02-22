@@ -12,11 +12,12 @@ interface EstadisticaFields {
   nombre?: string;
   componenteId?: number;
   subcomponenteId?: number;
+  temaEstadisticoId?:number;
 }
 
 // Tab datos
 interface EstadisticaDataFields {
-  data?: any[];
+  datos?: any[];
   nombre?: string;
   nota?: string;
   fuente?: string;
@@ -41,7 +42,7 @@ const initialState: EstadisticaFormState = {
     nombre: '',
   },
   estadisticaDataFields: {
-    data: [],
+    datos: [],
     nombre: '',
     nota: '',
     fuente: '',

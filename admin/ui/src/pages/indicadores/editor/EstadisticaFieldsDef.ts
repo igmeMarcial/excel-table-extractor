@@ -32,6 +32,11 @@ export const ESTADISTICA_FIELDS_DEF: Record<string, FieldsArray> = {
     type: 'text',
     required: true,
   },
+  finalidad:{
+     label: 'Finalidad',
+    type: 'text',
+    required: true,
+  },
   descripcionDefinicion: {
     label: 'Descripción/Definición',
     type: 'textarea',

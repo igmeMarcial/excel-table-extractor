@@ -13,20 +13,38 @@ const fieldsArray = DATOS_FIELDS_DEF;
 const IndicadorEditorTabDatos: React.FC = () => {
   const dispath = useAppDispatch();
   const values = useAppSelector(selectEstadisticaDataFields);
-   
-  const [containerHeight, setContainerHeight] = useState<number | null>(300);
-const divRef = useRef<HTMLDivElement>(null);
 
+  const [containerHeight, setContainerHeight] = useState<number | null>(null);
+  const divRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-         if (divRef.current) {
+ 
+  // Actualizando el tamaño de div de la tabla
+  useEffect(() => {
+    // Función para obtener la altura de la div
+    const updateContainerHeight = () => {
+      if (divRef.current) {
+        // setContainerHeight(null);
         const newHeight = divRef.current.scrollHeight;
         if (newHeight !== containerHeight) {
-            setContainerHeight(newHeight);
+          setContainerHeight(newHeight);
+          console.log(newHeight)
         }
-        console.log("cambios detectafo")
-    }
-    }, [values]);
+      }
+    };
+
+    updateContainerHeight(); // Llama a la función una vez al principio
+    console.log(updateContainerHeight())
+    // Escucha los cambios en el valor 'values' y actualiza la altura de la div
+    const handleResize = () => {
+      updateContainerHeight();
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [divRef.current, values]);
 
   const setValues = (values) => {
     dispath(setEstadisticaDataFields(values));
@@ -43,7 +61,7 @@ const divRef = useRef<HTMLDivElement>(null);
     };
     setValues(updatedValues);
   };
-
+ console.log(containerHeight)
   return (
     <div className="overflow-auto" style={{ height: '380px' }}>
       <form>
@@ -57,12 +75,22 @@ const divRef = useRef<HTMLDivElement>(null);
                 <td className="td-data">
                   {fieldDef.type === 'table' ? (
                     <div
-                       style={{ scrollbarWidth: 'thin', border: values?.data?.length ? 'none' : '1px solid #8C8F94',height: values?.data?.length ? `${containerHeight}px` : 'auto', }}
-                      className={`rounded-sm relative overflow-x-auto ${values?.data?.length ? 'p-0' : 'p-4'}`}
+                      style={{
+                        scrollbarWidth: 'thin',
+                        border: values?.datos?.length
+                          ? 'none'
+                          : '1px solid #8C8F94',
+                        height: values?.datos?.length
+                          ? `${containerHeight}px`
+                          : 'auto',
+                      }}
+                      className={`rounded-sm relative overflow-x-auto ${
+                        values?.datos?.length ? 'p-0' : 'p-4'
+                      }`}
                       ref={divRef}
                     >
-                      {(values?.data?.length ?? 0) > 0 ? (
-                        <IndicadorDataGrid data={values.data} />
+                      {(values?.datos?.length ?? 0) > 0 ? (
+                        <IndicadorDataGrid data={values.datos} />
                       ) : (
                         <div>No hay datos</div>
                       )}
