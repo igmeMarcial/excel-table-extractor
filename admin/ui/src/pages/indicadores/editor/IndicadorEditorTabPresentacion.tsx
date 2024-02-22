@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import IndicatorEditorTabPresentationLeft from './presentacion/IndicatorEditorTabPresentationLeft';
-import IndicatorEditorTabPresentationRight from './presentacion/IndicatorEditorTabPresentationRight';
+import Grafico from './presentacion/Grafico';
 import { use } from 'echarts';
 
 interface IndicadorEditorTabPresentacionProps {
@@ -17,14 +17,14 @@ const IndicadorEditorTabPresentacion: React.FC<
   };
   return (
     <div
-      className="flex flex-row overflow-auto scroll-container"
+      className="flex flex-row gap-8 overflow-auto scroll-container"
       style={{ height: '380px' }}
     >
       <IndicatorEditorTabPresentationLeft
         tableData={tableData}
         onTypeGraph={handleTypeGraph}
       />
-      <IndicatorEditorTabPresentationRight tyGraph={typeGraph} />
+      <Grafico />
     </div>
   );
 };

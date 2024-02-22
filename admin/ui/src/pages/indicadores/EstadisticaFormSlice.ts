@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { getEstadistica } from '../../app/services/estadistica';
 import type { RootState } from '../../app/store';
+import { DEFAULT_ESTADISTICA_PUBLISH_SETTINGS } from '../../config/estadistica-publish-settings';
+import { ConfigGrafico } from '../../types/ConfigGrafico';
+import { ConfigPubEstadistica } from '../../types/ConfigPubEstadistica';
+import { TipoGrafico } from '../../types/TipoGrafico';
 
 
 // Tab ficha
@@ -32,6 +36,7 @@ interface EstadisticaFormState {
   activeTab: string;
   estadisticaExcelDataTable: ExcelData;
   estadisticaExcelIndicator: string[][];
+  configPubEstadistica: ConfigPubEstadistica;
 }
 
 const initialState: EstadisticaFormState = {
@@ -53,8 +58,8 @@ const initialState: EstadisticaFormState = {
     sheetData: {},
     tableData: [],
   },
-  estadisticaExcelIndicator: []
-
+  estadisticaExcelIndicator: [],
+  configPubEstadistica: DEFAULT_ESTADISTICA_PUBLISH_SETTINGS
 };
 
 export const estadisticaFormSlice = createSlice({
@@ -84,6 +89,32 @@ export const estadisticaFormSlice = createSlice({
     },
     setEstadisticaExcelIndicator: (state, action: PayloadAction<string[][]>) => {
       state.estadisticaExcelIndicator = action.payload
+    },
+    // Gráficos
+    // Actualizar la configuración de un gráfico
+    setConfigGrafico: (state, action: PayloadAction<{ index: number, config: ConfigGrafico }>) => {
+      state.configPubEstadistica = {
+        ...state.configPubEstadistica,
+        graficos: state.configPubEstadistica.graficos.map((chart, index) => {
+          if (index === action.payload.index) {
+            return action.payload.config;
+          }
+          return chart;
+        })
+
+      }
+    },
+    setTipoGrafico: (state, action: PayloadAction<{ index: number, tipoGrafico: TipoGrafico }>) => {
+      state.configPubEstadistica = {
+        ...state.configPubEstadistica,
+        graficos: state.configPubEstadistica.graficos.map((chart, index) => {
+          if (index === action.payload.index) {
+            return { ...chart, tipoGrafico: action.payload.tipoGrafico };
+          }
+          return chart;
+        })
+
+      }
     }
   },
   extraReducers: (builder) => {
@@ -103,7 +134,9 @@ export const {
   setEstadisticaDataFields,
   setActiveTab,
   setEstadisticaExcelDataTable,
-  setEstadisticaExcelIndicator
+  setEstadisticaExcelIndicator,
+  setConfigGrafico,
+  setTipoGrafico,
 } = estadisticaFormSlice.actions;
 
 export const selectHasChanges = (state: RootState) => state.estadisticaForm.hasChanges;
@@ -114,4 +147,9 @@ export const selectIsCreationMode = (state: RootState) => state.estadisticaForm.
 export const selectActiveTab = (state: RootState) => state.estadisticaForm.activeTab;
 export const selectExcelTable = (state: RootState) => state.estadisticaForm.estadisticaExcelDataTable;
 export const selectExcelIndicator = (state: RootState) => state.estadisticaForm.estadisticaExcelIndicator;
+
+export const selectConfigGrafico = (index: number) => (state: RootState) => {
+  return { ...state.estadisticaForm.configPubEstadistica.defaults.configGrafico, ...state.estadisticaForm.configPubEstadistica.graficos[index] }
+}
+export const selectTipoGrafico = (index: number) => (state: RootState) => state.estadisticaForm.configPubEstadistica.graficos[index].tipoGrafico || state.estadisticaForm.configPubEstadistica.defaults.configGrafico.tipoGrafico;
 export default estadisticaFormSlice.reducer;

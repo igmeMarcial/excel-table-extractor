@@ -8,7 +8,7 @@ import {
   MenuTrigger,
   SplitButton,
   Button,
-  makeStyles
+  makeStyles,
 } from '@fluentui/react-components';
 import {
   Eye24Regular,
@@ -20,7 +20,6 @@ import {
 } from '@fluentui/react-icons';
 import { ColorPicker } from 'antd';
 
-
 interface PresentationSeriesConfigurationListProps {
   color: string;
   nombre: string;
@@ -29,25 +28,27 @@ interface PresentationSeriesConfigurationListProps {
 
 const useStyles = makeStyles({
   itemPopover: { minWidth: '55px' },
-  itemMenu:{justifyContent:"center"},
-  activeBtn:{backgroundColor:"#E6E6E6", ":hover":{
-    backgroundColor: "#E6E6E6"
-  }}
+  itemMenu: { justifyContent: 'center' },
+  activeBtn: {
+    backgroundColor: '#E6E6E6',
+    ':hover': {
+      backgroundColor: '#E6E6E6',
+    },
+  },
 });
 
 const PresentationSeriesConfigurationList: React.FC<
   PresentationSeriesConfigurationListProps
 > = ({ color, nombre, number }) => {
-  const [activeBtn,setActiveBtn]= useState<string>("left")
+  const [activeBtn, setActiveBtn] = useState<string>('left');
   const [iconVisible, setIconVisible] = useState<boolean>(true);
   const [selectedIcon, setSelectedIcon] = useState<React.ReactElement>(
-    <DataLine24Regular/>
+    <DataLine24Regular />
   );
   const classes = useStyles();
 
   const handleMenuItemClick = (selectedIcon: React.ReactElement) => {
     setSelectedIcon(selectedIcon);
-   
   };
   const onClick = () => alert('Primary action button clicked.');
 
@@ -59,17 +60,15 @@ const PresentationSeriesConfigurationList: React.FC<
     const buttonText = event.target.textContent;
     setIconVisible(!iconVisible);
   };
-  const handleChangeArrow=(key: string)=>{
-    setActiveBtn(key)
-  }
+  const handleChangeArrow = (key: string) => {
+    setActiveBtn(key);
+  };
 
   const menuItems = [
-    { icon: <DataLine24Regular />, id:'icon1' },
-    { icon: <ChevronDown24Filled /> ,id:'icon2' },
-    { icon: <ArrowExportRtl24Filled />,id:'icon3' },
-    { icon: <ArrowExport24Filled />,id:'icon4' },
-    
-    
+    { icon: <DataLine24Regular />, id: 'icon1' },
+    { icon: <ChevronDown24Filled />, id: 'icon2' },
+    { icon: <ArrowExportRtl24Filled />, id: 'icon3' },
+    { icon: <ArrowExport24Filled />, id: 'icon4' },
   ];
 
   return (
@@ -109,9 +108,9 @@ const PresentationSeriesConfigurationList: React.FC<
 
               <MenuPopover className={classes.itemPopover}>
                 <MenuList>
-                 {menuItems.map((menuItem) => (
+                  {menuItems.map((menuItem) => (
                     <MenuItem
-                    className={classes.itemMenu}
+                      className={classes.itemMenu}
                       key={`${menuItem.icon.type} + ${menuItem.id}`}
                       onClick={() => handleMenuItemClick(menuItem.icon)}
                       icon={menuItem.icon}
@@ -121,9 +120,19 @@ const PresentationSeriesConfigurationList: React.FC<
               </MenuPopover>
             </Menu>
           </div>
-          <div>
-            <Button appearance='transparent' className={activeBtn === 'left' ? classes.activeBtn : ''} icon={<ArrowExportRtl24Filled />} onClick={()=>handleChangeArrow('left')}/>
-           <Button appearance='transparent' className={activeBtn === 'right' ? classes.activeBtn : ''} icon={<ArrowExport24Filled />} onClick={()=>handleChangeArrow('right')}/>
+          <div className="flex">
+            <Button
+              appearance="transparent"
+              className={activeBtn === 'left' ? classes.activeBtn : ''}
+              icon={<ArrowExportRtl24Filled />}
+              onClick={() => handleChangeArrow('left')}
+            />
+            <Button
+              appearance="transparent"
+              className={activeBtn === 'right' ? classes.activeBtn : ''}
+              icon={<ArrowExport24Filled />}
+              onClick={() => handleChangeArrow('right')}
+            />
           </div>
         </div>
       </div>
