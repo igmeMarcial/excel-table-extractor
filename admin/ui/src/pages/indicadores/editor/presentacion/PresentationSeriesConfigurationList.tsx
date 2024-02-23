@@ -80,7 +80,7 @@ const PresentationSeriesConfigurationList: React.FC<
         <div
           className="flex
           content-center items-center
-          gap-3
+          gap-1
         "
         >
           <Button
@@ -90,7 +90,7 @@ const PresentationSeriesConfigurationList: React.FC<
           />
 
           <ColorPicker defaultValue={color} size="small" />
-          <p className="text-xs max-w-full md:max-w-48">{nombre}</p>
+          <p className=" block text-xs max-w-full m-y-auto  min-w-16 ">{nombre}</p>
         </div>
 
         <div className="flex gap-2">

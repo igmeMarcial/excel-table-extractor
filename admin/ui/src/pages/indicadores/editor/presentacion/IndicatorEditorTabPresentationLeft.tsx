@@ -3,19 +3,14 @@ import TipoGraficoSelect from './TipoGraficoSelect';
 import PresentationSeriesStacked from './PresentationSeriesStacked';
 import PresentationSeriesConfiguration from './PresentationSeriesConfiguration';
 
-interface IndicatorEditorTabPresentationLeftProps {
-  tableData: any;
-  onTypeGraph: any;
-}
 
-const IndicatorEditorTabPresentationLeft: React.FC<
-  IndicatorEditorTabPresentationLeftProps
-> = ({ tableData }) => {
+
+const IndicatorEditorTabPresentationLeft: React.FC = () => {
   return (
-    <div className="border border-red-600">
+    <div className='w-2/5'>
       <TipoGraficoSelect />
       <PresentationSeriesStacked />
-      <PresentationSeriesConfiguration tableData={tableData} />
+      <PresentationSeriesConfiguration/>
     </div>
   );
 };

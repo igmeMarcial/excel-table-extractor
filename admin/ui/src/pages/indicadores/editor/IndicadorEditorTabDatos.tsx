@@ -27,13 +27,13 @@ const IndicadorEditorTabDatos: React.FC = () => {
         const newHeight = divRef.current.scrollHeight;
         if (newHeight !== containerHeight) {
           setContainerHeight(newHeight);
-          console.log(newHeight)
+          // console.log(newHeight)
         }
       }
     };
 
     updateContainerHeight(); // Llama a la función una vez al principio
-    console.log(updateContainerHeight())
+    // console.log(updateContainerHeight())
     // Escucha los cambios en el valor 'values' y actualiza la altura de la div
     const handleResize = () => {
       updateContainerHeight();
@@ -61,7 +61,7 @@ const IndicadorEditorTabDatos: React.FC = () => {
     };
     setValues(updatedValues);
   };
- console.log(containerHeight)
+//  console.log(containerHeight)
   return (
     <div className="overflow-auto" style={{ height: '380px' }}>
       <form>

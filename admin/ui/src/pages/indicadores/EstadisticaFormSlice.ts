@@ -5,6 +5,7 @@ import { DEFAULT_ESTADISTICA_PUBLISH_SETTINGS } from '../../config/estadistica-p
 import { ConfigGrafico } from '../../types/ConfigGrafico';
 import { ConfigPubEstadistica } from '../../types/ConfigPubEstadistica';
 import { TipoGrafico } from '../../types/TipoGrafico';
+import { TablaDatos } from '../../types/TablaDatos';
 
 
 // Tab ficha
@@ -16,20 +17,14 @@ interface EstadisticaFields {
 }
 
 // Tab datos
-interface EstadisticaDataFields {
-  datos?: any[];
-  nombre?: string;
-  nota?: string;
-  fuente?: string;
-  elaboracion?: string;
-}
+
 interface EstadisticaFormState {
   // Indicar si hay cambios en el formulario
   hasChanges: boolean;
   isCreationMode: boolean;
   titulo: string;
   estadisticaFields: EstadisticaFields;
-  estadisticaDataFields: EstadisticaDataFields;
+  estadisticaDataFields: TablaDatos;
   activeTab: string;
   configPubEstadistica: ConfigPubEstadistica;
 }
@@ -61,13 +56,15 @@ export const estadisticaFormSlice = createSlice({
     },
     changeToUpdatingMode: (state) => {
       state.isCreationMode = false;
+      
     },
     setEstadisticaFields: (state, action: PayloadAction<EstadisticaFields>) => {
       state.estadisticaFields = action.payload;
       state.hasChanges = true;
       state.titulo = action.payload.nombre || '';
+
     },
-    setEstadisticaDataFields: (state, action: PayloadAction<EstadisticaDataFields>) => {
+    setEstadisticaDataFields: (state, action: PayloadAction<TablaDatos>) => {
       state.estadisticaDataFields = action.payload;
       state.hasChanges = true;
     },
@@ -127,6 +124,7 @@ export const selectEstadisticaFields = (state: RootState) => state.estadisticaFo
 export const selectEstadisticaDataFields = (state: RootState) => state.estadisticaForm.estadisticaDataFields;
 export const selectIsCreationMode = (state: RootState) => state.estadisticaForm.isCreationMode;
 export const selectActiveTab = (state: RootState) => state.estadisticaForm.activeTab;
+export const selectEstadisticaData = (state:RootState)=>state.estadisticaForm.estadisticaDataFields.datos
 
 
 export const selectConfigGrafico = (index: number) => (state: RootState) => {

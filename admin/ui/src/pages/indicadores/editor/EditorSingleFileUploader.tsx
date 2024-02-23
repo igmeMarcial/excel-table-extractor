@@ -30,6 +30,7 @@ const EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> = ({
   const extractDataExcelService = new ExtractDataExcelService();
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files![0];
+    console.log(typeof(selectedFile))
     try {
       const workbook = await extractDataExcelService.readExcelFile(
         selectedFile

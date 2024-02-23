@@ -7,7 +7,7 @@ import {
 } from '@fluentui/react-icons';
 import { Link, useLocation } from 'react-router-dom';
 import { builNavPathUrl } from '../../utils/url-utils';
-import IndicadorModal from './IndicadorModal';
+import IndicadorModalImport from './IndicadorModalImport';
 
 function IndicadoresPageToolbar() {
   const location = useLocation();
@@ -28,7 +28,7 @@ function IndicadoresPageToolbar() {
           Registrar
         </Button>
       </Link>
-      <IndicadorModal />
+      <IndicadorModalImport />
       <Button appearance="subtle" icon={<MoreVertical24Filled />}></Button>
     </div>
   );

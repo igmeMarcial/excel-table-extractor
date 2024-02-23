@@ -8,6 +8,8 @@ import dayjs from 'dayjs';
 import { builNavPathUrl } from '../../utils/url-utils';
 import RowDeteteButton from '../../components/RowDeleteButton';
 import EstadisticaService from '../../services/EstadisticaService';
+import { useAppDispatch } from '../../app/hooks';
+import { changeToUpdatingMode, setActiveTab } from './EstadisticaFormSlice';
 interface ColDataType {
   key: string;
   name: string;
@@ -19,6 +21,7 @@ const IndicadoresPageList = forwardRef((props, ref) => {
   const [fullData, setFullData] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const dispath = useAppDispatch();
   // Metodo para filtrar la tabla desde el toolbar
   const filterRecords = (text) => {
     const filteredData = fullData.filter((item) => {
@@ -53,11 +56,15 @@ const IndicadoresPageList = forwardRef((props, ref) => {
     return dayjs(value).format('DD/MM/YYYY hh:mm A');
   };
 
+  const onClickLink = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    dispath(setActiveTab('1'));
+    // dispath(changeToUpdatingMode())
+  };
   const renderActions = (_, record) => {
     const newUrl = builNavPathUrl(location, 'indicador-editor', record.id);
     return (
       <div className="flex">
-        <Link to={newUrl}>
+        <Link to={newUrl} onClick={onClickLink}>
           <Tooltip title="Ir al indicador">
             <Button appearance="subtle" icon={<OpenRegular />} />
           </Tooltip>
@@ -120,18 +127,16 @@ const IndicadoresPageList = forwardRef((props, ref) => {
     },
   ];
   return (
-    <>
-      <Table
-        className="mx-10"
-        dataSource={data}
-        columns={columns}
-        loading={loading}
-        size="small"
-        bordered
-        rowKey={(record) => record.id}
-        scroll={{ y: 380 }}
-      />
-    </>
+    <Table
+      className="mx-10"
+      dataSource={data}
+      columns={columns}
+      loading={loading}
+      size="small"
+      bordered
+      rowKey={(record) => record.id}
+      scroll={{ y: 380 }}
+    />
   );
 });
 

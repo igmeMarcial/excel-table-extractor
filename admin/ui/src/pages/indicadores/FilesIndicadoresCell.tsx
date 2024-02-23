@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Table } from 'antd';
 
 const columns = [
@@ -7,8 +7,11 @@ const columns = [
     dataIndex: 'file',
   },
 ];
+interface FileIndicadoresCellProps {
+  arr: [];
+}
 
-function FilesIndicadoresCell({ arr }) {
+const FilesIndicadoresCell: React.FC<FileIndicadoresCellProps> = ({ arr }) => {
   return (
     <div className=" ">
       <Table
@@ -24,6 +27,6 @@ function FilesIndicadoresCell({ arr }) {
       />
     </div>
   );
-}
+};
 
 export default FilesIndicadoresCell;

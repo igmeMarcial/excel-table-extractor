@@ -29,7 +29,7 @@ const IndicadorEditorTabs: React.FC = () => {
     {
       key: '3',
       label: 'Presentación',
-      children: <IndicadorEditorTabPresentacion tableData={null} />,
+      children: <IndicadorEditorTabPresentacion/>,
     },
   ];
   const onChangeTab = (key) => {

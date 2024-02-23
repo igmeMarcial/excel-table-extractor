@@ -27,7 +27,7 @@ const Grafico = () => {
   };
 
   return (
-    <div className="border border-yellow-200 w-full h-96">
+    <div className="w-3/5">
       <div className="border border-gray-400 w-full h-56 solid bg-gray-100">
         <ReactECharts option={options} />
       </div>
