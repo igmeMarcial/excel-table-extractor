@@ -10,10 +10,11 @@ import { store } from './app/store';
 import esES from 'antd/lib/locale/es_ES';
 import App from './App';
 import './index.css';
+import { AesaInfo } from './types/AesaInfo';
 // Globals
 declare global {
   interface Window {
-    AesaInfo: any;
+    AesaInfo: AesaInfo;
   }
 }
 // Antd Config

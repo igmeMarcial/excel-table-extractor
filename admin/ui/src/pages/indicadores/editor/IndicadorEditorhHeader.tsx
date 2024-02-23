@@ -5,12 +5,10 @@ import {
 } from '@fluentui/react-icons';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import {
-  setHasChanges,
   selectTitulo,
   selectHasChanges,
   selectIsCreationMode,
-  setEstadisticaFields,
-  setEstadisticaDataFields,
+  resetChanges,
 } from '../EstadisticaFormSlice';
 import IndicadorEditorModalImport from './IndicadorEditorModalImport';
 import React, { useRef } from 'react';
@@ -22,12 +20,9 @@ const IndicadorEditorhHeader: React.FC = () => {
   const hasChanges = useAppSelector(selectHasChanges);
   const isCreationMode = useAppSelector(selectIsCreationMode);
 
-  const handleDescartarCambios =()=>{
-
-    dispath(setEstadisticaFields({ nombre: '' }))
-    dispath(setEstadisticaDataFields({ data: [], nombre: '', nota: '', fuente: '', elaboracion: '' }))
-     dispath(setHasChanges(false))
-  }
+  const handleDescartarCambios = () => {
+    dispath(resetChanges());
+  };
   return (
     <>
       <div className="bg-custom-grey flex px-12 pt-3 pb-3 gap-2 items-center">

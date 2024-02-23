@@ -1,5 +1,3 @@
-import React from 'react';
-
 import IndicadoresPage from './pages/indicadores/IndicadoresPage';
 import AnuariosPage from './pages/anuarios/AnuariosPage';
 import ParamRoutes from './ParamRoutes';

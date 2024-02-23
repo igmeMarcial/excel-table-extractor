@@ -1,7 +1,7 @@
 import { Location } from 'react-router-dom';
 
 
-export const builNavPathUrl = (location: Location<any>, view, resourceId?: number | string) => {
+export const builNavPathUrl = (location: Location<any>, view: string, resourceId?: number | string) => {
   const queryParams = new URLSearchParams(location.search);
   queryParams.set('view', view);
   if (resourceId) {

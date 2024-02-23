@@ -13,11 +13,10 @@ const fieldsArray = DATOS_FIELDS_DEF;
 const IndicadorEditorTabDatos: React.FC = () => {
   const dispath = useAppDispatch();
   const values = useAppSelector(selectEstadisticaDataFields);
-
+  console.log('Store Values: ', values);
   const [containerHeight, setContainerHeight] = useState<number | null>(null);
   const divRef = useRef<HTMLDivElement>(null);
 
- 
   // Actualizando el tamaño de div de la tabla
   useEffect(() => {
     // Función para obtener la altura de la div
@@ -61,7 +60,7 @@ const IndicadorEditorTabDatos: React.FC = () => {
     };
     setValues(updatedValues);
   };
-//  console.log(containerHeight)
+  //  console.log(containerHeight)
   return (
     <div className="overflow-auto" style={{ height: '380px' }}>
       <form>

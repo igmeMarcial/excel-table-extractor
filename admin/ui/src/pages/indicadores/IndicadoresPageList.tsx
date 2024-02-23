@@ -9,7 +9,7 @@ import { builNavPathUrl } from '../../utils/url-utils';
 import RowDeteteButton from '../../components/RowDeleteButton';
 import EstadisticaService from '../../services/EstadisticaService';
 import { useAppDispatch } from '../../app/hooks';
-import { changeToUpdatingMode, setActiveTab } from './EstadisticaFormSlice';
+import { setActiveTab } from './EstadisticaFormSlice';
 interface ColDataType {
   key: string;
   name: string;
@@ -58,7 +58,6 @@ const IndicadoresPageList = forwardRef((props, ref) => {
 
   const onClickLink = (e: React.MouseEvent<HTMLAnchorElement>) => {
     dispath(setActiveTab('1'));
-    // dispath(changeToUpdatingMode())
   };
   const renderActions = (_, record) => {
     const newUrl = builNavPathUrl(location, 'indicador-editor', record.id);

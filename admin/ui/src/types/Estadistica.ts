@@ -1,14 +1,15 @@
+import { ConfigPubEstadistica } from './ConfigPubEstadistica';
 import { TablaDatos } from './TablaDatos';
 
 export interface EstadisticaBaseFields {
   id?: number;
   componenteId?: number;
   subcomponenteId?: number;
-  temaEstadisticoId?:number;
+  temaEstadisticoId?: number;
 }
 export interface FichaTecnicaFields {
   nombre?: string;
-  finalidad?:string;
+  finalidad?: string;
   descripcionDefinicion?: string;
   unidadDeMedida?: string;
   formulaCalculo?: string;
@@ -30,6 +31,7 @@ export interface FichaTecnicaFields {
 
 export interface Estadistica
   extends EstadisticaBaseFields,
-    FichaTecnicaFields {
-  tablaDatos: TablaDatos;
+  FichaTecnicaFields {
+  tablaDatos?: TablaDatos;
+  configPublicacion?: ConfigPubEstadistica;
 }

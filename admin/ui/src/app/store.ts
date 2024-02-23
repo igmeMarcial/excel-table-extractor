@@ -1,14 +1,7 @@
-import { configureStore, ConfigureStoreOptions, isFulfilled, isPending, isRejected, isAnyOf, isAllOf } from '@reduxjs/toolkit'
+import { configureStore, ConfigureStoreOptions } from '@reduxjs/toolkit'
 import { api } from './services/api'
 import appReducer from './AppSlice'
 import estadisticaFormReducer from '../pages/indicadores/EstadisticaFormSlice'
-
-const logger = store => next => action => {
-  //console.log('dispatching', action)
-  let result = next(action)
-  //console.log('next state', store.getState())
-  return result
-}
 
 export const createStore = (
   options?: ConfigureStoreOptions['preloadedState'] | undefined,
@@ -20,7 +13,7 @@ export const createStore = (
       app: appReducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(api.middleware, logger),
+      getDefaultMiddleware().concat(api.middleware),
     ...options,
   })
 

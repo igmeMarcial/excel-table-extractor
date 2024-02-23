@@ -2,11 +2,9 @@ import { Button } from 'antd';
 
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import {
-  setHasChanges,
   selectHasChanges,
   selectIsCreationMode,
-  selectEstadisticaFields,
-  selectEstadisticaDataFields,
+  commitChanges,
 } from '../EstadisticaFormSlice';
 import { Link, useLocation } from 'react-router-dom';
 import { builNavPathUrl } from '../../../utils/url-utils';
@@ -16,28 +14,12 @@ function IndicadorEditorBottomActions() {
   const dispath = useAppDispatch();
   const hasChanges = useAppSelector(selectHasChanges);
   const isCreationMode = useAppSelector(selectIsCreationMode);
-  const valuesData = useAppSelector(selectEstadisticaDataFields);
-  const valuesEstadisticas = useAppSelector(selectEstadisticaFields);
   const handleClick = () => {
-    if (valuesData) {
-      // Verificar si alguna propiedad de valuesData es distinta de "" o null
-      const hasData = Object.values(valuesData).some(
-        (value) => value !== '' && value !== null
-      );
-      if (hasData) {
-        console.log(valuesData);
-      }
-    }
-    if (valuesEstadisticas) {
-      // Verificar si alguna propiedad de valuesEstadisticas es distinta de "" o null
-      const hasData = Object.values(valuesEstadisticas).some(
-        (value) => value !== '' && value !== null
-      );
-      if (hasData) {
-        console.log(valuesEstadisticas);
-      }
-
-      dispath(setHasChanges(false));
+    // TODO implementar llamado a la API
+    if (hasChanges) {
+      dispath(commitChanges());
+    } else {
+      alert('No hay cambios para guardar');
     }
   };
   return (

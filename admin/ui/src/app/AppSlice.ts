@@ -13,7 +13,7 @@ const initialState: AppState = {
 };
 
 export const appSlice = createSlice({
-  name: 'estadisticaForm',
+  name: 'appSlice',
   initialState,
   reducers: {
     setActiveNetworkActivity: (state, action: PayloadAction<boolean>) => {
