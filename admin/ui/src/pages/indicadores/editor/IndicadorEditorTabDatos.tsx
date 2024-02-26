@@ -61,6 +61,7 @@ const IndicadorEditorTabDatos: React.FC = () => {
     setValues(updatedValues);
   };
   //  console.log(containerHeight)
+  console.log(values)
   return (
     <div className="overflow-auto" style={{ height: '380px' }}>
       <form>

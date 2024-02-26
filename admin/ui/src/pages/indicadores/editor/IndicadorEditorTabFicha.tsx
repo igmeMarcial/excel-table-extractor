@@ -97,7 +97,6 @@ const IndicadorEditorTabFicha: React.FC = () => {
     dispath(setEstadisticaFields(values));
   };
 
-  console.log(values)
   //Lamada de apis
   const { data: listaCoponentes } = useFetch(urls.componenteUrl);
   const { data: listaSubcomponentes } = useFetch(urls.subComponentesUrl);

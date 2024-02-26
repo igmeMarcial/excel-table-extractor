@@ -54,12 +54,10 @@ const EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> = ({
       if (option1) {
         const dataIndicator = extractDataExcelService.getEstadisticaFieldsFichaTecnica(workbookFile,1)
         onIndicatorData(dataIndicator)
-       console.log(dataIndicator)
       }
       if (option2) {
         const dataTable = extractDataExcelService.extractDataFromFile(workbookFile,0);
         onTableData(dataTable);
-        console.log(dataTable)
       }
     }
   }, [option1, option2]);

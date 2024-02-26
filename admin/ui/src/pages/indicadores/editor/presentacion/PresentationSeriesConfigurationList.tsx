@@ -15,8 +15,12 @@ import {
   ChevronDown24Filled,
   ArrowExportRtl24Filled,
   ArrowExport24Filled,
-  DataLine24Regular,
   EyeOff24Regular,
+   DataBarVertical24Regular,
+  DataBarHorizontal24Regular,
+  DataLine24Regular,
+  DataArea24Regular,
+  DataPie24Regular,
 } from '@fluentui/react-icons';
 import { ColorPicker } from 'antd';
 
@@ -65,10 +69,11 @@ const PresentationSeriesConfigurationList: React.FC<
   };
 
   const menuItems = [
-    { icon: <DataLine24Regular />, id: 'icon1' },
-    { icon: <ChevronDown24Filled />, id: 'icon2' },
-    { icon: <ArrowExportRtl24Filled />, id: 'icon3' },
-    { icon: <ArrowExport24Filled />, id: 'icon4' },
+    { icon: <DataBarVertical24Regular/>, id: 'icon1' },
+    { icon: <DataBarHorizontal24Regular />, id: 'icon2' },
+    { icon: <DataLine24Regular />, id: 'icon3' },
+    { icon: <DataArea24Regular/>, id: 'icon4' },
+    { icon: <DataPie24Regular/>, id: 'icon5' },
   ];
 
   return (

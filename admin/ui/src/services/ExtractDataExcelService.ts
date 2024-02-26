@@ -66,7 +66,7 @@ class ExtractDataExcelService {
         sheet,
         'Elaboración:'
       );
-      console.log(contentCellTitle)
+      // console.log(contentCellTitle)
       const transformedSheetData: TablaDatos = {
         nombre: contentCellTitle
           ? contentCellTitle.separatedContent ||

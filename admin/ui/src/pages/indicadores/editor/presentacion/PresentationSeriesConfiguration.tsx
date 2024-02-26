@@ -3,11 +3,12 @@ import PresentationSeriesConfigurationList from './PresentationSeriesConfigurati
 import { getChartColors } from '../../../../utils/colors';
 import chroma from 'chroma-js';
 import { useAppSelector } from '../../../../app/hooks';
-import { selectEstadisticaData } from '../../EstadisticaFormSlice';
+import { selectEstadisticaData, selectEstadisticaDataFields } from '../../EstadisticaFormSlice';
 
 const PresentationSeriesConfiguration: React.FC = () => {
   const [colors, setColors] = useState(getChartColors);
-  const data = useAppSelector(selectEstadisticaData);
+  // const data = useAppSelector(selectEstadisticaData);
+  const data = useAppSelector(selectEstadisticaDataFields).datos;//Test
 
   let number = 1;
   const getColor = (index: number, colors: string[]) => {

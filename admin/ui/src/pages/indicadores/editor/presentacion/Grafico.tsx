@@ -1,9 +1,11 @@
 import ReactECharts from 'echarts-for-react';
 import { useAppSelector } from '../../../../app/hooks';
-import { selectConfigGrafico } from '../../EstadisticaFormSlice';
+import { selectConfigGrafico, selectEstadisticaDataFields, selectTitulo } from '../../EstadisticaFormSlice';
 
 const Grafico = () => {
   const configGrafico = useAppSelector(selectConfigGrafico(0));
+  const nombreIndicador = useAppSelector(selectEstadisticaDataFields)
+  const indicador = useAppSelector(selectTitulo)
   console.log(configGrafico);
   const options = {
     grid: { top: 8, right: 8, bottom: 24, left: 36 },
@@ -28,6 +30,7 @@ const Grafico = () => {
 
   return (
     <div className="w-3/5">
+      <p>{nombreIndicador ? nombreIndicador.nombre : indicador}</p>
       <div className="border border-gray-400 w-full h-56 solid bg-gray-100">
         <ReactECharts option={options} />
       </div>

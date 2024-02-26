@@ -49,6 +49,10 @@ export const estadisticaFormSlice = createSlice({
     setActiveTab: (state, action: PayloadAction<string>) => {
       state.activeTab = action.payload
     },
+    setNavTab:(state)=>{
+      state.hasChanges = false;
+      state.estadisticaRawModel = { ...state.estadisticaModel };
+    },
     // Gráficos
     // Actualizar la configuración de un gráfico
     setConfigGrafico: (state, action: PayloadAction<{ index: number, config: ConfigGrafico }>) => {
@@ -95,6 +99,7 @@ export const {
   setTipoGrafico,
   resetChanges,
   commitChanges,
+  setNavTab,
 } = estadisticaFormSlice.actions;
 
 export const selectHasChanges = (state: RootState) => state.estadisticaForm.hasChanges;
@@ -104,6 +109,8 @@ export const selectEstadisticaDataFields = (state: RootState) => state.estadisti
 export const selectIsCreationMode = (state: RootState) => state.estadisticaForm.isCreationMode;
 export const selectActiveTab = (state: RootState) => state.estadisticaForm.activeTab;
 export const selectEstadisticaData = (state: RootState) => state.estadisticaForm.estadisticaModel.tablaDatos.datos;
+
+
 
 
 export const selectConfigGrafico = (index: number) => (state: RootState) => {
