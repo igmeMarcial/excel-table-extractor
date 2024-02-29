@@ -1,3 +1,4 @@
+import { ConfigGrafico } from "./ConfigGrafico";
 import { Estadistica } from "./Estadistica";
 
 export interface EstadisticaFormState {
@@ -7,5 +8,8 @@ export interface EstadisticaFormState {
   titulo: string;
   estadisticaModel: Estadistica;
   estadisticaRawModel: Estadistica;
+  parametrosPublicacionDefecto: {
+    configGrafico: ConfigGrafico;
+  };
   activeTab: string;
 }

@@ -4,6 +4,7 @@ import { selectConfigGrafico, selectEstadisticaDataFields, selectTitulo } from '
 
 const Grafico = () => {
   const configGrafico = useAppSelector(selectConfigGrafico(0));
+  console.log(configGrafico);
   const nombreIndicador = useAppSelector(selectEstadisticaDataFields)
   const indicador = useAppSelector(selectTitulo)
   console.log(configGrafico);

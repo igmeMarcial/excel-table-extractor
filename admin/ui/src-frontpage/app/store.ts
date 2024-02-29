@@ -1,0 +1,22 @@
+import { configureStore, ConfigureStoreOptions } from '@reduxjs/toolkit'
+import { api } from './services/api'
+import appReducer from './AppSlice'
+
+export const createStore = (
+  options?: ConfigureStoreOptions['preloadedState'] | undefined,
+) =>
+  configureStore({
+    reducer: {
+      [api.reducerPath]: api.reducer,
+      app: appReducer,
+    },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(api.middleware),
+    ...options,
+  })
+
+export const store = createStore()
+
+// Infer the `RootState` and `AppDispatch` types from the store itself
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch

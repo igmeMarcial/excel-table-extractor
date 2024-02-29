@@ -13,7 +13,6 @@ const fieldsArray = DATOS_FIELDS_DEF;
 const IndicadorEditorTabDatos: React.FC = () => {
   const dispath = useAppDispatch();
   const values = useAppSelector(selectEstadisticaDataFields);
-  console.log('Store Values: ', values);
   const [containerHeight, setContainerHeight] = useState<number | null>(null);
   const divRef = useRef<HTMLDivElement>(null);
 
@@ -77,20 +76,20 @@ const IndicadorEditorTabDatos: React.FC = () => {
                     <div
                       style={{
                         scrollbarWidth: 'thin',
-                        border: values?.datos?.length
+                        border: values?.tabla?.length
                           ? 'none'
                           : '1px solid #8C8F94',
-                        height: values?.datos?.length
+                        height: values?.tabla?.length
                           ? `${containerHeight}px`
                           : 'auto',
                       }}
                       className={`rounded-sm relative overflow-x-auto ${
-                        values?.datos?.length ? 'p-0' : 'p-4'
+                        values?.tabla?.length ? 'p-0' : 'p-4'
                       }`}
                       ref={divRef}
                     >
-                      {(values?.datos?.length ?? 0) > 0 ? (
-                        <IndicadorDataGrid data={values.datos} />
+                      {(values?.tabla?.length ?? 0) > 0 ? (
+                        <IndicadorDataGrid data={values.tabla} />
                       ) : (
                         <div>No hay datos</div>
                       )}

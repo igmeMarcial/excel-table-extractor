@@ -2,7 +2,9 @@
 
 namespace Aesa\Rest\Services;
 
+use Aesa\Core\DataParser;
 use Aesa\Db\DbMap;
+use Aesa\Model\Estadistica;
 
 class EstadisticaService
 {
@@ -14,12 +16,25 @@ class EstadisticaService
         $this->wpdb = $wpdb;
         $this->dbMap = $dbMap;
     }
-    public function registrarEstadistica($data)
+    public function registrarEstadistica(Estadistica $model): int
     {
         $currentUserId = get_current_user_id();
-        $data['usuario_reg_id'] = $currentUserId;
-        $data['usuario_mod_id'] = $currentUserId;
-        $this->wpdb->insert($this->dbMap->estadistica, $data);
+        $currentTime = current_time('mysql');
+        $model->setUsuarioRegId($currentUserId);
+        $model->setUsuarioModId($currentUserId);
+        $model->setFechaReg($currentTime);
+        $model->setFechaMod($currentTime);
+        $sucess = $this->wpdb->insert($this->dbMap->estadistica, $model->getDataForDbQuery());
+        if (!$sucess) {
+            throw new \Exception($this->wpdb->last_error);
+        }
+        return $this->wpdb->insert_id;
+    }
+    public function actualizarEstadistica(array $data, int $id)
+    {
+        $model = new Estadistica($data);
+        $model->setId($id);
+        $this->wpdb->update($this->dbMap->estadistica, $model->getDataForDbQuery(), ['estadistica_id' => $id]);
     }
     public function getListaEstadisticas()
     {
@@ -35,7 +50,13 @@ class EstadisticaService
     }
     public function getEstadistica($id)
     {
-        $sql = "SELECT * FROM {$this->dbMap->estadistica} WHERE estadistica_id = $id";
-        return $this->wpdb->get_row($sql);
+        $model = new Estadistica([]);
+        $columns = $model->getSqlColumnNamesString();
+        $sql = "SELECT $columns FROM {$this->dbMap->estadistica} WHERE estadistica_id = $id";
+        $data = $this->wpdb->get_row($sql, ARRAY_A);
+        if (!$data) {
+            throw new \Exception("No se encontró el registro con id $id");
+        }
+        return DataParser::parseQueryResult($data, $model->getFieldsDef());
     }
 }

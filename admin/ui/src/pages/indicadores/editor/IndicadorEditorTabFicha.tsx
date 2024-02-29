@@ -3,12 +3,12 @@ import { Select } from '@fluentui/react-components';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import {
   setEstadisticaFields,
+  setEstadisticaFieldValue,
   selectEstadisticaFields,
 } from '../EstadisticaFormSlice';
 import { useFetch } from '../../../hooks/useFetch';
 import { Input } from 'antd';
 import { ESTADISTICA_FIELDS_DEF } from './EstadisticaFieldsDef';
-
 
 interface Urls {
   componenteUrl: string;
@@ -93,24 +93,24 @@ const WPTextAreaField = ({ fieldName, label, onChange, value, required }) => {
 const IndicadorEditorTabFicha: React.FC = () => {
   const dispath = useAppDispatch();
   const values = useAppSelector(selectEstadisticaFields);
-  const setValues = (values) => {
-    dispath(setEstadisticaFields(values));
-  };
-
   //Lamada de apis
   const { data: listaCoponentes } = useFetch(urls.componenteUrl);
   const { data: listaSubcomponentes } = useFetch(urls.subComponentesUrl);
   const { data: listaTemasEstadisticos } = useFetch(urls.temasEstadisticosUrl);
 
-  const handleChange = (e, fieldKey) => {
+  const handleChange = (e) => {
     const { name: fiendName, value } = e.target;
     const updatedValues = {
       ...values,
       [fiendName]: value,
     };
-    setValues(updatedValues);
+    dispath(setEstadisticaFields(updatedValues));
   };
 
+  const handleSelectChange = (e) => {
+    const { name: fiendName, value } = e.target;
+    dispath(setEstadisticaFieldValue({ field: fiendName, value: +value }));
+  };
   const getSubComponentes = () => {
     return (listaSubcomponentes?.data || []).filter(
       (x) => x.componenteId === values.componenteId
@@ -147,7 +147,7 @@ const IndicadorEditorTabFicha: React.FC = () => {
                       label={fieldDef.label}
                       fieldName={fieldName}
                       options={getSelectFieldOptions(fieldName) || []}
-                      onChange={handleChange}
+                      onChange={handleSelectChange}
                       value={values[fieldName]}
                     />
                   );

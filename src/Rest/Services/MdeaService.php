@@ -20,7 +20,12 @@ class MdeaService
                   mdea_componente_id id,
                   nombre
                 FROM {$this->dbMap->mdeaComponente}";
-        return $this->wpdb->get_results($sql, ARRAY_A);
+        $out = $this->wpdb->get_results($sql, ARRAY_A);
+        $out = array_map(function ($item) {
+            $item['id'] = (int) $item['id'];
+            return $item;
+        }, $out);
+        return $out;
     }
     public function getListaSubcomponentes()
     {
@@ -29,7 +34,13 @@ class MdeaService
                   mdea_componente_id componenteId,
                   nombre
                 FROM {$this->dbMap->mdeaSubcomponente}";
-        return $this->wpdb->get_results($sql, ARRAY_A);
+        $out = $this->wpdb->get_results($sql, ARRAY_A);
+        $out = array_map(function ($item) {
+            $item['id'] = (int) $item['id'];
+            $item['componenteId'] = (int) $item['componenteId'];
+            return $item;
+        }, $out);
+        return $out;
     }
     public function getListaTemasEstadisticos()
     {
@@ -38,6 +49,12 @@ class MdeaService
                   mdea_subcomponente_id subcomponenteId,
                   nombre
                 FROM {$this->dbMap->mdeaTemaEstadistico}";
-        return $this->wpdb->get_results($sql, ARRAY_A);
+        $out = $this->wpdb->get_results($sql, ARRAY_A);
+        $out = array_map(function ($item) {
+            $item['id'] = (int) $item['id'];
+            $item['subcomponenteId'] = (int) $item['subcomponenteId'];
+            return $item;
+        }, $out);
+        return $out;
     }
 }

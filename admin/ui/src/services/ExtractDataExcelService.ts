@@ -1,7 +1,7 @@
 import * as XLSX from 'xlsx';
 import { FICHA_FIELDS_MAP } from '../pages/indicadores/editor/FichaFieldsMap';
-import { Estadistica, FichaTecnicaFields } from '../types/Estadistica';
-import { TablaDatos } from '../types/TablaDatos';
+import { FichaTecnicaFields } from '../types/Estadistica';
+import { EstadisticaDatos } from '../types/EstadisticaDatos';
 
 
 interface Sheet {
@@ -54,7 +54,7 @@ class ExtractDataExcelService {
   extractDataFromFile(
     workbook: XLSX.WorkBook,
     sheetIndex: number
-  ): TablaDatos {
+  ): EstadisticaDatos {
     try {
       const sheetName: string = workbook.SheetNames[sheetIndex];
       const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
@@ -67,7 +67,7 @@ class ExtractDataExcelService {
         'Elaboración:'
       );
       // console.log(contentCellTitle)
-      const transformedSheetData: TablaDatos = {
+      const transformedSheetData: EstadisticaDatos = {
         nombre: contentCellTitle
           ? contentCellTitle.separatedContent ||
             contentCellTitle.description ||
@@ -91,7 +91,7 @@ class ExtractDataExcelService {
             contentCellElaboration.cell?.v ||
             ''
           : '',
-        datos: tableData,
+        tabla: tableData,
       };
       //tranfor Data
       return transformedSheetData;
@@ -248,7 +248,7 @@ class ExtractDataExcelService {
     return null;
   }
 
-  // 
+  //
   extractTableData(sheet: Sheet): DataCell[][] {
     const tableData: any[] = [];
     const range: Range = XLSX.utils.decode_range(sheet['!ref']);
@@ -507,7 +507,7 @@ class ExtractDataExcelService {
          console.log(error);
         throw error;
       }
-    
+
   }
 }
 

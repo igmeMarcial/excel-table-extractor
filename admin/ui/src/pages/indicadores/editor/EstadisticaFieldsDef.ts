@@ -1,17 +1,12 @@
-interface FieldsArray {
-  label: string;
-  type: 'select' | 'text' | 'url' | 'email' | 'textarea';
-  required?: boolean;
-}
-type FieldType = 'text' | 'table'; 
-interface Field {
+type FieldType = 'select' | 'text' | 'url' | 'email' | 'textarea' | 'table';
+
+interface FieldConfig {
   label: string;
   type: FieldType;
-  required: boolean;
+  required?: boolean;
 }
 
-
-export const ESTADISTICA_FIELDS_DEF: Record<string, FieldsArray> = {
+export const ESTADISTICA_FIELDS_DEF: Record<string, FieldConfig> = {
   componenteId: {
     label: 'Componente',
     type: 'select',
@@ -32,24 +27,24 @@ export const ESTADISTICA_FIELDS_DEF: Record<string, FieldsArray> = {
     type: 'text',
     required: true,
   },
-  finalidad:{
-     label: 'Finalidad',
-    type: 'text',
+  finalidad: {
+    label: 'Finalidad',
+    type: 'textarea',
     required: true,
   },
-  descripcionDefinicion: {
+  descripcion: {
     label: 'Descripción/Definición',
     type: 'textarea',
     required: true,
   },
-  unidadDeMedida: {
+  unidadMedida: {
     label: 'Unidad de medida',
     type: 'text',
     required: true,
   },
   formulaCalculo: {
     label: 'Fórmula de cálculo',
-    type: 'text',
+    type: 'textarea',
     required: true,
   },
   metodologiaCalculo: {
@@ -74,7 +69,7 @@ export const ESTADISTICA_FIELDS_DEF: Record<string, FieldsArray> = {
     type: 'textarea',
     required: true,
   },
-  periodicidadEntregaRegistro: {
+  periodicidadEntrega: {
     label: 'Periodicidad de entrega/registro',
     type: 'textarea',
     required: true,
@@ -91,17 +86,17 @@ export const ESTADISTICA_FIELDS_DEF: Record<string, FieldsArray> = {
   },
   limitaciones: {
     label: 'Limitaciones',
-    type: 'text',
+    type: 'textarea',
     required: true,
   },
-  relacionObjetivos: {
+  relacionObjetivosNacionales: {
     label: 'Relación con objetivos nacionales',
-    type: 'text',
+    type: 'textarea',
     required: true,
   },
   relacionIniciativasInternacionales: {
     label: 'Relación con iniciativas internacionales',
-    type: 'text',
+    type: 'textarea',
     required: true,
   },
   correoElectronico: {
@@ -121,34 +116,28 @@ export const ESTADISTICA_FIELDS_DEF: Record<string, FieldsArray> = {
   },
 };
 
-export const DATOS_FIELDS_DEF: Record<string, Field> = {
+export const DATOS_FIELDS_DEF: Record<string, FieldConfig> = {
   nombre: {
     label: 'Título',
-    type: 'text', 
+    type: 'text',
     required: true,
-    
   },
-  tablaDatos: {
+  datos: {
     label: 'Tabla de datos',
-    type: 'table', 
+    type: 'table',
     required: true,
-    
   },
   nota: {
     label: 'Nota',
-    type: 'text', 
-    required: false, 
-   
+    type: 'text',
   },
   fuente: {
     label: 'Fuente',
-    type: 'text', 
-    required: false, 
-   
+    type: 'text',
+
   },
   elaboracion: {
     label: 'Elaboración',
-    type: 'text', 
-    required: false,
+    type: 'text',
   }
 };

@@ -1,7 +1,5 @@
+import { Estadistica } from '../../types/Estadistica'
 import { api, ApiResponse } from './api'
-interface Estadistica {
-  id: number
-}
 
 export const estadisticaApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -42,6 +40,14 @@ export const estadisticaApi = api.injectEndpoints({
     }),
   }),
 })
+// Add/Update
+export const useSaveEstadisticaMutation = (creating: boolean) => {
+  if (creating) {
+    return useAddEstadisticaMutation()
+  } else {
+    return useUpdateEstadisticaMutation()
+  }
+}
 export const {
   useAddEstadisticaMutation,
   useDeleteEstadisticaMutation,
@@ -50,5 +56,5 @@ export const {
 } = estadisticaApi
 
 export const {
-  endpoints: { getEstadistica },
+  endpoints: { getEstadistica, addEstadistica, updateEstadistica, deleteEstadistica },
 } = estadisticaApi

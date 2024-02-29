@@ -19,7 +19,9 @@ const IndicadorEditorhHeader: React.FC = () => {
   const titulo = useAppSelector(selectTitulo);
   const hasChanges = useAppSelector(selectHasChanges);
   const isCreationMode = useAppSelector(selectIsCreationMode);
-
+  const importButtonTitle =
+    (isCreationMode ? 'Importar' : 'Actualizar') + ' desde ficha técnica';
+  const importModalTitle = importButtonTitle;
   const handleDescartarCambios = () => {
     dispath(resetChanges());
   };
@@ -35,9 +37,12 @@ const IndicadorEditorhHeader: React.FC = () => {
             importDialogRef.current.open();
           }}
         >
-          {isCreationMode ? 'Importar' : 'Actualizar'} desde ficha técnica
+          {importButtonTitle}
         </Button>
-        <IndicadorEditorModalImport ref={importDialogRef} />
+        <IndicadorEditorModalImport
+          ref={importDialogRef}
+          title={importModalTitle}
+        />
         <Button
           type="text"
           //style={{ color: '#2271B1' }}

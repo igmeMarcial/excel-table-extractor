@@ -1,5 +1,5 @@
 import { ConfigPubEstadistica } from './ConfigPubEstadistica';
-import { TablaDatos } from './TablaDatos';
+import { EstadisticaDatos } from './EstadisticaDatos';
 
 export interface EstadisticaBaseFields {
   id?: number;
@@ -10,19 +10,19 @@ export interface EstadisticaBaseFields {
 export interface FichaTecnicaFields {
   nombre?: string;
   finalidad?: string;
-  descripcionDefinicion?: string;
-  unidadDeMedida?: string;
+  descripcion?: string;
+  unidadMedida?: string;
   formulaCalculo?: string;
   metodologiaCalculo?: string;
   fuente?: string;
   unidadOrganicaGeneradora?: string;
   url?: string;
   periodicidadGeneracion?: string;
-  periodicidadEntregaRegistro?: string;
+  periodicidadEntrega?: string;
   periodoSerieTiempo?: string;
   ambitoGeografico?: string;
   limitaciones?: string;
-  relacionObjetivos?: string;
+  relacionObjetivosNacionales?: string;
   relacionIniciativasInternacionales?: string;
   correoElectronico?: string;
   datosContacto?: string;
@@ -32,6 +32,6 @@ export interface FichaTecnicaFields {
 export interface Estadistica
   extends EstadisticaBaseFields,
   FichaTecnicaFields {
-  tablaDatos?: TablaDatos;
-  configPublicacion?: ConfigPubEstadistica;
+  datos?: EstadisticaDatos;
+  parametrosPublicacion?: any;
 }

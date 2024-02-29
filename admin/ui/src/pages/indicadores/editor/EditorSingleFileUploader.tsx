@@ -13,7 +13,7 @@ interface EditorSingleFileUploaderProps {
   setOption2: any;
   setFiles: any;
 }
-const EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> = ({
+const EditorSingleFileUploader = ({
   uploadFile,
   setUploadFile,
   onTableData,
@@ -23,14 +23,13 @@ const EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> = ({
   option2,
   setOption2,
   setFiles,
-}) => {
+}: EditorSingleFileUploaderProps) => {
   const [workbookFile, setWorkBookFile] = useState<WorkBook>(null);
   const [title, setTitle] = useState<string>('');
 
   const extractDataExcelService = new ExtractDataExcelService();
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files![0];
-    console.log(typeof(selectedFile))
     try {
       const workbook = await extractDataExcelService.readExcelFile(
         selectedFile
@@ -52,11 +51,18 @@ const EditorSingleFileUploader: React.FC<EditorSingleFileUploaderProps> = ({
     setFiles(option1 || option2);
     if (workbookFile) {
       if (option1) {
-        const dataIndicator = extractDataExcelService.getEstadisticaFieldsFichaTecnica(workbookFile,1)
-        onIndicatorData(dataIndicator)
+        const dataIndicator =
+          extractDataExcelService.getEstadisticaFieldsFichaTecnica(
+            workbookFile,
+            1
+          );
+        onIndicatorData(dataIndicator);
       }
       if (option2) {
-        const dataTable = extractDataExcelService.extractDataFromFile(workbookFile,0);
+        const dataTable = extractDataExcelService.extractDataFromFile(
+          workbookFile,
+          0
+        );
         onTableData(dataTable);
       }
     }

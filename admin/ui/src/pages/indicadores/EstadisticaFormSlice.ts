@@ -4,15 +4,15 @@ import type { RootState } from '../../app/store';
 import { DEFAULT_ESTADISTICA_PUBLISH_SETTINGS } from '../../config/estadistica-publish-settings';
 import { ConfigGrafico } from '../../types/ConfigGrafico';
 import { TipoGrafico } from '../../types/TipoGrafico';
-import { TablaDatos } from '../../types/TablaDatos';
+import { EstadisticaDatos } from '../../types/EstadisticaDatos';
 import { Estadistica, FichaTecnicaFields } from '../../types/Estadistica';
 import { EstadisticaFormState } from '../../types/EstadisticarFormState';
 
 // Tab datos
 
 const estadisticaDefaultModel: Estadistica = {
-  configPublicacion: DEFAULT_ESTADISTICA_PUBLISH_SETTINGS,
-  tablaDatos: {}
+  datos: {},
+  parametrosPublicacion: {},
 }
 
 const initialState: EstadisticaFormState = {
@@ -21,6 +21,7 @@ const initialState: EstadisticaFormState = {
   titulo: '',
   estadisticaModel: estadisticaDefaultModel,
   estadisticaRawModel: estadisticaDefaultModel,
+  parametrosPublicacionDefecto: DEFAULT_ESTADISTICA_PUBLISH_SETTINGS,
   activeTab: "1",
 };
 // TODO: Implementar algoritmo para determinar si hay cambios en el formulario
@@ -38,27 +39,37 @@ export const estadisticaFormSlice = createSlice({
       state.hasChanges = false;
     },
     setEstadisticaFields: (state, action: PayloadAction<FichaTecnicaFields>) => {
-      state.estadisticaRawModel = { ...state.estadisticaModel, ...action.payload };
+      state.estadisticaRawModel = { ...state.estadisticaRawModel, ...action.payload };
       state.titulo = action.payload.nombre || '';
       state.hasChanges = true;
     },
-    setEstadisticaDataFields: (state, action: PayloadAction<TablaDatos>) => {
-      state.estadisticaRawModel.tablaDatos = action.payload;
+    setEstadisticaFieldValue: (state, action: PayloadAction<{ field: string, value: any }>) => {
+      state.estadisticaRawModel = {
+        ...state.estadisticaRawModel,
+        [action.payload.field]: action.payload.value
+      }
+      if (action.payload.field === 'nombre') {
+        state.titulo = action.payload.value || '';
+      }
+      state.hasChanges = true;
+    },
+    setEstadisticaDataFields: (state, action: PayloadAction<EstadisticaDatos>) => {
+      state.estadisticaRawModel.datos = action.payload;
       state.hasChanges = true;
     },
     setActiveTab: (state, action: PayloadAction<string>) => {
       state.activeTab = action.payload
     },
-    setNavTab:(state)=>{
+    setNavTab: (state) => {
       state.hasChanges = false;
       state.estadisticaRawModel = { ...state.estadisticaModel };
     },
     // Gráficos
     // Actualizar la configuración de un gráfico
     setConfigGrafico: (state, action: PayloadAction<{ index: number, config: ConfigGrafico }>) => {
-      state.estadisticaRawModel.configPublicacion = {
-        ...state.estadisticaRawModel.configPublicacion,
-        graficos: state.estadisticaRawModel.configPublicacion.graficos.map((chart, index) => {
+      state.estadisticaRawModel.parametrosPublicacion = {
+        ...state.estadisticaRawModel.parametrosPublicacion,
+        graficos: state.estadisticaRawModel.parametrosPublicacion?.graficos.map((chart, index) => {
           if (index === action.payload.index) {
             return action.payload.config;
           }
@@ -68,9 +79,9 @@ export const estadisticaFormSlice = createSlice({
       }
     },
     setTipoGrafico: (state, action: PayloadAction<{ index: number, tipoGrafico: TipoGrafico }>) => {
-      state.estadisticaRawModel.configPublicacion = {
-        ...state.estadisticaRawModel.configPublicacion,
-        graficos: state.estadisticaRawModel.configPublicacion.graficos.map((chart, index) => {
+      state.estadisticaRawModel.parametrosPublicacion = {
+        ...state.estadisticaRawModel.parametrosPublicacion,
+        graficos: state.estadisticaRawModel.parametrosPublicacion?.graficos.map((chart, index) => {
           if (index === action.payload.index) {
             return { ...chart, tipoGrafico: action.payload.tipoGrafico };
           }
@@ -94,6 +105,7 @@ export const estadisticaFormSlice = createSlice({
 export const {
   setEstadisticaFields,
   setEstadisticaDataFields,
+  setEstadisticaFieldValue,
   setActiveTab,
   setConfigGrafico,
   setTipoGrafico,
@@ -105,23 +117,23 @@ export const {
 export const selectHasChanges = (state: RootState) => state.estadisticaForm.hasChanges;
 export const selectTitulo = (state: RootState) => state.estadisticaForm.titulo;
 export const selectEstadisticaFields = (state: RootState) => state.estadisticaForm.estadisticaRawModel;
-export const selectEstadisticaDataFields = (state: RootState) => state.estadisticaForm.estadisticaRawModel.tablaDatos;
+export const selectEstadisticaDataFields = (state: RootState) => state.estadisticaForm.estadisticaRawModel.datos || {};
 export const selectIsCreationMode = (state: RootState) => state.estadisticaForm.isCreationMode;
 export const selectActiveTab = (state: RootState) => state.estadisticaForm.activeTab;
-export const selectEstadisticaData = (state: RootState) => state.estadisticaForm.estadisticaModel.tablaDatos.datos;
-
-
+export const selectEstadisticaData = (state: RootState) => state.estadisticaForm.estadisticaModel.datos?.tabla;
+export const selectPostValues = (state: RootState) => state.estadisticaForm.estadisticaRawModel;
 
 
 export const selectConfigGrafico = (index: number) => (state: RootState) => {
   return {
-    ...state.estadisticaForm.estadisticaRawModel.configPublicacion.defaults.configGrafico,
-    ...state.estadisticaForm.estadisticaRawModel.configPublicacion.graficos[index]
+    ...state.estadisticaForm.parametrosPublicacionDefecto.configGrafico,
+    ...state.estadisticaForm.estadisticaRawModel.parametrosPublicacion?.graficos[index]
   }
 }
 
 export const selectTipoGrafico = (index: number) => (state: RootState) => {
-  return state.estadisticaForm.estadisticaRawModel.configPublicacion.graficos[index].tipoGrafico || state.estadisticaForm.estadisticaRawModel.configPublicacion.defaults.configGrafico.tipoGrafico
+  return state.estadisticaForm.estadisticaRawModel.parametrosPublicacion?.graficos[index]?.tipoGrafico ||
+    state.estadisticaForm.parametrosPublicacionDefecto.configGrafico.tipoGrafico;
 };
 
 export default estadisticaFormSlice.reducer;

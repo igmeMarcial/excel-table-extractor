@@ -8,7 +8,7 @@ import { selectEstadisticaData, selectEstadisticaDataFields } from '../../Estadi
 const PresentationSeriesConfiguration: React.FC = () => {
   const [colors, setColors] = useState(getChartColors);
   // const data = useAppSelector(selectEstadisticaData);
-  const data = useAppSelector(selectEstadisticaDataFields).datos;//Test
+  const data = useAppSelector(selectEstadisticaDataFields).tabla;//Test
 
   let number = 1;
   const getColor = (index: number, colors: string[]) => {
