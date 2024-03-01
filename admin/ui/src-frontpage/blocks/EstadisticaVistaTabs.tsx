@@ -14,6 +14,8 @@ import { getPathResourceId } from '../../src/utils/url-utils';
 import { useGetEstadisticaQuery } from '../app/services/estadistica';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectActiveTabName, setActiveTabName } from '../app/AppSlice';
+import Title from '../components/Title';
+import SubNavbar from '../components/SubNavbar';
 
 const items = [
   { text: 'Gráfico', value: 'grafico' },
@@ -27,13 +29,18 @@ export default function EstadisticaVistaTabs() {
 
   const location = useLocation();
   const resourceId = getPathResourceId(location);
+   console.log(resourceId)
   // Get data from the API
   if (resourceId) useGetEstadisticaQuery(+resourceId);
+ 
 
   const onTabSelect = (event: SelectTabEvent, data: SelectTabData) => {
     distpath(setActiveTabName(String(data.value)));
   };
   return (
+    <>
+    <Title/>
+    <SubNavbar/>
     <div>
       <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
         {items.map((item) => {
@@ -50,5 +57,6 @@ export default function EstadisticaVistaTabs() {
         {selectedValue === 'ficha' && <FichaTecnica />}
       </div>
     </div>
+    </>
   );
 }

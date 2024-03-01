@@ -106,6 +106,8 @@ function FichaTecnica() {
     return <span dangerouslySetInnerHTML={{ __html: clickableValue }} />;
   }
   const classes = useStyles();
+
+  
   return (
     <div className="overflow-auto w-full ">
       <table className={classes.dataGrid}>

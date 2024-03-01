@@ -1,21 +1,31 @@
 import { useAppSelector } from '../app/hooks';
 import { selectEstadisticaDatos } from '../app/AppSlice';
 import TableDataGrid from './TableDataGrid';
+import { Button } from "@fluentui/react-components";
+import * as XLSX from 'xlsx';
 
 
 function TablaDatos() {
   const data = useAppSelector(selectEstadisticaDatos);
-
+const { fuente, elaboracion, nota, nombre, tabla } = data;
   if (!data?.tabla?.length) {
     return <div>No hay datos disponibles.</div>;
   }
-  console.log(data);
-  const { fuente, elaboracion, nota, nombre } = data;
+  
+ 
+
+  const handleDowload = ()=>{
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.aoa_to_sheet(tabla)
+    XLSX.utils.book_append_sheet(workbook,worksheet,'miFile1')
+    XLSX.writeFile(workbook,'descarga.xlsx')
+   ;
+  }
   return (
     <div>
       <div className="flex justify-around mb-2 items-center">
         {nombre && <h4 className="text-sm font-bold text-center">{nombre}</h4>}
-        <div>
+        {/* <div>
           <a
           href="#"
           className="hover:bg-green-700 cursor-pointer  text-green-800 px-4 py-3 flex justify-center items-center underline"
@@ -27,7 +37,8 @@ function TablaDatos() {
           />
           <span className="ml-1">Descargar</span>
         </a>
-        </div>
+        </div> */}
+        <Button onClick={handleDowload}>Descargar</Button>
       </div>
       <div
         className="overflow-auto w-ful relative"
