@@ -32,7 +32,7 @@ export default function EstadisticaVistaTabs() {
    console.log(resourceId)
   // Get data from the API
   if (resourceId) useGetEstadisticaQuery(+resourceId);
- 
+
 
   const onTabSelect = (event: SelectTabEvent, data: SelectTabData) => {
     distpath(setActiveTabName(String(data.value)));

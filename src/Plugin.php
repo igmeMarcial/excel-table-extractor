@@ -15,6 +15,7 @@ class Plugin
     private \DI\Container $container;
     private Menu $menu;
     private AdminPage $adminPage;
+    private PublicPage $publicPagePage;
     private Routes $apiRoutes;
 
     private Installer $installer;
@@ -25,6 +26,7 @@ class Plugin
         $this->installer = $this->container->get(Installer::class);
         $this->menu =      $this->container->get(Menu::class);
         $this->adminPage = $this->container->get(AdminPage::class);
+        $this->publicPagePage = $this->container->get(PublicPage::class);
         $this->apiRoutes = $this->container->get(Routes::class);
     }
     private function setupContainer()
@@ -55,6 +57,7 @@ class Plugin
         $this->installer->init();
         $this->menu->init();
         $this->adminPage->init();
+        $this->publicPagePage->init();
         $this->apiRoutes->init();
         self::$initialized = true;
     }
