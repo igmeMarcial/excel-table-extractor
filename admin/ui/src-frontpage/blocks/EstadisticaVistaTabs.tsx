@@ -9,6 +9,11 @@ import { useState } from 'react';
 import FichaTecnica from '../components/FichaTecnica';
 import Grafico from '../components/Grafico';
 import TablaDatos from '../components/TablaDatos';
+import { useLocation } from 'react-router-dom';
+import { getPathResourceId } from '../../src/utils/url-utils';
+import { useGetEstadisticaQuery } from '../app/services/estadistica';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { selectActiveTabName, setActiveTabName } from '../app/AppSlice';
 
 const items = [
   { text: 'Gráfico', value: 'grafico' },
@@ -17,10 +22,16 @@ const items = [
 ];
 
 export default function EstadisticaVistaTabs() {
-  const [selectedValue, setSelectedValue] = useState<TabValue>('grafico');
+  const selectedValue = useAppSelector(selectActiveTabName);
+  const distpath = useAppDispatch();
+
+  const location = useLocation();
+  const resourceId = getPathResourceId(location);
+  // Get data from the API
+  if (resourceId) useGetEstadisticaQuery(+resourceId);
 
   const onTabSelect = (event: SelectTabEvent, data: SelectTabData) => {
-    setSelectedValue(data.value);
+    distpath(setActiveTabName(String(data.value)));
   };
   return (
     <div>

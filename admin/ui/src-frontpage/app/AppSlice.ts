@@ -1,15 +1,23 @@
 import { createSlice, PayloadAction, isAnyOf } from '@reduxjs/toolkit'
 import { getEstadistica } from './services/estadistica'
 import type { RootState } from './store'
+import { Estadistica } from '../../src/types/Estadistica'
+import { Root } from 'react-dom/client'
 
 interface AppState {
   activeNetworkActivity: boolean
   currentEstadisticaId?: number
+  idEstadistica?:number
+  activeTabName?:string
+  estadisticaModel:Estadistica
 }
 
 const initialState: AppState = {
   activeNetworkActivity: false,
   currentEstadisticaId: 1,
+  idEstadistica: 0,
+  activeTabName: 'grafico',
+  estadisticaModel: {},
 };
 
 export const appSlice = createSlice({
@@ -21,7 +29,14 @@ export const appSlice = createSlice({
     },
     setCurrentEstadisticaId: (state, action: PayloadAction<number>) => {
       state.currentEstadisticaId = action.payload
+    },
+    setIdEstadistica:(state,action:PayloadAction<number>)=>{
+      state.idEstadistica = action.payload
+    },
+    setActiveTabName:(state, action:PayloadAction<string>)=>{
+      state.activeTabName = action.payload
     }
+
   },
   extraReducers: (builder) => {
     builder.addMatcher(isAnyOf(getEstadistica.matchPending), (state, action) => {
@@ -29,15 +44,24 @@ export const appSlice = createSlice({
     }).addMatcher(isAnyOf(getEstadistica.matchFulfilled, getEstadistica.matchRejected), (state, action) => {
       state.activeNetworkActivity = false
     })
+    builder.addMatcher(getEstadistica.matchFulfilled, (state, action) => {
+      state.estadisticaModel = action.payload
+    })
   }
 })
 
 export const {
   setActiveNetworkActivity,
   setCurrentEstadisticaId,
+  setIdEstadistica,
+  setActiveTabName
 } = appSlice.actions
 
 export const selectActiveNetworkActivity = (state: RootState) => state.app.activeNetworkActivity
 export const selectCurrentEstadisticaId = (state: RootState) => state.app.currentEstadisticaId
+export const selectIdEstadisitico = (state: RootState)=>state.app.idEstadistica
+export const selectActiveTabName = (state: RootState)=>state.app.activeTabName
+export const selectEstadisticaData = (state:RootState)=>state.app.estadisticaModel
+export const selectEstadisticaDatos = (state:RootState)=>state.app.estadisticaModel.datos
 
 export default appSlice.reducer
