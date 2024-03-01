@@ -25,8 +25,8 @@ function Grafico() {
   };
 
   return (
-    <div className="w-3/5">
-      <p>Chart</p>
+    <div className="w-3/5 p-4">
+    
       <div className="border border-gray-400 w-full h-56 solid bg-gray-100">
         <ReactECharts option={options} />
       </div>

@@ -16,6 +16,8 @@ import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectActiveTabName, setActiveTabName } from '../app/AppSlice';
 import Title from '../components/Title';
 import SubNavbar from '../components/SubNavbar';
+import NamePanel from '../components/NamePanel';
+import NabAside from '../components/NabAside';
 
 const items = [
   { text: 'Gráfico', value: 'grafico' },
@@ -28,35 +30,40 @@ export default function EstadisticaVistaTabs() {
   const distpath = useAppDispatch();
 
   const location = useLocation();
-  const resourceId = getPathResourceId(location);
-   console.log(resourceId)
+  const resourceId = getPathResourceId(location) || 1;
+  console.log(resourceId);
   // Get data from the API
   if (resourceId) useGetEstadisticaQuery(+resourceId);
-
 
   const onTabSelect = (event: SelectTabEvent, data: SelectTabData) => {
     distpath(setActiveTabName(String(data.value)));
   };
   return (
     <>
-    <Title/>
-    <SubNavbar/>
-    <div>
-      <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
-        {items.map((item) => {
-          return (
-            <Tab key={item.value} value={item.value}>
-              {item.text}
-            </Tab>
-          );
-        })}
-      </TabList>
-      <div>
-        {selectedValue === 'grafico' && <Grafico />}
-        {selectedValue === 'datos' && <TablaDatos />}
-        {selectedValue === 'ficha' && <FichaTecnica />}
+      <Title />
+      <SubNavbar />
+      <NamePanel />
+      <div className="flex">
+        <div className="w-1/3">
+          <NabAside/>
+        </div>
+        <div className="w-full">
+          <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
+            {items.map((item) => {
+              return (
+                <Tab key={item.value} value={item.value}>
+                  {item.text}
+                </Tab>
+              );
+            })}
+          </TabList>
+          <div>
+            {selectedValue === 'grafico' && <Grafico />}
+            {selectedValue === 'datos' && <TablaDatos />}
+            {selectedValue === 'ficha' && <FichaTecnica />}
+          </div>
+        </div>
       </div>
-    </div>
     </>
   );
 }

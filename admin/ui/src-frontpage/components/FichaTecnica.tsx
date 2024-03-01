@@ -107,6 +107,10 @@ function FichaTecnica() {
   }
   const classes = useStyles();
 
+
+  if (!dataIndicator || dataIndicator === null) {
+    return <div>No hay datos disponibles.</div>;
+  }
   
   return (
     <div className="overflow-auto w-full ">

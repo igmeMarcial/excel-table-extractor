@@ -7,7 +7,7 @@ function SubNavbar() {
     { text: 'ODS', path: 'ods' },
     {
       text: 'Política Nacional del Ambiente',
-      path: 'politicaNacionalAmbiente',
+      path: 'pna',
     },
   ];
 

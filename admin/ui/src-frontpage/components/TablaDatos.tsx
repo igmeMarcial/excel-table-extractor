@@ -1,26 +1,24 @@
 import { useAppSelector } from '../app/hooks';
 import { selectEstadisticaDatos } from '../app/AppSlice';
 import TableDataGrid from './TableDataGrid';
-import { Button } from "@fluentui/react-components";
+import { Button } from '@fluentui/react-components';
 import * as XLSX from 'xlsx';
-
 
 function TablaDatos() {
   const data = useAppSelector(selectEstadisticaDatos);
-const { fuente, elaboracion, nota, nombre, tabla } = data;
+  const { fuente, elaboracion, nota, nombre, tabla } = data || {};
+
+  const handleDowload = () => {
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.aoa_to_sheet(tabla);
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'miFile1');
+    XLSX.writeFile(workbook, 'descarga.xlsx');
+  };
+
   if (!data?.tabla?.length) {
     return <div>No hay datos disponibles.</div>;
   }
-  
- 
 
-  const handleDowload = ()=>{
-    const workbook = XLSX.utils.book_new();
-    const worksheet = XLSX.utils.aoa_to_sheet(tabla)
-    XLSX.utils.book_append_sheet(workbook,worksheet,'miFile1')
-    XLSX.writeFile(workbook,'descarga.xlsx')
-   ;
-  }
   return (
     <div>
       <div className="flex justify-around mb-2 items-center">
