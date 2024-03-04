@@ -9,7 +9,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { builNavPathUrl } from '../../utils/url-utils';
 import IndicadorModalImport from './IndicadorModalImport';
 
-function IndicadoresPageToolbar() {
+function EstadisticasPageToolbar() {
   const location = useLocation();
   return (
     <div className="flex px-10 pt-6 pb-4 gap-2">
@@ -34,4 +34,4 @@ function IndicadoresPageToolbar() {
   );
 }
 
-export default IndicadoresPageToolbar;
+export default EstadisticasPageToolbar;

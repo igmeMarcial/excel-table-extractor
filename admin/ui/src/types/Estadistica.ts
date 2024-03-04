@@ -1,4 +1,5 @@
-import { ConfigPubEstadistica } from './ConfigPubEstadistica';
+import { Grafico } from './Grafico';
+import { DatosInformacion } from './DatosInformacion';
 import { EstadisticaDatos } from './EstadisticaDatos';
 
 export interface EstadisticaBaseFields {
@@ -33,5 +34,7 @@ export interface Estadistica
   extends EstadisticaBaseFields,
   FichaTecnicaFields {
   datos?: EstadisticaDatos;
+  datosInformacion?: DatosInformacion;
   parametrosPublicacion?: any;
+  graficos?: Grafico[];
 }

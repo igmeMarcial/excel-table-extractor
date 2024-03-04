@@ -12,11 +12,10 @@ import {
 } from '@fluentui/react-components';
 import {
   Eye24Regular,
-  ChevronDown24Filled,
   ArrowExportRtl24Filled,
   ArrowExport24Filled,
   EyeOff24Regular,
-   DataBarVertical24Regular,
+  DataBarVertical24Regular,
   DataBarHorizontal24Regular,
   DataLine24Regular,
   DataArea24Regular,
@@ -41,9 +40,11 @@ const useStyles = makeStyles({
   },
 });
 
-const PresentationSeriesConfigurationList: React.FC<
-  PresentationSeriesConfigurationListProps
-> = ({ color, nombre, number }) => {
+const PresentationSeriesConfigurationList = ({
+  color,
+  nombre,
+  number,
+}: PresentationSeriesConfigurationListProps) => {
   const [activeBtn, setActiveBtn] = useState<string>('left');
   const [iconVisible, setIconVisible] = useState<boolean>(true);
   const [selectedIcon, setSelectedIcon] = useState<React.ReactElement>(
@@ -69,11 +70,11 @@ const PresentationSeriesConfigurationList: React.FC<
   };
 
   const menuItems = [
-    { icon: <DataBarVertical24Regular/>, id: 'icon1' },
+    { icon: <DataBarVertical24Regular />, id: 'icon1' },
     { icon: <DataBarHorizontal24Regular />, id: 'icon2' },
     { icon: <DataLine24Regular />, id: 'icon3' },
-    { icon: <DataArea24Regular/>, id: 'icon4' },
-    { icon: <DataPie24Regular/>, id: 'icon5' },
+    { icon: <DataArea24Regular />, id: 'icon4' },
+    { icon: <DataPie24Regular />, id: 'icon5' },
   ];
 
   return (
@@ -95,7 +96,9 @@ const PresentationSeriesConfigurationList: React.FC<
           />
 
           <ColorPicker defaultValue={color} size="small" />
-          <p className=" block text-xs max-w-full m-y-auto  min-w-16 ">{nombre}</p>
+          <p className=" block text-xs max-w-full m-y-auto  min-w-16 ">
+            {nombre}
+          </p>
         </div>
 
         <div className="flex gap-2">

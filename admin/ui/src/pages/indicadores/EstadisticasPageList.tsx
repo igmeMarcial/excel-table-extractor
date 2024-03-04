@@ -16,7 +16,7 @@ interface ColDataType {
   modified: number;
 }
 
-const IndicadoresPageList = forwardRef((props, ref) => {
+const EstadisticasPageList = forwardRef((props, ref) => {
   const location = useLocation();
   const [fullData, setFullData] = useState([]);
   const [data, setData] = useState([]);
@@ -139,4 +139,4 @@ const IndicadoresPageList = forwardRef((props, ref) => {
   );
 });
 
-export default IndicadoresPageList;
+export default EstadisticasPageList;

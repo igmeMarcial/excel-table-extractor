@@ -3,7 +3,7 @@ import IndicadorDataGrid from './IndicadorDataGrid';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   selectEstadisticaDataFields,
-  setEstadisticaDataFields,
+  setEstadisticaDatos,
 } from '../EstadisticaFormSlice';
 import { DATOS_FIELDS_DEF } from './EstadisticaFieldsDef';
 import { Input } from 'antd';
@@ -45,7 +45,7 @@ const IndicadorEditorTabDatos: React.FC = () => {
   }, [divRef.current, values]);
 
   const setValues = (values) => {
-    dispath(setEstadisticaDataFields(values));
+    dispath(setEstadisticaDatos(values));
   };
 
   const handleChange = (

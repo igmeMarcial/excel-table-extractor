@@ -4,15 +4,13 @@ import PresentationSeriesStacked from './PresentationSeriesStacked';
 import PresentationSeriesConfiguration from './PresentationSeriesConfiguration';
 import TipoApilamiento from './PresentationTipoApilamiento';
 
-
-
 const IndicatorEditorTabPresentationLeft: React.FC = () => {
   return (
-    <div className='w-2/5'>
-      <TipoGraficoSelect />
+    <div className="w-2/5">
+      <TipoGraficoSelect tipoGrafico="columnas" />
       <PresentationSeriesStacked />
-      <TipoApilamiento/>
-      <PresentationSeriesConfiguration/>
+      <TipoApilamiento />
+      <PresentationSeriesConfiguration />
     </div>
   );
 };

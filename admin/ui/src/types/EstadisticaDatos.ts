@@ -1,5 +1,7 @@
+import { DataCell } from "./DataCell";
+
 export interface EstadisticaDatos {
-  tabla?: any[];
+  tabla?: DataCell[][];
   nombre?: string;
   nota?: string;
   fuente?: string;

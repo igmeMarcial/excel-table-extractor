@@ -1,4 +1,4 @@
-import IndicadoresPage from './pages/indicadores/IndicadoresPage';
+import IndicadoresPage from './pages/indicadores/EstadisticasPage';
 import AnuariosPage from './pages/anuarios/AnuariosPage';
 import ParamRoutes from './ParamRoutes';
 import ParamRoute from './ParamRoute';

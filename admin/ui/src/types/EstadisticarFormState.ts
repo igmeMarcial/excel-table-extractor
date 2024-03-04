@@ -1,5 +1,6 @@
-import { ConfigGrafico } from "./ConfigGrafico";
+import { EChartsReactProps } from "echarts-for-react";
 import { Estadistica } from "./Estadistica";
+import { RecomendacionGrafica } from "./RecomendacionGrafica";
 
 export interface EstadisticaFormState {
   // Indicar si hay cambios en el formulario
@@ -8,8 +9,8 @@ export interface EstadisticaFormState {
   titulo: string;
   estadisticaModel: Estadistica;
   estadisticaRawModel: Estadistica;
-  parametrosPublicacionDefecto: {
-    configGrafico: ConfigGrafico;
-  };
   activeTab: string;
+  echartDefaultProps: EChartsReactProps;
+  recomendacionGrafica?: RecomendacionGrafica;
+  tienePresentacionGraficaPersonalizada?: boolean;
 }

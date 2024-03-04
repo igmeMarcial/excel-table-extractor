@@ -1,5 +1,5 @@
-import { ConfigGrafico } from "./ConfigGrafico";
+import { Grafico } from "./Grafico";
 // Configuración de publicación de estadística
 export interface ConfigPubEstadistica {
-  configGrafico: ConfigGrafico;
+  configGrafico: Grafico;
 }

@@ -4,7 +4,7 @@ import EditorSingleFileUploader from './EditorSingleFileUploader';
 import { useAppDispatch } from '../../../app/hooks';
 import {
   setActiveTab,
-  setEstadisticaDataFields,
+  setEstadisticaDatos,
   setEstadisticaFields,
 } from '../EstadisticaFormSlice';
 type IndicadorEditorModalImportProps = {
@@ -31,12 +31,12 @@ const IndicadorEditorModalImport = forwardRef(
     const handleOk = () => {
       setIsModalOpen(false);
       if (option1 && option2) {
-        dispath(setEstadisticaDataFields(tableData));
+        dispath(setEstadisticaDatos(tableData));
         dispath(setEstadisticaFields(indicadorData));
       } else if (option1) {
         dispath(setEstadisticaFields(indicadorData));
       } else if (option2) {
-        dispath(setEstadisticaDataFields(tableData));
+        dispath(setEstadisticaDatos(tableData));
       }
       setUploadFileLoading(false);
       setOption1(false);

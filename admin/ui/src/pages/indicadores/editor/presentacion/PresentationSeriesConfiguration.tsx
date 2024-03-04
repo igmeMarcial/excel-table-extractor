@@ -3,12 +3,12 @@ import PresentationSeriesConfigurationList from './PresentationSeriesConfigurati
 import { getChartColors } from '../../../../utils/colors';
 import chroma from 'chroma-js';
 import { useAppSelector } from '../../../../app/hooks';
-import { selectEstadisticaData, selectEstadisticaDataFields } from '../../EstadisticaFormSlice';
+import { selectEstadisticaDataFields } from '../../EstadisticaFormSlice';
 
 const PresentationSeriesConfiguration: React.FC = () => {
   const [colors, setColors] = useState(getChartColors);
   // const data = useAppSelector(selectEstadisticaData);
-  const data = useAppSelector(selectEstadisticaDataFields).tabla;//Test
+  const data = useAppSelector(selectEstadisticaDataFields).tabla; //Test
 
   let number = 1;
   const getColor = (index: number, colors: string[]) => {
@@ -23,7 +23,6 @@ const PresentationSeriesConfiguration: React.FC = () => {
   const getNumber = () => {
     return number++; //
   };
-  console.log(data)
 
   return (
     <div>
@@ -35,8 +34,8 @@ const PresentationSeriesConfiguration: React.FC = () => {
               .slice(1)
               .map((item, index) => (
                 <PresentationSeriesConfigurationList
-                  key={item[0]}
-                  nombre={String(item[0])}
+                  key={item[0].value}
+                  nombre={String(item[0].value)}
                   color={getColor(index, colors)}
                   number={getNumber()}
                 />

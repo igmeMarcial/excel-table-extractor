@@ -1,29 +1,29 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Modal, Button } from 'antd';
 import { ArrowImport24Regular } from '@fluentui/react-icons';
 import MultipleFileUploader from './IndicadorMultipleFileUploader';
 
-const IndicadorModalImport:React.FC=()=> {
+const IndicadorModalImport = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [hasFiles, setHasFiles] = useState(false);
-  const [files,setFiles]=useState<[] | null>(null)
+  const [files, setFiles] = useState<[] | null>(null);
 
   const showModal = () => {
     setIsModalOpen(true);
   };
   const handleOk = () => {
-    console.log("Post:")
-    console.log(files)
+    console.log('Post:');
+    console.log(files);
     setIsModalOpen(false);
-    setHasFiles(false)
+    setHasFiles(false);
   };
   const handleCancel = () => {
     setIsModalOpen(false);
-    setHasFiles(false)
+    setHasFiles(false);
   };
- const  handleFiles =(archivos:[])=>{
-  setFiles(archivos)
- }
+  const handleFiles = (archivos: []) => {
+    setFiles(archivos);
+  };
 
   const modalStyles = {
     footer: {
@@ -61,10 +61,14 @@ const IndicadorModalImport:React.FC=()=> {
           </Button>,
         ]}
       >
-        <MultipleFileUploader setHasFiles={setHasFiles} hasFiles={hasFiles} onFiles={handleFiles}/>
+        <MultipleFileUploader
+          setHasFiles={setHasFiles}
+          hasFiles={hasFiles}
+          onFiles={handleFiles}
+        />
       </Modal>
     </>
   );
-}
+};
 
 export default IndicadorModalImport;

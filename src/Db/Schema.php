@@ -143,6 +143,8 @@ CREATE TABLE {$tablePrefix}estadistica (
   datos_contacto                 VARCHAR(1000),
   telefono_celular               VARCHAR(1000),
   datos                          TEXT,
+  datos_informacion              TEXT,
+  graficos                       TEXT,
   parametros_publicacion         TEXT,
   posicion                       INT(11) NOT NULL,
   PRIMARY KEY (estadistica_id),

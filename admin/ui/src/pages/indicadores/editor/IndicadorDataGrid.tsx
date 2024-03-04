@@ -1,16 +1,16 @@
 import { makeStyles } from '@fluentui/react-components';
+import { DataCell } from '../../../types/DataCell';
 
 type Props = {
   readonly data: any[];
 };
 
-
 const useStyles = makeStyles({
   dataGrid: {
-    position:"absolute",
+    position: 'absolute',
     borderCollapse: 'separate',
     borderSpacing: '0',
-    width:"100%",
+    width: '100%',
     '> tbody >tr': {
       ':first-child': {
         '>td': {
@@ -35,29 +35,32 @@ const useStyles = makeStyles({
   },
 });
 
-function Cell(rowIndex: number, colIndex: number, value: any) {
-  return <td key={`cell-${rowIndex}-${colIndex}`}>{value}</td>;
+function Cell(cell: DataCell, rowIndex: number, colIndex: number) {
+  return (
+    <td key={colIndex} colSpan={cell.colspan} rowSpan={cell.rowspan}>
+      {cell.value}
+    </td>
+  );
 }
 
 export default function IndicadorDataGrid({ data }: Props) {
   const classes = useStyles();
-  
+
   return (
     <table className={classes.dataGrid}>
       <tbody>
-        <tr>{data[0].map((value, colIndex) => Cell(0, colIndex, value))}</tr>
-      {data.slice(1, -1).map((itemRow, rowIndex) => (
-        <tr key={`C${itemRow}-F${rowIndex}`}>
-          {itemRow.map((value, colIndex) => Cell(0, colIndex, value))}
+        <tr>{data[0].map((cell, colIndex) => Cell(cell, 0, colIndex))}</tr>
+        {data.slice(1, -1).map((itemRow, rowIndex) => (
+          <tr key={`C${itemRow}-F${rowIndex}`}>
+            {itemRow.map((cell, colIndex) => Cell(cell, 0, colIndex))}
+          </tr>
+        ))}
+        <tr>
+          {data[data.length - 1].map((cell, colIndex) =>
+            Cell(cell, 0, colIndex)
+          )}
         </tr>
-      ))}
-      <tr>
-        {data[data.length - 1].map((value, colIndex) =>
-          Cell(0, colIndex, value)
-        )}
-      </tr>
       </tbody>
-    
     </table>
   );
 }

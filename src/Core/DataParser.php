@@ -26,7 +26,7 @@ class DataParser
                     $out[$fieldName] = (float) $value;
                     break;
                 case DataTypes::ARRAY:
-                    $out[$fieldName] = json_decode($value, true);
+                    $out[$fieldName] = !is_null($value) ? json_decode($value, true) : null;
                     break;
                 case DataTypes::OBJECT:
                     $out[$fieldName] = (object) $value;
