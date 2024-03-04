@@ -1,6 +1,8 @@
 import { EChartsReactProps } from "echarts-for-react";
 import { Estadistica } from "./Estadistica";
+import { FieldValidation } from "./FieldValidation";
 import { RecomendacionGrafica } from "./RecomendacionGrafica";
+import { ValidationError } from "./ValidationError";
 
 export interface EstadisticaFormState {
   // Indicar si hay cambios en el formulario
@@ -13,4 +15,6 @@ export interface EstadisticaFormState {
   echartDefaultProps: EChartsReactProps;
   recomendacionGrafica?: RecomendacionGrafica;
   tienePresentacionGraficaPersonalizada?: boolean;
+  validations?: Record<string, FieldValidation>;
+  validationErrors?: Record<string, ValidationError[]>;
 }

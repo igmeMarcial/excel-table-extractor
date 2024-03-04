@@ -4,6 +4,7 @@ interface FieldConfig {
   label: string;
   type: FieldType;
   required?: boolean;
+  vtype?: 'url' | 'email';
 }
 
 export const ESTADISTICA_FIELDS_DEF: Record<string, FieldConfig> = {
@@ -63,6 +64,7 @@ export const ESTADISTICA_FIELDS_DEF: Record<string, FieldConfig> = {
   url: {
     label: 'URL', type: 'url',
     required: true,
+    vtype: 'url',
   },
   periodicidadGeneracion: {
     label: 'Periodicidad de generación',

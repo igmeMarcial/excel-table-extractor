@@ -2,9 +2,9 @@ import React from 'react';
 import { Select } from '@fluentui/react-components';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import {
-  setEstadisticaFields,
   setEstadisticaFieldValue,
   selectEstadisticaFields,
+  selectValidationErrors,
 } from '../EstadisticaFormSlice';
 import { useFetch } from '../../../hooks/useFetch';
 import { Input } from 'antd';
@@ -93,6 +93,7 @@ const WPTextAreaField = ({ fieldName, label, onChange, value, required }) => {
 const IndicadorEditorTabFicha: React.FC = () => {
   const dispath = useAppDispatch();
   const values = useAppSelector(selectEstadisticaFields);
+  const validationErrors = useAppSelector(selectValidationErrors);
   //Lamada de apis
   const { data: listaCoponentes } = useFetch(urls.componenteUrl);
   const { data: listaSubcomponentes } = useFetch(urls.subComponentesUrl);
@@ -100,11 +101,7 @@ const IndicadorEditorTabFicha: React.FC = () => {
 
   const handleChange = (e) => {
     const { name: fiendName, value } = e.target;
-    const updatedValues = {
-      ...values,
-      [fiendName]: value,
-    };
-    dispath(setEstadisticaFields(updatedValues));
+    dispath(setEstadisticaFieldValue({ field: fiendName, value }));
   };
 
   const handleSelectChange = (e) => {
@@ -177,7 +174,7 @@ const IndicadorEditorTabFicha: React.FC = () => {
               })}
             </tbody>
           </table>
-          <button className="invisible" type="submit">
+          <button type="submit">
             {' '}
             enviar
           </button>

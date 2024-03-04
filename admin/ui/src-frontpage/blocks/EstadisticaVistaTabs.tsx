@@ -39,31 +39,21 @@ export default function EstadisticaVistaTabs() {
     distpath(setActiveTabName(String(data.value)));
   };
   return (
-    <>
-      <Title />
-      <SubNavbar />
-      <NamePanel />
-      <div className="flex gap-6 border border-green-300 border-solid">
-        <div className="w-1/3">
-          <NabAside/>
-        </div>
-        <div className="w-full">
-          <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
-            {items.map((item) => {
-              return (
-                <Tab key={item.value} value={item.value}>
-                  {item.text}
-                </Tab>
-              );
-            })}
-          </TabList>
-          <div>
-            {selectedValue === 'grafico' && <Grafico />}
-            {selectedValue === 'datos' && <TablaDatos />}
-            {selectedValue === 'ficha' && <FichaTecnica />}
-          </div>
-        </div>
+    <div className="w-full">
+      <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
+        {items.map((item) => {
+          return (
+            <Tab key={item.value} value={item.value}>
+              {item.text}
+            </Tab>
+          );
+        })}
+      </TabList>
+      <div>
+        {selectedValue === 'grafico' && <Grafico />}
+        {selectedValue === 'datos' && <TablaDatos />}
+        {selectedValue === 'ficha' && <FichaTecnica />}
       </div>
-    </>
+    </div>
   );
 }

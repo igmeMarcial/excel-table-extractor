@@ -8,7 +8,9 @@ import { Estadistica, FichaTecnicaFields } from '../../types/Estadistica';
 import { EstadisticaFormState } from '../../types/EstadisticarFormState';
 import tablaDatosHelper from '../../helpers/TablaDatosHelper';
 import graficoHelper from '../../helpers/GraficoHelper';
+import fieldValidationsHelper from '../../helpers/FieldValidationsHelper';
 import { DataCell } from '../../types/DataCell';
+import { ValidationError } from '../../types/ValidationError';
 
 const estadisticaDefaultModel: Estadistica = {
   datos: {},
@@ -25,7 +27,18 @@ const initialState: EstadisticaFormState = {
   estadisticaModel: estadisticaDefaultModel,
   estadisticaRawModel: estadisticaDefaultModel,
   activeTab: "1",
-  echartDefaultProps: GRAFICO_PROPIEDADES_DEFECTO
+  echartDefaultProps: GRAFICO_PROPIEDADES_DEFECTO,
+  validationErrors: {},
+  // Validaciones
+  validations: {
+    nombre: {
+      required: true
+    },
+    descripcion: {
+      required: true
+    }
+
+  }
 };
 // TODO: Implementar algoritmo para determinar si hay cambios en el formulario
 
@@ -47,10 +60,26 @@ export const estadisticaFormSlice = createSlice({
       state.hasChanges = true;
     },
     setEstadisticaFieldValue: (state, action: PayloadAction<{ field: string, value: any }>) => {
+      const fielName = action.payload.field;
+      const value = action.payload.value;
       state.estadisticaRawModel = {
         ...state.estadisticaRawModel,
-        [action.payload.field]: action.payload.value
+        [fielName]: value
       }
+      // Validar el campo
+      const fieldErrors = fieldValidationsHelper.getFieldErrors(value, state.validations[fielName]);
+      if (fieldErrors) {
+        state.validationErrors = {
+          ...state.validationErrors,
+          [fielName]: fieldErrors
+        }
+      } else {
+        // Eliminar el error si existe
+        // TODO: Verificar código
+        const { [fielName]: _, ...rest } = state.validationErrors;
+        state.validationErrors = rest;
+      }
+
       if (action.payload.field === 'nombre') {
         state.titulo = action.payload.value || '';
       }
@@ -84,12 +113,22 @@ export const estadisticaFormSlice = createSlice({
         }
         return chart;
       })
-    }
+    },
+    setFieldValidationErrors: (state, action: PayloadAction<{ fieldName: string, errors: ValidationError[] }>) => {
+      state.validationErrors = {
+        ...state.validationErrors,
+        [action.payload.fieldName]: action.payload.errors
+      }
+    },
+    setValidationErrors: (state, action: PayloadAction<Record<string, ValidationError[]>>) => {
+      state.validationErrors = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addMatcher(getEstadistica.matchFulfilled, (state, action) => {
       state.estadisticaModel = { ...estadisticaDefaultModel, ...action.payload };
       state.estadisticaRawModel = { ...estadisticaDefaultModel, ...action.payload };
+      state.estadisticaRawModel.datos = action.payload.datos || {};
       state.titulo = action.payload.nombre || '';
       state.isCreationMode = false;
       state.hasChanges = false;
@@ -107,6 +146,9 @@ export const {
   resetChanges,
   commitChanges,
   setNavTab,
+  // field validation
+  setFieldValidationErrors,
+  setValidationErrors
 } = estadisticaFormSlice.actions;
 
 export const selectHasChanges = (state: RootState) => state.estadisticaForm.hasChanges;
@@ -120,7 +162,7 @@ export const selectPostValues = (state: RootState) => state.estadisticaForm.esta
 export const selectGraficos = (state: RootState) => state.estadisticaForm.estadisticaRawModel.graficos;
 export const selectGraficoOpcionesDefecto = (state: RootState) => state.estadisticaForm.echartDefaultProps;
 export const selectRecomendacionGrafica = (state: RootState) => state.estadisticaForm.recomendacionGrafica;
-
+export const selectValidationErrors = (state: RootState) => state.estadisticaForm.validationErrors;
 
 export const selectGraficoPropiedades = (index: number) => (state: RootState) => {
   return state.estadisticaForm.estadisticaRawModel.graficos[index]
