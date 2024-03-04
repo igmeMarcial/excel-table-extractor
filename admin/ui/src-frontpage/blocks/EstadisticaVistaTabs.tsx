@@ -43,7 +43,7 @@ export default function EstadisticaVistaTabs() {
       <Title />
       <SubNavbar />
       <NamePanel />
-      <div className="flex gap-6">
+      <div className="flex gap-6 border border-green-300 border-solid">
         <div className="w-1/3">
           <NabAside/>
         </div>
