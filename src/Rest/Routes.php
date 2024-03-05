@@ -54,7 +54,10 @@ class Routes
         $this->router->get('/mdea/componentes',               MdeaController::class . ':listarComponentes');
         $this->router->get('/mdea/subcomponentes',            MdeaController::class . ':listarSubcomponentes');
         $this->router->get('/mdea/temas-estadisticos',        MdeaController::class . ':listarTemasEstadisticos');
-        $this->router->get('/mdea/indice',                    MdeaController::class . ':onGetIndice');
+        $this->router->get(
+            '/web/marcos-ordenadores/mdea/indice',
+             MdeaController::class . ':onGetIndice'
+        );
         $this->router->get('/dev/reset-database',             DevController::class . ':resetDatabase');
     }
 }

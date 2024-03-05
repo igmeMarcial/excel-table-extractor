@@ -11,12 +11,17 @@ export const estadisticaApi = api.injectEndpoints({
       providesTags: (_result, _err, id) => [{ type: 'Estadistica', id }],
       transformResponse: (response: ApiResponse) => response.data,
     }),
+    getIndice: build.query<any, number>({
+      query: () => `/web/marcos-ordenadores/mdea/indic`,
+      transformResponse: (response: ApiResponse) => response.data,
+    }),
   }),
 })
 export const {
   useGetEstadisticaQuery,
+  useGetIndiceQuery,
 } = estadisticaApi
 
 export const {
-  endpoints: { getEstadistica },
+  endpoints: { getEstadistica, getIndice },
 } = estadisticaApi
