@@ -6,20 +6,20 @@ import { IndiceItem } from '../types/IndiceItem'
 
 interface AppState {
   activeNetworkActivity: boolean
-  currentEstadisticaId?: number
-  idEstadistica?: number
+  estadisticaId?: number
   activeTabName?: string
   estadisticaModel: Estadistica
   indiceEstadisticas: IndiceItem[]
+  estadisticaIndicePath?: string
 }
 
 const initialState: AppState = {
   activeNetworkActivity: false,
-  currentEstadisticaId: 1,
-  idEstadistica: 0,
+  estadisticaId: 1,
   activeTabName: 'grafico',
   estadisticaModel: {},
-  indiceEstadisticas: []
+  indiceEstadisticas: [],
+  estadisticaIndicePath: '1.1.1.1'
 };
 
 export const appSlice = createSlice({
@@ -29,14 +29,14 @@ export const appSlice = createSlice({
     setActiveNetworkActivity: (state, action: PayloadAction<boolean>) => {
       state.activeNetworkActivity = action.payload
     },
-    setCurrentEstadisticaId: (state, action: PayloadAction<number>) => {
-      state.currentEstadisticaId = action.payload
-    },
-    setIdEstadistica: (state, action: PayloadAction<number>) => {
-      state.idEstadistica = action.payload
+    setEstadisticaId: (state, action: PayloadAction<number>) => {
+      state.estadisticaId = action.payload
     },
     setActiveTabName: (state, action: PayloadAction<string>) => {
       state.activeTabName = action.payload
+    },
+    setEstadisticaIndicePath: (state, action: PayloadAction<string>) => {
+      state.estadisticaIndicePath = action.payload
     }
 
   },
@@ -57,9 +57,9 @@ export const appSlice = createSlice({
 
 export const {
   setActiveNetworkActivity,
-  setCurrentEstadisticaId,
-  setIdEstadistica,
-  setActiveTabName
+  setEstadisticaId,
+  setActiveTabName,
+  setEstadisticaIndicePath
 } = appSlice.actions
 
 export const selectActiveNetworkActivity = (state: RootState) => state.app.activeNetworkActivity
@@ -70,5 +70,20 @@ export const selectEstadisticaData = (state: RootState) => state.app.estadistica
 export const selectEstadisticaDatos = (state: RootState) => state.app.estadisticaModel.datos
 export const selectIndiceEstadisticas = (state: RootState) => state.app.indiceEstadisticas
 
+export const selectComponenteIndicePath = (state: RootState) => {
+  const pathParts = state.app.estadisticaIndicePath?.split('.')
+  return pathParts[0]
+}
+export const selectSubcomponenteIndicePath = (state: RootState) => {
+  const pathParts = state.app.estadisticaIndicePath?.split('.')
+  return pathParts[0] + '.' + pathParts[1]
+}
+export const selectTemaEstadisticoIndicePath = (state: RootState) => {
+  const pathParts = state.app.estadisticaIndicePath?.split('.')
+  return pathParts[0] + '.' + pathParts[1] + '.' + pathParts[2]
+}
+export const selectEstadisticaIndicePath = (state: RootState) => {
+  return state.app.estadisticaIndicePath
+}
 
 export default appSlice.reducer
