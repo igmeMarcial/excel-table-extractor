@@ -9,15 +9,11 @@ import { useState } from 'react';
 import FichaTecnica from '../components/FichaTecnica';
 import Grafico from '../components/Grafico';
 import TablaDatos from '../components/TablaDatos';
-import { useLocation } from 'react-router-dom';
-import { getPathResourceId } from '../../src/utils/url-utils';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { getPathResourceId, newPathUrl } from '../../src/utils/url-utils';
 import { useGetEstadisticaQuery } from '../app/services/estadistica';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectActiveTabName, setActiveTabName } from '../app/AppSlice';
-import Title from '../components/Title';
-import SubNavbar from '../components/SubNavbar';
-import NamePanel from '../components/NamePanel';
-import NabAside from '../components/NabAside';
 
 const items = [
   { text: 'Gráfico', value: 'grafico' },
@@ -26,17 +22,22 @@ const items = [
 ];
 
 export default function EstadisticaVistaTabs() {
+
   const selectedValue = useAppSelector(selectActiveTabName);
   const distpath = useAppDispatch();
 
+  const navigate = useNavigate()
   const location = useLocation();
-  const resourceId = getPathResourceId(location) || 1;
-  console.log(resourceId);
+  const resourceId = getPathResourceId(location);
+
   // Get data from the API
   if (resourceId) useGetEstadisticaQuery(+resourceId);
 
   const onTabSelect = (event: SelectTabEvent, data: SelectTabData) => {
     distpath(setActiveTabName(String(data.value)));
+     const newPath = newPathUrl(location, 'tab', String(data.value));
+     navigate(newPath)
+
   };
   return (
     <div className="w-full">

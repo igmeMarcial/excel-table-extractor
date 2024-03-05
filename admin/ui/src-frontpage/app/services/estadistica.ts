@@ -12,7 +12,7 @@ export const estadisticaApi = api.injectEndpoints({
       transformResponse: (response: ApiResponse) => response.data,
     }),
     getIndice: build.query<any, number>({
-      query: () => `/web/marcos-ordenadores/mdea/indic`,
+      query: () => `/web/marcos-ordenadores/mdea/indice`,
       transformResponse: (response: ApiResponse) => response.data,
     }),
   }),

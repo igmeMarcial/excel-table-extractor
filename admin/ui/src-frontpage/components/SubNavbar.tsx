@@ -1,6 +1,10 @@
 import React from 'react';
+import { useGetIndiceQuery } from '../app/services/estadistica';
 
 function SubNavbar() {
+
+  useGetIndiceQuery(1);
+
   const items = [
     { text: 'INICIO', path: 'inicio' },
     { text: 'MDEA', path: 'mdea' },
@@ -10,7 +14,6 @@ function SubNavbar() {
       path: 'pna',
     },
   ];
-
   return (
     <div className="w-full bg-gray-200 ">
       <nav className="flex justify-between items-center py-0">

@@ -5,6 +5,8 @@ import EstadisticaVistaTabs from '../blocks/EstadisticaVistaTabs';
 import EstadisticasNav from '../blocks/EstadisticasNav';
 
 export default function NavegadorEstadisticas() {
+
+  
   return (
     <>
       <Title />

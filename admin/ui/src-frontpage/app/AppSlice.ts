@@ -70,4 +70,5 @@ export const selectEstadisticaData = (state: RootState) => state.app.estadistica
 export const selectEstadisticaDatos = (state: RootState) => state.app.estadisticaModel.datos
 export const selectIndiceEstadisticas = (state: RootState) => state.app.indiceEstadisticas
 
+
 export default appSlice.reducer
