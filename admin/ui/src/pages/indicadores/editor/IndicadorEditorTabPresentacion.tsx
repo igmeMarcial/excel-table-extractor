@@ -1,4 +1,4 @@
-import IndicatorEditorTabPresentationLeft from './presentacion/IndicatorEditorTabPresentationLeft';
+import GraficoToolbar from './presentacion/GraficoToolbar';
 import SeccionGrafico from './presentacion/SeccionGrafico';
 import { useAppSelector } from '../../../app/hooks';
 import { selectGraficos } from '../EstadisticaFormSlice';
@@ -6,8 +6,7 @@ import { selectGraficos } from '../EstadisticaFormSlice';
 const IndicadorEditorTabPresentacion = () => {
   const graficos = useAppSelector(selectGraficos);
   return (
-    <div className="flex overflow-y-auto " style={{ height: '380px' }}>
-      <IndicatorEditorTabPresentationLeft />
+    <div>
       {graficos.map((grafico, index) => (
         <SeccionGrafico key={index} index={index} options={grafico} />
       ))}

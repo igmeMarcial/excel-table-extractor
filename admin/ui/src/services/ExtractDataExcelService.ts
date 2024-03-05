@@ -311,12 +311,14 @@ class ExtractDataExcelService {
 
 
       for (let i = startRow; i <= endRow; ++i) {
-        const rowData = [];
+        const rowData: DataCell[] = [];
         for (let j = startCol; j <= endCol; ++j) {
           const cellref = XLSX.utils.encode_cell({ c: j, r: i });
           const value = sheet[cellref] ? sheet[cellref].v : null;
           rowData.push({
             value,
+            rowIndex: i,
+            colIndex: j,
           });
         }
         // Verificar si la fila es parte de la tabla antes de agregarla a tableData

@@ -8,7 +8,7 @@ import { useGetEstadisticaQuery } from '../../../app/services/estadistica';
 import { getPathResourceId } from '../../../utils/url-utils';
 import { useAppDispatch } from '../../../app/hooks';
 import { setEstadisticaTablaDatos } from '../EstadisticaFormSlice';
-import tablaDatosTest from '../../../data/tabla-datos2';
+import tablaDatosTest from '../../../data/tabla-datos';
 
 function IndicadorEditorPage() {
   const dispath = useAppDispatch();

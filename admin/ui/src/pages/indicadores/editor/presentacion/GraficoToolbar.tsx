@@ -1,18 +1,22 @@
-import React from 'react';
 import TipoGraficoSelect from './TipoGraficoSelect';
 import PresentationSeriesStacked from './PresentationSeriesStacked';
 import PresentationSeriesConfiguration from './PresentationSeriesConfiguration';
 import TipoApilamiento from './PresentationTipoApilamiento';
+import { Grafico } from '../../../../types/Grafico';
 
-const IndicatorEditorTabPresentationLeft: React.FC = () => {
+interface GraficoToolbarProps {
+  grficoIndex: number;
+  grafico: Grafico;
+}
+const GraficoToolbar = ({ grafico }: GraficoToolbarProps) => {
   return (
-    <div className="w-2/5">
-      <TipoGraficoSelect tipoGrafico="columnas" />
+    <div className="flex">
+      <TipoGraficoSelect tipoGrafico={grafico.tipo} />
       <PresentationSeriesStacked />
       <TipoApilamiento />
-      <PresentationSeriesConfiguration />
+      {/* <PresentationSeriesConfiguration /> */}
     </div>
   );
 };
 
-export default IndicatorEditorTabPresentationLeft;
+export default GraficoToolbar;

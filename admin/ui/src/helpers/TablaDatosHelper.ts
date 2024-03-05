@@ -95,7 +95,7 @@ export class TablaDatosHelper {
   }
 
   tieneCeldasCombinadas(tabla: DataCell[][]): boolean {
-    return tabla.some((row) => row.some((cell) => cell.rowspan > 1 || cell.colspan > 1));
+    return tabla.some((row) => row.some((cell) => cell.rowSpan > 1 || cell.colSpan > 1));
   }
   parseNumber(value: string | number): number {
     if (value === null || value === undefined || value === '') {
@@ -124,7 +124,7 @@ export class TablaDatosHelper {
       if (rowIndex === 0) return;
       const valores = [];
       for (const cell of row) {
-        if (cell.rowspan > 1 || cell.colspan > 1) {
+        if (cell.rowSpan > 1 || cell.colSpan > 1) {
           if (valores.length > 0) {
             break;
           }

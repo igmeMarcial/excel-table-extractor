@@ -1,7 +1,8 @@
 import { DataCell } from "../types/DataCell";
 import tablaDatosHelper from "./TablaDatosHelper";
-import { EChartsReactProps } from "echarts-for-react";
 import { Grafico } from "../types/Grafico";
+import { RangoCeldas } from "../types/RangoCeldas";
+import { Serie } from "../types/Serie";
 
 export class GraficoHelper {
 
@@ -21,86 +22,50 @@ export class GraficoHelper {
     if (!valoresRango) {
       return [{}];
     }
+    // Categoria
+    const categorias = tablaDatosHelper.getRowValues(tabla, valoresRango.inicio.rowIndex - 1, valoresRango.inicio.colIndex, valoresRango.fin.colIndex) as string[];
+    // Si la tabla tiene una fila de totales solo se muestra un gráfico de barras
     if (dataInfo.tieneFilaTotales) {
       const filaTotalesRowIndex = tablaDatosHelper.getFilaTotalesRowIndex(tabla);
-      const valoresTotales = tablaDatosHelper.getRowNumberValues(tabla, filaTotalesRowIndex, valoresRango.inicio.colIndex, valoresRango.fin.colIndex);
-      const categoriasTotales = tablaDatosHelper.getRowValues(tabla, valoresRango.inicio.rowIndex - 1, valoresRango.inicio.colIndex, valoresRango.fin.colIndex);
+      const totalValoresRango = {
+        inicio: { rowIndex: filaTotalesRowIndex, colIndex: valoresRango.inicio.colIndex },
+        fin: { rowIndex: filaTotalesRowIndex, colIndex: valoresRango.fin.colIndex }
+      };
       out.push({
-        categorias: categoriasTotales as string[],
-        tipoGrafico: 'barras',
-        series: [
-          {
-            valores: valoresTotales
-          }
-        ]
+        categorias,
+        tipo: 'columnas',
+        series: this.getSeries(tabla, totalValoresRango),
       });
     } else {
       out.push({
-        tipoGrafico: 'barras',
-        //series: tablaDatosHelper.getRowNumberValues(tabla, tabla.length - 1, 1)
+        categorias,
+        tipo: 'lineas',
+        series: this.getSeries(tabla, valoresRango),
       });
     }
     return out;
   }
 
-  toEchartsProps(grafico: Grafico): EChartsReactProps {
-    const out: EChartsReactProps = {
-      option: {
-        title: {
-          text: grafico.titulo
-        },
-        xAxis: {
-          type: 'category',
-          data: grafico.categorias,
-        },
-        series: [
-          {
-            name: 'Sales',
-            type: 'bar',
-            data: grafico.series[0].valores
-          }
-        ]
+  private getSeries(tabla: DataCell[][], rangoValores: RangoCeldas): Serie[] {
+    const out: Serie[] = [];
+    for (let i = rangoValores.inicio.rowIndex; i <= rangoValores.fin.rowIndex; i++) {
+      // colIdex de nombre de la serie
+      let nombreColIndex = rangoValores.inicio.colIndex - 1;
+      let nombre = '';
+      if (nombreColIndex >= 0) {
+        nombre = tabla[i][nombreColIndex].value as string;
+      } else {
+        nombre = `Serie ${i}`;
       }
-    };
+      const valores = tablaDatosHelper.getRowNumberValues(tabla, i, rangoValores.inicio.colIndex, rangoValores.fin.colIndex);
+      out.push({
+        nombre,
+        valores
+      });
+    }
     return out;
   }
 
-  /**
-   * deepAssign
-   *
-   * Función para asignar recursivamente las propiedades de un objeto a otro
-   * Creditos: https://stackoverflow.com/a/61395050/13780697
-   *
-   * @param {Object} target Objeto destino
-   * @param {Object} sources Uno o más objetos origen
-   * @returns {Object} Objeto destino con las propiedades de los objetos origen
-   */
-  deepAssign = (target, ...sources) => {
-    for (const source of sources) {
-      for (const k in source) {
-        const vs = source[k], vt = target[k]
-        if (Object(vs) == vs && Object(vt) === vt) {
-          target[k] = this.deepAssign(vt, vs)
-          continue
-        }
-        target[k] = this.deepClone(source[k])
-      }
-    }
-    return target
-  }
-  deepClone = (obj) => {
-    if (obj === null || typeof obj !== 'object') {
-      return obj
-    }
-    const cloned = Array.isArray(obj) ? [] : {}
-    for (const key in obj) {
-      if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        cloned[key] = this.deepClone(obj[key])
-      }
-    }
-
-    return cloned
-  }
 }
 
 export default GraficoHelper.getInstance();

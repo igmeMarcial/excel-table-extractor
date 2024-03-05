@@ -37,7 +37,7 @@ const useStyles = makeStyles({
 
 function Cell(cell: DataCell, rowIndex: number, colIndex: number) {
   return (
-    <td key={colIndex} colSpan={cell.colspan} rowSpan={cell.rowspan}>
+    <td key={colIndex} colSpan={cell.colSpan} rowSpan={cell.rowSpan}>
       {cell.value}
     </td>
   );

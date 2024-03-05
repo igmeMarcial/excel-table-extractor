@@ -24,37 +24,42 @@ const TipoGraficoSelect = ({ tipoGrafico }: TipoGraficoSelectProps) => {
   const handleChange = (tipoGrafico: TipoGrafico) => {
     dispath(setTipoGrafico({ tipoGrafico, index: 0 }));
   };
-
+  const isActive = (tipo: TipoGrafico) => {
+    return tipoGrafico === tipo;
+  };
   return (
     <div>
       <p>Tipo de gráfico</p>
       <div className="flex gap-3">
         <Button
           appearance="subtle"
+          className={isActive('columnas') ? classes.active : ''}
           icon={<DataBarVertical24Regular />}
           onClick={() => handleChange('columnas')}
         />
         <Button
           appearance="subtle"
+          className={isActive('barras') ? classes.active : ''}
           icon={<DataBarHorizontal24Regular />}
           onClick={() => handleChange('barras')}
         />
         <Button
-          className={tipoGrafico === 'lineas' ? classes.active : ''}
+          className={isActive('lineas') ? classes.active : ''}
           appearance="subtle"
           icon={<DataLine24Regular />}
           onClick={() => handleChange('lineas')}
         />
         <Button
           appearance="subtle"
+          className={isActive('areas') ? classes.active : ''}
           icon={<DataArea24Regular />}
           onClick={() => handleChange('areas')}
         />
         <Button
-          className={tipoGrafico === 'torta' ? classes.active : ''}
+          className={isActive('pie') ? classes.active : ''}
           appearance="subtle"
           icon={<DataPie24Regular />}
-          onClick={() => handleChange('torta')}
+          onClick={() => handleChange('pie')}
         />
       </div>
     </div>

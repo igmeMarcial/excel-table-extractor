@@ -1,6 +1,6 @@
 import { EChartsReactProps } from "echarts-for-react";
 
-export const GRAFICO_PROPIEDADES_DEFECTO: EChartsReactProps = {
+export const ECHATS_DEFALT_PROPS: EChartsReactProps = {
   option: {
     grid: { top: 8, right: 8, bottom: 24, left: 36 },
     xAxis: {
@@ -13,7 +13,7 @@ export const GRAFICO_PROPIEDADES_DEFECTO: EChartsReactProps = {
     series: [
       {
         data: [820, 932, 901, 934, 1290, 1330, 1320],
-        type: 'line',
+        type: 'bar',
         smooth: true,
       },
     ],

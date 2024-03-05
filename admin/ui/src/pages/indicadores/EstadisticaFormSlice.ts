@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { getEstadistica } from '../../app/services/estadistica';
 import type { RootState } from '../../app/store';
-import { GRAFICO_PROPIEDADES_DEFECTO } from '../../config/grafico-propiedades-defecto';
 import { TipoGrafico } from '../../types/TipoGrafico';
 import { EstadisticaDatos } from '../../types/EstadisticaDatos';
 import { Estadistica, FichaTecnicaFields } from '../../types/Estadistica';
@@ -27,7 +26,6 @@ const initialState: EstadisticaFormState = {
   estadisticaModel: estadisticaDefaultModel,
   estadisticaRawModel: estadisticaDefaultModel,
   activeTab: "1",
-  echartDefaultProps: GRAFICO_PROPIEDADES_DEFECTO,
   validationErrors: {},
   // Validaciones
   validations: {
@@ -93,7 +91,6 @@ export const estadisticaFormSlice = createSlice({
     },
     setEstadisticaTablaDatos: (state, action: PayloadAction<DataCell[][]>) => {
       state.estadisticaRawModel.datos.tabla = action.payload;
-      console.log('TABLA: ', action.payload);
       if (!state.tienePresentacionGraficaPersonalizada) {
         state.estadisticaRawModel.graficos = graficoHelper.getGraficosDefecto(action.payload);
       }
@@ -109,7 +106,7 @@ export const estadisticaFormSlice = createSlice({
     setTipoGrafico: (state, action: PayloadAction<{ index: number, tipoGrafico: TipoGrafico }>) => {
       state.estadisticaRawModel.graficos = state.estadisticaRawModel.graficos.map((chart, index) => {
         if (index === action.payload.index) {
-          return { ...chart, tipoGrafico: action.payload.tipoGrafico };
+          return { ...chart, tipo: action.payload.tipoGrafico };
         }
         return chart;
       })
@@ -160,8 +157,6 @@ export const selectActiveTab = (state: RootState) => state.estadisticaForm.activ
 export const selectEstadisticaData = (state: RootState) => state.estadisticaForm.estadisticaModel.datos?.tabla;
 export const selectPostValues = (state: RootState) => state.estadisticaForm.estadisticaRawModel;
 export const selectGraficos = (state: RootState) => state.estadisticaForm.estadisticaRawModel.graficos;
-export const selectGraficoOpcionesDefecto = (state: RootState) => state.estadisticaForm.echartDefaultProps;
-export const selectRecomendacionGrafica = (state: RootState) => state.estadisticaForm.recomendacionGrafica;
 export const selectValidationErrors = (state: RootState) => state.estadisticaForm.validationErrors;
 
 export const selectGraficoPropiedades = (index: number) => (state: RootState) => {
