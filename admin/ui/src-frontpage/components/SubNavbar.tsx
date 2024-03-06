@@ -15,7 +15,7 @@ function SubNavbar() {
     },
   ];
   return (
-    <div className="w-full bg-gray-200 ">
+    <div className="w-full bg-gray-200">
       <nav className="flex justify-between items-center py-0">
         <ul className="flex list-none space-x-4 py-0 my-2 pl-0">
           {items.map((item, index) => (

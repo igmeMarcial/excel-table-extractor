@@ -11,6 +11,7 @@ const NamePanel = () => {
   const indiceEstadisticas = useAppSelector(selectIndiceEstadisticas);
   const numItemActivo = useAppSelector(selectComponenteIndicePath);
 
+ 
   return (
     <div className="grid grid-cols-6 gap-4 my-10">
       {indiceEstadisticas.map((item) => (
@@ -23,7 +24,7 @@ const NamePanel = () => {
               numItemActivo === item.numeracion ? '#0071BC' : '#07C4EC',
           }}
         >
-          <h4 className="font-normal text-white text-sm sm:text-sm md:text-base lg:text-base xl:text-base leading-tight">
+          <h4 className="font-normal text-white text-sm sm:text-sm md:text-base lg:text-base xl:text-base leading-tight xl:leading-4 lg:leading-4">
             {item.nombre}
           </h4>
         </Link>

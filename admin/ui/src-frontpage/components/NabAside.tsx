@@ -1,137 +1,76 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@fluentui/react-components';
+import React, { useEffect, useState } from 'react';
 import {
   ChevronRight24Filled,
   ChevronDown24Filled,
 } from '@fluentui/react-icons';
-import { getQueryParam } from '../../src/utils/url-utils';
+import { getQueryParam, newPathUrl } from '../../src/utils/url-utils';
 import { Link, useLocation } from 'react-router-dom';
-
-const useStyles = makeStyles({
-  root: {
-    width: '12px',
-    height: '12px',
-  },
-});
+import { useAppSelector } from '../app/hooks';
+import {
+  selectComponenteIndicePath,
+  selectIndiceEstadisticas,
+} from '../app/AppSlice';
 
 function NabAside() {
   const [openSubMenu, setOpenSubMenu] = useState({});
-  const classes = useStyles();
-  const toggleMenu = (index) => {
+  const [selectChilds, setSelectChild] = useState(null);
+  const indiceEstadisticas = useAppSelector(selectIndiceEstadisticas);
+  const numItemActivo = useAppSelector(selectComponenteIndicePath);
+  const location = useLocation();
+  const resourceId = getQueryParam(location, 'estadistica') || 1;
+
+  console.log(resourceId);
+  useEffect(() => {
+    const node = indiceEstadisticas.find(
+      (item) => item.id === Number(numItemActivo)
+    );
+    if (node) {
+      setSelectChild(node?.hijos);
+    } else {
+      setSelectChild([]);
+    }
+  }, [indiceEstadisticas, numItemActivo]);
+
+  const toggleMenu = (id) => {
     setOpenSubMenu((prevState) => ({
       ...prevState,
-      [index]: !prevState[index],
+      [id]: !prevState[id],
     }));
   };
-  const location = useLocation();
-  const resourceId = getQueryParam(location, 'cid') || 1;
-
-  const menuItems = [
-    {
-      id: 1,
-      title: '1.1 Condiciones Físicas',
-      subItems: [
-        {
-          id: 22,
-          title: '1.1.1 Atmósfera, Clima y Condiciones Meteorológicas',
-          subItems: [
-            '1.1.1.1 Radiación ultravioleta, promedio mensual, anual y máximo mensual y anual en los Distritos de San Martin de Porres, Carabayllo, Ate (Ceres) de la Provincia de Lima, 2023 (IUV)',
-            '1.1.1.2 Radiación ultravioleta, promedio mensual, anual y máximo mensual y anual según principales provincias y departamentos, 2023 (IUV)',
-          ],
-        },
-        {
-          id: 23,
-          title: '1.1.2 Características Hidrográficas',
-          subItems: ['1.1.2.1 Subitem 1', '1.1.2.2 Subitem 2'],
-        },
-        {
-          id: 24,
-          title: 'Información geológica y geográfica',
-          subItems: ['1.1.2.1 Subitem 1', '1.1.2.2 Subitem 2'],
-        },
-        {
-          id: 25,
-          title: 'Características del suelo',
-          subItems: ['1.1.2.1 Subitem 1', '1.1.2.2 Subitem 2'],
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: '1.2 Cobertura Terrestre, Ecosistemas y Biodiversidad',
-      subItems: [
-        {
-          id: 15,
-          title: '1.1.1 Atmósfera, Clima y Condiciones Meteorológicas',
-          subItems: ['1.1.1.1 Subitem 1', '1.1.1.2 Subitem 2'],
-        },
-        {
-          id: 16,
-          title: '1.1.2 Características Hidrográficas',
-          subItems: ['1.1.2.1 Subitem 1', '1.1.2.2 Subitem 2'],
-        },
-      ],
-    },
-    {
-      id: 3,
-      title: '1.3 Calidad Ambiental',
-      subItems: [
-        {
-          id: 13,
-          title: '1.1.1 Atmósfera, Clima y Condiciones Meteorológicas',
-          subItems: ['1.1.1.1 Subitem 1', '1.1.1.2 Subitem 2'],
-        },
-        {
-          id: 14,
-          title: '1.1.2 Características Hidrográficas',
-          subItems: ['1.1.2.1 Subitem 1', '1.1.2.2 Subitem 2'],
-        },
-      ],
-    },
-    // Agrega más elementos aquí según sea necesario
-  ];
 
   const renderSubMenuItems = (subItems, parentId) => {
     return (
-      <ul className="list-none pl-6">
+      <ul className="list-none pl-4 flex flex-col">
         {subItems.map((subItem) => (
-          <li key={subItem.id} className="flex">
-            <div>
-              <button
-                onClick={() => toggleMenu(subItem.id)}
-                className="flex items-center justify-start border-none p-0 appearance-none cursor-pointer no-underline hover:text-custom-blue focus:outline-none bg-gray-100"
-              >
-                {Array.isArray(subItem.subItems) ? (
-                  openSubMenu[subItem.id] ? (
-                    <ChevronDown24Filled />
-                  ) : (
-                    
-                    <ChevronRight24Filled />
-                  )
+          <li key={subItem.id} className="my-custom-pad">
+            <button
+              onClick={() => toggleMenu(subItem.numeracion)}
+              className="flex items-start justify-start border-none p-0 appearance-none cursor-pointer no-underline hover:text-custom-blue focus:outline-none bg-gray-100 gap-1"
+            >
+              <div className="hover:text-custom-blue flex items-center justify-center">
+                {openSubMenu[subItem.numeracion] ? (
+                  <ChevronDown24Filled
+                    style={{ width: '16px', height: '16px' }}
+                  />
                 ) : (
-                  <span className="mr-2" />
+                  <ChevronRight24Filled
+                    style={{ width: '16px', height: '16px' }}
+                  />
                 )}
-              </button>
-            </div>
-            <div>
-              <Link to="" className="text-xs text-start">
-                {subItem.title}
+              </div>
+              <Link
+                to={newPathUrl(
+                  location,
+                  'estadistica',
+                  subItem.numeracion + '.1'
+                )}
+                className="no-underline text-black hover:text-custom-blue text-xs flex gap-custom-pad items-start justify-center"
+              >
+                <div>{subItem.numeracion}</div>
+                <div className="text-start">{subItem.nombre}</div>
               </Link>
-              {Array.isArray(subItem.subItems) && openSubMenu[subItem.id] && (
-                <ul className="list-none pl-6">
-                  {subItem.subItems.map((subSubItem, subIndex) => (
-                    <li key={`${subItem.id}-${subIndex}`}>
-                      <Link
-                        to=""
-                        className="text-xs border-none p-0 appearance-none cursor-pointer no-underline hover:text-custom-blue focus:outline-none bg-gray-100"
-                      >
-                        <p className="text-start">{subSubItem}</p>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+            </button>
+            <ul></ul>
           </li>
         ))}
       </ul>
@@ -139,33 +78,47 @@ function NabAside() {
   };
 
   return (
-    <div className="bg-gray-100  p-2 my-3">
-      <ul className="list-none flex flex-col pl-0 gap-2">
-        {menuItems.map((item, index) => (
-          <li key={item.id} className="flex">
-            <div>
+    <div className="bg-gray-100 p-3  h-full border-x-0 border-b-0 border-t-4 border-t-custom-blue border-solid">
+      <ul className="list-none flex flex-col pl-0 my-0">
+        {selectChilds ? (
+          selectChilds.map((item, index) => (
+            <li key={item.id} className="my-custom-pad">
               <button
-                onClick={() => toggleMenu(item.id)}
-                className="flex items-center justify-start border-none p-0 appearance-none cursor-pointer no-underline hover:text-custom-blue focus:outline-none bg-gray-100 "
+                onClick={() => toggleMenu(item.numeracion)}
+                className="flex items-start justify-start border-none p-0 appearance-none cursor-pointer no-underline hover:text-custom-blue focus:outline-none bg-gray-100 gap-1"
               >
-                {openSubMenu[item.id] ? (
-                  <ChevronDown24Filled />
-                ) : (
-                  <ChevronRight24Filled />
-                )}
+                <div className="hover:text-custom-blue flex items-center justify-center">
+                  {openSubMenu[item.numeracion] ? (
+                    <ChevronDown24Filled
+                      style={{ width: '16px', height: '16px' }}
+                    />
+                  ) : (
+                    <ChevronRight24Filled
+                      style={{ width: '16px', height: '16px' }}
+                    />
+                  )}
+                </div>
+                <Link
+                  className="no-underline text-black hover:text-custom-blue text-xs flex gap-custom-pad items-start justify-center"
+                  to={newPathUrl(
+                    location,
+                    'estadistica',
+                    item.numeracion + '.1.1'
+                  )}
+                >
+                  <div>{item.numeracion}</div>
+                  <div className="text-start">{item.nombre}</div>
+                </Link>
               </button>
-            </div>
-            <div>
-              <Link to="">{item.title}</Link>
-              {item.subItems &&
-                openSubMenu[item.id] &&
-                renderSubMenuItems(item.subItems, item.id)}
-            </div>
-          </li>
-        ))}
+              {openSubMenu[item.numeracion] &&
+                renderSubMenuItems(item.hijos, item.id)}
+            </li>
+          ))
+        ) : (
+          <li>Cargando...</li>
+        )}
       </ul>
     </div>
   );
 }
-
 export default NabAside;

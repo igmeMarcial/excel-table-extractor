@@ -16,6 +16,7 @@ const IndicadorEditorTabDatos: React.FC = () => {
   const [containerHeight, setContainerHeight] = useState<number | null>(null);
   const divRef = useRef<HTMLDivElement>(null);
 
+  console.log(values)
   // Actualizando el tamaño de div de la tabla
   useEffect(() => {
     // Función para obtener la altura de la div

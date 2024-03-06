@@ -8,6 +8,8 @@ function TablaDatos() {
   const data = useAppSelector(selectEstadisticaDatos);
   const { fuente, elaboracion, nota, nombre, tabla } = data || {};
 
+  console.log(data)
+  
   const handleDowload = () => {
     const workbook = XLSX.utils.book_new();
     const worksheet = XLSX.utils.aoa_to_sheet(tabla);

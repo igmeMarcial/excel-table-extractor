@@ -11,6 +11,9 @@ module.exports = {
         'custom-blue': '#0F6CBD',
         'custom-green': '#5ABA5B',
       },
+      spacing: {
+        'custom-pad': '6px',
+      },
     },
   },
   plugins: [],
