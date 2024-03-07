@@ -6,9 +6,7 @@ class Schema
 {
     private static $pluginTablePrefix = 'aesa_';
     private $tables = [
-        'mdea_componente',
-        'mdea_subcomponente',
-        'mdea_tema_estadistico',
+        'clasificador',
         'estadistica',
     ];
 
@@ -74,48 +72,20 @@ class Schema
         $charset = $wpdb->get_charset_collate();
 
         return "
-CREATE TABLE {$tablePrefix}mdea_componente (
-    mdea_componente_id  INT(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE {$tablePrefix}clasificador (
+    clasificador_id  INT(11) NOT NULL AUTO_INCREMENT,
     usuario_reg_id      INT(11) NOT NULL,
     usuario_mod_id      INT(11) NOT NULL,
     fecha_reg           DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     fecha_mod           DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     activo              TINYINT(1) NOT NULL DEFAULT 1,
+    numeral             VARCHAR(11) NOT NULL COMMENT 'Máx 99.99.99.99(11 caracteres)',
     nombre              VARCHAR(255) NOT NULL,
-    posicion            INT(11) NOT NULL,
-    PRIMARY KEY  (mdea_componente_id)
-) $charset;
-CREATE TABLE {$tablePrefix}mdea_subcomponente (
-    mdea_subcomponente_id  INT(11) NOT NULL AUTO_INCREMENT,
-    mdea_componente_id     INT(11) NOT NULL,
-    usuario_reg_id         INT(11) NOT NULL,
-    usuario_mod_id         INT(11) NOT NULL,
-    fecha_reg              DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    fecha_mod              DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    activo                 TINYINT(1) NOT NULL DEFAULT 1,
-    nombre                 VARCHAR(255) NOT NULL,
-    posicion               INT(11) NOT NULL,
-    PRIMARY KEY (mdea_subcomponente_id),
-    FOREIGN KEY (mdea_componente_id) REFERENCES {$tablePrefix}mdea_componente(mdea_componente_id)
-) $charset;
-CREATE TABLE {$tablePrefix}mdea_tema_estadistico (
-    mdea_tema_estadistico_id  INT(11) NOT NULL AUTO_INCREMENT,
-    mdea_subcomponente_id     INT(11) NOT NULL,
-    usuario_reg_id         INT(11) NOT NULL,
-    usuario_mod_id         INT(11) NOT NULL,
-    fecha_reg              DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    fecha_mod              DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    activo                 TINYINT(1) NOT NULL DEFAULT 1,
-    nombre                 VARCHAR(255) NOT NULL,
-    posicion               INT(11) NOT NULL,
-    PRIMARY KEY (mdea_tema_estadistico_id),
-    FOREIGN KEY (mdea_subcomponente_id) REFERENCES {$tablePrefix}mdea_subcomponente(mdea_subcomponente_id)
+    PRIMARY KEY  (clasificador_id)
 ) $charset;
 CREATE TABLE {$tablePrefix}estadistica (
   estadistica_id            INT(11) NOT NULL AUTO_INCREMENT,
-  mdea_componente_id        INT(11) NOT NULL,
-  mdea_subcomponente_id     INT(11) NOT NULL,
-  mdea_tema_estadistico_id  INT(11) NOT NULL,
+  clasificador_id           INT(11) NOT NULL,
   usuario_reg_id            INT(11) NOT NULL,
   usuario_mod_id            INT(11) NOT NULL,
   fecha_reg                 DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -148,9 +118,7 @@ CREATE TABLE {$tablePrefix}estadistica (
   parametros_publicacion         TEXT,
   posicion                       INT(11) NOT NULL,
   PRIMARY KEY (estadistica_id),
-  FOREIGN KEY (mdea_componente_id)       REFERENCES {$tablePrefix}mdea_componente(mdea_componente_id),
-  FOREIGN KEY (mdea_subcomponente_id)    REFERENCES {$tablePrefix}mdea_subcomponente(mdea_subcomponente_id),
-  FOREIGN KEY (mdea_tema_estadistico_id) REFERENCES {$tablePrefix}mdea_tema_estadistico(mdea_tema_estadistico_id)
+  FOREIGN KEY (clasificador_id)       REFERENCES {$tablePrefix}clasificador(clasificador_id)
 ) $charset;";
     }
 
@@ -159,9 +127,7 @@ CREATE TABLE {$tablePrefix}estadistica (
         $tablePrefix = self::getTablePrefix();
         return "
 DROP TABLE IF EXISTS {$tablePrefix}estadistica;
-DROP TABLE IF EXISTS {$tablePrefix}mdea_tema_estadistico;
-DROP TABLE IF EXISTS {$tablePrefix}mdea_subcomponente;
-DROP TABLE IF EXISTS {$tablePrefix}mdea_componente;
+DROP TABLE IF EXISTS {$tablePrefix}clasificador;
 ";
     }
     public static function getTablePrefix()

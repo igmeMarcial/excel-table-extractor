@@ -1,8 +1,5 @@
 import { api } from './api'
 import { ApiResponse } from '../../../src/types/ApiResponse'
-interface Estadistica {
-  id: number
-}
 
 export const estadisticaApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -12,7 +9,7 @@ export const estadisticaApi = api.injectEndpoints({
       transformResponse: (response: ApiResponse) => response.data,
     }),
     getIndice: build.query<any, number>({
-      query: () => `/web/marcos-ordenadores/mdea/indice`,
+      query: () => `/website/marcos-ordenadores/mdea/indice-estadisticas`,
       transformResponse: (response: ApiResponse) => response.data,
     }),
   }),

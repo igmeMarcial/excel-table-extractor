@@ -5,9 +5,7 @@ namespace Aesa\Db;
 class DbMap
 {
     private string $prefix;
-    public string $mdeaComponente;
-    public string $mdeaSubcomponente;
-    public string $mdeaTemaEstadistico;
+    public string $clasificador;
     public string $estadistica;
 
     /**
@@ -27,9 +25,7 @@ class DbMap
     }
     private function setupTableNames(): void
     {
-        $this->mdeaComponente      = $this->prefix . 'mdea_componente';
-        $this->mdeaSubcomponente   = $this->prefix . 'mdea_subcomponente';
-        $this->mdeaTemaEstadistico = $this->prefix . 'mdea_tema_estadistico';
+        $this->clasificador = $this->prefix . 'clasificador';
         $this->estadistica         = $this->prefix . 'estadistica';
     }
 }

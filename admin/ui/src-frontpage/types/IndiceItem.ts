@@ -1,7 +1,8 @@
 export interface IndiceItem {
-  id?: number;
-  padreId?: number;
-  numeracion?: string;
+  estadisticaId?: number;
+  clasificadorId?: number;
+  numeral: string;
   nombre?: string;
-  hijos?: IndiceItem[];
+  expanded?: boolean;
+  visible?: boolean;
 }

@@ -10,17 +10,9 @@ class Estadistica extends BaseModel
             'type' => DataTypes::INTEGER,
             'column' => 'estadistica_id',
         ],
-        'componenteId' => [
+        'clasificadorId' => [
             'type' => DataTypes::INTEGER,
-            'column' => 'mdea_componente_id',
-        ],
-        'subcomponenteId' => [
-            'type' => DataTypes::INTEGER,
-            'column' => 'mdea_subcomponente_id',
-        ],
-        'temaEstadisticoId' => [
-            'type' => DataTypes::INTEGER,
-            'column' => 'mdea_tema_estadistico_id',
+            'column' => 'clasificador_id',
         ],
         'usuarioRegId' => [
             'type' => DataTypes::INTEGER,

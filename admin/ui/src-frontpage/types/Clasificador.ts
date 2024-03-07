@@ -1,7 +1,6 @@
 export interface Clasificador {
   id?: number;
-  padreId?: number;
-  numeracion?: string;
+  numeral?: string;
   nombre?: string;
   hijos?: Clasificador[];
 }

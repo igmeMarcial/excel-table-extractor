@@ -11,6 +11,7 @@ interface AppState {
   estadisticaModel: Estadistica
   indiceEstadisticas: IndiceItem[]
   estadisticaIndicePath?: string
+  clasificadorNivel1?: string
 }
 
 const initialState: AppState = {
@@ -19,7 +20,8 @@ const initialState: AppState = {
   activeTabName: 'grafico',
   estadisticaModel: {},
   indiceEstadisticas: [],
-  estadisticaIndicePath: '1.1.1.1'
+  estadisticaIndicePath: '1.1.1.1',
+  clasificadorNivel1: '1'
 };
 
 export const appSlice = createSlice({
@@ -37,6 +39,7 @@ export const appSlice = createSlice({
     },
     setEstadisticaIndicePath: (state, action: PayloadAction<string>) => {
       state.estadisticaIndicePath = action.payload
+      state.clasificadorNivel1 = action.payload.split('.')[0]
     }
 
   },
@@ -69,6 +72,15 @@ export const selectActiveTabName = (state: RootState) => state.app.activeTabName
 export const selectEstadisticaData = (state: RootState) => state.app.estadisticaModel
 export const selectEstadisticaDatos = (state: RootState) => state.app.estadisticaModel.datos
 export const selectIndiceEstadisticas = (state: RootState) => state.app.indiceEstadisticas
+export const selectClaficadorNivel1Activo = (state: RootState) => state.app.clasificadorNivel1
+export const selectClasificadoresNivel1 = (state: RootState): IndiceItem[] => state.app.indiceEstadisticas.filter(
+  (item: IndiceItem) => item.numeral.split('.').length === 1)
+
+export const selectClasificadoresDesdeNivel2 = (state: RootState): IndiceItem[] =>
+  state
+    .app
+    .indiceEstadisticas.filter((item: IndiceItem) => item.numeral.split('.').length > 1)
+
 
 export const selectComponenteIndicePath = (state: RootState) => {
   const pathParts = state.app.estadisticaIndicePath?.split('.')

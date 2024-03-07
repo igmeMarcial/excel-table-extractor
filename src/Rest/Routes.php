@@ -48,6 +48,10 @@ class Routes
             '/anuarios/(?P<hash>[\w]+):descargar',
             AnuarioController::class . ':descargarArchivo'
         );
+        $this->router->get(
+            '/admin/marcos-ordenadores/mdea/indice-clasificadores',
+             MdeaController::class . ':onGetIndiceClasificadores'
+        );
         $this->router->post('/anuarios',                      AnuarioController::class . ':guardarArchivo');
         $this->router->post('/anuarios:generar-version-base', AnuarioController::class . ':generarAnuario');
         $this->router->delete('/anuarios/(?P<hash>[\w]+)',    AnuarioController::class . ':eliminarArchivo');
@@ -55,9 +59,12 @@ class Routes
         $this->router->get('/mdea/subcomponentes',            MdeaController::class . ':listarSubcomponentes');
         $this->router->get('/mdea/temas-estadisticos',        MdeaController::class . ':listarTemasEstadisticos');
         $this->router->get(
-            '/web/marcos-ordenadores/mdea/indice',
-             MdeaController::class . ':onGetIndice'
+            '/website/marcos-ordenadores/mdea/indice-estadisticas',
+             MdeaController::class . ':onGetIndiceEstadisticas'
         );
         $this->router->get('/dev/reset-database',             DevController::class . ':resetDatabase');
     }
 }
+
+
+//  wep.com/api/{v2}/{contexto}/{collection}/{id_recurso}

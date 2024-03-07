@@ -36,16 +36,17 @@ class EstadisticaService
         $model->setId($id);
         $this->wpdb->update($this->dbMap->estadistica, $model->getDataForDbQuery(), ['estadistica_id' => $id]);
     }
+    // TODO: corregir mdeaComponenteNombre no está listando el nombre del componente sino del clasificador
     public function getListaEstadisticas()
     {
         $sql = "SELECT
                   A.estadistica_id id,
                   A.nombre,
-                  B.mdea_componente_id medeaComponenteId,
+                  B.clasificador_id clasificadorId,
                   B.nombre mdeaComponenteNombre,
                   A.fecha_mod fechaMod
                 FROM {$this->dbMap->estadistica} A
-                INNER JOIN {$this->dbMap->mdeaComponente} B ON A.mdea_componente_id = B.mdea_componente_id";
+                INNER JOIN {$this->dbMap->clasificador} B ON A.clasificador_id = B.clasificador_id";
         return $this->wpdb->get_results($sql, ARRAY_A);
     }
     public function getEstadistica($id)
