@@ -53,7 +53,11 @@ export const appSlice = createSlice({
       state.estadisticaModel = action.payload
     })
     builder.addMatcher(getIndice.matchFulfilled, (state, action) => {
-      state.indiceEstadisticas = action.payload
+      const indice = [];
+       action.payload.forEach((item:IndiceItem)=>{
+        indice.push({...item,nivel:item.numeral.split('.').length })
+      })
+      state.indiceEstadisticas = indice;
     })
   }
 })
@@ -73,14 +77,16 @@ export const selectEstadisticaData = (state: RootState) => state.app.estadistica
 export const selectEstadisticaDatos = (state: RootState) => state.app.estadisticaModel.datos
 export const selectIndiceEstadisticas = (state: RootState) => state.app.indiceEstadisticas
 export const selectClaficadorNivel1Activo = (state: RootState) => state.app.clasificadorNivel1
+
+// TODO: selectClasificadoresNivel1 AND 2 returned a different result when called with the same parameters
 export const selectClasificadoresNivel1 = (state: RootState): IndiceItem[] => state.app.indiceEstadisticas.filter(
   (item: IndiceItem) => item.numeral.split('.').length === 1)
 
+  
 export const selectClasificadoresDesdeNivel2 = (state: RootState): IndiceItem[] =>
   state
     .app
     .indiceEstadisticas.filter((item: IndiceItem) => item.numeral.split('.').length > 1)
-
 
 export const selectComponenteIndicePath = (state: RootState) => {
   const pathParts = state.app.estadisticaIndicePath?.split('.')

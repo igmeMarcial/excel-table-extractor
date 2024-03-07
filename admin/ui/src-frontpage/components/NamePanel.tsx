@@ -22,7 +22,7 @@ const NamePanel = () => {
             background: numItemActivo === item.numeral ? '#0071BC' : '#07C4EC',
           }}
         >
-          <h4 className="font-normal text-white text-sm sm:text-sm md:text-base lg:text-base xl:text-base leading-tight xl:leading-4 lg:leading-4">
+          <h4 className=" font-normal text-white text-xs sm:text-xs sm:leading-3 md:text-xs lg:leading-3 lg:text-sm xl:text-base leading-4 xl:leading-4 lg:leading-4">
             {item.nombre}
           </h4>
         </Link>

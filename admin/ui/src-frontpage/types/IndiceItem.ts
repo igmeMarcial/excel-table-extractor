@@ -5,4 +5,5 @@ export interface IndiceItem {
   nombre?: string;
   expanded?: boolean;
   visible?: boolean;
+  nivel?:number;
 }
