@@ -3,7 +3,6 @@ import { Grafico } from "../types/Grafico"
 import { ECHATS_DEFALT_PROPS } from "../config/grafico-propiedades-defecto"
 import { deepAssign } from "../utils/object-utils"
 import * as echarts from 'echarts'
-import { TipoSerie } from "../types/TipoSerie"
 import { TIPO_SERIE_TO_ECHARS_SERIE_TYPE } from "../maps/tipo-serie-echars-serie-type"
 import { Serie } from "../types/Serie"
 import { TipoGrafico } from "../types/TipoGrafico"
@@ -12,27 +11,30 @@ export class EchartsPropsMapper {
   private static readonly _instance = new EchartsPropsMapper()
   private tipoGraficoDefecto: TipoGrafico = 'columnas'
   private grafico: Grafico
+  private series: Serie[]
   private constructor() { }
 
   static get instance() {
     return EchartsPropsMapper._instance
   }
   public map(grafico: Grafico): EChartsReactProps {
-    this.grafico = grafico;
+    this.grafico = grafico
+    this.series = grafico.series || []
     const props: EChartsReactProps = {
       option: {
         title: {
-          text: grafico.titulo
+          text: grafico.titulo || 'Título del gráfico',
         },
         xAxis: this.getXAxisConfig(),
         yAxis: this.getYAxisConfig(),
-        series: this.getSeries()
+        series: this.getSeries(),
+        legend: this.getLegend(),
       }
     }
     return deepAssign({}, ECHATS_DEFALT_PROPS, props)
   }
   private getSeries(): echarts.EChartOption.Series[] {
-    const rawSeries = this.grafico.series || [];
+    const rawSeries = this.grafico.series || []
     return rawSeries.map((serie) => {
       return {
         ...this.getTypeProps(serie),
@@ -42,44 +44,49 @@ export class EchartsPropsMapper {
     })
   }
   private getTypeProps(serie: Serie): echarts.EChartOption.Series {
-    const tipo = serie.tipo || this.grafico.tipo || this.tipoGraficoDefecto;
-    const props = TIPO_SERIE_TO_ECHARS_SERIE_TYPE[tipo];
+    const tipo = serie.tipo || this.grafico.tipo || this.tipoGraficoDefecto
+    const props = TIPO_SERIE_TO_ECHARS_SERIE_TYPE[tipo]
     if (props) {
-      return props;
+      return props
     }
     return {
       type: 'column'
-    };
+    }
   }
   private getXAxisConfig(): echarts.EChartOption.XAxis {
     const main: echarts.EChartOption.XAxis = {
       type: this.getXAxisType(),
     }
     if (main.type === 'category') {
-      main.data = this.grafico.categorias;
+      main.data = this.grafico.categorias
     }
-    return main;
+    return main
   }
   private getYAxisConfig(): echarts.EChartOption.YAxis {
     const main: echarts.EChartOption.YAxis = {
       type: this.getYAxisType(),
     }
     if (main.type === 'category') {
-      main.data = this.grafico.categorias;
+      main.data = this.grafico.categorias
     }
-    return main;
+    return main
   }
   private getXAxisType(): 'category' | 'value' {
     if (this.grafico.tipo === 'barras') {
-      return 'value';
+      return 'value'
     }
-    return 'category';
+    return 'category'
   }
   private getYAxisType(): 'value' | 'category' {
     if (this.grafico.tipo === 'barras') {
-      return 'category';
+      return 'category'
     }
-    return 'value';
+    return 'value'
+  }
+  private getLegend(): echarts.EChartOption.Legend {
+    return {
+      data: this.series.map((serie) => serie.nombre)
+    }
   }
 }
 

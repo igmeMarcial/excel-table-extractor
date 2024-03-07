@@ -28,8 +28,8 @@ const TipoGraficoSelect = ({ tipoGrafico }: TipoGraficoSelectProps) => {
     return tipoGrafico === tipo;
   };
   return (
-    <div>
-      <p>Tipo de gráfico</p>
+    <div className="flex items-center">
+      <span>Tipo:</span>
       <div className="flex gap-3">
         <Button
           appearance="subtle"

@@ -1,20 +1,28 @@
 import TipoGraficoSelect from './TipoGraficoSelect';
-import PresentationSeriesStacked from './PresentationSeriesStacked';
-import PresentationSeriesConfiguration from './PresentationSeriesConfiguration';
-import TipoApilamiento from './PresentationTipoApilamiento';
+import { DataUsageSettings20Regular } from '@fluentui/react-icons';
 import { Grafico } from '../../../../types/Grafico';
+import { Button } from '@fluentui/react-button';
+import { Divider } from 'antd';
 
 interface GraficoToolbarProps {
-  grficoIndex: number;
+  graficoIndex: number;
   grafico: Grafico;
 }
 const GraficoToolbar = ({ grafico }: GraficoToolbarProps) => {
+  const onConfigSeriesClick = () => {
+    console.log('handleChange');
+  };
   return (
-    <div className="flex">
+    <div className="flex items-center justify-start bg-gray-50 px-4 py-1">
       <TipoGraficoSelect tipoGrafico={grafico.tipo} />
-      <PresentationSeriesStacked />
-      <TipoApilamiento />
-      {/* <PresentationSeriesConfiguration /> */}
+      <Divider type="vertical" />
+      <Button
+        appearance="subtle"
+        icon={<DataUsageSettings20Regular />}
+        onClick={() => onConfigSeriesClick()}
+      >
+        Series
+      </Button>
     </div>
   );
 };
