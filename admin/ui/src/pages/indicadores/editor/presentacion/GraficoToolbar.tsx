@@ -13,7 +13,7 @@ const GraficoToolbar = ({ grafico }: GraficoToolbarProps) => {
     console.log('handleChange');
   };
   return (
-    <div className="flex items-center justify-start bg-gray-50 px-4 py-1">
+    <div className="flex items-center justify-start bg-gray-100 px-4 py-1">
       <TipoGraficoSelect tipoGrafico={grafico.tipo} />
       <Divider type="vertical" />
       <Button
