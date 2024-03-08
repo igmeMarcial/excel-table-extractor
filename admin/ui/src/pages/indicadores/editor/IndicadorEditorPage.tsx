@@ -16,17 +16,16 @@ function IndicadorEditorPage() {
   const resourceId = getPathResourceId(location);
   // Get data from the API
   if (resourceId) useGetEstadisticaQuery(+resourceId);
-
-  dispath(setEstadisticaTablaDatos(tablaDatosTest));
+  setTimeout(() => {
+    dispath(setEstadisticaTablaDatos(tablaDatosTest));
+  }, 0);
 
   return (
     <MainLayout>
       <IndicadorEditorhHeader />
-      <div className="px-12">
+      <div className="px-12 pb-8">
         <IndicadorEditorTabs />
       </div>
-
-      <IndicadorEditorBottomActions />
     </MainLayout>
   );
 }

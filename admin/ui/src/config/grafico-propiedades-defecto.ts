@@ -2,7 +2,7 @@ import { EChartsReactProps } from "echarts-for-react";
 
 export const ECHATS_DEFALT_PROPS: EChartsReactProps = {
   style: {
-    height: 500,
+    height: 400,
   },
   option: {
     toolbox: {
