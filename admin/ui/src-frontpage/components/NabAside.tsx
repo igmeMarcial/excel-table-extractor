@@ -3,7 +3,7 @@ import {
   ChevronRight24Filled,
   ChevronDown24Filled,
 } from '@fluentui/react-icons';
-import { newPathUrl } from '../../src/utils/url-utils';
+import { getQueryParam, newPathUrl } from '../../src/utils/url-utils';
 import { Link, useLocation } from 'react-router-dom';
 import { useAppSelector } from '../app/hooks';
 import {
@@ -59,6 +59,9 @@ function NabAside() {
   const [indice, setIndice] = useState<IndiceItem[]>([]);
   let indiceOriginal = useAppSelector(selectClasificadoresDesdeNivel2);
   let clasificadorNivel1Activo = useAppSelector(selectClaficadorNivel1Activo);
+  const location = useLocation();
+  let pathCurrent = getQueryParam(location, 'estadistica');
+
   const filterNivel1 = (arr) => {
     return arr.map((item) => {
       item.expanded = false;

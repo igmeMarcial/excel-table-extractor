@@ -31,7 +31,7 @@ export default function EstadisticaVistaTabs() {
     navigate(newPath);
   };
   return (
-    <div className="w-full">
+    <div className="w-9/12 pl-6">
       <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
         {items.map((item) => {
           return (

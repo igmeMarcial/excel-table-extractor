@@ -44,9 +44,8 @@ const apiMap = {
 
 function FichaTecnica() {
   const [dataIndicator, setDataIndicator] = useState([]);
-
   const data = useAppSelector(selectEstadisticaData);
-  
+
   useEffect(() => {
     if (data && typeof data === 'object') {
       convertObjectToArr();
@@ -56,7 +55,18 @@ function FichaTecnica() {
     if (!data || typeof data !== 'object') {
       return;
     }
-    const filteredEntries = Object.entries(data).filter(
+
+    //Campos que se mostraran en el front
+    const newArrNecessary = {
+      nombre: data?.nombre,
+      descripcion: data?.descripcion,
+      finalidad: data?.finalidad,
+      limitaciones: data?.limitaciones,
+      metodologiaCalculo: data?.metodologiaCalculo,
+      fuente: data?.fuente,
+    };
+
+    const filteredEntries = Object.entries(newArrNecessary).filter(
       ([_, value]) => typeof value === 'string'
     );
     const formattedData = filteredEntries.map(([key, value], index) => ({
@@ -86,7 +96,7 @@ function FichaTecnica() {
       <div className="p-4">
         <div className="relative my-1 mx-2">
           <div className="absolute top-2 right-0 text-xs">
-            <a  className="font-bold cursor-pointer text-red-400 hover:bg-red-200 py-2 px-3 hover:border hover:border-red-600 hover:border-solid rounded-md">
+            <a className="font-bold cursor-pointer text-red-400 hover:bg-red-200 py-2 px-3 hover:border hover:border-red-600 hover:border-solid rounded-md">
               Descargar
             </a>
           </div>
