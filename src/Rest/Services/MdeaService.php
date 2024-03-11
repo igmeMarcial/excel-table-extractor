@@ -89,7 +89,7 @@ class MdeaService
         $clasificadores = $this->getListaClasificadores();
         return array_map(function ($clasificador) {
             return [
-                'clasificadorId' => (int) $clasificador['clasificadorId'],
+                'id'      => (int) $clasificador['clasificadorId'],
                 'numeral' => $clasificador['numeral'],
                 'nombre'  => $clasificador['nombre'],
             ];

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction, isAnyOf } from '@reduxjs/toolkit'
+import { getIndiceClasificadores } from './services/clasificador';
 import { getEstadistica } from './services/estadistica';
 import type { RootState } from './store';
 
@@ -24,11 +25,13 @@ export const appSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addMatcher(isAnyOf(getEstadistica.matchPending), (state, action) => {
-      state.activeNetworkActivity = true;
-    }).addMatcher(isAnyOf(getEstadistica.matchFulfilled, getEstadistica.matchRejected), (state, action) => {
-      state.activeNetworkActivity = false;
-    })
+    builder
+      .addMatcher(isAnyOf(getEstadistica.matchPending), (state, action) => {
+        state.activeNetworkActivity = true;
+      })
+      .addMatcher(isAnyOf(getEstadistica.matchFulfilled, getEstadistica.matchRejected), (state, action) => {
+        state.activeNetworkActivity = false;
+      })
   }
 });
 

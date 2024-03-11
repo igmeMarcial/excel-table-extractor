@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
 
-export interface ApiResponse {
-  data: any
+export interface ApiResponse<T> {
+  data: T
   total?: number
 }
 

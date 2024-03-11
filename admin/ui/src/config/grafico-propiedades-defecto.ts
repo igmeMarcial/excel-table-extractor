@@ -12,11 +12,11 @@ export const ECHATS_DEFALT_PROPS: EChartsReactProps = {
         dataZoom: {
           yAxisIndex: "none"
         },
-        dataView: {
-          readOnly: false
-        },
+/*         dataView: {
+          readOnly: true
+        }, */
         magicType: {
-          type: ["line", "bar", "stack", "tiled", "pie"]
+          type: ["line", "bar", "stack", "tiled"]
         },
         saveAsImage: {}
       }

@@ -1,5 +1,6 @@
 import { Estadistica } from '../../types/Estadistica'
-import { api, ApiResponse } from './api'
+import { ObjectResponse } from '../../types/ObjectResponse'
+import { api } from './api'
 
 export const estadisticaApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -13,10 +14,10 @@ export const estadisticaApi = api.injectEndpoints({
       },
       invalidatesTags: ['Estadistica'],
     }),
-    getEstadistica: build.query<any, number>({
+    getEstadistica: build.query<Estadistica, number>({
       query: (id) => `estadisticas/${id}`,
       providesTags: (_result, _err, id) => [{ type: 'Estadistica', id }],
-      transformResponse: (response: ApiResponse) => response.data,
+      transformResponse: (response: ObjectResponse<Estadistica>) => response.data,
     }),
     updateEstadistica: build.mutation<Estadistica, Partial<Estadistica>>({
       query(data) {

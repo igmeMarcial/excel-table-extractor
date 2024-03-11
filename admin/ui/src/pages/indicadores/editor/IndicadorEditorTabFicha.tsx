@@ -9,6 +9,8 @@ import {
 import { useFetch } from '../../../hooks/useFetch';
 import { Input } from 'antd';
 import { ESTADISTICA_FIELDS_DEF } from './EstadisticaFieldsDef';
+import { useGetIndiceClasificadoresQuery } from '../../../app/services/clasificador';
+import { IndiceClasificadores } from '../../../core/IndiceClasificadores';
 
 interface Urls {
   componenteUrl: string;
@@ -43,7 +45,7 @@ const WPSelectField = ({ fieldName, label, options, onChange, value }) => {
           <option value="">-- Seleccionar --</option>
           {options.map((option) => (
             <option key={option.id} value={option.id}>
-              {option.nombre}
+              {option.numeral} {option.nombre}
             </option>
           ))}
         </Select>
@@ -94,10 +96,8 @@ const IndicadorEditorTabFicha: React.FC = () => {
   const dispath = useAppDispatch();
   const values = useAppSelector(selectEstadisticaFields);
   const validationErrors = useAppSelector(selectValidationErrors);
-  //Lamada de apis
-  const { data: listaCoponentes } = useFetch(urls.componenteUrl);
-  const { data: listaSubcomponentes } = useFetch(urls.subComponentesUrl);
-  const { data: listaTemasEstadisticos } = useFetch(urls.temasEstadisticosUrl);
+  const { data: clasificadores } = useGetIndiceClasificadoresQuery();
+  const indiceClasificadores = new IndiceClasificadores(clasificadores || []);
 
   const handleChange = (e) => {
     const { name: fiendName, value } = e.target;
@@ -109,19 +109,15 @@ const IndicadorEditorTabFicha: React.FC = () => {
     dispath(setEstadisticaFieldValue({ field: fiendName, value: +value }));
   };
   const getSubComponentes = () => {
-    return (listaSubcomponentes?.data || []).filter(
-      (x) => x.componenteId === values.componenteId
-    );
+    return indiceClasificadores.getSubclasificadores(values.componenteId);
   };
   const getTemasEstadisticos = () => {
-    return (listaTemasEstadisticos?.data || []).filter(
-      (x) => x.subcomponenteId === values.subcomponenteId
-    );
+    return indiceClasificadores.getSubclasificadores(values.subcomponenteId);
   };
   const getSelectFieldOptions = (fieldName: string) => {
     switch (fieldName) {
       case 'componenteId':
-        return listaCoponentes?.data || [];
+        return indiceClasificadores.getItemsNivel1();
       case 'subcomponenteId':
         return getSubComponentes();
       case 'temaEstadisticoId':
@@ -174,10 +170,7 @@ const IndicadorEditorTabFicha: React.FC = () => {
               })}
             </tbody>
           </table>
-          <button type="submit">
-            {' '}
-            enviar
-          </button>
+          <button type="submit"> enviar</button>
         </form>
       </div>
     </div>

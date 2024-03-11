@@ -4,8 +4,8 @@ import { useAppDispatch } from '../app/hooks';
 import { setNavTab } from '../pages/indicadores/EstadisticaFormSlice';
 
 const items = [
-  { text: 'Indicadores', path: 'indicadores' },
-  { text: 'Anuarios', path: 'anuarios' },
+  { text: 'Estadisticas', path: 'indicadores' },
+  //{ text: 'Anuarios', path: 'anuarios' },
   { text: 'Configuracion', path: 'configuracion' },
   { text: '*Dev', path: 'dev' },
 ];
@@ -45,7 +45,7 @@ export default function Navbar() {
   return (
     <nav
       className={
-        'flex justify-start items-center h-10 px-8 rounded-t ' + classes.bar
+        'flex justify-start items-center h-10 px-10 rounded-t ' + classes.bar
       }
     >
       {items.map((item) => {
