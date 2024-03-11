@@ -1,21 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import ExtractDataExcelService from '../../../services/ExtractDataExcelService';
 import { Checkbox } from 'antd';
 import { WorkBook } from 'xlsx';
 interface EditorSingleFileUploaderProps {
   onTableData?: any;
   onIndicatorData?: any;
-  uploadFile: boolean;
-  setUploadFile: any;
   option1: boolean;
   setOption1: any;
   option2: boolean;
   setOption2: any;
   setFiles: any;
+  titleIndicador: string;
+  workBook: WorkBook;
+  hasFile: boolean;
 }
 const EditorSingleFileUploader = ({
-  uploadFile,
-  setUploadFile,
   onTableData,
   onIndicatorData,
   option1,
@@ -23,44 +22,22 @@ const EditorSingleFileUploader = ({
   option2,
   setOption2,
   setFiles,
+  titleIndicador,
+  workBook,
+  hasFile,
 }: EditorSingleFileUploaderProps) => {
-  const [workbookFile, setWorkBookFile] = useState<WorkBook>(null);
-  const [title, setTitle] = useState<string>('');
-
   const extractDataExcelService = new ExtractDataExcelService();
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files![0];
-    try {
-      const workbook = await extractDataExcelService.readExcelFile(
-        selectedFile
-      );
-      setUploadFile(true);
-      setWorkBookFile(workbook);
-      if (workbook) {
-        const cellVallueTitle = await extractDataExcelService.getNameIndicador(
-          workbook,
-          1
-        );
-        setTitle(cellVallueTitle);
-      }
-    } catch (error) {
-      console.error('Error al leer el archivo Excel:', error);
-    }
-  };
   useEffect(() => {
     setFiles(option1 || option2);
-    if (workbookFile) {
+    if (workBook) {
       if (option1) {
         const dataIndicator =
-          extractDataExcelService.getEstadisticaFieldsFichaTecnica(
-            workbookFile,
-            1
-          );
+          extractDataExcelService.getEstadisticaFieldsFichaTecnica(workBook, 1);
         onIndicatorData(dataIndicator);
       }
       if (option2) {
         const dataTable = extractDataExcelService.extractDataFromFile(
-          workbookFile,
+          workBook,
           0
         );
         onTableData(dataTable);
@@ -69,10 +46,10 @@ const EditorSingleFileUploader = ({
   }, [option1, option2]);
   return (
     <section className="h-full min-h-60 py-3  w-full items-center ">
-      {uploadFile ? (
+      {hasFile && (
         <div>
           <p className="text-blue-500">Indicador detectado en la ficha</p>
-          <div>{title && <p>{title}</p>}</div>
+          <div>{titleIndicador && <p>{titleIndicador}</p>}</div>
           <p className="text-blue-500">Selecciona los datos a importar</p>
           <div className="flex flex-col pl-4 gap-2 ">
             <Checkbox
@@ -89,35 +66,6 @@ const EditorSingleFileUploader = ({
             </Checkbox>
           </div>
         </div>
-      ) : (
-        <main
-          style={{ borderColor: '#0F6CBD', backgroundColor: '#F6F7F7' }}
-          className="h-full min-h-44  border-dotted border-2 rounded-md  py-12 flex flex-col justify-center items-center"
-        >
-          <p className="mb-3 font-semibold text-gray-900 flex flex-wrap justify-center">
-            <span>
-              Arrastré y suelte aquí las fichas de los indicadores o haga clic
-              en “seleccionar fichas técnicas”
-            </span>
-            &nbsp;<span></span>
-          </p>
-          <label>
-            <input
-              id="hidden-input"
-              className="text-sm cursor-pointer  hidden"
-              type="file"
-              accept=".xlsx"
-              onChange={handleFileChange}
-              multiple
-            />
-            <div
-              style={{ borderRadius: '4px' }}
-              className=" cursor-pointer  rounded-sm px-3 py-1 bg-white hover:bg-gray-300 focus:shadow-outline focus:outline-none font-semibold border-2 border-gray-300"
-            >
-              Seleccionar fichas técnicas
-            </div>
-          </label>
-        </main>
       )}
     </section>
   );

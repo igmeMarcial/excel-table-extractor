@@ -3,5 +3,7 @@ export interface DataCell {
   rowIndex: number;
   colIndex: number;
   colSpan?: number;
-  rowSpan?: number
+  rowSpan?: number;
+  typeCell?: 'header' | 'body' | 'footer';
+  type?: 'string' |'number'
 }

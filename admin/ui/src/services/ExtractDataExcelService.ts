@@ -4,7 +4,6 @@ import { DataCell } from '../types/DataCell';
 import { FichaTecnicaFields } from '../types/Estadistica';
 import { EstadisticaDatos } from '../types/EstadisticaDatos';
 
-
 interface Sheet {
   [key: string]: any; // Tipo genérico para la celda
 }
@@ -59,30 +58,29 @@ class ExtractDataExcelService {
         sheet,
         'Elaboración:'
       );
-      // console.log(contentCellTitle)
       const transformedSheetData: EstadisticaDatos = {
         nombre: contentCellTitle
           ? contentCellTitle.separatedContent ||
-          contentCellTitle.description ||
-          ''
+            contentCellTitle.description ||
+            ''
           : '',
         nota: contentCellNote
           ? contentCellNote.separatedContent ||
-          contentCellNote.nextCell?.v ||
-          contentCellNote.cell?.v ||
-          ''
+            contentCellNote.nextCell?.v ||
+            contentCellNote.cell?.v ||
+            ''
           : '',
         fuente: contentCellFuente
           ? contentCellFuente.separatedContent ||
-          contentCellFuente.nextCell?.v ||
-          contentCellFuente.cell?.v ||
-          ''
+            contentCellFuente.nextCell?.v ||
+            contentCellFuente.cell?.v ||
+            ''
           : '',
         elaboracion: contentCellElaboration
           ? contentCellElaboration.separatedContent ||
-          contentCellElaboration.nextCell?.v ||
-          contentCellElaboration.cell?.v ||
-          ''
+            contentCellElaboration.nextCell?.v ||
+            contentCellElaboration.cell?.v ||
+            ''
           : '',
         tabla: tableData,
       };
@@ -187,7 +185,6 @@ class ExtractDataExcelService {
         const title = match[1].trim();
         const separatedContent = match[2].trim();
         return { title, separatedContent, description: cellValue };
-
       } else {
         // Si no se encuentra ":" o el formato no es válido, retornar null
         return { title: '', separatedContent: '', description: cellValue };
@@ -308,17 +305,21 @@ class ExtractDataExcelService {
       // Llamar a la función analyzeSearchArea para analizar el área de búsqueda
       this.analyzeSearchArea(sheet, searchStartCell, searchEndCell);
 
-
-
       for (let i = startRow; i <= endRow; ++i) {
         const rowData: DataCell[] = [];
         for (let j = startCol; j <= endCol; ++j) {
           const cellref = XLSX.utils.encode_cell({ c: j, r: i });
           const value = sheet[cellref] ? sheet[cellref].v : null;
+
+          //Determinar si es header o body
+          const typeCell = i === headerRowIndex ? 'header' : 'body';
+          const type = typeof value === 'number' ? 'number' : 'string';
           rowData.push({
             value,
             rowIndex: i,
             colIndex: j,
+            typeCell,
+            type,
           });
         }
         // Verificar si la fila es parte de la tabla antes de agregarla a tableData
@@ -446,8 +447,7 @@ class ExtractDataExcelService {
             }
             combinedData = combinedData.concat(rowData); // Almacena datos combinados en combinedData
           } else {
-            combinedData[combinedData.length - 1] +=
-              ', ' + rowData.join(', ');
+            combinedData[combinedData.length - 1] += ', ' + rowData.join(', ');
           }
         }
       }
@@ -479,9 +479,7 @@ class ExtractDataExcelService {
 
       if (result && result.length > 0) {
         result.forEach((row) => {
-          const firstNonNumberValue = row.find((value) =>
-            isNaN(Number(value))
-          );
+          const firstNonNumberValue = row.find((value) => isNaN(Number(value)));
           if (typeof firstNonNumberValue === 'string') {
             const snakeCaseKey = toSnakeCase(firstNonNumberValue);
             const matchedKey = Object.keys(FICHA_FIELDS_MAP).find((key) => {
@@ -493,8 +491,7 @@ class ExtractDataExcelService {
               return similarity >= 0.5;
             });
             if (matchedKey) {
-              resultObject[FICHA_FIELDS_MAP[matchedKey]] =
-                row[row.length - 1];
+              resultObject[FICHA_FIELDS_MAP[matchedKey]] = row[row.length - 1];
             }
           }
         });
@@ -504,7 +501,6 @@ class ExtractDataExcelService {
       console.log(error);
       throw error;
     }
-
   }
 }
 

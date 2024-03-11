@@ -6,7 +6,6 @@ import {
   selectEstadisticaFields,
   selectValidationErrors,
 } from '../EstadisticaFormSlice';
-import { useFetch } from '../../../hooks/useFetch';
 import { Input } from 'antd';
 import { ESTADISTICA_FIELDS_DEF } from './EstadisticaFieldsDef';
 import { useGetIndiceClasificadoresQuery } from '../../../app/services/clasificador';
@@ -98,6 +97,8 @@ const IndicadorEditorTabFicha: React.FC = () => {
   const validationErrors = useAppSelector(selectValidationErrors);
   const { data: clasificadores } = useGetIndiceClasificadoresQuery();
   const indiceClasificadores = new IndiceClasificadores(clasificadores || []);
+
+  console.log(indiceClasificadores.getItemsNivel1);
 
   const handleChange = (e) => {
     const { name: fiendName, value } = e.target;

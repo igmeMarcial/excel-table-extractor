@@ -16,7 +16,6 @@ const IndicadorEditorTabDatos: React.FC = () => {
   const [containerHeight, setContainerHeight] = useState<number | null>(null);
   const divRef = useRef<HTMLDivElement>(null);
 
-  console.log(values)
   // Actualizando el tamaño de div de la tabla
   useEffect(() => {
     // Función para obtener la altura de la div
@@ -60,8 +59,6 @@ const IndicadorEditorTabDatos: React.FC = () => {
     };
     setValues(updatedValues);
   };
-  //  console.log(containerHeight)
-  console.log(values)
   return (
     <div className="overflow-auto" style={{ height: '380px' }}>
       <form>

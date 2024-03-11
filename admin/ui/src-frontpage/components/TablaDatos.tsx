@@ -1,5 +1,10 @@
 import { useAppSelector } from '../app/hooks';
-import { selectEstadisticaData, selectEstadisticaDatos } from '../app/AppSlice';
+import {
+  selectComponenteIndicePath,
+  selectEstadisticaData,
+  selectEstadisticaDatos,
+  selectEstadisticaIndicePath,
+} from '../app/AppSlice';
 import TableDataGrid from './TableDataGrid';
 import { Button } from '@fluentui/react-components';
 import * as XLSX from 'xlsx';
@@ -7,9 +12,13 @@ import * as XLSX from 'xlsx';
 function TablaDatos() {
   const dataTable = useAppSelector(selectEstadisticaDatos);
   const data = useAppSelector(selectEstadisticaData);
+  const compo = useAppSelector(selectComponenteIndicePath);
+  const sub = useAppSelector(selectEstadisticaIndicePath);
   const { fuente, elaboracion, nota, nombre, tabla } = data?.datos || {};
 
   console.log(data);
+  console.log(compo);
+  console.log(sub);
 
   const handleDowload = () => {
     const workbook = XLSX.utils.book_new();

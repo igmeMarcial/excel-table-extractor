@@ -1,4 +1,4 @@
-import { forwardRef, useState, useImperativeHandle } from 'react';
+import { forwardRef, useState, useEffect } from 'react';
 import { Modal, Button } from 'antd';
 import EditorSingleFileUploader from './EditorSingleFileUploader';
 import { useAppDispatch } from '../../../app/hooks';
@@ -7,27 +7,39 @@ import {
   setEstadisticaDatos,
   setEstadisticaFields,
 } from '../EstadisticaFormSlice';
+import { WorkBook } from 'xlsx';
 type IndicadorEditorModalImportProps = {
   title: string;
+  hasFile: boolean;
+  setHasFile: any;
+  titleIndicador: string;
+  workBook: WorkBook;
 };
 const IndicadorEditorModalImport = forwardRef(
-  ({ title }: IndicadorEditorModalImportProps, ref) => {
+  (
+    {
+      title,
+      hasFile,
+      setHasFile,
+      titleIndicador,
+      workBook,
+    }: IndicadorEditorModalImportProps,
+    ref
+  ) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [files, setFiles] = useState(false);
     const [tableData, setTableData] = useState(null);
     const [indicadorData, setIndicadorData] = useState(null);
-    const [uploadFileLoading, setUploadFileLoading] = useState<boolean>(false);
     const [option1, setOption1] = useState(false);
     const [option2, setOption2] = useState(false);
     const dispath = useAppDispatch();
 
-    const open = () => {
-      setIsModalOpen(true);
-    };
-    // Expose the custom method to the parent component
-    useImperativeHandle(ref, () => ({
-      open,
-    }));
+    useEffect(() => {
+      if (hasFile) {
+        setIsModalOpen(true);
+      }
+    }, [hasFile]);
+
     const handleOk = () => {
       setIsModalOpen(false);
       if (option1 && option2) {
@@ -38,7 +50,7 @@ const IndicadorEditorModalImport = forwardRef(
       } else if (option2) {
         dispath(setEstadisticaDatos(tableData));
       }
-      setUploadFileLoading(false);
+      setHasFile(false);
       setOption1(false);
       setOption2(false);
       setFiles(false);
@@ -54,7 +66,7 @@ const IndicadorEditorModalImport = forwardRef(
     };
     const handleCancel = () => {
       setIsModalOpen(false);
-      setUploadFileLoading(false);
+      setHasFile(false);
       setOption1(false); // Reiniciar estado de los checkboxes
       setOption2(false);
       setFiles(false);
@@ -100,8 +112,6 @@ const IndicadorEditorModalImport = forwardRef(
         ]}
       >
         <EditorSingleFileUploader
-          uploadFile={uploadFileLoading}
-          setUploadFile={setUploadFileLoading}
           onTableData={handleTableData}
           onIndicatorData={handleIndicatorData}
           option1={option1}
@@ -109,6 +119,9 @@ const IndicadorEditorModalImport = forwardRef(
           option2={option2}
           setOption2={setOption2}
           setFiles={setFiles}
+          titleIndicador={titleIndicador}
+          workBook={workBook}
+          hasFile={hasFile}
         />
       </Modal>
     );
