@@ -50,28 +50,45 @@ const IndicadorEditorhHeader: React.FC = () => {
       alert('No hay cambios para guardar');
     }
   };
+  const handleRemove = () => {
+    setWorkBookFile(null);
+    setTitleIndicador('');
+    setHasFile(false);
+    return true;
+  };
+
   const handleFileChange = async (info) => {
     const selectedFile = info.file.originFileObj;
+
     if (info.file.status !== 'uploading') {
       try {
         const workbook = await extractDataExcelService.readExcelFile(
           selectedFile
         );
-        setWorkBookFile(workbook);
         if (workbook) {
-          const cellVallueTitle =
-            await extractDataExcelService.getNameIndicador(workbook, 1);
-          setTitleIndicador(cellVallueTitle);
-          setHasFile(true);
+          const cellVallueTitle = extractDataExcelService.getNameIndicador(
+            workbook,
+            1
+          );
+          // Verifica que workbook y cellVallueTitle no sean nulos ni indefinidos
+          if (workbook && cellVallueTitle && cellVallueTitle?.nombreIndicador) {
+            setWorkBookFile(workbook);
+            setTitleIndicador(cellVallueTitle?.nombreIndicador);
+            setHasFile(true); // Establece hasFile como true si todo es válido
+          } else {
+            // Si workbook o cellVallueTitle son nulos o indefinidos, muestra una alerta
+            alert(
+              'El archivo debe ser tipo Indicador, con hoja1 de datos y hoja2 de ficha técnica'
+            );
+          }
         }
       } catch (error) {
-        setHasFile(false);
-        alert(
-          'El archivo tiene que ser tipo Indicador, hoja1 ficha técnica y hoja2 datos'
-        );
+        setHasFile(false); // Establece hasFile como false si hay un error al leer el archivo
+        alert('El archivo.xlsx debe ser  tipo Indicador');
       }
     }
   };
+
   const props = {
     onChange: handleFileChange,
     multiple: false,
@@ -88,7 +105,7 @@ const IndicadorEditorhHeader: React.FC = () => {
         </Link>
         <div className="text-2xl md:text-2xl font-bold p-0">Indicador</div>
         <span className="flex-1"></span>
-        <Upload showUploadList={false} {...props}>
+        <Upload showUploadList={false} onRemove={handleRemove} {...props}>
           <Button
             type="text"
             icon={<ArrowImport24Regular className="align-middle" />}
@@ -103,6 +120,7 @@ const IndicadorEditorhHeader: React.FC = () => {
           setHasFile={setHasFile}
           titleIndicador={titleIndicador}
           workBook={workbookFile}
+          handleRemove={handleRemove}
         />
         <Button
           type="text"

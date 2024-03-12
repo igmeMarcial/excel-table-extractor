@@ -14,6 +14,7 @@ type IndicadorEditorModalImportProps = {
   setHasFile: any;
   titleIndicador: string;
   workBook: WorkBook;
+  handleRemove: () => void;
 };
 const IndicadorEditorModalImport = forwardRef(
   (
@@ -23,6 +24,7 @@ const IndicadorEditorModalImport = forwardRef(
       setHasFile,
       titleIndicador,
       workBook,
+      handleRemove,
     }: IndicadorEditorModalImportProps,
     ref
   ) => {
@@ -37,6 +39,8 @@ const IndicadorEditorModalImport = forwardRef(
     useEffect(() => {
       if (hasFile) {
         setIsModalOpen(true);
+      } else {
+        setIsModalOpen(false);
       }
     }, [hasFile]);
 
@@ -63,6 +67,7 @@ const IndicadorEditorModalImport = forwardRef(
         activeTabValue = '1'; // Valor por defecto si ninguna opción está seleccionada
       }
       dispath(setActiveTab(activeTabValue));
+      handleRemove();
     };
     const handleCancel = () => {
       setIsModalOpen(false);
@@ -70,6 +75,7 @@ const IndicadorEditorModalImport = forwardRef(
       setOption1(false); // Reiniciar estado de los checkboxes
       setOption2(false);
       setFiles(false);
+      handleRemove();
     };
 
     const handleTableData = (values) => {

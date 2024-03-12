@@ -94,81 +94,83 @@ class ExtractDataExcelService {
   getNameIndicador(
     workbook: XLSX.WorkBook,
     sheetIndex: number
-  ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      try {
-        const sheetName: string = workbook.SheetNames[sheetIndex];
-        const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
-        let data: string | undefined;
-        const range = XLSX.utils.decode_range(sheet['!ref']);
-        let foundValue = false;
+  ): { nombreIndicador: string; rowIndex: number | null } {
+    try {
+      const sheetName: string = workbook.SheetNames[sheetIndex];
+      const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
+      let data: string | undefined;
+      let rowIndex: number | null = null;
+      const range = XLSX.utils.decode_range(sheet['!ref']);
+      let foundValue = false;
 
-        const validarCadenaFlex = (
-          cadena: string,
-          cadenasObjetivo: string[]
-        ): boolean => {
-          const cadenaNormalizada = cadena
+      const validarCadenaFlex = (
+        cadena: string,
+        cadenasObjetivo: string[]
+      ): boolean => {
+        const cadenaNormalizada = cadena
+          .trim()
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '');
+        return cadenasObjetivo.some((objetivo) => {
+          const objetivoNormalizado = objetivo
             .trim()
             .toLowerCase()
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '');
-          return cadenasObjetivo.some((objetivo) => {
-            const objetivoNormalizado = objetivo
-              .trim()
-              .toLowerCase()
-              .normalize('NFD')
-              .replace(/[\u0300-\u036f]/g, '');
-            return cadenaNormalizada.includes(objetivoNormalizado);
-          });
-        };
+          return cadenaNormalizada.includes(objetivoNormalizado);
+        });
+      };
 
-        //iterando
-        for (let R = range.s.r; R <= range.e.r; R++) {
-          for (let C = range.s.c; C <= range.e.c; ++C) {
-            const cellref = XLSX.utils.encode_cell({ c: C, r: R });
-            const cell = sheet[cellref];
-            if (cell !== undefined && typeof cell === 'object' && 'v' in cell) {
-              const cellValue = String(cell.v);
-              if (
-                validarCadenaFlex(cellValue, [
-                  'Nombre del indicador',
-                  'estadística ambiental',
-                  'Nombre del indicador o estadística ambiental',
-                ])
-              ) {
-                for (let R2 = R; R2 <= range.e.r; R2++) {
-                  for (let C2 = C + 1; C2 <= range.e.c; ++C2) {
-                    const cellref2 = XLSX.utils.encode_cell({ c: C2, r: R2 });
-                    const cell2 = sheet[cellref2];
-                    if (
-                      cell2 !== undefined &&
-                      typeof cell2 === 'object' &&
-                      'v' in cell2
-                    ) {
-                      data = cell2.v;
-                      foundValue = true;
-                      break; // Salir del bucle una vez que se encuentra un valor
-                    }
+      //iterando
+      for (let R = range.s.r; R <= range.e.r; R++) {
+        for (let C = range.s.c; C <= range.e.c; ++C) {
+          const cellref = XLSX.utils.encode_cell({ c: C, r: R });
+          const cell = sheet[cellref];
+          if (cell !== undefined && typeof cell === 'object' && 'v' in cell) {
+            const cellValue = String(cell.v);
+            if (
+              validarCadenaFlex(cellValue, [
+                'Nombre del indicador',
+                'estadística ambiental',
+                'Nombre del indicador o estadística ambiental',
+              ])
+            ) {
+              for (let R2 = R; R2 <= range.e.r; R2++) {
+                for (let C2 = C + 1; C2 <= range.e.c; ++C2) {
+                  const cellref2 = XLSX.utils.encode_cell({ c: C2, r: R2 });
+                  const cell2 = sheet[cellref2];
+                  if (
+                    cell2 !== undefined &&
+                    typeof cell2 === 'object' &&
+                    'v' in cell2
+                  ) {
+                    data = cell2.v;
+                    rowIndex = R2;
+                    foundValue = true;
+                    break; // Salir del bucle una vez que se encuentra un valor
                   }
-                  if (foundValue) break;
                 }
+                if (foundValue) break;
               }
             }
-            if (foundValue) break;
           }
           if (foundValue) break;
         }
-        if (data === undefined) {
-          resolve(
-            'Nombre del indicador o estadística ambiental no se encuentra en esta hoja'
-          );
-        } else {
-          resolve(data);
-        }
-      } catch (error) {
-        reject(error);
+        if (foundValue) break;
       }
-    });
+      if (data === undefined) {
+        return {
+          nombreIndicador:
+            '',
+          rowIndex: null,
+        };
+      } else {
+        return { nombreIndicador: data, rowIndex: rowIndex };
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   getTablaDatosTitulo(
@@ -239,6 +241,7 @@ class ExtractDataExcelService {
   }
 
   //
+  
   extractTableData(sheet: Sheet): DataCell[][] {
     const tableData: any[] = [];
     const range: Range = XLSX.utils.decode_range(sheet['!ref']);
@@ -331,7 +334,6 @@ class ExtractDataExcelService {
         }
       }
     }
-    console.log(tableData)
     return tableData;
   }
   filaEsParteDeTabla = (rowData: DataCell[]) => {
@@ -403,10 +405,10 @@ class ExtractDataExcelService {
     }
     // Verificar si se encontraron suficientes valores numéricos consecutivos en varias filas
     if (consecutiveNumericValues >= minConsecutiveValues) {
-      console.log('Se encontraron datos de tabla en el área de búsqueda.');
+      console.info('Se encontraron datos de tabla en el área de búsqueda.');
       // Aquí puedes realizar acciones adicionales, como retornar true o ejecutar otras funciones
     } else {
-      console.log('No se encontraron datos de tabla en el área de búsqueda.');
+      console.warn('No se encontraron datos de tabla en el área de búsqueda.');
       // Aquí puedes realizar acciones adicionales, como retornar false o ejecutar otras funciones
     }
   }
@@ -421,16 +423,15 @@ class ExtractDataExcelService {
       const resultObject: ResultObject = {};
       let result: string[][] = [];
       let combinedData: string[] = [];
-      let start = 3; //range.s.r
+      const { rowIndex } = this.getNameIndicador(workbook, sheetIndex);
+      let start = rowIndex || 3; //range.s.r
       for (let rowNum = start; rowNum <= range.e.r; rowNum++) {
         let rowHasPattern = false;
         let rowData: string[] = [];
         for (let colNum = range.s.c; colNum <= range.e.c; colNum++) {
           let cellAddress = XLSX.utils.encode_cell({ r: rowNum, c: colNum });
           let cellValue = sheet[cellAddress] ? sheet[cellAddress].w : '';
-
           if (cellValue.trim().length > 0) {
-            // console.log(cellValue)
             rowData.push(cellValue);
             rowHasPattern = true;
           }

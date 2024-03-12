@@ -3,19 +3,25 @@ import IndicadorDataGrid from './IndicadorDataGrid';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   selectEstadisticaDataFields,
+  selectValidationErrors,
   setEstadisticaDatos,
+  setFieldValidationErrors,
 } from '../EstadisticaFormSlice';
 import { DATOS_FIELDS_DEF } from './EstadisticaFieldsDef';
 import { Input } from 'antd';
+import { FieldValidation } from '../../../types/FieldValidation';
+import FieldValidationsHelper from '../../../helpers/FieldValidationsHelper';
 
 const fieldsArray = DATOS_FIELDS_DEF;
 
 const IndicadorEditorTabDatos: React.FC = () => {
   const dispath = useAppDispatch();
   const values = useAppSelector(selectEstadisticaDataFields);
+  const err = useAppSelector(selectValidationErrors);
   const [containerHeight, setContainerHeight] = useState<number | null>(null);
   const divRef = useRef<HTMLDivElement>(null);
 
+  console.log(err);
   // Actualizando el tamaño de div de la tabla
   useEffect(() => {
     // Función para obtener la altura de la div
@@ -53,11 +59,22 @@ const IndicadorEditorTabDatos: React.FC = () => {
     key: string
   ) => {
     const newValue = e.target.value;
+    const validations: FieldValidation = {
+      required: true,
+      state: 'error',
+    };
+    const errors = FieldValidationsHelper.getFieldErrors(newValue, validations);
+
+    console.log(errors);
+    console.log(newValue);
+
     const updatedValues = {
       ...values,
       [key]: newValue,
     };
+
     setValues(updatedValues);
+    dispath(setFieldValidationErrors({ fieldName: key, errors }));
   };
   return (
     <div className="overflow-auto" style={{ height: '380px' }}>
@@ -99,6 +116,7 @@ const IndicadorEditorTabDatos: React.FC = () => {
                       value={values[fieldName]}
                       onChange={(e) => handleChange(e, fieldName)}
                       required={fieldDef.required}
+                      status={err[fieldName]}
                     />
                   )}
                 </td>

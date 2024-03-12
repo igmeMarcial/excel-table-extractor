@@ -98,8 +98,6 @@ const IndicadorEditorTabFicha: React.FC = () => {
   const { data: clasificadores } = useGetIndiceClasificadoresQuery();
   const indiceClasificadores = new IndiceClasificadores(clasificadores || []);
 
-  console.log(indiceClasificadores.getItemsNivel1);
-
   const handleChange = (e) => {
     const { name: fiendName, value } = e.target;
     dispath(setEstadisticaFieldValue({ field: fiendName, value }));

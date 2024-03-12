@@ -48,6 +48,7 @@ export class GraficoHelper {
 
   private getSeries(tabla: DataCell[][], rangoValores: RangoCeldas): Serie[] {
     const out: Serie[] = [];
+    console.log(tabla)
     for (let i = rangoValores.inicio.rowIndex; i <= rangoValores.fin.rowIndex; i++) {
       // colIdex de nombre de la serie
       let nombreColIndex = rangoValores.inicio.colIndex - 1;
