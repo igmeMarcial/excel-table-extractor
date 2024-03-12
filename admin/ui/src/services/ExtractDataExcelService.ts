@@ -309,7 +309,8 @@ class ExtractDataExcelService {
       this.analyzeSearchArea(sheet, searchStartCell, searchEndCell);
 
       for (let i = startRow; i <= endRow; ++i) {
-        const rowData: DataCell[] = [];
+        // const rowData: DataCell[] = [];
+        const rowData: any[] = [];
         for (let j = startCol; j <= endCol; ++j) {
           const cellref = XLSX.utils.encode_cell({ c: j, r: i });
           const value = sheet[cellref] ? sheet[cellref].v : null;
@@ -317,13 +318,14 @@ class ExtractDataExcelService {
           //Determinar si es header o body
           const typeCell = i === headerRowIndex ? 'header' : 'body';
           const type = typeof value === 'number' ? 'number' : 'string';
-          rowData.push({
-            value,
-            rowIndex: i,
-            colIndex: j,
-            typeCell,
-            type,
-          });
+          // rowData.push({
+          //   value,
+          //   rowIndex: i,
+          //   colIndex: j,
+          //   typeCell,
+          //   type,
+          // });
+          rowData.push(value)
         }
         // Verificar si la fila es parte de la tabla antes de agregarla a tableData
         if (this.filaEsParteDeTabla(rowData)) {
@@ -334,17 +336,21 @@ class ExtractDataExcelService {
         }
       }
     }
-    return tableData;
+    console.log(tableData)
+    return [];
   }
-  filaEsParteDeTabla = (rowData: DataCell[]) => {
+  filaEsParteDeTabla = (rowData:any[]) => {
     // Procesar los datos dentro del área de búsqueda y agregarlos a tableData
     //aqui la logica de extraer datos
     const umbral = 0.5;
     let countDataCells = 0;
     for (let cell of rowData) {
-      if (cell.value !== null && cell.value !== '') {
-        countDataCells++;
-      }
+      // if (cell.value !== null && cell.value !== '') {
+      //   countDataCells++;
+      // }
+      if (cell !== null && cell !== '') {
+      countDataCells++;
+     }
     }
     // Calcular el porcentaje de celdas con datos
     const dataCellPercentage = countDataCells / rowData.length;
