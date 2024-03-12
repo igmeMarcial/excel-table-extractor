@@ -1,4 +1,5 @@
 import * as XLSX from 'xlsx';
+import tablaDatosHelper from '../helpers/TablaDatosHelper';
 import { FICHA_FIELDS_MAP } from '../pages/indicadores/editor/FichaFieldsMap';
 import { DataCell } from '../types/DataCell';
 import { FichaTecnicaFields } from '../types/Estadistica';
@@ -61,26 +62,26 @@ class ExtractDataExcelService {
       const transformedSheetData: EstadisticaDatos = {
         nombre: contentCellTitle
           ? contentCellTitle.separatedContent ||
-            contentCellTitle.description ||
-            ''
+          contentCellTitle.description ||
+          ''
           : '',
         nota: contentCellNote
           ? contentCellNote.separatedContent ||
-            contentCellNote.nextCell?.v ||
-            contentCellNote.cell?.v ||
-            ''
+          contentCellNote.nextCell?.v ||
+          contentCellNote.cell?.v ||
+          ''
           : '',
         fuente: contentCellFuente
           ? contentCellFuente.separatedContent ||
-            contentCellFuente.nextCell?.v ||
-            contentCellFuente.cell?.v ||
-            ''
+          contentCellFuente.nextCell?.v ||
+          contentCellFuente.cell?.v ||
+          ''
           : '',
         elaboracion: contentCellElaboration
           ? contentCellElaboration.separatedContent ||
-            contentCellElaboration.nextCell?.v ||
-            contentCellElaboration.cell?.v ||
-            ''
+          contentCellElaboration.nextCell?.v ||
+          contentCellElaboration.cell?.v ||
+          ''
           : '',
         tabla: tableData,
       };
@@ -241,7 +242,13 @@ class ExtractDataExcelService {
   }
 
   //
-  
+
+  extractTableDataNew(sheet: Sheet): DataCell[][] {
+    const tableData: any[] = [];
+    const html = XLSX.utils.sheet_to_html(sheet);
+    console.log(html);
+    return [];
+  }
   extractTableData(sheet: Sheet): DataCell[][] {
     const tableData: any[] = [];
     const range: Range = XLSX.utils.decode_range(sheet['!ref']);
@@ -318,14 +325,15 @@ class ExtractDataExcelService {
           //Determinar si es header o body
           const typeCell = i === headerRowIndex ? 'header' : 'body';
           const type = typeof value === 'number' ? 'number' : 'string';
-          // rowData.push({
-          //   value,
-          //   rowIndex: i,
-          //   colIndex: j,
-          //   typeCell,
-          //   type,
-          // });
-          rowData.push(value)
+          rowData.push({
+            value: value,
+            rowIndex: i,
+            colIndex: j,
+            colSpan: 1,
+            rowSpan: 1,
+            typeCell,
+            type,
+          });
         }
         // Verificar si la fila es parte de la tabla antes de agregarla a tableData
         if (this.filaEsParteDeTabla(rowData)) {
@@ -337,20 +345,18 @@ class ExtractDataExcelService {
       }
     }
     console.log(tableData)
-    return [];
+    return tableData;
+    //return tablaDatosHelper.getTablaDatosFromRawArrays(tableData);
   }
-  filaEsParteDeTabla = (rowData:any[]) => {
+  filaEsParteDeTabla = (rowData: DataCell[]) => {
     // Procesar los datos dentro del área de búsqueda y agregarlos a tableData
     //aqui la logica de extraer datos
     const umbral = 0.5;
     let countDataCells = 0;
     for (let cell of rowData) {
-      // if (cell.value !== null && cell.value !== '') {
-      //   countDataCells++;
-      // }
-      if (cell !== null && cell !== '') {
-      countDataCells++;
-     }
+      if (cell.value !== null && cell.value !== '') {
+        countDataCells++;
+      }
     }
     // Calcular el porcentaje de celdas con datos
     const dataCellPercentage = countDataCells / rowData.length;

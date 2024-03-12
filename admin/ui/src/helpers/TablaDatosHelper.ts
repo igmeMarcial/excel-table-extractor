@@ -27,17 +27,48 @@ export class TablaDatosHelper {
   getTablaDatosFromRawArrays(rows: (string | number)[][]): DataCell[][] {
     let out: DataCell[][] = [];
     out = rows.map((row, rowIndex) => {
-      return row.map((cell, colIndex) => {
-        return {
-          value: cell,
-          colIndex,
-          rowIndex,
-          rowspan: 1,
-          colspan: 1
-        };
+      const newRow: DataCell[] = [];
+      row.forEach((cell, colIndex) => {
+        const value = cell;
+        const colSpan = this.calculateColSpan(rows, rowIndex, colIndex);
+        const rowSpan = 1; //this.calculateRowSpan(rows, rowIndex, colIndex);
+        if (value !== null) {
+          newRow.push({
+            value,
+            colIndex,
+            rowIndex,
+            colSpan,
+            rowSpan,
+          });
+        }
       });
+      return newRow;
     });
     return out;
+  }
+
+  calculateRowSpan(rows: (string | number)[][], cellRowIndex: number, cellColIndex: number): number {
+    let nextCellIndex = cellRowIndex + 1;
+    while (nextCellIndex < rows.length) {
+      if (rows[nextCellIndex][cellColIndex] === null) {
+        nextCellIndex++;
+      } else {
+        break;
+      }
+    }
+    return nextCellIndex - cellRowIndex;
+  }
+
+  calculateColSpan(rows: (string | number)[][], cellRowIndex: number, cellColIndex: number): number {
+    let nextCellIndex = cellColIndex + 1;
+    while (nextCellIndex < rows[cellRowIndex].length) {
+      if (rows[cellRowIndex][nextCellIndex] === null) {
+        nextCellIndex++;
+      } else {
+        break;
+      }
+    }
+    return nextCellIndex - cellColIndex;
   }
 
   tieneFilaTotales(tabla: DataCell[][]): boolean {
@@ -112,7 +143,7 @@ export class TablaDatosHelper {
    * Algoritmo
    * El algoritmo para obtener el rango de celdas con valores numéricos es el siguiente:
    * 1.- Se recorre la tabla y se obtienen los valores numéricos de cada celda y se guardan en un arreglo bidimensional
-   * 2.- Se añaden a la lista unicamente aquellos valores que sean numéricos y no sean celadas combinadas.
+   * 2.- Se añaden a la lista unicamente aquellos valores que sean numéricos y no sean celdas combinadas.
    * 3.- Por defecto se asigna como inicio del rango los indices de la primera y ultima celda del resultado del paso 1
    * 3.- Hasta el paso 2 funciona para la mayoría de los casos.
    * @param tabla
