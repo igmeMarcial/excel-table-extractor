@@ -5,6 +5,8 @@ import { DataCell } from '../types/DataCell';
 import { FichaTecnicaFields } from '../types/Estadistica';
 import { EstadisticaDatos } from '../types/EstadisticaDatos';
 import { start } from 'repl';
+import { RangoCeldas } from '../types/RangoCeldas';
+import { getSheetHtmlRows } from '../utils/xmls-utils';
 
 interface Sheet {
   [key: string]: any; // Tipo genérico para la celda
@@ -67,26 +69,26 @@ class ExtractDataExcelService {
       const transformedSheetData: EstadisticaDatos = {
         nombre: contentCellTitle
           ? contentCellTitle.separatedContent ||
-            contentCellTitle.description ||
-            ''
+          contentCellTitle.description ||
+          ''
           : '',
         nota: contentCellNote
           ? contentCellNote.separatedContent ||
-            contentCellNote.nextCell?.v ||
-            contentCellNote.cell?.v ||
-            ''
+          contentCellNote.nextCell?.v ||
+          contentCellNote.cell?.v ||
+          ''
           : '',
         fuente: contentCellFuente
           ? contentCellFuente.separatedContent ||
-            contentCellFuente.nextCell?.v ||
-            contentCellFuente.cell?.v ||
-            ''
+          contentCellFuente.nextCell?.v ||
+          contentCellFuente.cell?.v ||
+          ''
           : '',
         elaboracion: contentCellElaboration
           ? contentCellElaboration.separatedContent ||
-            contentCellElaboration.nextCell?.v ||
-            contentCellElaboration.cell?.v ||
-            ''
+          contentCellElaboration.nextCell?.v ||
+          contentCellElaboration.cell?.v ||
+          ''
           : '',
         tabla: tableData,
       };
@@ -248,24 +250,51 @@ class ExtractDataExcelService {
   //
 
   extractTableDataNew(sheet: Sheet): DataCell[][] {
-    const tableData: any[] = [];
-    const html = XLSX.utils.sheet_to_html(sheet);
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    const allTr = doc.querySelectorAll('tr:has(td[data-v])');
-    let maxDataColums = 0;
-    let tableDataR = [];
+    const out: DataCell[][] = [];
+    const htmlRows = getSheetHtmlRows(sheet);
+    let htmlTablaDatos = this.getHtmlTablaDatos(htmlRows);
 
-    allTr.forEach((tr) => {
-      const tdWithValues = tr.querySelectorAll('td[data-v]');
-      if (tdWithValues.length > maxDataColums) {
-        maxDataColums = tdWithValues.length;
+    htmlTablaDatos.forEach((tr, i) => {
+      const tdElements = tr.querySelectorAll('td[data-v]');
+      let colIndex = 0;
+      const rowData: DataCell[] = [];
+      tdElements.forEach((cell) => {
+        const colSpan = cell.getAttribute('colspan')
+          ? +cell.getAttribute('colspan')
+          : 1;
+        const rowSpan = cell.getAttribute('rowspan')
+          ? +cell.getAttribute('rowspan')
+          : 1;
+
+        rowData.push({
+          value: cell.getAttribute('data-v'),
+          colIndex,
+          rowIndex: i,
+          colSpan,
+          rowSpan,
+        });
+        colIndex += colSpan;
+      });
+      out.push(rowData);
+    });
+    return out;
+  }
+
+  getHtmlTablaDatos(rows: NodeListOf<Element>): Element[] {
+    let out = [];
+    let rangoTablaDatos = this.getRangoTablaDatos(rows);
+    rows.forEach((tr, i) => {
+      if (i >= rangoTablaDatos.inicio.rowIndex && i >= rangoTablaDatos.fin.rowIndex) {
+        out.push(tr);
       }
     });
-
+    return out;
+  }
+  getRangoTablaDatos(rows: NodeListOf<Element>): RangoCeldas {
     let startRowIndex = -1;
     let endRowIndex = -1;
-    allTr.forEach((tr, i) => {
+    const maxDataColums = this.getMaxDataColums(rows);
+    rows.forEach((tr, i) => {
       let totalCols = 0;
       const tdWithValues = tr.querySelectorAll('td[data-v]');
       tdWithValues.forEach((element) => {
@@ -289,39 +318,28 @@ class ExtractDataExcelService {
         endRowIndex = i;
       }
     });
-
-    allTr.forEach((tr, i) => {
-      if (i >= startRowIndex && i >= endRowIndex) {
-        tableDataR.push(tr);
+    return {
+      inicio: {
+        rowIndex: 5, /// De acuerdo a formato estandar
+        colIndex: 0,
+      },
+      fin: {
+        rowIndex: endRowIndex,
+        colIndex: 0
+      }
+    };
+  }
+  getMaxDataColums(rows: NodeListOf<Element>): number {
+    let maxDataColums = 0;
+    rows.forEach((tr) => {
+      const tdWithValues = tr.querySelectorAll('td[data-v]');
+      if (tdWithValues.length > maxDataColums) {
+        maxDataColums = tdWithValues.length;
       }
     });
-
-    tableDataR.forEach((tr, i) => {
-      const tdElements = tr.querySelectorAll('td[data-v]');
-      let colIndex = 0;
-      const rowData: DataCell[] = [];
-      tdElements.forEach((cell, index) => {
-        const colSpan = cell.getAttribute('colspan')
-          ? +cell.getAttribute('colspan')
-          : 1;
-        const rowSpan = cell.getAttribute('rowspan')
-          ? +cell.getAttribute('rowspan')
-          : 1;
-
-        rowData.push({
-          value: cell.getAttribute('data-v'),
-          colIndex,
-          rowIndex: i,
-          colSpan,
-          rowSpan,
-        });
-        colIndex += colSpan;
-      });
-      tableData.push(rowData);
-    });
-    // console.log(tableData);
-    return tableData;
+    return maxDataColums;
   }
+
   extractTableData(sheet: Sheet): DataCell[][] {
     const tableData: any[] = [];
     const range: Range = XLSX.utils.decode_range(sheet['!ref']);
