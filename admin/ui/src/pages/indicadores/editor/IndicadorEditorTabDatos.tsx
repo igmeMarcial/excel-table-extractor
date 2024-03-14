@@ -48,7 +48,7 @@ const IndicadorEditorTabDatos: React.FC = () => {
     dispath(setFieldValidationErrors({ fieldName: key, errors }));
   };
   return (
-    <div className="overflow-auto" style={{ height: '380px' }}>
+    <div className="overflow-auto">
       <form>
         <table className="form-table ">
           <tbody>

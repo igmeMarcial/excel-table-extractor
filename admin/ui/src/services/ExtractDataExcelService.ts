@@ -240,9 +240,10 @@ class ExtractDataExcelService {
     }
     return null;
   }
-
-  //
-
+  identifyCellType(cell,index){
+    console.log(cell)
+    console.log(index)
+  }
   extractTableDataNew(sheet: Sheet): DataCell[][] {
     const out: DataCell[][] = [];
     const htmlRows = getSheetHtmlRows(sheet);
@@ -255,7 +256,7 @@ class ExtractDataExcelService {
         const colSpan = +cell.getAttribute('colspan') || 1;
         const rowSpan = +cell.getAttribute('rowspan') || 1;
         // TODO: Mejorar algoritmo para obtener el tipo de celda
-
+        const typeCellM = this.identifyCellType(cell,i)
         const typeCell = i === 0 ? 'header' : 'body';
         const value = cell.getAttribute('data-v') || '';
         const type = isNaN(Number(value)) ? 'string' : 'number';
@@ -379,7 +380,7 @@ class ExtractDataExcelService {
         if (this.isNotEmptyCell(cell)) {
           totalNotEmptyCell++;
         }
-        console.log(cell)
+        // console.log(cell)
       }
       // Se considera como columna de inicio la primera columna que tenga datos en todas las filas
       if (totalNotEmptyCell === endRowIndex - startRowIndex + 1 && startColIndex === -1 && uniqueCells.size > 1) {

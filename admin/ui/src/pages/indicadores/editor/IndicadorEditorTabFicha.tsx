@@ -126,7 +126,7 @@ const IndicadorEditorTabFicha: React.FC = () => {
     }
   };
   return (
-    <div style={{ height: '380px' }}>
+    <div>
       <div className="h-full overflow-auto scroll-container pr-8">
         <form className="h-full flex flex-col justify-between">
           <table className="form-table">
