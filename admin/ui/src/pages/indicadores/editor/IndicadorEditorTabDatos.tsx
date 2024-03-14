@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import IndicadorDataGrid from './IndicadorDataGrid';
+import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   selectEstadisticaDataFields,
@@ -11,6 +10,7 @@ import { DATOS_FIELDS_DEF } from './EstadisticaFieldsDef';
 import { Input } from 'antd';
 import { FieldValidation } from '../../../types/FieldValidation';
 import FieldValidationsHelper from '../../../helpers/FieldValidationsHelper';
+import IndicadorDataGrid from '../../../components/IndicadorDataGrid';
 
 const fieldsArray = DATOS_FIELDS_DEF;
 
@@ -18,37 +18,8 @@ const IndicadorEditorTabDatos: React.FC = () => {
   const dispath = useAppDispatch();
   const values = useAppSelector(selectEstadisticaDataFields);
   const err = useAppSelector(selectValidationErrors);
-  const [containerHeight, setContainerHeight] = useState<number | null>(null);
-  const divRef = useRef<HTMLDivElement>(null);
 
-  console.log(err);
-  // Actualizando el tamaño de div de la tabla
-  useEffect(() => {
-    // Función para obtener la altura de la div
-    const updateContainerHeight = () => {
-      if (divRef.current) {
-        // setContainerHeight(null);
-        const newHeight = divRef.current.scrollHeight;
-        if (newHeight !== containerHeight) {
-          setContainerHeight(newHeight);
-          // console.log(newHeight)
-        }
-      }
-    };
-
-    updateContainerHeight(); // Llama a la función una vez al principio
-    // console.log(updateContainerHeight())
-    // Escucha los cambios en el valor 'values' y actualiza la altura de la div
-    const handleResize = () => {
-      updateContainerHeight();
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [divRef.current, values]);
+  // console.log(err);
 
   const setValues = (values) => {
     dispath(setEstadisticaDatos(values));
@@ -89,24 +60,21 @@ const IndicadorEditorTabDatos: React.FC = () => {
                 <td className="td-data">
                   {fieldDef.type === 'table' ? (
                     <div
-                      style={{
-                        scrollbarWidth: 'thin',
-                        border: values?.tabla?.length
-                          ? 'none'
-                          : '1px solid #8C8F94',
-                        height: values?.tabla?.length
-                          ? `${containerHeight}px`
-                          : 'auto',
-                      }}
-                      className={`rounded-sm relative overflow-x-auto ${
+                      className={`container rounded-sm overflow-x-auto relative${
                         values?.tabla?.length ? 'p-0' : 'p-4'
                       }`}
-                      ref={divRef}
+                      style={{
+                        scrollbarWidth: 'thin',
+                        overflowX: 'auto',
+                        border: values?.tabla?.length
+                          ? 'none'
+                          : '1px solid #94908c',
+                      }}
                     >
                       {(values?.tabla?.length ?? 0) > 0 ? (
                         <IndicadorDataGrid data={values.tabla} />
                       ) : (
-                        <div>No hay datos</div>
+                        <div>Importe los datos</div>
                       )}
                     </div>
                   ) : (

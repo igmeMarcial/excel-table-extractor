@@ -5,9 +5,9 @@ import {
   selectEstadisticaDatos,
   selectEstadisticaIndicePath,
 } from '../app/AppSlice';
-import TableDataGrid from './TableDataGrid';
 import { Button } from '@fluentui/react-components';
 import * as XLSX from 'xlsx';
+import IndicadorDataGrid from '../../src/components/IndicadorDataGrid';
 
 function TablaDatos() {
   const dataTable = useAppSelector(selectEstadisticaDatos);
@@ -57,7 +57,7 @@ function TablaDatos() {
           overflowX: 'auto',
         }}
       >
-        <TableDataGrid data={dataTable.tabla} />
+        <IndicadorDataGrid data={dataTable.tabla} />
       </div>
       <div className="my-2 text-xs">
         <div>
