@@ -1,13 +1,12 @@
 import * as XLSX from 'xlsx';
-import tablaDatosHelper from '../helpers/TablaDatosHelper';
 import { FICHA_FIELDS_MAP } from '../pages/indicadores/editor/FichaFieldsMap';
 import { DataCell } from '../types/DataCell';
 import { FichaTecnicaFields } from '../types/Estadistica';
 import { EstadisticaDatos } from '../types/EstadisticaDatos';
-import { start } from 'repl';
 import { RangoCeldas } from '../types/RangoCeldas';
 import { getSheetHtmlRows } from '../utils/xmls-utils';
 
+type HtmlCellsMatrix = HTMLTableCellElement[][];
 interface Sheet {
   [key: string]: any; // Tipo genérico para la celda
 }
@@ -47,18 +46,13 @@ class ExtractDataExcelService {
     });
   }
   //
-  extractDataFromFile(
-    workbook: XLSX.WorkBook,
-    sheetIndex: number
-  ): EstadisticaDatos {
+  extractDataFromFile(workbook: XLSX.WorkBook, sheetIndex: number): EstadisticaDatos {
     try {
       const sheetName: string = workbook.SheetNames[sheetIndex];
       const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
-      // const tableData: any = this.extractTableData(sheet);
 
       //text extract new table
       const tableData: any = this.extractTableDataNew(sheet);
-      console.log(tableData)
       const contentCellTitle: any = this.getTablaDatosTitulo(sheet);
       const contentCellFuente: any = this.getContentCell(sheet, 'Fuente:');
       const contentCellNote: any = this.getContentCell(sheet, 'Nota:');
@@ -252,26 +246,27 @@ class ExtractDataExcelService {
   extractTableDataNew(sheet: Sheet): DataCell[][] {
     const out: DataCell[][] = [];
     const htmlRows = getSheetHtmlRows(sheet);
-    let htmlTablaDatos = this.getHtmlTablaDatos(htmlRows);
-
-    htmlTablaDatos.forEach((tr, i) => {
-      const tdElements = tr.querySelectorAll('td[data-v]');
+    const cellMap = this.createCellsDataMap(htmlRows);
+    let htmlTablaDatos = this.getHtmlTablaDatos(cellMap);
+    htmlTablaDatos.forEach((row, i) => {
       let colIndex = 0;
       const rowData: DataCell[] = [];
-      tdElements.forEach((cell) => {
-        const colSpan = cell.getAttribute('colspan')
-          ? +cell.getAttribute('colspan')
-          : 1;
-        const rowSpan = cell.getAttribute('rowspan')
-          ? +cell.getAttribute('rowspan')
-          : 1;
+      row.forEach((cell) => {
+        const colSpan = +cell.getAttribute('colspan') || 1;
+        const rowSpan = +cell.getAttribute('rowspan') || 1;
+        // TODO: Mejorar algoritmo para obtener el tipo de celda
+        const typeCell = i === 0 ? 'header' : 'body';
+        const value = cell.getAttribute('data-v') || '';
+        const type = isNaN(Number(value)) ? 'string' : 'number';
 
         rowData.push({
-          value: cell.getAttribute('data-v'),
+          value,
           colIndex,
           rowIndex: i,
           colSpan,
           rowSpan,
+          typeCell,
+          type,
         });
         colIndex += colSpan;
       });
@@ -280,193 +275,179 @@ class ExtractDataExcelService {
     return out;
   }
 
-  getHtmlTablaDatos(rows: NodeListOf<Element>): Element[] {
-    let out = [];
-    let rangoTablaDatos = this.getRangoTablaDatos(rows);
-    rows.forEach((tr, i) => {
-      if (i >= rangoTablaDatos.inicio.rowIndex && i >= rangoTablaDatos.fin.rowIndex) {
-        out.push(tr);
+  getHtmlTablaDatos(rows: HtmlCellsMatrix): HtmlCellsMatrix {
+    let out = []
+    const { inicio, fin } = this.getRangoTablaDatos(rows)
+    console.log(inicio, fin)
+    for (let i = inicio.rowIndex; i <= fin.rowIndex; i++) {
+      const outRow = []
+      for (let j = inicio.colIndex; j <= fin.colIndex; j++) {
+        const cell = rows[i][j]
+        if (cell) {
+          const { rowIndex, colIndex } = this.getCellCoordinates(cell);
+          if (i === rowIndex && j === colIndex) {
+            outRow.push(cell)
+          }
+        }
       }
-    });
-    return out;
+      out.push(outRow)
+    }
+    return out
   }
-  getRangoTablaDatos(rows: NodeListOf<Element>): RangoCeldas {
+  setDataMapValues(map: any[][], value: any, rowIndex: number, colIndex: number, rows: number = 1, cols: number = 1) {
+    for (let i = rowIndex; i < rowIndex + rows; i++) {
+      for (let j = colIndex; j < colIndex + cols; j++) {
+        map[i][j] = value;
+      }
+    }
+  }
+  cellAddressToCoordinates(cellAddress: string): { rowIndex: number, colIndex: number } {
+    const colLetter = cellAddress.match(/[A-Z]+/g)[0];
+    const rowNumber = cellAddress.match(/[0-9]+/g)[0];
+    const colIndex = XLSX.utils.decode_col(colLetter);
+    const rowIndex = +rowNumber - 1;
+    return { rowIndex, colIndex };
+  }
+  createCellsDataMap(rows: NodeListOf<Element>): HtmlCellsMatrix {
+    const maxColIndex = this.getMaxColIndex(rows);
+    const maxRowIndex = this.getMaxRowIndex(rows);
+    const cellsDataMap: HtmlCellsMatrix = [];
+    // Completar el mapa de celdas con ceros
+    for (let i = 0; i <= maxRowIndex; i++) {
+      cellsDataMap.push(new Array(maxColIndex + 1).fill(null));
+    }
+    // Llenar el mapa de celdas con unos si la celda tiene datos o pertnece a una celda combinada
+    rows.forEach((tr) => {
+      // Obtener solo las celdas con valores
+      const tds = tr.querySelectorAll('td');
+      tds.forEach((td) => {
+        const colSpan = +td.getAttribute('colspan') || 1;
+        const rowSpan = +td.getAttribute('rowspan') || 1;
+        const cellAddress = td.getAttribute('id').replace('sjs-', '');
+        const { rowIndex, colIndex } = this.cellAddressToCoordinates(cellAddress);
+        this.setDataMapValues(cellsDataMap, td, rowIndex, colIndex, rowSpan, colSpan);
+      })
+    })
+    return cellsDataMap;
+  }
+  getRangoTablaDatos(rows: HtmlCellsMatrix): RangoCeldas {
+    const maxDataColums = this.getMaxDataColums(rows);
+    const maxColIndex = rows[0].length - 1;
     let startRowIndex = -1;
     let endRowIndex = -1;
-    const maxDataColums = this.getMaxDataColums(rows);
+    // Iterar filas para determinar la fila de inicio y fin
     rows.forEach((tr, i) => {
-      let totalCols = 0;
-      const tdWithValues = tr.querySelectorAll('td[data-v]');
-      tdWithValues.forEach((element) => {
-        const colSpan = element.getAttribute('colspan')
-          ? +element.getAttribute('colspan')
-          : 1;
-        totalCols += colSpan;
-      });
+      const notEmpty = tr.filter((td) => this.isNotEmptyCell(td));
+      const totalNotEmptyCells = notEmpty.length;
+      const totalUniqueCells = (new Set(notEmpty)).size;
+      console.log(totalUniqueCells)
+
+      // Verificar si el número de columnas es igual al número máximo de columnas con datos
+      // y si el índice de la fila de inicio aún no se ha establecido
+      // y si el número de celdas con datos es mayor que 1
+      // entonces establecer el índice de la fila de inicio
       if (
-        totalCols === maxDataColums &&
+        totalNotEmptyCells === maxDataColums &&
         startRowIndex === -1 &&
-        tdWithValues.length > 1
+        totalUniqueCells > 1
       ) {
         startRowIndex = i;
       }
+      // Verificar si el número de columnas es igual al número máximo de columnas con datos
+      // y si el índice de la fila de inicio ya se ha establecido
+      // y si el número de celdas con datos es mayor que 1
+      // entonces establecer el índice de la fila de fin, endRowIndex queda con el último valor que cumpla la condición
       if (
-        totalCols === maxDataColums &&
-        endRowIndex === -1 &&
-        tdWithValues.length > 1
+        totalNotEmptyCells === maxDataColums &&
+        startRowIndex !== -1 &&
+        totalUniqueCells > 1
       ) {
         endRowIndex = i;
       }
     });
+    // Iterar columnas para determinar la columna de inicio y fin
+    let startColIndex = -1;
+    let endColIndex = -1;
+
+    for (let colIndex = 0; colIndex < maxColIndex; colIndex++) {
+      let totalNotEmptyCell = 0;
+      const uniqueCells = new Set();
+      for (let rowIndex = startRowIndex; rowIndex <= endRowIndex; rowIndex++) {
+        const cell = rows[rowIndex][colIndex];
+        uniqueCells.add(cell);
+        if (this.isNotEmptyCell(cell)) {
+          totalNotEmptyCell++;
+        }
+        console.log(cell)
+      }
+      // Se considera como columna de inicio la primera columna que tenga datos en todas las filas
+      if (totalNotEmptyCell === endRowIndex - startRowIndex + 1 && startColIndex === -1 && uniqueCells.size > 1) {
+        startColIndex = colIndex;
+      }
+      // Se considera como columna de fin la última columna que tenga datos en todas las filas
+      if (totalNotEmptyCell === endRowIndex - startRowIndex + 1 && startColIndex !== -1 && uniqueCells.size > 1) {
+        endColIndex = colIndex;
+      }
+    }
     return {
       inicio: {
-        rowIndex: 5, /// De acuerdo a formato estandar
-        colIndex: 0,
+        rowIndex: startRowIndex,
+        colIndex: startColIndex,
       },
       fin: {
         rowIndex: endRowIndex,
-        colIndex: 0
+        colIndex: endColIndex
       }
     };
   }
-  getMaxDataColums(rows: NodeListOf<Element>): number {
+  getMaxDataColums(rows: HtmlCellsMatrix): number {
     let maxDataColums = 0;
     rows.forEach((tr) => {
-      const tdWithValues = tr.querySelectorAll('td[data-v]');
+      const tdWithValues = tr.filter((td) => this.isNotEmptyCell(td));
       if (tdWithValues.length > maxDataColums) {
         maxDataColums = tdWithValues.length;
       }
     });
     return maxDataColums;
   }
-
-  extractTableData(sheet: Sheet): DataCell[][] {
-    const tableData: any[] = [];
-    const range: Range = XLSX.utils.decode_range(sheet['!ref']);
-    let headerRowIndex: number | null = null;
-    let headerColumnIndex: number | null = null;
-    let headerColumnEnd: number | null = null;
-
-    for (let i = range.s.r; i <= range.e.r; ++i) {
-      const rowData: any[] = [];
-      for (let j = range.s.c; j <= range.e.c; ++j) {
-        const cellref = XLSX.utils.encode_cell({ c: j, r: i });
-        const cell = sheet[cellref] ? sheet[cellref].v : null;
-        rowData.push(cell);
-      }
-      if (this.isTableHeader(rowData)) {
-        headerRowIndex = i;
-        break;
-      }
-    }
-
-    // Si ya se encontró el encabezado y el índice de la columna aún no se ha establecido, buscar el índice de la columna del encabezado
-    if (headerRowIndex !== null) {
-      for (let C = range.s.c; C <= range.e.c; ++C) {
-        const cellref = XLSX.utils.encode_cell({ c: C, r: headerRowIndex });
-        const cell = sheet[cellref] ? sheet[cellref].v : null;
-        if (cell !== null && cell !== '') {
-          headerColumnIndex = C;
-          break;
-        }
-      }
-    }
-    if (headerRowIndex !== null && headerColumnIndex !== null) {
-      let emptyCellFound = false;
-      let lastNonEmptyColumn = headerColumnIndex;
-      for (let C = headerColumnIndex; C <= range.e.c; ++C) {
-        const cellref = XLSX.utils.encode_cell({ c: C, r: headerRowIndex });
-        const cell = sheet[cellref] ? sheet[cellref].v : null;
-        if (cell === null || cell === '') {
-          // Si la celda está vacía, establece headerColumnEnd en el valor anterior de C
-          headerColumnEnd = C - 1;
-          emptyCellFound = true; // Marca que se encontró una celda vacía
-          break;
-        } else {
-          lastNonEmptyColumn = C;
-        }
-      }
-      if (!emptyCellFound) {
-        headerColumnEnd = lastNonEmptyColumn;
-      }
-    }
-
-    // Si se encuentra el encabezado, extraerlo
-    if (headerRowIndex !== null) {
-      const startRow = headerRowIndex; // La fila siguiente al encabezado
-      const startCol = headerColumnIndex; // La primera columna del rango
-      const endRow = range.e.r; // La última fila del rango
-      let endCol = headerColumnEnd; // La última columna del rango
-
-      const searchStartCell = XLSX.utils.encode_cell({
-        c: startCol,
-        r: startRow,
-      });
-      const searchEndCell = XLSX.utils.encode_cell({ c: endCol, r: endRow });
-      // Llamar a la función analyzeSearchArea para analizar el área de búsqueda
-      this.analyzeSearchArea(sheet, searchStartCell, searchEndCell);
-
-      for (let i = startRow; i <= endRow; ++i) {
-        // const rowData: DataCell[] = [];
-        const rowData: any[] = [];
-        for (let j = startCol; j <= endCol; ++j) {
-          const cellref = XLSX.utils.encode_cell({ c: j, r: i });
-          const value = sheet[cellref] ? sheet[cellref].v : null;
-
-          //Determinar si es header o body
-          const typeCell = i === headerRowIndex ? 'header' : 'body';
-          const type = typeof value === 'number' ? 'number' : 'string';
-          rowData.push({
-            value: value,
-            rowIndex: i,
-            colIndex: j,
-            colSpan: 1,
-            rowSpan: 1,
-            typeCell,
-            type,
-          });
-        }
-        // Verificar si la fila es parte de la tabla antes de agregarla a tableData
-        if (this.filaEsParteDeTabla(rowData)) {
-          tableData.push(rowData);
-        } else {
-          // Si una fila no es parte de la tabla, detenemos la iteración
-          break;
-        }
-      }
-    }
-    // console.log(tableData);
-    return tableData;
-    //return tablaDatosHelper.getTablaDatosFromRawArrays(tableData);
-  }
-  filaEsParteDeTabla = (rowData: DataCell[]) => {
-    // Procesar los datos dentro del área de búsqueda y agregarlos a tableData
-    //aqui la logica de extraer datos
-    const umbral = 0.5;
-    let countDataCells = 0;
-    for (let cell of rowData) {
-      if (cell.value !== null && cell.value !== '') {
-        countDataCells++;
-      }
-    }
-    // Calcular el porcentaje de celdas con datos
-    const dataCellPercentage = countDataCells / rowData.length;
-    // Verificar si el porcentaje supera el umbral
-    return dataCellPercentage > umbral;
-  };
-  isTableHeader(rowData) {
-    // Verifica si la fila tiene al menos una cierta cantidad de celdas con datos
-    const minDataCells = 3; // Define el mínimo número de celdas con datos para considerar como encabezado
-    const dataCellsCount = rowData.filter(
-      (cell) => cell !== null && cell !== ''
-    ).length;
-    if (dataCellsCount >= minDataCells) {
-      // Si la fila tiene suficientes celdas con datos, considerarla como encabezado
+  isEmptyCell(cell: HTMLTableCellElement): boolean {
+    if (!cell) {
       return true;
-    } else {
-      // De lo contrario, no es un encabezado
-      return false;
     }
+    return !cell.getAttribute('data-v');
+  }
+  isNotEmptyCell(cell: HTMLTableCellElement): boolean {
+    return !this.isEmptyCell(cell);
+  }
+  getMaxColIndex(rows: NodeListOf<Element>): number {
+    let max = 0;
+    rows.forEach((tr) => {
+      const tds = tr.querySelectorAll('td');
+      const lastTd = tds[tds.length - 1];
+      const colSpan = +lastTd.getAttribute('colspan') || 1;
+      const cellAddress = lastTd.getAttribute('id').replace('sjs-', '');
+      const { colIndex } = this.cellAddressToCoordinates(cellAddress);
+      if (colIndex + colSpan - 1 > max) {
+        max = colIndex + colSpan - 1;
+      }
+      if (tds.length > max) {
+        max = tds.length;
+      }
+    });
+    return max;
+  }
+  getMaxRowIndex(rows: NodeListOf<Element>): number {
+    const lastRow = rows[rows.length - 1];
+    const tds = lastRow.querySelectorAll('td');
+    const { rowIndex } = this.getCellCoordinates(tds[0]);
+    return rowIndex;
+  }
+  getCellAddress(cell: HTMLTableCellElement): string {
+    return cell.getAttribute('id').replace('sjs-', '');
+  }
+  getCellCoordinates(cell: HTMLTableCellElement): { rowIndex: number, colIndex: number } {
+    const cellAddress = this.getCellAddress(cell);
+    return this.cellAddressToCoordinates(cellAddress);
   }
   // Función para analizar el área de búsqueda y determinar si contiene datos de la tabla
   analyzeSearchArea(sheet: any, startCell: any, endCell: any): void {
