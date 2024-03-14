@@ -34,6 +34,7 @@ function renderCell(cell: DataCell, rowIndex: number, colIndex: number) {
         border: 'rgb(107, 107, 107) solid 1px',
         fontWeight: '400',
         padding: '4px 8px',
+        fontFamily: 'Arial, sans-serif',
         ...cellStyle,
       }}
       key={colIndex}
@@ -50,11 +51,13 @@ const IndicadorDataGrid: FC<DataGridTableProps> = ({ data }) => {
   const renderTable = () => {
     return (
       <table
+        id="tableEstadistica"
         style={{
           borderCollapse: 'collapse',
           borderSpacing: '0',
           width: '100%',
           border: 'solid rgb(107, 107, 107) 1px',
+          fontFamily: 'Arial, sans-serif',
         }}
       >
         <tbody>

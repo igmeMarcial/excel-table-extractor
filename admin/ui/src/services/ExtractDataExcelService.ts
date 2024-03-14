@@ -255,6 +255,7 @@ class ExtractDataExcelService {
         const colSpan = +cell.getAttribute('colspan') || 1;
         const rowSpan = +cell.getAttribute('rowspan') || 1;
         // TODO: Mejorar algoritmo para obtener el tipo de celda
+
         const typeCell = i === 0 ? 'header' : 'body';
         const value = cell.getAttribute('data-v') || '';
         const type = isNaN(Number(value)) ? 'string' : 'number';

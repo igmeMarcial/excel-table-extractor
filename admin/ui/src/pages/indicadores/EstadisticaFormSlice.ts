@@ -27,6 +27,7 @@ const initialState: EstadisticaFormState = {
   estadisticaRawModel: estadisticaDefaultModel,
   activeTab: "1",
   validationErrors: {},
+  handleNav:'',
   // Validaciones
   validations: {
     nombre: {
@@ -99,8 +100,8 @@ export const estadisticaFormSlice = createSlice({
     setActiveTab: (state, action: PayloadAction<string>) => {
       state.activeTab = action.payload
     },
-    setNavTab: (state) => {
-      state.hasChanges = false;
+    setNavTab: (state, action:PayloadAction<string>) => {
+      state.handleNav = action.payload;
       state.estadisticaRawModel = { ...state.estadisticaModel };
     },
     setTipoGrafico: (state, action: PayloadAction<{ index: number, tipoGrafico: TipoGrafico }>) => {
