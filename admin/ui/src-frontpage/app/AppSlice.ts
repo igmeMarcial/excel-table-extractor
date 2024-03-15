@@ -12,6 +12,7 @@ interface AppState {
   indiceEstadisticas: IndiceItem[]
   estadisticaIndicePath?: string
   clasificadorNivel1?: string,
+  marcoOrdenadorSeleccionado: string,
   menuNivel2: IndiceItem[],
 }
 
@@ -19,6 +20,7 @@ const initialState: AppState = {
   activeNetworkActivity: false,
   estadisticaId: 1,
   activeTabName: 'grafico',
+  marcoOrdenadorSeleccionado: 'mdea',
   estadisticaModel: {},
   indiceEstadisticas: [],
   estadisticaIndicePath: '1.1.1.1',
@@ -51,6 +53,10 @@ export const appSlice = createSlice({
     },
     setActiveTabName: (state, action: PayloadAction<string>) => {
       state.activeTabName = action.payload
+    },
+    setMarcoOrdenadorSeleccionado: (state, action: PayloadAction<string>) => {
+      console.log('setMarcoOrdenadorSeleccionado__Call', action.payload)
+      state.marcoOrdenadorSeleccionado = action.payload
     },
     setEstadisticaIndicePath: (state, action: PayloadAction<string>) => {
       const path = action.payload
@@ -109,6 +115,7 @@ export const appSlice = createSlice({
 export const {
   setActiveNetworkActivity,
   setEstadisticaId,
+  setMarcoOrdenadorSeleccionado,
   setActiveTabName,
   toggleMenuNivel2Item,
   setEstadisticaIndicePath
@@ -124,6 +131,7 @@ export const selectEstadisticaGraficos = (state: RootState) => state.app.estadis
 export const selectIndiceEstadisticas = (state: RootState) => state.app.indiceEstadisticas
 export const selectClaficadorNivel1Activo = (state: RootState) => state.app.clasificadorNivel1
 export const selectMenuNivel2 = (state: RootState) => state.app.menuNivel2
+export const selectMarcoOrdenadorSeleccionado = (state: RootState) => state.app.marcoOrdenadorSeleccionado
 
 // TODO: selectClasificadoresNivel1 AND 2 returned a different result when called with the same parameters
 export const selectClasificadoresNivel1 = (state: RootState): IndiceItem[] => state.app.indiceEstadisticas.filter(

@@ -1,35 +1,48 @@
-import React from 'react';
-import { useGetIndiceQuery } from '../app/services/estadistica';
+import {
+  SelectTabData,
+  SelectTabEvent,
+  Tab,
+  TabList,
+} from '@fluentui/react-components';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { newPathUrl } from '../../src/utils/url-utils';
+import { selectMarcoOrdenadorSeleccionado } from '../app/AppSlice';
+import { useAppSelector } from '../app/hooks';
+import { QUERY_PARAM_MARCO_ORDENADOR } from '../core/constantes';
 
 function SubNavbar() {
-
-  useGetIndiceQuery(1);
-
+  console.log('SubNavbar rendered');
+  const navigate = useNavigate();
+  const location = useLocation();
+  const activeItem = useAppSelector(selectMarcoOrdenadorSeleccionado);
+  const onTabSelect = (event: SelectTabEvent, data: SelectTabData) => {
+    const newPath = newPathUrl(
+      location,
+      QUERY_PARAM_MARCO_ORDENADOR,
+      String(data.value)
+    );
+    navigate(newPath);
+  };
   const items = [
-    { text: 'INICIO', path: 'inicio' },
     { text: 'MDEA', path: 'mdea' },
     { text: 'ODS', path: 'ods' },
+    { text: 'OCDE', path: 'ocde' },
     {
       text: 'Política Nacional del Ambiente',
       path: 'pna',
     },
   ];
   return (
-    <div className="w-full bg-gray-200">
-      <nav className="flex justify-between items-center py-0">
-        <ul className="flex list-none space-x-4 py-0 my-2 pl-0">
-          {items.map((item, index) => (
-            <li key={item.path}>
-              <a
-                href={`/${item.path}`}
-                className="text-gray-800 no-underline hover:text-gray-600 font-segoeui font-semibold text-base leading-20"
-              >
-                {item.text}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
+    <div className="bg-gray-200">
+      <TabList selectedValue={activeItem} onTabSelect={onTabSelect}>
+        {items.map((item) => {
+          return (
+            <Tab key={item.path} value={item.path}>
+              {item.text}
+            </Tab>
+          );
+        })}
+      </TabList>
     </div>
   );
 }
