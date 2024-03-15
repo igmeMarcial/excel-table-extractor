@@ -15,13 +15,13 @@ export const getPathResourceId = (location: Location<any>) => {
   return queryParams.get('rid') || null;
 }
 
-export const getQueryParam = (location:Location<any>, param: string)=>{
-   const queryParams = new URLSearchParams(location.search);
-  return queryParams.get(param) || null;
+export const getQueryParam = (location: Location<any>, param: string, defaultValue: string = null) => {
+  const queryParams = new URLSearchParams(location.search);
+  return queryParams.get(param) || defaultValue;
 }
 
 //
-export const newPathUrl=(location:Location<any>,path:string,id?: number | string)=>{
+export const newPathUrl = (location: Location<any>, path: string, id?: number | string) => {
   const queryParams = new URLSearchParams(location.search);
   queryParams.set(path, id.toString());
 
