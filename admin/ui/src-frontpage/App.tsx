@@ -16,7 +16,8 @@ function App() {
   const dispath = useAppDispatch();
   const location = useLocation();
   const indice = getQueryParam(location, QUERY_PARAM_ESTADISTICA_INDICE_PATH);
-  const estadisticaId = getQueryParam(location, QUERY_PARAM_ESTADISTICA_ID);
+  const estadisticaId =
+    getQueryParam(location, QUERY_PARAM_ESTADISTICA_ID) || 1;
   if (indice) {
     dispath(setEstadisticaIndicePath(indice));
   }

@@ -60,7 +60,6 @@ function TablaDatos() {
       <div
         className="w-full"
         style={{
-          maxHeight: '600px',
           scrollbarWidth: 'thin',
           overflowX: 'auto',
         }}

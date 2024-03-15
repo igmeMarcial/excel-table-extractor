@@ -120,6 +120,9 @@ class Estadistica extends BaseModel
             'type' => DataTypes::ARRAY,
             'column' => 'datos_informacion',
         ],
+        'graficos' => [
+            'type' => DataTypes::ARRAY,
+        ],
         'parametrosPublicacion' => [
             'type' => DataTypes::ARRAY,
             'column' => 'parametros_publicacion',

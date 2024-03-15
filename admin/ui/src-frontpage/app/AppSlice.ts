@@ -11,7 +11,8 @@ interface AppState {
   estadisticaModel: Estadistica
   indiceEstadisticas: IndiceItem[]
   estadisticaIndicePath?: string
-  clasificadorNivel1?: string
+  clasificadorNivel1?: string,
+  menuNivel2: IndiceItem[],
 }
 
 const initialState: AppState = {
@@ -21,9 +22,23 @@ const initialState: AppState = {
   estadisticaModel: {},
   indiceEstadisticas: [],
   estadisticaIndicePath: '1.1.1.1',
-  clasificadorNivel1: '1'
+  clasificadorNivel1: '1',
+  menuNivel2: []
 };
-
+const getMenuNivel2 = (indice: IndiceItem[], clasificadorNivel1: string) => {
+  return indice.map((item) => {
+    item.expanded = false;
+    if (
+      item.nivel === 2 &&
+      item.numeral.split('.')[0] === clasificadorNivel1
+    ) {
+      item.visible = true;
+    } else {
+      item.visible = false;
+    }
+    return item;
+  })
+}
 export const appSlice = createSlice({
   name: 'estadisticaForm',
   initialState,
@@ -38,8 +53,36 @@ export const appSlice = createSlice({
       state.activeTabName = action.payload
     },
     setEstadisticaIndicePath: (state, action: PayloadAction<string>) => {
-      state.estadisticaIndicePath = action.payload
-      state.clasificadorNivel1 = action.payload.split('.')[0]
+      const path = action.payload
+      const pathParts = path.split('.')
+      state.estadisticaIndicePath = path
+      if (pathParts[0] !== state.clasificadorNivel1) {
+        state.clasificadorNivel1 = pathParts[0]
+        state.menuNivel2 = getMenuNivel2(state.indiceEstadisticas, state.clasificadorNivel1)
+      }
+    },
+    toggleMenuNivel2Item: (state, action: PayloadAction<IndiceItem>) => {
+      const { numeral, expanded, nivel } = action.payload;
+
+      const doExpand = !expanded;
+
+      const newindice = state.menuNivel2.map((item) => {
+        //Invertir toggle expander
+        if (item.numeral === numeral) {
+          item.expanded = !item.expanded;
+        }
+        //Hijos directos e indirectos
+        if (item.nivel > nivel && item.numeral.startsWith(numeral)) {
+          if (item.nivel === nivel + 1) {
+            item.visible = doExpand;
+          }
+          if (item.nivel > nivel + 1 && !doExpand) {
+            item.visible = false;
+          }
+        }
+        return item;
+      });
+      state.menuNivel2 = newindice;
     }
 
   },
@@ -54,10 +97,11 @@ export const appSlice = createSlice({
     })
     builder.addMatcher(getIndice.matchFulfilled, (state, action) => {
       const indice = [];
-       action.payload.forEach((item:IndiceItem)=>{
-        indice.push({...item,nivel:item.numeral.split('.').length })
+      action.payload.forEach((item: IndiceItem) => {
+        indice.push({ ...item, nivel: item.numeral.split('.').length })
       })
       state.indiceEstadisticas = indice;
+      state.menuNivel2 = getMenuNivel2(indice, state.clasificadorNivel1)
     })
   }
 })
@@ -66,6 +110,7 @@ export const {
   setActiveNetworkActivity,
   setEstadisticaId,
   setActiveTabName,
+  toggleMenuNivel2Item,
   setEstadisticaIndicePath
 } = appSlice.actions
 
@@ -75,14 +120,16 @@ export const selectIdEstadisitico = (state: RootState) => state.app.idEstadistic
 export const selectActiveTabName = (state: RootState) => state.app.activeTabName
 export const selectEstadisticaData = (state: RootState) => state.app.estadisticaModel
 export const selectEstadisticaDatos = (state: RootState) => state.app.estadisticaModel.datos
+export const selectEstadisticaGraficos = (state: RootState) => state.app.estadisticaModel.graficos || []
 export const selectIndiceEstadisticas = (state: RootState) => state.app.indiceEstadisticas
 export const selectClaficadorNivel1Activo = (state: RootState) => state.app.clasificadorNivel1
+export const selectMenuNivel2 = (state: RootState) => state.app.menuNivel2
 
 // TODO: selectClasificadoresNivel1 AND 2 returned a different result when called with the same parameters
 export const selectClasificadoresNivel1 = (state: RootState): IndiceItem[] => state.app.indiceEstadisticas.filter(
   (item: IndiceItem) => item.numeral.split('.').length === 1)
 
-  
+
 export const selectClasificadoresDesdeNivel2 = (state: RootState): IndiceItem[] =>
   state
     .app
