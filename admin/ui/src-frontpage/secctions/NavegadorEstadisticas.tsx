@@ -11,7 +11,7 @@ export default function NavegadorEstadisticas() {
       <EstadisticasNav />
       <NamePanel />
       <div className="flex">
-        <div className="w-3/12">
+        <div style={{ maxWidth: '300px' }}>
           <NabAside />
         </div>
         <EstadisticaVistaTabs />

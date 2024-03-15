@@ -19,19 +19,36 @@ const MenuItem = ({ model, onExpandToggleClick }: MenuItemProps) => {
   if (!model.estadisticaId) {
     return (
       <div
-        className="flex gap-1 justify-between"
+        className="min-h-6 cursor-pointer relative pl-16 pr-10  py-1 font-semibold hover:bg-gray-200"
         onClick={() => {
           onExpandToggleClick(model);
         }}
       >
-        <div className="hover:text-custom-blue text-sm relative pl-11">
-          <span className="absolute left-0">{model.numeral}</span>
-          {model.nombre}
-        </div>
+        <span className="absolute left-0 pl-3">{model.numeral}</span>
+        <span>{model.nombre}</span>
+
         {model.expanded ? (
-          <ChevronDown24Filled style={{ width: '16px', height: '16px' }} />
+          <ChevronDown24Filled
+            style={{
+              width: '20px',
+              height: '20px',
+              position: 'absolute',
+              right: '0px',
+              top: '5px',
+              paddingRight: '12px',
+            }}
+          />
         ) : (
-          <ChevronUp24Filled style={{ width: '16px', height: '16px' }} />
+          <ChevronUp24Filled
+            style={{
+              width: '20px',
+              height: '20px',
+              position: 'absolute',
+              right: '0px',
+              top: '5px',
+              paddingRight: '12px',
+            }}
+          />
         )}
       </div>
     );
@@ -41,12 +58,10 @@ const MenuItem = ({ model, onExpandToggleClick }: MenuItemProps) => {
   return (
     <Link
       to={newPathUrl(location, 'eid', model.estadisticaId)}
-      className="flex items-start justify-start  bg-gray-100 gap-1 no-underline"
+      className=" relative bg-gray-100  no-underline  text-black pl-16 pr-4 hover:text-custom-blue py-1"
     >
-      <div className="hover:text-custom-blue relative pl-11">
-        <span className="absolute left-0">{model.numeral}</span>
-        {model.nombre}
-      </div>
+      <span className="absolute left-0 pl-3">{model.numeral}</span>
+      {model.nombre}
     </Link>
   );
 };
@@ -58,7 +73,7 @@ function NabAside() {
     dispath(toggleMenuNivel2Item(model));
   };
   return (
-    <div className="bg-gray-100 p-3  h-full border-x-0 border-b-0 border-t-4 border-t-custom-blue border-solid">
+    <div className="bg-gray-100 py-3  h-full border-x-0 border-b-0 border-t-4 border-t-custom-blue border-solid">
       <div className="flex flex-col pl-0 my-0">
         {menuNivel2.map((item, index) => (
           <MenuItem key={index} model={item} onExpandToggleClick={toggleMenu} />
