@@ -28,20 +28,8 @@ export class GraficoHelper {
     const categorias = tablaDatosHelper.getRowValues(tabla, valoresRango.inicio.rowIndex - 1, valoresRango.inicio.colIndex, valoresRango.fin.colIndex) as string[];
     // Datos anuales por departamento
     if (dataInfo.sonDatosAnualesPorDepartamento) {
-      // Rango de series, solo la ultima columna
-      const serieRango = {
-        inicio: { rowIndex: valoresRango.inicio.rowIndex, colIndex: valoresRango.fin.colIndex },
-        fin: { rowIndex: valoresRango.fin.rowIndex, colIndex: valoresRango.fin.colIndex }
-      };
-      const categorias = tablaDatosHelper.getColumnValues(tabla, 0, 1) as string[];
       return [
-        {
-          categorias,
-          tipo: 'columnas',
-          series: this.getVerticalSeries(tabla, serieRango),
-          rotacionEtiquetasCategorias: 30,
-          mostrarLeyenda: false
-        }
+        this.getGraficoParaDatosAnualesPorDepartamento(valoresRango, tabla)
       ];
     }
     // Si la tabla tiene una fila de totales solo se muestra un gráfico de barras
@@ -66,6 +54,22 @@ export class GraficoHelper {
         series: this.getHorizontalSeries(tabla, valoresRango),
       }
     ];
+  }
+
+  private getGraficoParaDatosAnualesPorDepartamento(valoresRango: RangoCeldas, tabla: DataCell[][]): Grafico {
+    // Rango de series, solo la ultima columna
+    const serieRango = {
+      inicio: { rowIndex: valoresRango.inicio.rowIndex, colIndex: valoresRango.fin.colIndex },
+      fin: { rowIndex: valoresRango.fin.rowIndex, colIndex: valoresRango.fin.colIndex }
+    };
+    const categorias = tablaDatosHelper.getColumnValues(tabla, 0, 1) as string[];
+    return {
+      categorias,
+      tipo: 'columnas',
+      series: this.getVerticalSeries(tabla, serieRango),
+      rotacionEtiquetasCategorias: 30,
+      mostrarLeyenda: false
+    };
   }
 
   private getHorizontalSeries(tabla: DataCell[][], rangoValores: RangoCeldas): Serie[] {
