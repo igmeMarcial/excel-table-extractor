@@ -12,7 +12,9 @@ import { DataCell } from '../../types/DataCell';
 import { ValidationError } from '../../types/ValidationError';
 
 const estadisticaDefaultModel: Estadistica = {
-  datos: {},
+  datos: {
+    tabla: []
+  },
   datosInformacion: {},
   graficos: [
     {}
@@ -27,7 +29,7 @@ const initialState: EstadisticaFormState = {
   estadisticaRawModel: estadisticaDefaultModel,
   activeTab: "1",
   validationErrors: {},
-  handleNav:'',
+  handleNav: '',
   // Validaciones
   validations: {
     nombre: {
@@ -84,6 +86,14 @@ export const estadisticaFormSlice = createSlice({
       }
       state.hasChanges = true;
     },
+    setEstadisticaDatosFieldValue: (state, action: PayloadAction<{ field: string, value: any }>) => {
+      const fielName = action.payload.field;
+      const value = action.payload.value;
+      state.estadisticaRawModel.datos = {
+        ...state.estadisticaRawModel.datos,
+        [fielName]: value
+      }
+    },
     setEstadisticaDatos: (state, action: PayloadAction<EstadisticaDatos>) => {
       state.estadisticaRawModel.datos = action.payload;
       state.estadisticaRawModel.datosInformacion = tablaDatosHelper.getInformacion(action.payload.tabla || []);
@@ -100,7 +110,7 @@ export const estadisticaFormSlice = createSlice({
     setActiveTab: (state, action: PayloadAction<string>) => {
       state.activeTab = action.payload
     },
-    setNavTab: (state, action:PayloadAction<string>) => {
+    setNavTab: (state, action: PayloadAction<string>) => {
       state.handleNav = action.payload;
       state.estadisticaRawModel = { ...state.estadisticaModel };
     },
@@ -126,7 +136,8 @@ export const estadisticaFormSlice = createSlice({
     builder.addMatcher(getEstadistica.matchFulfilled, (state, action) => {
       state.estadisticaModel = { ...estadisticaDefaultModel, ...action.payload };
       state.estadisticaRawModel = { ...estadisticaDefaultModel, ...action.payload };
-      state.estadisticaRawModel.datos = action.payload.datos || {};
+      state.estadisticaRawModel.datos = action.payload.datos || { tabla: [] };
+      state.estadisticaRawModel.graficos = action.payload.graficos || [{}];
       state.titulo = action.payload.nombre || '';
       state.isCreationMode = false;
       state.hasChanges = false;
@@ -139,6 +150,7 @@ export const {
   setEstadisticaDatos,
   setEstadisticaTablaDatos,
   setEstadisticaFieldValue,
+  setEstadisticaDatosFieldValue,
   setActiveTab,
   setTipoGrafico,
   resetChanges,
@@ -152,10 +164,10 @@ export const {
 export const selectHasChanges = (state: RootState) => state.estadisticaForm.hasChanges;
 export const selectTitulo = (state: RootState) => state.estadisticaForm.titulo;
 export const selectEstadisticaFields = (state: RootState) => state.estadisticaForm.estadisticaRawModel;
-export const selectEstadisticaDataFields = (state: RootState) => state.estadisticaForm.estadisticaRawModel.datos || {};
+export const selectEstadisticaDataFields = (state: RootState) => state.estadisticaForm.estadisticaRawModel.datos;
 export const selectIsCreationMode = (state: RootState) => state.estadisticaForm.isCreationMode;
 export const selectActiveTab = (state: RootState) => state.estadisticaForm.activeTab;
-export const selectEstadisticaData = (state: RootState) => state.estadisticaForm.estadisticaModel.datos?.tabla;
+export const selectEstadisticaData = (state: RootState) => state.estadisticaForm.estadisticaRawModel.datos.tabla;
 export const selectPostValues = (state: RootState) => state.estadisticaForm.estadisticaRawModel;
 export const selectGraficos = (state: RootState) => state.estadisticaForm.estadisticaRawModel.graficos;
 export const selectValidationErrors = (state: RootState) => state.estadisticaForm.validationErrors;

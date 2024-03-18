@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx';
 import { FICHA_FIELDS_MAP } from '../pages/indicadores/editor/FichaFieldsMap';
-import { DataCell } from '../types/DataCell';
+import { CellPosition, CELL_POSITION_BODY, CELL_POSITION_HEADER, CELL_VALUE_TYPE_STRING, DataCell } from '../types/DataCell';
 import { FichaTecnicaFields } from '../types/Estadistica';
 import { EstadisticaDatos } from '../types/EstadisticaDatos';
 import { RangoCeldas } from '../types/RangoCeldas';
@@ -50,9 +50,10 @@ class ExtractDataExcelService {
     try {
       const sheetName: string = workbook.SheetNames[sheetIndex];
       const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
+      console.log('Sheet:', sheet,);
 
       //text extract new table
-      const tableData: any = this.extractTableDataNew(sheet);
+      const tableData: any = this.getTablaDatos(sheet);
       const contentCellTitle: any = this.getTablaDatosTitulo(sheet);
       const contentCellFuente: any = this.getContentCell(sheet, 'Fuente:');
       const contentCellNote: any = this.getContentCell(sheet, 'Nota:');
@@ -240,43 +241,74 @@ class ExtractDataExcelService {
     }
     return null;
   }
-  identifyCellType(cell,index){
-    console.log(cell)
-    console.log(index)
-  }
-  extractTableDataNew(sheet: Sheet): DataCell[][] {
+
+  getTablaDatos(sheet: Sheet): DataCell[][] {
     const out: DataCell[][] = [];
     const htmlRows = getSheetHtmlRows(sheet);
     const cellMap = this.createCellsDataMap(htmlRows);
     let htmlTablaDatos = this.getHtmlTablaDatos(cellMap);
-    htmlTablaDatos.forEach((row, i) => {
+    htmlTablaDatos.forEach((row, rowIndex) => {
       let colIndex = 0;
       const rowData: DataCell[] = [];
-      row.forEach((cell) => {
-        const colSpan = +cell.getAttribute('colspan') || 1;
-        const rowSpan = +cell.getAttribute('rowspan') || 1;
-        // TODO: Mejorar algoritmo para obtener el tipo de celda
-        const typeCellM = this.identifyCellType(cell,i)
-        const typeCell = i === 0 ? 'header' : 'body';
-        const value = cell.getAttribute('data-v') || '';
-        const type = isNaN(Number(value)) ? 'string' : 'number';
-
-        rowData.push({
-          value,
-          colIndex,
-          rowIndex: i,
-          colSpan,
-          rowSpan,
-          typeCell,
-          type,
-        });
+      const cellPostion = this.getRowPosition(row, rowIndex);
+      row.forEach((td) => {
+        const colSpan = +td.getAttribute('colspan') || 1;
+        const rowSpan = +td.getAttribute('rowspan') || 1;
+        let value: string | number = td.getAttribute('data-v') || '';
+        const type = td.getAttribute('data-t') as ('n' | 's') || 's';
+        // Parse value to number if type is number
+        if (type === 'n') {
+          value = +value;
+        }
+        const dataCell: DataCell = {
+          v: value,
+          r: rowIndex,
+          c: colIndex,
+          p: cellPostion,
+          t: type,
+        }
+        // Añade colspan y rowspan si son mayores a 1
+        if (colSpan > 1) {
+          dataCell.s = colSpan;
+        }
+        if (rowSpan > 1) {
+          dataCell.rs = rowSpan;
+        }
+        rowData.push(dataCell);
         colIndex += colSpan;
       });
       out.push(rowData);
     });
     return out;
   }
-
+  getRowPosition(row: HTMLTableCellElement[], rowIndex): CellPosition {
+    // Header row
+    if (this.isHederRow(row, rowIndex)) {
+      return CELL_POSITION_HEADER
+    }
+    // Footer row
+    if (this.isFooterRow(row, rowIndex)) {
+      return CELL_POSITION_BODY
+    }
+    // Body row
+    return CELL_POSITION_BODY
+  }
+  isHederRow(row: HTMLTableCellElement[], rowIndex): boolean {
+    if (rowIndex === 0) {
+      return true
+    }
+    return row.every((cell) => {
+      return cell.getAttribute('data-t') === CELL_VALUE_TYPE_STRING
+    })
+  }
+  // Función para determinar si una fila es el pie de página de la tabla
+  // Condiciones:
+  // - Una de las celdas de la fila contiene la palabra "total"
+  isFooterRow(row: HTMLTableCellElement[], rowIndex): boolean {
+    return row.some((cell) => {
+      return cell.textContent?.toLowerCase().includes('total');
+    });
+  }
   getHtmlTablaDatos(rows: HtmlCellsMatrix): HtmlCellsMatrix {
     let out = []
     const { inicio, fin } = this.getRangoTablaDatos(rows)

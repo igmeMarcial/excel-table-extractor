@@ -6,7 +6,7 @@ import {
   selectEstadisticaIndicePath,
 } from '../app/AppSlice';
 import { Button } from '@fluentui/react-components';
-import IndicadorDataGrid from '../../src/components/IndicadorDataGrid';
+import IndicadorDataGrid from '../../src/components/DataTable';
 import { useRef } from 'react';
 
 function TablaDatos() {
@@ -57,14 +57,7 @@ function TablaDatos() {
         </div>
         <Button onClick={handleDowload}>Descargar</Button>
       </div>
-      <div
-        className="w-full"
-        style={{
-          scrollbarWidth: 'thin',
-          overflowX: 'auto',
-        }}
-        ref={downloadAreaContainer}
-      >
+      <div ref={downloadAreaContainer}>
         <IndicadorDataGrid data={dataTable.tabla} />
       </div>
       <div className="my-2 text-xs">

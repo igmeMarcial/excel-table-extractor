@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { newPathUrl } from '../../src/utils/url-utils';
 import { selectMarcoOrdenadorSeleccionado } from '../app/AppSlice';
 import { useAppSelector } from '../app/hooks';
-import { QUERY_PARAM_MARCO_ORDENADOR } from '../core/constantes';
+import { QUERY_PARAM_MARCO_ORDENADOR } from '../../src/core/constantes';
 
 function SubNavbar() {
   console.log('SubNavbar rendered');

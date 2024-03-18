@@ -1,10 +1,13 @@
 import { EChartsReactProps } from "echarts-for-react";
+import { getChartColors } from "../utils/colors";
+import { DT_GRAFICO_FONT_SIZE } from "./design-tokens";
 
 export const ECHATS_DEFALT_PROPS: EChartsReactProps = {
   style: {
     height: 400,
   },
   option: {
+    color: getChartColors(),
     toolbox: {
       right: 8,
       top: 8,
@@ -12,9 +15,6 @@ export const ECHATS_DEFALT_PROPS: EChartsReactProps = {
         dataZoom: {
           yAxisIndex: "none"
         },
-/*         dataView: {
-          readOnly: true
-        }, */
         magicType: {
           type: ["line", "bar", "stack", "tiled"]
         },
@@ -24,14 +24,22 @@ export const ECHATS_DEFALT_PROPS: EChartsReactProps = {
     title: {
       left: 'center',
       textStyle: {
-        fontSize: '12px'
+        fontSize: DT_GRAFICO_FONT_SIZE,
       }
     },
     xAxis: {
       type: 'category',
+      axisLabel: {
+        interval: 0, // Show all labels
+        fontSize: DT_GRAFICO_FONT_SIZE,
+      }
     },
     yAxis: {
       type: 'value',
+      axisLabel: {
+        interval: 0, // Show all labels
+        fontSize: DT_GRAFICO_FONT_SIZE,
+      }
     },
     tooltip: {
       trigger: 'axis',

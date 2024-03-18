@@ -1,3 +1,4 @@
+import { sonDatosAnualesPorDepartamento } from "../data-scanners/datos-anuales-por-departamento";
 import { DataCell } from "../types/DataCell";
 import { DatosInformacion } from "../types/DatosInformacion";
 import { RangoCeldas } from "../types/RangoCeldas";
@@ -16,6 +17,7 @@ export class TablaDatosHelper {
   //
   getInformacion(tabla: DataCell[][]): DatosInformacion {
     const out: DatosInformacion = {
+      sonDatosAnualesPorDepartamento: sonDatosAnualesPorDepartamento(tabla),
       tieneFilaTotales: this.tieneFilaTotales(tabla),
       tieneCeldasCombinadas: this.tieneCeldasCombinadas(tabla),
       valoresRango: this.getValoresRango(tabla)
@@ -30,15 +32,13 @@ export class TablaDatosHelper {
       const newRow: DataCell[] = [];
       row.forEach((cell, colIndex) => {
         const value = cell;
-        const colSpan = this.calculateColSpan(rows, rowIndex, colIndex);
-        const rowSpan = 1; //this.calculateRowSpan(rows, rowIndex, colIndex);
+        const type = typeof cell === 'number' ? 'n' : 's';
         if (value !== null) {
           newRow.push({
-            value,
-            colIndex,
-            rowIndex,
-            colSpan,
-            rowSpan,
+            v: value,
+            c: colIndex,
+            r: rowIndex,
+            t: type,
           });
         }
       });
@@ -47,36 +47,12 @@ export class TablaDatosHelper {
     return out;
   }
 
-  calculateRowSpan(rows: (string | number)[][], cellRowIndex: number, cellColIndex: number): number {
-    let nextCellIndex = cellRowIndex + 1;
-    while (nextCellIndex < rows.length) {
-      if (rows[nextCellIndex][cellColIndex] === null) {
-        nextCellIndex++;
-      } else {
-        break;
-      }
-    }
-    return nextCellIndex - cellRowIndex;
-  }
-
-  calculateColSpan(rows: (string | number)[][], cellRowIndex: number, cellColIndex: number): number {
-    let nextCellIndex = cellColIndex + 1;
-    while (nextCellIndex < rows[cellRowIndex].length) {
-      if (rows[cellRowIndex][nextCellIndex] === null) {
-        nextCellIndex++;
-      } else {
-        break;
-      }
-    }
-    return nextCellIndex - cellColIndex;
-  }
-
   tieneFilaTotales(tabla: DataCell[][]): boolean {
     return this.getFilaTotalesRowIndex(tabla) > -1;
   }
 
   getFilaTotalesRowIndex(tabla: DataCell[][]): number {
-    return tabla.findIndex((row) => row.some((cell) => cell.value?.toString().toLowerCase().match(/total/)));
+    return tabla.findIndex((row) => row.some((cell) => cell.v?.toString().toLowerCase().match(/total/)));
   }
 
   getRowValues(
@@ -87,7 +63,7 @@ export class TablaDatosHelper {
   ): (number | string)[] {
     const row = tabla[rowIndex];
     endIndex = endIndex || row.length - 1;
-    return row.slice(startIndex, endIndex + 1).map((cell) => cell.value);
+    return row.slice(startIndex, endIndex + 1).map((cell) => cell.v);
   }
 
   getColumnValues(
@@ -98,7 +74,7 @@ export class TablaDatosHelper {
   ): (number | string)[] {
     startIndex = startIndex || 0;
     endIndex = endIndex || tabla.length - 1;
-    return tabla.slice(startIndex, endIndex + 1).map((row) => row[columnIndex].value);
+    return tabla.slice(startIndex, endIndex + 1).map((row) => row[columnIndex].v);
   }
 
   getRowNumberValues(
@@ -126,7 +102,7 @@ export class TablaDatosHelper {
   }
 
   tieneCeldasCombinadas(tabla: DataCell[][]): boolean {
-    return tabla.some((row) => row.some((cell) => cell.rowSpan > 1 || cell.colSpan > 1));
+    return tabla.some((row) => row.some((cell) => cell.rs > 1 || cell.s > 1));
   }
   parseNumber(value: string | number): number {
     if (value === null || value === undefined || value === '') {
@@ -155,13 +131,13 @@ export class TablaDatosHelper {
       if (rowIndex === 0) return;
       const valores = [];
       for (const cell of row) {
-        if (cell.rowSpan > 1 || cell.colSpan > 1) {
+        if (cell.rs > 1 || cell.s > 1) {
           if (valores.length > 0) {
             break;
           }
           continue;
         }
-        if (!isNaN(+cell.value)) {
+        if (!isNaN(+cell.v)) {
           valores.push(cell);
         }
       }
@@ -187,12 +163,12 @@ export class TablaDatosHelper {
     const colsLn = valoresNumericos[0].length;
     return {
       inicio: {
-        colIndex: valoresNumericos[0][0].colIndex,
-        rowIndex: valoresNumericos[0][0].rowIndex,
+        colIndex: valoresNumericos[0][0].c,
+        rowIndex: valoresNumericos[0][0].r,
       },
       fin: {
-        colIndex: valoresNumericos[rowsLn - 1][colsLn - 1].colIndex,
-        rowIndex: valoresNumericos[rowsLn - 1][colsLn - 1].rowIndex,
+        colIndex: valoresNumericos[rowsLn - 1][colsLn - 1].c,
+        rowIndex: valoresNumericos[rowsLn - 1][colsLn - 1].r,
       }
     }
 
@@ -200,11 +176,11 @@ export class TablaDatosHelper {
 
   sonValoresContiguos(valores: DataCell[][]): boolean {
     let out = true;
-    const startValueColIndex = valores[0][0].colIndex;
-    const startValueRowIndex = valores[0][0].rowIndex;
+    const startValueColIndex = valores[0][0].c;
+    const startValueRowIndex = valores[0][0].r;
     valores.forEach((row, rowIndex) => {
       row.forEach((cell, colIndex) => {
-        if (cell.colIndex !== startValueColIndex + colIndex || cell.rowIndex !== startValueRowIndex + rowIndex) {
+        if (cell.c !== startValueColIndex + colIndex || cell.r !== startValueRowIndex + rowIndex) {
           out = false;
         }
       });

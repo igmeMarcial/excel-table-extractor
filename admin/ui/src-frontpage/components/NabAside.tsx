@@ -60,7 +60,6 @@ const MenuItem = ({ model, onExpandToggleClick }: MenuItemProps) => {
       to={newPathUrl(location, 'eid', model.estadisticaId)}
       className=" relative bg-gray-100  no-underline  text-black pl-16 pr-4 hover:text-custom-blue py-1"
     >
-      <span className="absolute left-0 pl-3">{model.numeral}</span>
       {model.nombre}
     </Link>
   );
@@ -73,7 +72,7 @@ function NabAside() {
     dispath(toggleMenuNivel2Item(model));
   };
   return (
-    <div className="bg-gray-100 py-3  h-full border-x-0 border-b-0 border-t-4 border-t-custom-blue border-solid">
+    <div className="bg-gray-100 py-3 border-x-0 border-b-0 border-t-4 border-t-custom-blue border-solid">
       <div className="flex flex-col pl-0 my-0">
         {menuNivel2.map((item, index) => (
           <MenuItem key={index} model={item} onExpandToggleClick={toggleMenu} />

@@ -1,99 +1,56 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
+  selectEstadisticaData,
   selectEstadisticaDataFields,
   selectValidationErrors,
-  setEstadisticaDatos,
-  setFieldValidationErrors,
+  setEstadisticaDatosFieldValue,
 } from '../EstadisticaFormSlice';
 import { DATOS_FIELDS_DEF } from './EstadisticaFieldsDef';
-import { Input } from 'antd';
-import { FieldValidation } from '../../../types/FieldValidation';
-import FieldValidationsHelper from '../../../helpers/FieldValidationsHelper';
-import IndicadorDataGrid from '../../../components/IndicadorDataGrid';
+import DataTable from '../../../components/DataTable';
+import { Field, Input } from '@fluentui/react-components';
 
 const fieldsArray = DATOS_FIELDS_DEF;
 
-const IndicadorEditorTabDatos: React.FC = () => {
+const TextField = ({ fieldName }) => {
+  const fieldDef = fieldsArray[fieldName];
   const dispath = useAppDispatch();
   const values = useAppSelector(selectEstadisticaDataFields);
   const err = useAppSelector(selectValidationErrors);
-
-  // console.log(err);
-
-  const setValues = (values) => {
-    dispath(setEstadisticaDatos(values));
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    key: string
-  ) => {
-    const newValue = e.target.value;
-    const validations: FieldValidation = {
-      required: true,
-      state: 'error',
-    };
-    const errors = FieldValidationsHelper.getFieldErrors(newValue, validations);
-
-    console.log(errors);
-    console.log(newValue);
-
-    const updatedValues = {
-      ...values,
-      [key]: newValue,
-    };
-
-    setValues(updatedValues);
-    dispath(setFieldValidationErrors({ fieldName: key, errors }));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispath(
+      setEstadisticaDatosFieldValue({ field: fieldName, value: e.target.value })
+    );
   };
   return (
-    <div className="overflow-auto">
-      <form>
-        <table className="form-table ">
-          <tbody>
-            {Object.entries(fieldsArray).map(([fieldName, fieldDef]) => (
-              <tr key={fieldName} className="flex flex-col pb-0">
-                <th scope="row" className="th_data">
-                  <label htmlFor={fieldName}>{fieldDef.label}</label>
-                </th>
-                <td className="td-data">
-                  {fieldDef.type === 'table' ? (
-                    <div
-                      className={`container rounded-sm overflow-x-auto relative${
-                        values?.tabla?.length ? 'p-0' : 'p-4'
-                      }`}
-                      style={{
-                        scrollbarWidth: 'thin',
-                        overflowX: 'auto',
-                        border: values?.tabla?.length
-                          ? 'none'
-                          : '1px solid #94908c',
-                      }}
-                    >
-                      {(values?.tabla?.length ?? 0) > 0 ? (
-                        <IndicadorDataGrid data={values.tabla} />
-                      ) : (
-                        <div>Importe los datos</div>
-                      )}
-                    </div>
-                  ) : (
-                    <Input
-                      name={fieldName}
-                      type={fieldDef.type}
-                      value={values[fieldName]}
-                      onChange={(e) => handleChange(e, fieldName)}
-                      required={fieldDef.required}
-                      status={err[fieldName]}
-                    />
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </form>
-    </div>
+    <Field label={fieldDef.label}>
+      <Input
+        name={fieldName}
+        type="text"
+        value={values[fieldName]}
+        onChange={handleChange}
+        required={fieldDef.required}
+      />
+    </Field>
+  );
+};
+
+const IndicadorEditorTabDatos = () => {
+  const data = useAppSelector(selectEstadisticaData);
+  return (
+    <form>
+      <div className="flex flex-col gap-y-4">
+        <TextField fieldName="nombre" />
+        <Field label="Tabla de datos">
+          <div className="p-3 border border-solid  border-gray-300 rounded overflow-hidden">
+            <DataTable data={data} />
+          </div>
+        </Field>
+        <TextField fieldName="nota" />
+        <TextField fieldName="fuente" />
+        <TextField fieldName="elaboracion" />
+      </div>
+    </form>
   );
 };
 

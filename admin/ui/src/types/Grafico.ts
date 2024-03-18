@@ -6,4 +6,6 @@ export interface Grafico {
   titulo?: string;
   series?: Serie[];
   categorias?: string[];
+  rotacionEtiquetasCategorias?: number;
+  mostrarLeyenda?: boolean;
 }

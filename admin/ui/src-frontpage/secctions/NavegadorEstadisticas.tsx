@@ -9,10 +9,12 @@ export default function NavegadorEstadisticas() {
       <EstadisticasNav />
       <NamePanel />
       <div className="flex">
-        <div style={{ maxWidth: '300px' }}>
+        <div style={{ width: '300px' }}>
           <NabAside />
         </div>
-        <EstadisticaVistaTabs />
+        <div className="flex-1 overflow-hidden">
+          <EstadisticaVistaTabs />
+        </div>
       </div>
     </>
   );

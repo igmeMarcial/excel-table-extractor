@@ -59,6 +59,7 @@ export class EchartsPropsMapper {
     }
     if (main.type === 'category') {
       main.data = this.grafico.categorias
+      main.axisLabel = this.getCategoryAxisLabel()
     }
     return main
   }
@@ -70,6 +71,11 @@ export class EchartsPropsMapper {
       main.data = this.grafico.categorias
     }
     return main
+  }
+  private getCategoryAxisLabel(): echarts.EChartOption.BasicComponents.CartesianAxis.Label {
+    return {
+      rotate: this.grafico.rotacionEtiquetasCategorias || 0
+    }
   }
   private getXAxisType(): 'category' | 'value' {
     if (this.grafico.tipo === 'barras') {
@@ -84,6 +90,12 @@ export class EchartsPropsMapper {
     return 'value'
   }
   private getLegend(): echarts.EChartOption.Legend {
+    // Si mostrarLeyenda está explicitamente definido como false, no se muestra
+    if (this.grafico.mostrarLeyenda === false) {
+      return {
+        show: false
+      }
+    }
     return {
       data: this.series.map((serie) => serie.nombre)
     }

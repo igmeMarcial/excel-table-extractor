@@ -15,7 +15,7 @@ import {
   QUERY_PARAM_ESTADISTICA_ID,
   QUERY_PARAM_ESTADISTICA_INDICE_PATH,
   QUERY_PARAM_MARCO_ORDENADOR,
-} from './core/constantes';
+} from '../src/core/constantes';
 import {
   useGetEstadisticaQuery,
   useGetIndiceQuery,

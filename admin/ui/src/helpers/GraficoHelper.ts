@@ -16,14 +16,34 @@ export class GraficoHelper {
   }
   getGraficosDefecto(tabla: DataCell[][]): Grafico[] {
     const dataInfo = tablaDatosHelper.getInformacion(tabla);
-    const out: Grafico[] = [];
+
     // Cuando la tabla tiene una fila final con totales
     const valoresRango = dataInfo.valoresRango;
     if (!valoresRango) {
       return [{}];
     }
+    console.log('valoresRango', valoresRango);
+    console.log('dataInfo', dataInfo);
     // Categoria
     const categorias = tablaDatosHelper.getRowValues(tabla, valoresRango.inicio.rowIndex - 1, valoresRango.inicio.colIndex, valoresRango.fin.colIndex) as string[];
+    // Datos anuales por departamento
+    if (dataInfo.sonDatosAnualesPorDepartamento) {
+      // Rango de series, solo la ultima columna
+      const serieRango = {
+        inicio: { rowIndex: valoresRango.inicio.rowIndex, colIndex: valoresRango.fin.colIndex },
+        fin: { rowIndex: valoresRango.fin.rowIndex, colIndex: valoresRango.fin.colIndex }
+      };
+      const categorias = tablaDatosHelper.getColumnValues(tabla, 0, 1) as string[];
+      return [
+        {
+          categorias,
+          tipo: 'columnas',
+          series: this.getVerticalSeries(tabla, serieRango),
+          rotacionEtiquetasCategorias: 30,
+          mostrarLeyenda: false
+        }
+      ];
+    }
     // Si la tabla tiene una fila de totales solo se muestra un gráfico de barras
     if (dataInfo.tieneFilaTotales) {
       const filaTotalesRowIndex = tablaDatosHelper.getFilaTotalesRowIndex(tabla);
@@ -31,30 +51,31 @@ export class GraficoHelper {
         inicio: { rowIndex: filaTotalesRowIndex, colIndex: valoresRango.inicio.colIndex },
         fin: { rowIndex: filaTotalesRowIndex, colIndex: valoresRango.fin.colIndex }
       };
-      out.push({
-        categorias,
-        tipo: 'columnas',
-        series: this.getSeries(tabla, totalValoresRango),
-      });
-    } else {
-      out.push({
+      return [
+        {
+          categorias,
+          tipo: 'columnas',
+          series: this.getHorizontalSeries(tabla, totalValoresRango),
+        }
+      ];
+    }
+    return [
+      {
         categorias,
         tipo: 'lineas',
-        series: this.getSeries(tabla, valoresRango),
-      });
-    }
-    return out;
+        series: this.getHorizontalSeries(tabla, valoresRango),
+      }
+    ];
   }
 
-  private getSeries(tabla: DataCell[][], rangoValores: RangoCeldas): Serie[] {
+  private getHorizontalSeries(tabla: DataCell[][], rangoValores: RangoCeldas): Serie[] {
     const out: Serie[] = [];
-    console.log(tabla)
     for (let i = rangoValores.inicio.rowIndex; i <= rangoValores.fin.rowIndex; i++) {
       // colIdex de nombre de la serie
       let nombreColIndex = rangoValores.inicio.colIndex - 1;
       let nombre = '';
       if (nombreColIndex >= 0) {
-        nombre = tabla[i][nombreColIndex].value as string;
+        nombre = tabla[i][nombreColIndex].v as string;
       } else {
         nombre = `Serie ${i}`;
       }
@@ -62,6 +83,26 @@ export class GraficoHelper {
       out.push({
         nombre,
         valores
+      });
+    }
+    return out;
+  }
+  private getVerticalSeries(tabla: DataCell[][], rangoValores: RangoCeldas): Serie[] {
+    const out: Serie[] = [];
+    for (let colIndex = rangoValores.inicio.colIndex; colIndex <= rangoValores.fin.colIndex; colIndex++) {
+      // colIdex de nombre de la serie
+      let nombreRowIndex = rangoValores.inicio.rowIndex - 1;
+      let nombre = '';
+      if (nombreRowIndex >= 0) {
+        nombre = tabla[nombreRowIndex][colIndex].v as string;
+      } else {
+        nombre = `Serie ${colIndex}`;
+      }
+      const valores = tablaDatosHelper.getColumnNumberValues(tabla, colIndex, rangoValores.inicio.rowIndex, rangoValores.fin.rowIndex);
+      out.push({
+        nombre,
+        valores,
+        mostrarEtiquetas: true
       });
     }
     return out;

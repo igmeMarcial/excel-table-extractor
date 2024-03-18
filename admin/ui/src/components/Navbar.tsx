@@ -2,7 +2,6 @@ import { makeStyles } from '@fluentui/react-components';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useAppDispatch } from '../app/hooks';
 import {
-  resetChanges,
   setNavTab,
 } from '../pages/indicadores/EstadisticaFormSlice';
 

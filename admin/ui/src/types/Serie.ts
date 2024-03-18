@@ -4,4 +4,5 @@ export interface Serie {
   nombre: string;
   tipo?: TipoSerie;
   valores: number[];
+  mostrarEtiquetas?: boolean;
 }
