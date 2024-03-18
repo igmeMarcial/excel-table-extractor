@@ -136,7 +136,6 @@ export const DATOS_FIELDS_DEF: Record<string, FieldConfig> = {
   fuente: {
     label: 'Fuente',
     type: 'text',
-
   },
   elaboracion: {
     label: 'Elaboración',

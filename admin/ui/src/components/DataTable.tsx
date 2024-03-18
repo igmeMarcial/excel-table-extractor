@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import {
+  DT_TABLA_DATOS_BORDER_COLOR,
+  DT_TABLA_DATOS_FONT_SIZE,
+} from '../config/design-tokens';
+import {
   CELL_POSITION_BODY,
   CELL_POSITION_HEADER,
   DataCell,
@@ -8,8 +12,6 @@ import {
 interface DataTableProps {
   data: DataCell[][];
 }
-const CELL_BORDER_COLOR = '#757575';
-const CELL_FONT_SIZE = '11px';
 
 function renderCell(cell: DataCell, rowIndex: number, colIndex: number) {
   const { v: value, t: type, p: position } = cell || {};
@@ -17,13 +19,13 @@ function renderCell(cell: DataCell, rowIndex: number, colIndex: number) {
   let cellStyle = {
     backgroundColor: '#fff',
     color: '#000',
-    borderColor: CELL_BORDER_COLOR,
+    borderColor: DT_TABLA_DATOS_BORDER_COLOR,
     verticalAlign: '',
   };
   if (position === CELL_POSITION_HEADER) {
-    cellStyle.backgroundColor = CELL_BORDER_COLOR;
+    cellStyle.backgroundColor = DT_TABLA_DATOS_BORDER_COLOR;
     cellStyle.color = '#fff';
-    cellStyle.borderColor = CELL_BORDER_COLOR;
+    cellStyle.borderColor = DT_TABLA_DATOS_BORDER_COLOR;
   }
   const className =
     type === 'n' && position === CELL_POSITION_BODY
@@ -39,9 +41,9 @@ function renderCell(cell: DataCell, rowIndex: number, colIndex: number) {
   return (
     <td
       style={{
-        fontSize: CELL_FONT_SIZE,
+        fontSize: DT_TABLA_DATOS_FONT_SIZE,
         border: 'solid 1px',
-        borderColor: CELL_BORDER_COLOR,
+        borderColor: DT_TABLA_DATOS_BORDER_COLOR,
         fontWeight: '400',
         padding: '4px 6px',
         fontFamily: 'Arial, sans-serif',
@@ -94,7 +96,7 @@ const DataTable = ({ data }: DataTableProps) => {
       style={{
         borderWidth: hasScrollbar ? '1px' : '0',
         borderStyle: hasScrollbar ? 'solid' : 'none',
-        borderColor: CELL_BORDER_COLOR,
+        borderColor: DT_TABLA_DATOS_BORDER_COLOR,
       }}
       ref={tableWrapperRef}
     >
