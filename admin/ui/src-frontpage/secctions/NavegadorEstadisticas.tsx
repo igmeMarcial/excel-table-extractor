@@ -12,7 +12,7 @@ export default function NavegadorEstadisticas() {
         <div style={{ width: '300px' }}>
           <NabAside />
         </div>
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 overflow-hidden border border-red-400 border-solid">
           <EstadisticaVistaTabs />
         </div>
       </div>

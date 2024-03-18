@@ -1,103 +1,127 @@
-import { forwardRef, useState, useEffect } from 'react';
-import { Modal, Button } from 'antd';
-import EditorSingleFileUploader from './EditorSingleFileUploader';
-import { useAppDispatch } from '../../../app/hooks';
+import React, { FC, useEffect, useState } from 'react';
+import UploadFileButton from '../../../components/UploadFileButton';
+import { Modal, Button, Checkbox } from 'antd';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
+  selectIsCreationMode,
   setActiveTab,
   setEstadisticaDatos,
   setEstadisticaFields,
 } from '../EstadisticaFormSlice';
+import ExtractDataExcelService from '../../../services/ExtractDataExcelService';
 import { WorkBook } from 'xlsx';
-type IndicadorEditorModalImportProps = {
-  title: string;
-  hasFile: boolean;
-  setHasFile: any;
-  titleIndicador: string;
-  workBook: WorkBook;
-  handleRemove: () => void;
-};
-const IndicadorEditorModalImport = forwardRef(
-  (
-    {
-      title,
-      hasFile,
-      setHasFile,
-      titleIndicador,
-      workBook,
-      handleRemove,
-    }: IndicadorEditorModalImportProps,
-    ref
-  ) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [files, setFiles] = useState(false);
-    const [tableData, setTableData] = useState(null);
-    const [indicadorData, setIndicadorData] = useState(null);
-    const [option1, setOption1] = useState(false);
-    const [option2, setOption2] = useState(false);
-    const dispath = useAppDispatch();
+import { EstadisticaDatos } from '../../../types/EstadisticaDatos';
+import { FichaTecnicaFields } from '../../../types/Estadistica';
 
-    useEffect(() => {
-      if (hasFile) {
+const Importar: FC = () => {
+  const [fileUploading, setFileUploading] = useState(false);
+  const [workbookFile, setWorkBookFile] = useState<WorkBook>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hasFile, setHasFile] = useState<boolean>(false);
+  const [titleIndicador, setTitleIndicador] = useState<string>('');
+  const [showIndicadorFields, setShowIndicadorFields] = useState(false);
+  const [showEstadisticaData, setShowEstadisticaData] = useState(false);
+  const [tableData, setTableData] = useState<EstadisticaDatos>(null);
+  const [indicadorData, setIndicadorData] = useState<FichaTecnicaFields>(null);
+  const dispath = useAppDispatch();
+  const isCreationMode = useAppSelector(selectIsCreationMode);
+  const importButtonTitle = isCreationMode ? 'Importar' : 'Actualizar datos';
+  const importModalTitle = importButtonTitle;
+  const extractDataExcelService = new ExtractDataExcelService();
+
+  const handleFileChange = async (file: File | null) => {
+    if (!file) return;
+    setFileUploading(true);
+    try {
+      const workbook = await extractDataExcelService.readExcelFile(file);
+      if (workbook) {
+        setWorkBookFile(workbook);
+        const tituloIndicador = extractDataExcelService.getNameIndicador(
+          workbook,
+          1
+        );
+        setTitleIndicador(tituloIndicador?.nombreIndicador);
         setIsModalOpen(true);
-      } else {
-        setIsModalOpen(false);
-      }
-    }, [hasFile]);
+        setHasFile(true);
 
-    const handleOk = () => {
-      setIsModalOpen(false);
-      if (option1 && option2) {
-        dispath(setEstadisticaDatos(tableData));
-        dispath(setEstadisticaFields(indicadorData));
-      } else if (option1) {
-        dispath(setEstadisticaFields(indicadorData));
-      } else if (option2) {
-        dispath(setEstadisticaDatos(tableData));
+        if (!tituloIndicador?.nombreIndicador) {
+          setFileUploading(false);
+          alert(
+            'El archivo debe ser tipo Indicador, con hoja1 de datos y hoja2 de ficha técnica'
+          );
+          return;
+        }
       }
-      setHasFile(false);
-      setOption1(false);
-      setOption2(false);
-      setFiles(false);
-      let activeTabValue: string;
-      if (option1) {
-        activeTabValue = '1';
-      } else if (option2) {
-        activeTabValue = '2';
-      } else {
-        activeTabValue = '1'; // Valor por defecto si ninguna opción está seleccionada
+    } catch (error) {
+      setFileUploading(false);
+      alert('El archivo.xlsx debe ser  tipo Indicador');
+    }
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+    setFileUploading(false);
+    if (showIndicadorFields && showEstadisticaData) {
+      dispath(setEstadisticaDatos(tableData));
+      dispath(setEstadisticaFields(indicadorData));
+    } else if (showIndicadorFields) {
+      dispath(setEstadisticaFields(indicadorData));
+    } else if (showEstadisticaData) {
+      dispath(setEstadisticaDatos(tableData));
+    }
+    setHasFile(false);
+    setShowIndicadorFields(false);
+    setShowEstadisticaData(false);
+    let activeTabValue: string;
+    if (showIndicadorFields) {
+      activeTabValue = '1';
+    } else if (showEstadisticaData) {
+      activeTabValue = '2';
+    } else {
+      activeTabValue = '1'; // Valor por defecto si ninguna opción está seleccionada
+    }
+    dispath(setActiveTab(activeTabValue));
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setFileUploading(false);
+    setHasFile(false);
+    setShowIndicadorFields(false); // Reiniciar estado de los checkboxes
+    setShowEstadisticaData(false);
+  };
+  const modalStyles = {
+    footer: {
+      display: 'flex',
+    },
+  };
+  useEffect(() => {
+    if (workbookFile) {
+      if (showIndicadorFields) {
+        const dataIndicator =
+          extractDataExcelService.getEstadisticaFieldsFichaTecnica(
+            workbookFile,
+            1
+          );
+        setIndicadorData(dataIndicator);
       }
-      dispath(setActiveTab(activeTabValue));
-      handleRemove();
-    };
-    const handleCancel = () => {
-      setIsModalOpen(false);
-      setHasFile(false);
-      setOption1(false); // Reiniciar estado de los checkboxes
-      setOption2(false);
-      setFiles(false);
-      handleRemove();
-    };
-
-    const handleTableData = (values) => {
-      if (values) {
-        setTableData(values);
-        setFiles(true);
+      if (showEstadisticaData) {
+        const dataTable = extractDataExcelService.extractDataFromFile(
+          workbookFile,
+          0
+        );
+        setTableData(dataTable);
       }
-    };
-    const handleIndicatorData = (values) => {
-      if (values) {
-        setIndicadorData(values);
-      }
-    };
-
-    const modalStyles = {
-      footer: {
-        display: 'flex',
-      },
-    };
-    return (
+    }
+  }, [showIndicadorFields, showEstadisticaData]);
+  return (
+    <>
+      <UploadFileButton
+        text={importButtonTitle}
+        accept=".xlsx"
+        onFileChange={handleFileChange}
+        uploading={fileUploading}
+      />
       <Modal
-        title={title}
+        title={importModalTitle}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -105,7 +129,7 @@ const IndicadorEditorModalImport = forwardRef(
         width={700}
         footer={[
           <Button
-            disabled={!files && !option1 && !option2}
+            disabled={!showIndicadorFields && !showEstadisticaData}
             key="submit"
             type="primary"
             onClick={handleOk}
@@ -117,21 +141,46 @@ const IndicadorEditorModalImport = forwardRef(
           </Button>,
         ]}
       >
-        <EditorSingleFileUploader
-          onTableData={handleTableData}
-          onIndicatorData={handleIndicatorData}
-          option1={option1}
-          setOption1={setOption1}
-          option2={option2}
-          setOption2={setOption2}
-          setFiles={setFiles}
-          titleIndicador={titleIndicador}
-          workBook={workBook}
-          hasFile={hasFile}
-        />
+        <section className="mb-5">
+          {hasFile && (
+            <>
+              <div className="mb-2">
+                <span className="text-blue-500">
+                  Indicador detectado en la ficha
+                </span>
+                {titleIndicador && (
+                  <div className="mt-1 font-semibold">{titleIndicador}</div>
+                )}
+              </div>
+              <div className="">
+                <span className="text-blue-500">
+                  Selecciona los datos a importar
+                </span>
+                <div className="flex flex-col pl-4 gap-2 mt-1">
+                  <Checkbox
+                    checked={showIndicadorFields}
+                    onChange={() =>
+                      setShowIndicadorFields((checked) => !checked)
+                    }
+                  >
+                    Campos de ficha técnica
+                  </Checkbox>
+                  <Checkbox
+                    checked={showEstadisticaData}
+                    onChange={() =>
+                      setShowEstadisticaData((checked) => !checked)
+                    }
+                  >
+                    Datos estadísticos
+                  </Checkbox>
+                </div>
+              </div>
+            </>
+          )}
+        </section>
       </Modal>
-    );
-  }
-);
+    </>
+  );
+};
 
-export default IndicadorEditorModalImport;
+export default Importar;

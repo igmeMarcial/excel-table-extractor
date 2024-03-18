@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   DT_TABLA_DATOS_BORDER_COLOR,
+  DT_TABLA_DATOS_BORDER_COLOR_HEADER,
   DT_TABLA_DATOS_FONT_SIZE,
 } from '../config/design-tokens';
 import {
@@ -25,7 +26,7 @@ function renderCell(cell: DataCell, rowIndex: number, colIndex: number) {
   if (position === CELL_POSITION_HEADER) {
     cellStyle.backgroundColor = DT_TABLA_DATOS_BORDER_COLOR;
     cellStyle.color = '#fff';
-    cellStyle.borderColor = DT_TABLA_DATOS_BORDER_COLOR;
+    cellStyle.borderColor = DT_TABLA_DATOS_BORDER_COLOR_HEADER;
   }
   const className =
     type === 'n' && position === CELL_POSITION_BODY

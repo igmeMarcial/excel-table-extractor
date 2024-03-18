@@ -40,39 +40,33 @@ function TablaDatos() {
   }
 
   return (
-    <div className="w-full relative">
-      <div className="flex justify-around mb-2 items-center px-4">
-        <div className="text-center mx-auto">
-          {nombre && (
-            <h4
-              style={{
-                fontSize: '12px',
-                fontWeight: 'bold',
-                textAlign: 'center',
-              }}
-            >
-              {nombre}
-            </h4>
-          )}
+    <div ref={downloadAreaContainer} className="my-5">
+      <div
+        style={{ paddingRight: '110px' }}
+        className="flex justify-around mb-4 items-center px-4 relative"
+      >
+        <div className="absolute top-0 right-0 text-xs">
+          <Button
+            size="small"
+            onClick={handleDowload}
+            style={{ color: '#217346', borderColor: '#217346' }}
+          >
+            Descargar
+          </Button>
         </div>
-        <Button onClick={handleDowload}>Descargar</Button>
+        <div
+          style={{ fontSize: '12px', fontWeight: 'bold', textAlign: 'center' }}
+        >
+          {nombre}
+        </div>
       </div>
-      <div ref={downloadAreaContainer}>
-        <IndicadorDataGrid data={dataTable.tabla} />
+      <IndicadorDataGrid data={dataTable.tabla} />
+      <div className="mt-2" style={{ fontSize: '10px' }}>
+        Nota: <br />
+        {nota}
       </div>
-      <div className="my-2 text-xs">
-        <div>
-          {fuente && <p className="inline text-xs">Fuente: </p>}
-          {fuente && <p className="inline">{fuente}</p>}
-        </div>
-        <div>
-          {elaboracion && <p className="inline">Elaboración: </p>}
-          {elaboracion && <p className="inline">{elaboracion}</p>}
-        </div>
-        <div>
-          {nota && <p className="inline">Nota: </p>}
-          {nota && <p className="inline">{nota}</p>}
-        </div>
+      <div className="mt-2" style={{ fontSize: '10px' }}>
+        Fuente: {fuente}
       </div>
     </div>
   );

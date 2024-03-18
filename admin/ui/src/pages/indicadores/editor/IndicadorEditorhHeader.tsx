@@ -1,9 +1,7 @@
-import { Button, Tooltip, Upload } from 'antd';
+import { Button, Tooltip } from 'antd';
 import {
-  ArrowImport24Regular,
   ArrowCurveDownLeft24Regular,
   ArrowCircleLeft24Regular,
-  Save20Regular,
 } from '@fluentui/react-icons';
 import { SaveOutlined } from '@ant-design/icons';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
@@ -15,30 +13,21 @@ import {
   commitChanges,
   selectPostValues,
 } from '../EstadisticaFormSlice';
-import IndicadorEditorModalImport from './IndicadorEditorModalImport';
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { builNavPathUrl } from '../../../utils/url-utils';
 import { useSaveEstadisticaMutation } from '../../../app/services/estadistica';
-import ExtractDataExcelService from '../../../services/ExtractDataExcelService';
-import { WorkBook } from 'xlsx';
+import Importar from './IndicadorEditorModalImport';
 
 const IndicadorEditorhHeader: React.FC = () => {
-  const [workbookFile, setWorkBookFile] = useState<WorkBook>(null);
-  const [titleIndicador, setTitleIndicador] = useState<string>('');
-  const [hasFile, setHasFile] = useState<boolean>(false);
   const location = useLocation();
-  const importDialogRef = useRef(null);
   const dispath = useAppDispatch();
   const titulo = useAppSelector(selectTitulo);
   const hasChanges = useAppSelector(selectHasChanges);
   const isCreationMode = useAppSelector(selectIsCreationMode);
   const postValues = useAppSelector(selectPostValues);
-  const importButtonTitle = isCreationMode ? 'Importar' : 'Actualizar datos';
-  const importModalTitle = importButtonTitle;
   const [addEstadistica, { isLoading }] =
     useSaveEstadisticaMutation(isCreationMode);
-  const extractDataExcelService = new ExtractDataExcelService();
   const handleDescartarCambios = () => {
     dispath(resetChanges());
   };
@@ -49,49 +38,6 @@ const IndicadorEditorhHeader: React.FC = () => {
     } else {
       alert('No hay cambios para guardar');
     }
-  };
-  const handleRemove = () => {
-    setWorkBookFile(null);
-    setTitleIndicador('');
-    setHasFile(false);
-    return true;
-  };
-
-  const handleFileChange = async (info) => {
-    const selectedFile = info.file.originFileObj;
-
-    if (info.file.status !== 'uploading') {
-      try {
-        const workbook = await extractDataExcelService.readExcelFile(
-          selectedFile
-        );
-        if (workbook) {
-          const cellVallueTitle = extractDataExcelService.getNameIndicador(
-            workbook,
-            1
-          );
-          // Verifica que workbook y cellVallueTitle no sean nulos ni indefinidos
-          if (workbook && cellVallueTitle && cellVallueTitle?.nombreIndicador) {
-            setWorkBookFile(workbook);
-            setTitleIndicador(cellVallueTitle?.nombreIndicador);
-            setHasFile(true); // Establece hasFile como true si todo es válido
-          } else {
-            // Si workbook o cellVallueTitle son nulos o indefinidos, muestra una alerta
-            alert(
-              'El archivo debe ser tipo Indicador, con hoja1 de datos y hoja2 de ficha técnica'
-            );
-          }
-        }
-      } catch (error) {
-        setHasFile(false); // Establece hasFile como false si hay un error al leer el archivo
-        alert('El archivo.xlsx debe ser  tipo Indicador');
-      }
-    }
-  };
-
-  const props = {
-    onChange: handleFileChange,
-    multiple: false,
   };
 
   const urlIndicadores = builNavPathUrl(location, 'indicadores');
@@ -105,23 +51,7 @@ const IndicadorEditorhHeader: React.FC = () => {
         </Link>
         <div className="text-2xl md:text-2xl font-bold p-0">Indicador</div>
         <span className="flex-1"></span>
-        <Upload showUploadList={false} onRemove={handleRemove} {...props}>
-          <Button
-            type="text"
-            icon={<ArrowImport24Regular className="align-middle" />}
-          >
-            {importButtonTitle}
-          </Button>
-        </Upload>
-        <IndicadorEditorModalImport
-          ref={importDialogRef}
-          title={importModalTitle}
-          hasFile={hasFile}
-          setHasFile={setHasFile}
-          titleIndicador={titleIndicador}
-          workBook={workbookFile}
-          handleRemove={handleRemove}
-        />
+        <Importar />
         <Button
           type="text"
           icon={<ArrowCurveDownLeft24Regular className="w-5 align-middle" />}

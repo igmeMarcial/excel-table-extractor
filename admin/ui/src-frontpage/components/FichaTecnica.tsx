@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-
+import { Button } from '@fluentui/react-components';
 import { useAppSelector } from '../app/hooks';
 import { selectEstadisticaData } from '../app/AppSlice';
 
@@ -91,14 +91,15 @@ function FichaTecnica() {
     return <div>No hay datos disponibles.</div>;
   }
 
+  const handleDowload = () => {
+    // const url = window.URL.createObjectURL(new Blob([dataIndicator]))
+  };
   return (
-    <div className="overflow-auto w-full ">
+    <div className="overflow-auto">
       <div className="p-4">
         <div className="relative my-1 mx-2">
           <div className="absolute top-2 right-0 text-xs">
-            <a className="font-bold cursor-pointer text-red-400 hover:bg-red-200 py-2 px-3 hover:border hover:border-red-600 hover:border-solid rounded-md">
-              Descargar
-            </a>
+            <Button onClick={handleDowload}>Descargar</Button>
           </div>
           <div>
             {dataIndicator.map((item, rowIndex) => (
