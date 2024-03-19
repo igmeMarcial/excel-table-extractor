@@ -18,6 +18,9 @@ function NavItem(item: IndiceItem, location, numItemActivo: any) {
     '6': '#bc9100',
   };
 
+  const tranform = 'scaleX(1.03) scaleY(1.03)';
+  const transition =
+    'transform 300ms ease 0ms,border-radius 300ms ease 0ms,border 300ms ease 0ms,background-color 300ms ease 0ms,background-image 300ms ease 0ms';
   const transformStyles = {
     background:
       numItemActivo === item.numeral
@@ -27,12 +30,12 @@ function NavItem(item: IndiceItem, location, numItemActivo: any) {
       numItemActivo === item.numeral
         ? '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)'
         : 'none',
-    WebkitTransform: numItemActivo === item.numeral ? 'scale(1.1)' : 'none',
-    MozTransform: numItemActivo === item.numeral ? 'scale(1.1)' : 'none',
-    MsTransform: numItemActivo === item.numeral ? 'scale(1.1)' : 'none',
-    OTransform: numItemActivo === item.numeral ? 'scale(1.1)' : 'none',
-    transform: numItemActivo === item.numeral ? 'scale(1.1)' : 'none',
-    transition: 'all 0.2s ease-in-out', // Transición suave
+    WebkitTransform: numItemActivo === item.numeral ? tranform : 'none',
+    MozTransform: numItemActivo === item.numeral ? tranform : 'none',
+    MsTransform: numItemActivo === item.numeral ? tranform : 'none',
+    OTransform: numItemActivo === item.numeral ? tranform : 'none',
+    transform: numItemActivo === item.numeral ? tranform : 'none',
+    transition: transition, // Transición suave
   };
 
   return (

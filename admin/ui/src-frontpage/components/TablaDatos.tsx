@@ -36,18 +36,21 @@ function TablaDatos() {
   };
 
   if (!dataTable?.tabla?.length) {
-    return <div>No hay datos disponibles.</div>;
+    return <div className="pl-4 pt-4">No hay datos disponibles.</div>;
   }
 
   return (
-    <div ref={downloadAreaContainer} className="my-5">
+    <div
+      ref={downloadAreaContainer}
+      className="my-5"
+      style={{ fontFamily: 'sans-serif' }}
+    >
       <div
         style={{ paddingRight: '110px' }}
-        className="flex justify-around mb-4 items-center px-4 relative"
+        className="flex justify-around my-4 items-center px-4 relative"
       >
-        <div className="absolute top-0 right-0 text-xs">
+        <div className="absolute -top-2 right-0 text-xs">
           <Button
-            size="small"
             onClick={handleDowload}
             style={{ color: '#217346', borderColor: '#217346' }}
           >

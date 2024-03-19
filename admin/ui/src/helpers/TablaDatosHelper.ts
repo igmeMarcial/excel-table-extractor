@@ -1,4 +1,5 @@
 import { sonDatosAnualesPorDepartamento } from "../data-scanners/datos-anuales-por-departamento";
+import sonDepartamentosTest from "../data-scanners/datos-anuales-por-departamentoTest";
 import { DataCell } from "../types/DataCell";
 import { DatosInformacion } from "../types/DatosInformacion";
 import { RangoCeldas } from "../types/RangoCeldas";
@@ -18,6 +19,7 @@ export class TablaDatosHelper {
   getInformacion(tabla: DataCell[][]): DatosInformacion {
     const out: DatosInformacion = {
       sonDatosAnualesPorDepartamento: sonDatosAnualesPorDepartamento(tabla),
+      sonDepartamentosTest: sonDepartamentosTest(tabla),//borrar
       tieneFilaTotales: this.tieneFilaTotales(tabla),
       tieneCeldasCombinadas: this.tieneCeldasCombinadas(tabla),
       valoresRango: this.getValoresRango(tabla)

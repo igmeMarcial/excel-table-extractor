@@ -92,7 +92,12 @@ function FichaTecnica() {
   }
 
   const handleDowload = () => {
-    // const url = window.URL.createObjectURL(new Blob([dataIndicator]))
+    const url = window.URL.createObjectURL(new Blob([data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'fichaEstadistico.pdf');
+    document.body.appendChild(link);
+    link.click();
   };
   return (
     <div className="overflow-auto">

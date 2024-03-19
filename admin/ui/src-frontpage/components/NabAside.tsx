@@ -72,7 +72,7 @@ function NabAside() {
     dispath(toggleMenuNivel2Item(model));
   };
   return (
-    <div className="bg-gray-100 py-3 border-x-0 border-b-0 border-t-4 border-t-custom-blue border-solid">
+    <div className="py-3 border-x-0 border-b-0 border-t-4 border-t-custom-blue border-solid">
       <div className="flex flex-col pl-0 my-0">
         {menuNivel2.map((item, index) => (
           <MenuItem key={index} model={item} onExpandToggleClick={toggleMenu} />

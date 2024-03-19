@@ -7,7 +7,7 @@ import { useAppSelector } from '../app/hooks';
 function Grafico() {
   const graficos = useAppSelector(selectEstadisticaGraficos);
   if (graficos.length === 0) {
-    return <div>Sin datos</div>;
+    return <div className="pl-4 pt-4">Sin datos</div>;
   }
   const chartOptions = ChartProspMapper.map(graficos[0]);
   return (
