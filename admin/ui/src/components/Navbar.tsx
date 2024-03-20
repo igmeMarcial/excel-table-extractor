@@ -1,9 +1,7 @@
 import { makeStyles } from '@fluentui/react-components';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useAppDispatch } from '../app/hooks';
-import {
-  setNavTab,
-} from '../pages/indicadores/EstadisticaFormSlice';
+import { setResetDefault } from '../pages/indicadores/EstadisticaFormSlice';
 
 const items = [
   { text: 'Estadisticas', path: 'indicadores' },
@@ -41,8 +39,7 @@ export default function Navbar() {
     return '?' + queryParams.toString();
   };
   const handleNav = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    dispath(setNavTab(currentTab));
-    console.log('click en va');
+    dispath(setResetDefault());
   };
   return (
     <nav

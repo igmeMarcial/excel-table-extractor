@@ -12,7 +12,9 @@ interface LabelDecimalsEditorProps {
 const LabelDecimalsEditor = ({ chartIndex }: LabelDecimalsEditorProps) => {
   const dispath = useAppDispatch();
   const fieldName = 'numeroDecimalesEtiquetas';
-  let value = useAppSelector(selectGraficoFieldValue(chartIndex, fieldName));
+
+  let value =
+    useAppSelector(selectGraficoFieldValue(chartIndex, fieldName)) || '';
   const handleChange = (e, data: TextareaOnChangeData) => {
     dispath(
       setGraficoFieldValue({

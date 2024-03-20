@@ -69,6 +69,7 @@ const renderDataTableRows = (itemRow: DataCell[], rowIndex) => {
 };
 
 const DataTable = ({ data }: DataTableProps) => {
+  console.log(data);
   const [hasScrollbar, setHasScrollbar] = useState(false);
   const tableWrapperRef = useRef(null);
   // Actualiza el estado hasScrollbar si hay scroll horizontal

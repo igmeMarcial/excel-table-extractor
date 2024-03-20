@@ -27,3 +27,8 @@ export const newPathUrl = (location: Location<any>, path: string, id?: number | 
 
   return '?' + queryParams.toString();
 }
+export const resetPathUrl=(location:Location<any>,path:string)=>{
+  const queryParams = new URLSearchParams(location.search);
+  queryParams.delete('rid')
+  return '?' + queryParams.toString();
+}

@@ -12,7 +12,6 @@ export interface EstadisticaFormState {
   estadisticaModel: Estadistica;
   estadisticaRawModel: Estadistica;
   activeTab: string;
-  handleNav:string
   recomendacionGrafica?: RecomendacionGrafica;
   tienePresentacionGraficaPersonalizada?: boolean;
   validations?: Record<string, FieldValidation>;

@@ -16,6 +16,7 @@ const TextField = ({ fieldName }) => {
   const fieldDef = fieldsArray[fieldName];
   const dispath = useAppDispatch();
   const values = useAppSelector(selectEstadisticaDataFields);
+  let fieldValue = values[fieldName] || ''; // Valor predeterminado en caso de que sea undefined
   const err = useAppSelector(selectValidationErrors);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispath(
@@ -27,7 +28,7 @@ const TextField = ({ fieldName }) => {
       <Input
         name={fieldName}
         type="text"
-        value={values[fieldName]}
+        value={fieldValue}
         onChange={handleChange}
         required={fieldDef.required}
       />

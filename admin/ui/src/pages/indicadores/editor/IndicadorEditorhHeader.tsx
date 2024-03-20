@@ -12,20 +12,24 @@ import {
   resetChanges,
   commitChanges,
   selectPostValues,
+  setResetDefault,
 } from '../EstadisticaFormSlice';
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { builNavPathUrl } from '../../../utils/url-utils';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { builNavPathUrl, resetPathUrl } from '../../../utils/url-utils';
 import { useSaveEstadisticaMutation } from '../../../app/services/estadistica';
 import Importar from './IndicadorEditorModalImport';
 
 const IndicadorEditorhHeader: React.FC = () => {
+  const navigate = useNavigate();
+
   const location = useLocation();
   const dispath = useAppDispatch();
   const titulo = useAppSelector(selectTitulo);
   const hasChanges = useAppSelector(selectHasChanges);
   const isCreationMode = useAppSelector(selectIsCreationMode);
   const postValues = useAppSelector(selectPostValues);
+
   const [addEstadistica, { isLoading }] =
     useSaveEstadisticaMutation(isCreationMode);
   const handleDescartarCambios = () => {
@@ -35,18 +39,25 @@ const IndicadorEditorhHeader: React.FC = () => {
     if (hasChanges) {
       await addEstadistica(postValues);
       dispath(commitChanges());
+      //cambia url cuando se haya guardado correctamente
+      // const newUrl = resetPathUrl(location, 'indicadores');
+      navigate(urlIndicadores);
+      dispath(setResetDefault());
     } else {
       alert('No hay cambios para guardar');
     }
   };
-
   const urlIndicadores = builNavPathUrl(location, 'indicadores');
   return (
     <>
       <div className="bg-custom-grey flex px-12 pt-3 pb-3 gap-2 items-center relative">
         <Link to={urlIndicadores} className="absolute top-3 left-2">
           <Tooltip title="Volver a la lista de indicadores">
-            <Button type="text" icon={<ArrowCircleLeft24Regular />}></Button>
+            <Button
+              onClick={() => dispath(setResetDefault())}
+              type="text"
+              icon={<ArrowCircleLeft24Regular />}
+            ></Button>
           </Tooltip>
         </Link>
         <div className="text-2xl md:text-2xl font-bold p-0">Indicador</div>
