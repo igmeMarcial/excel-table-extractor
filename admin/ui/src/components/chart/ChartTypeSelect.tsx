@@ -6,31 +6,43 @@ import {
   DataArea24Regular,
   DataPie24Regular,
 } from '@fluentui/react-icons';
-import { useAppDispatch } from '../../../../app/hooks';
-import { setTipoGrafico } from '../../EstadisticaFormSlice';
-import { TipoGrafico } from '../../../../types/TipoGrafico';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import {
+  selectGraficoFieldValue,
+  setGraficoFieldValue,
+} from '../../pages/indicadores/EstadisticaFormSlice';
+import { TipoGrafico } from '../../types/TipoGrafico';
 const useStyles = makeStyles({
   active: { backgroundColor: '#E6E6E6' },
 });
 
-interface TipoGraficoSelectProps {
-  tipoGrafico: TipoGrafico;
+interface ChartTypeSelectProps {
+  chartIndex: number;
 }
 
-const TipoGraficoSelect = ({ tipoGrafico }: TipoGraficoSelectProps) => {
+const ChartTypeSelect = ({ chartIndex }: ChartTypeSelectProps) => {
   const dispath = useAppDispatch();
   const classes = useStyles();
-
-  const handleChange = (tipoGrafico: TipoGrafico) => {
-    dispath(setTipoGrafico({ tipoGrafico, index: 0 }));
+  const fieldName = 'tipo';
+  let tipoGrafico = useAppSelector(
+    selectGraficoFieldValue(chartIndex, fieldName)
+  );
+  const handleChange = (tipo: TipoGrafico) => {
+    dispath(
+      setGraficoFieldValue({
+        index: chartIndex,
+        field: fieldName,
+        value: tipo,
+      })
+    );
   };
   const isActive = (tipo: TipoGrafico) => {
     return tipoGrafico === tipo;
   };
   return (
-    <div className="flex items-center">
+    <div>
       <span>Tipo:</span>
-      <div className="flex gap-3">
+      <div className="flex gap-1">
         <Button
           appearance="subtle"
           className={isActive('columnas') ? classes.active : ''}
@@ -66,4 +78,4 @@ const TipoGraficoSelect = ({ tipoGrafico }: TipoGraficoSelectProps) => {
   );
 };
 
-export default TipoGraficoSelect;
+export default ChartTypeSelect;

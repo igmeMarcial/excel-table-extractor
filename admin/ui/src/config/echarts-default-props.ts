@@ -49,3 +49,12 @@ export const ECHATS_DEFALT_PROPS: EChartsReactProps = {
     },
   }
 };
+
+export const ECHART_SERIES_DEFAULT_PROPS: echarts.EChartOption.Series = {
+  type: 'line',
+  label: {
+    show: true,
+    position: 'top',
+    fontSize: DT_GRAFICO_FONT_SIZE,
+  }
+};

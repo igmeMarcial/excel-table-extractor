@@ -8,4 +8,6 @@ export interface Grafico {
   categorias?: string[];
   rotacionEtiquetasCategorias?: number;
   mostrarLeyenda?: boolean;
+  mostrarEtiquetas?: boolean;
+  numeroDecimalesEtiquetas?: number;
 }

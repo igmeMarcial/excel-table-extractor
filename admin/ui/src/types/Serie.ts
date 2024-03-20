@@ -5,4 +5,5 @@ export interface Serie {
   tipo?: TipoSerie;
   valores: number[];
   mostrarEtiquetas?: boolean;
+  numeroDecimalesEtiquetas?: number;
 }

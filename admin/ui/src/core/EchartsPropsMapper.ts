@@ -1,6 +1,6 @@
 import { EChartsReactProps } from "echarts-for-react"
 import { Grafico } from "../types/Grafico"
-import { ECHATS_DEFALT_PROPS } from "../config/grafico-propiedades-defecto"
+import { ECHART_SERIES_DEFAULT_PROPS, ECHATS_DEFALT_PROPS } from "../config/echarts-default-props"
 import { deepAssign } from "../utils/object-utils"
 import * as echarts from 'echarts'
 import { TIPO_SERIE_TO_ECHARS_SERIE_TYPE } from "../maps/tipo-serie-echars-serie-type"
@@ -36,11 +36,22 @@ export class EchartsPropsMapper {
   private getSeries(): echarts.EChartOption.Series[] {
     const rawSeries = this.grafico.series || []
     return rawSeries.map((serie) => {
-      return {
+      const mostrarEtiquetas = !(serie.mostrarEtiquetas === false || this.grafico.mostrarEtiquetas === false)
+      const serieProps: any = {
         ...this.getTypeProps(serie),
         name: serie.nombre,
-        data: serie.valores,
+        data: serie.valores as any[],
+        label: {
+          show: mostrarEtiquetas
+        }
       }
+      if (this.grafico.numeroDecimalesEtiquetas || serie.numeroDecimalesEtiquetas) {
+        // Redondear a n decimales
+        serieProps.label.formatter = (params) => {
+          return params.value.toFixed(this.grafico.numeroDecimalesEtiquetas)
+        }
+      }
+      return deepAssign({}, ECHART_SERIES_DEFAULT_PROPS, serieProps)
     })
   }
   private getTypeProps(serie: Serie): echarts.EChartOption.Series {

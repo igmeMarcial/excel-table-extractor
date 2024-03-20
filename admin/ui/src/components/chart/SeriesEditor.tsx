@@ -1,24 +1,21 @@
-import TipoGraficoSelect from './TipoGraficoSelect';
+import TipoGraficoSelect from './ChartTypeSelect';
 import { DataUsageSettings20Regular } from '@fluentui/react-icons';
-import { Grafico } from '../../../../types/Grafico';
+import { Grafico } from '../../types/Grafico';
 import { Button } from '@fluentui/react-button';
 import { Divider } from 'antd';
-import GraficoSeriesConfigWindow from './GraficoSeriesConfigWindow';
+import GraficoSeriesConfigWindow from '../../pages/indicadores/editor/presentacion/GraficoSeriesConfigWindow';
 import { useRef } from 'react';
 
 interface GraficoToolbarProps {
-  graficoIndex: number;
-  grafico: Grafico;
+  chartIndex: number;
 }
-const GraficoToolbar = ({ grafico }: GraficoToolbarProps) => {
+const GraficoToolbar = ({ chartIndex }: GraficoToolbarProps) => {
   const seriesConfigWindowRef = useRef(null);
   const onConfigSeriesClick = () => {
     seriesConfigWindowRef.current.open();
   };
   return (
-    <div className="flex items-center justify-start bg-gray-100 px-4 py-1">
-      <TipoGraficoSelect tipoGrafico={grafico.tipo} />
-      <Divider type="vertical" />
+    <div>
       <Button
         appearance="subtle"
         icon={<DataUsageSettings20Regular />}
