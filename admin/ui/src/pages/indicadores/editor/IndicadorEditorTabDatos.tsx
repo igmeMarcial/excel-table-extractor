@@ -18,6 +18,8 @@ const TextField = ({ fieldName }) => {
   const values = useAppSelector(selectEstadisticaDataFields);
   let fieldValue = values[fieldName] || ''; // Valor predeterminado en caso de que sea undefined
   const err = useAppSelector(selectValidationErrors);
+  // console.log(err);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispath(
       setEstadisticaDatosFieldValue({ field: fieldName, value: e.target.value })

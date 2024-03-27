@@ -47,7 +47,7 @@ function TablaDatos() {
     >
       <div
         style={{ paddingRight: '110px' }}
-        className="flex justify-around my-4 items-center px-4 relative"
+        className="flex justify-around my-4 items-center px-4 relative min-h-5"
       >
         <div className="absolute -top-2 right-0 text-xs">
           <Button

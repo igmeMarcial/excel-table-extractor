@@ -8,7 +8,7 @@ export default function NavegadorEstadisticas() {
     <>
       <EstadisticasNav />
       <NamePanel />
-      <div className="flex">
+      <div className="flex sm:flex-col-reverse md:flex-row">
         <div style={{ width: '300px' }} className="bg-gray-100">
           <NabAside />
         </div>

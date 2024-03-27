@@ -13,10 +13,11 @@ import {
   commitChanges,
   selectPostValues,
   setResetDefault,
+  selectEstadisticaFields,
 } from '../EstadisticaFormSlice';
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { builNavPathUrl, resetPathUrl } from '../../../utils/url-utils';
+import { resetPathUrl } from '../../../utils/url-utils';
 import { useSaveEstadisticaMutation } from '../../../app/services/estadistica';
 import Importar from './IndicadorEditorModalImport';
 
@@ -30,6 +31,8 @@ const IndicadorEditorhHeader: React.FC = () => {
   const isCreationMode = useAppSelector(selectIsCreationMode);
   const postValues = useAppSelector(selectPostValues);
 
+  const valuesTest = useAppSelector(selectEstadisticaFields);
+
   const [addEstadistica, { isLoading }] =
     useSaveEstadisticaMutation(isCreationMode);
   const handleDescartarCambios = () => {
@@ -39,15 +42,13 @@ const IndicadorEditorhHeader: React.FC = () => {
     if (hasChanges) {
       await addEstadistica(postValues);
       dispath(commitChanges());
-      //cambia url cuando se haya guardado correctamente
-      // const newUrl = resetPathUrl(location, 'indicadores');
-      navigate(urlIndicadores);
+      // navigate(urlIndicadores);
       dispath(setResetDefault());
     } else {
       alert('No hay cambios para guardar');
     }
   };
-  const urlIndicadores = builNavPathUrl(location, 'indicadores');
+  const urlIndicadores = resetPathUrl(location, 'indicadores');
   return (
     <>
       <div className="bg-custom-grey flex px-12 pt-3 pb-3 gap-2 items-center relative">
@@ -66,7 +67,7 @@ const IndicadorEditorhHeader: React.FC = () => {
         <Button
           type="text"
           icon={<ArrowCurveDownLeft24Regular className="w-5 align-middle" />}
-          disabled={!hasChanges}
+          // disabled={!hasChanges}
           onClick={handleDescartarCambios}
         >
           Deshacer cambios
