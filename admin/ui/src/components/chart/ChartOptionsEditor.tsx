@@ -1,3 +1,4 @@
+import ChartEjes from './ChartEjes';
 import ChartTypeSelect from './ChartTypeSelect';
 import LabelDecimalsEditor from './LabelDecimalsEditor';
 import SeriesEditor from './SeriesEditor';
@@ -16,6 +17,7 @@ const ChartOptionsEditor = ({ chartIndex }: ChartOptionsEditorProps) => {
       <div className="flex flex-col gap-y-3 px-2">
         <ChartTypeSelect chartIndex={chartIndex} />
         <TitleEditor chartIndex={chartIndex} />
+        <ChartEjes />
         <ShowLabelsSwitch chartIndex={chartIndex} />
         <ShowLegendSwitch chartIndex={chartIndex} />
         <LabelDecimalsEditor chartIndex={chartIndex} />
