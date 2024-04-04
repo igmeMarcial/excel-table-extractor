@@ -6,11 +6,14 @@ import {
   MenuTrigger,
   SplitButton,
   Switch,
+  Field,
+  Input,
 } from '@fluentui/react-components';
 import type { MenuButtonProps } from '@fluentui/react-components';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 const ChartEjes: React.FC = () => {
+  const [checked, setChecked] = useState(true);
   const [range, setRange] = useState({
     min: 0,
     max: 20,
@@ -19,7 +22,13 @@ const ChartEjes: React.FC = () => {
     x: 0,
     y: 0,
   });
-  const handleChange = (e) => {};
+
+  const handleChange = useCallback(
+    (ev) => {
+      setChecked(ev.currentTarget.checked);
+    },
+    [setChecked]
+  );
 
   const handleMenuItemClick = (value, name) => {
     setSelectedInterval({
@@ -40,7 +49,7 @@ const ChartEjes: React.FC = () => {
       <Menu positioning="below-end">
         <MenuTrigger disableButtonEnhancement>
           {(triggerProps: MenuButtonProps) => (
-            <SplitButton menuButton={triggerProps}>
+            <SplitButton menuButton={triggerProps} size="small">
               {selectedInterval.x}
             </SplitButton>
           )}
@@ -65,7 +74,7 @@ const ChartEjes: React.FC = () => {
       <Menu positioning="below-end">
         <MenuTrigger disableButtonEnhancement>
           {(triggerProps: MenuButtonProps) => (
-            <SplitButton menuButton={triggerProps}>
+            <SplitButton menuButton={triggerProps} size="small" disabled={true}>
               {selectedInterval.y}
             </SplitButton>
           )}
@@ -84,6 +93,9 @@ const ChartEjes: React.FC = () => {
           </MenuList>
         </MenuPopover>
       </Menu>
+      {/* <Field label="Número de decimales en etiquetas">
+        <Input type="number" onChange={handleChange} min="0" />
+      </Field> */}
       <Switch
         label="Habilitar eje secundario"
         onChange={handleChange}
