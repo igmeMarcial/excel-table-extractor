@@ -7,4 +7,10 @@ return [
     ['nombre' => 'EstadÍstica 4'],
     ['nombre' => 'EstadÍstica 5'],
     ['nombre' => 'EstadÍstica 6'],
+    ['nombre' => 'EstadÍstica 7'],
+    ['nombre' => 'EstadÍstica 8'],
+    ['nombre' => 'EstadÍstica 9'],
+    ['nombre' => 'EstadÍstica 10'],
+    ['nombre' => 'EstadÍstica 11'],
+    ['nombre' => 'EstadÍstica 12'],
 ];
