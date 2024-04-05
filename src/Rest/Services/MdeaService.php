@@ -98,10 +98,10 @@ class MdeaService
     private function getListaEstadisticas()
     {
         $query = "SELECT
-                    estadistica_id estadisticaId,
-                    clasificador_id clasificadorId,
+                    A.estadistica_id estadisticaId,
+                    B.clasificador_id clasificadorId,
                     nombre
-                  FROM {$this->dbMap->estadistica}";
+                  FROM {$this->dbMap->estadistica} A INNER JOIN {$this->dbMap->estaClasN3} B ON A.estadistica_id = B.estadistica_id";
         return $this->wpdb->get_results($query, ARRAY_A);
     }
     private function getListaClasificadores()

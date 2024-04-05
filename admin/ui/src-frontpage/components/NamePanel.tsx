@@ -54,12 +54,13 @@ function NavItem(item: IndiceItem, location, numItemActivo: any) {
 
 const NamePanel = () => {
   const location = useLocation();
-  const indiceEstadisticas = useAppSelector(selectClasificadoresNivel1);
+  const clasificadoresN1 = useAppSelector(selectClasificadoresNivel1);
+  console.log('clasificadoresN1', clasificadoresN1);
   const numItemActivo = useAppSelector(selectComponenteIndicePath);
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-10 mb-5">
-      {indiceEstadisticas.map((item) => NavItem(item, location, numItemActivo))}
+      {clasificadoresN1.map((item) => NavItem(item, location, numItemActivo))}
     </div>
   );
 };

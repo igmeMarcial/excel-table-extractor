@@ -165,11 +165,11 @@ CREATE TABLE {$tablePrefix}esta_clas_n3 (
     {
         $tablePrefix = self::getTablePrefix();
         return "
-DROP TABLE IF EXISTS {$tablePrefix}estadistica;
-DROP TABLE IF EXISTS {$tablePrefix}clasificador;
 DROP TABLE IF EXISTS {$tablePrefix}esta_clas_n1;
 DROP TABLE IF EXISTS {$tablePrefix}esta_clas_n2;
 DROP TABLE IF EXISTS {$tablePrefix}esta_clas_n3;
+DROP TABLE IF EXISTS {$tablePrefix}clasificador;
+DROP TABLE IF EXISTS {$tablePrefix}estadistica;
 ";
     }
     public static function getTablePrefix()
