@@ -40,7 +40,10 @@ function App() {
   }
   if (urlEstadisticaId) {
     dispath(setEstadisticaId(Number(urlEstadisticaId)));
-    useGetEstadisticaQuery(Number(urlEstadisticaId));
+    console.log('useGetEstadisticaQuery start');
+    const { data } = useGetEstadisticaQuery(Number(urlEstadisticaId));
+    console.log('useGetEstadisticaQuery data', data);
+    console.log('useGetEstadisticaQuery end');
   }
   // Load indice
   useGetIndiceQuery(1);

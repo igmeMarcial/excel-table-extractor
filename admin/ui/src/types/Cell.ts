@@ -7,7 +7,7 @@ export const CELL_VALUE_TYPE_NUMBER: CellValueType = 'n'
 
 export type CellPosition = 'h' | 'b' | 'f'
 export type CellValueType = 's' | 'n'  //t: type s: string, n: number
-export interface DataCell {
+export interface Cell {
   v: string | number
   r: number
   c: number

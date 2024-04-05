@@ -1,4 +1,4 @@
-import { RangoCeldas } from "./RangoCeldas";
+import { CellRange } from "./CellRange";
 import { RecomendacionGrafica } from "./RecomendacionGrafica";
 
 export interface DatosInformacion {
@@ -7,5 +7,5 @@ export interface DatosInformacion {
   tieneFilaTotales?: boolean;
   tieneCeldasCombinadas?: boolean;
   recomendacionGrafica?: RecomendacionGrafica;
-  valoresRango?: RangoCeldas;
+  valoresRango?: CellRange;
 }

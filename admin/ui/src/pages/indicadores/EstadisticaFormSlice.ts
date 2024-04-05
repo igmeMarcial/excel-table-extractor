@@ -8,7 +8,7 @@ import { EstadisticaFormState } from '../../types/EstadisticarFormState';
 import tablaDatosHelper from '../../helpers/TablaDatosHelper';
 import graficoHelper from '../../helpers/GraficoHelper';
 import fieldValidationsHelper from '../../helpers/FieldValidationsHelper';
-import { DataCell } from '../../types/DataCell';
+import { Cell } from '../../types/Cell';
 import { ValidationError } from '../../types/ValidationError';
 import { Grafico } from '../../types/Grafico';
 
@@ -100,7 +100,7 @@ export const estadisticaFormSlice = createSlice({
       state.estadisticaRawModel.graficos = graficoHelper.getGraficosDefecto(action.payload.tabla || []);
       state.hasChanges = true;
     },
-    setEstadisticaTablaDatos: (state, action: PayloadAction<DataCell[][]>) => {
+    setEstadisticaTablaDatos: (state, action: PayloadAction<Cell[][]>) => {
       state.estadisticaRawModel.datos.tabla = action.payload;
       if (!state.tienePresentacionGraficaPersonalizada) {
         state.estadisticaRawModel.graficos = graficoHelper.getGraficosDefecto(action.payload);

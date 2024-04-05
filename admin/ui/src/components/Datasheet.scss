@@ -1,0 +1,122 @@
+@import "../scss/vars";
+
+$values-range-border-color: #326ac7;
+$values-range-background-color: #ebf0f9;
+
+$categories-range-border-color: #8157b7;
+$categories-range-background-color: #f2eef8;
+
+$series-range-border-color: #c0353e;
+$series-range-background-color: #f9ebec;
+
+.aesa-datasheet {
+  font-size: 11px;
+  border-spacing: 0;
+  line-height: 1;
+  border-collapse: collapse;
+  * {
+    box-sizing: border-box;
+  }
+  .col-reference,
+  .row-reference,
+  .empty-corner {
+    background-color: #f0f0f0;
+    text-align: center;
+    padding: 4px;
+  }
+
+  .empty-corner {
+    border-right: 1px solid #e1e1e1;
+    border-bottom: 1px solid #e1e1e1;
+  }
+
+  .col-reference {
+    border-right: 1px solid #e1e1e1;
+    border-bottom: 1px solid #ababab;
+  }
+
+  .row-reference {
+    border-bottom: 1px solid #e1e1e1;
+    border-right: 1px solid #ababab;
+  }
+  td {
+    border-right: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    border-top: 1px solid #e0e0e0;
+    border-left: 1px solid #e0e0e0;
+    white-space: nowrap;
+    padding: 4px 6px;
+    line-height: 1;
+    &.vrange-part {
+      background-color: $values-range-background-color;
+    }
+    &.crange-part {
+      background-color: $categories-range-background-color;
+    }
+    &.srange-part {
+      background-color: $series-range-background-color;
+    }
+    &.vrb-t,
+    &.crb-t,
+    &.srb-t {
+      border-top: 2px solid;
+    }
+    &.vrb-r,
+    &.crb-r,
+    &.srb-r {
+      border-right: 2px solid;
+    }
+    &.vrb-b,
+    &.crb-b,
+    &.srb-b {
+      border-bottom: 2px solid;
+    }
+    &.vrb-l,
+    &.crb-l,
+    &.srb-l {
+      border-left: 2px solid;
+    }
+    // Values range borders
+    &.vrb-t {
+      border-top-color: $values-range-border-color;
+    }
+    &.vrb-r {
+      border-right-color: $values-range-border-color;
+    }
+    &.vrb-b {
+      border-bottom-color: $values-range-border-color;
+    }
+    &.vrb-l {
+      border-left-color: $values-range-border-color;
+    }
+    // Categories range border
+    &.crb-t {
+      border-top-color: $categories-range-border-color;
+    }
+    &.crb-r {
+      border-right-color: $categories-range-border-color;
+    }
+    &.crb-b {
+      border-bottom-color: $categories-range-border-color;
+    }
+    &.crb-l {
+      border-left-color: $categories-range-border-color;
+    }
+    // Series range border
+    &.srb-t {
+      border-top-color: $series-range-border-color;
+    }
+    &.srb-r {
+      border-right-color: $series-range-border-color;
+    }
+    &.srb-b {
+      border-bottom-color: $series-range-border-color;
+    }
+    &.srb-l {
+      border-left-color: $series-range-border-color;
+    }
+  }
+  .data-cell--number {
+    text-align: right;
+  }
+}

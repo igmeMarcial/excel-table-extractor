@@ -1,4 +1,4 @@
-import { DataCell } from '../types/DataCell'
+import { Cell } from '../types/Cell'
 
 /**
  * Determina si la tabla tiene datos anuales por departamento
@@ -10,7 +10,7 @@ import { DataCell } from '../types/DataCell'
  * @param tabla
  * @returns
  */
-export const sonDatosAnualesPorMes = (tabla: DataCell[][]): boolean => {
+export const sonDatosAnualesPorMes = (tabla: Cell[][]): boolean => {
   if (tabla.length === 0 || tabla[0].length === 0) {
     return false
   }

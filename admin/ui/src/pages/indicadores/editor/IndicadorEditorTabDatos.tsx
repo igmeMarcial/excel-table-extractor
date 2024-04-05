@@ -7,8 +7,8 @@ import {
   setEstadisticaDatosFieldValue,
 } from '../EstadisticaFormSlice';
 import { DATOS_FIELDS_DEF } from './EstadisticaFieldsDef';
-import DataTable from '../../../components/DataTable';
 import { Field, Input } from '@fluentui/react-components';
+import Datasheet from '../../../components/Datasheet';
 
 const fieldsArray = DATOS_FIELDS_DEF;
 
@@ -46,7 +46,7 @@ const IndicadorEditorTabDatos = () => {
         <TextField fieldName="nombre" />
         <Field label="Tabla de datos">
           <div className="p-3 border border-solid  border-gray-300 rounded overflow-hidden">
-            <DataTable data={data} />
+            <Datasheet data={data} />
           </div>
         </Field>
         <TextField fieldName="nota" />

@@ -1,9 +1,9 @@
 import * as XLSX from 'xlsx';
 import { FICHA_FIELDS_MAP } from '../pages/indicadores/editor/FichaFieldsMap';
-import { CellPosition, CELL_POSITION_BODY, CELL_POSITION_HEADER, CELL_VALUE_TYPE_STRING, DataCell } from '../types/DataCell';
+import { CellPosition, CELL_POSITION_BODY, CELL_POSITION_HEADER, CELL_VALUE_TYPE_STRING, Cell } from '../types/Cell';
 import { FichaTecnicaFields } from '../types/Estadistica';
 import { EstadisticaDatos } from '../types/EstadisticaDatos';
-import { RangoCeldas } from '../types/RangoCeldas';
+import { CellRange } from '../types/CellRange';
 import { getSheetHtmlRows } from '../utils/xmls-utils';
 
 type HtmlCellsMatrix = HTMLTableCellElement[][];
@@ -242,14 +242,14 @@ class ExtractDataExcelService {
     return null;
   }
 
-  getTablaDatos(sheet: Sheet): DataCell[][] {
-    const out: DataCell[][] = [];
+  getTablaDatos(sheet: Sheet): Cell[][] {
+    const out: Cell[][] = [];
     const htmlRows = getSheetHtmlRows(sheet);
     const cellMap = this.createCellsDataMap(htmlRows);
     let htmlTablaDatos = this.getHtmlTablaDatos(cellMap);
     htmlTablaDatos.forEach((row, rowIndex) => {
       let colIndex = 0;
-      const rowData: DataCell[] = [];
+      const rowData: Cell[] = [];
       const cellPostion = this.getRowPosition(row, rowIndex);
       row.forEach((td) => {
         const colSpan = +td.getAttribute('colspan') || 1;
@@ -260,7 +260,7 @@ class ExtractDataExcelService {
         if (type === 'n') {
           value = +value;
         }
-        const dataCell: DataCell = {
+        const dataCell: Cell = {
           v: value,
           r: rowIndex,
           c: colIndex,
@@ -311,7 +311,7 @@ class ExtractDataExcelService {
   }
   getHtmlTablaDatos(rows: HtmlCellsMatrix): HtmlCellsMatrix {
     let out = []
-    const { inicio, fin } = this.getRangoTablaDatos(rows)
+    const { start: inicio, end: fin } = this.getRangoTablaDatos(rows)
     console.log(inicio, fin)
     for (let i = inicio.rowIndex; i <= fin.rowIndex; i++) {
       const outRow = []
@@ -364,7 +364,7 @@ class ExtractDataExcelService {
     })
     return cellsDataMap;
   }
-  getRangoTablaDatos(rows: HtmlCellsMatrix): RangoCeldas {
+  getRangoTablaDatos(rows: HtmlCellsMatrix): CellRange {
     const maxDataColums = this.getMaxDataColums(rows);
     const maxColIndex = rows[0].length - 1;
     let startRowIndex = -1;
@@ -424,11 +424,11 @@ class ExtractDataExcelService {
       }
     }
     return {
-      inicio: {
+      start: {
         rowIndex: startRowIndex,
         colIndex: startColIndex,
       },
-      fin: {
+      end: {
         rowIndex: endRowIndex,
         colIndex: endColIndex
       }

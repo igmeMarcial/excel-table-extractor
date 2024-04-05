@@ -1,8 +1,8 @@
 import { sonDatosAnualesPorDepartamento } from "../data-scanners/datos-anuales-por-departamento";
 import sonDepartamentosTest from "../data-scanners/datos-anuales-por-departamentoTest";
-import { DataCell } from "../types/DataCell";
+import { Cell } from "../types/Cell";
 import { DatosInformacion } from "../types/DatosInformacion";
-import { RangoCeldas } from "../types/RangoCeldas";
+import { CellRange } from "../types/CellRange";
 import { RecomendacionGrafica } from "../types/RecomendacionGrafica";
 
 export class TablaDatosHelper {
@@ -16,7 +16,7 @@ export class TablaDatosHelper {
     return TablaDatosHelper._instance;
   }
   //
-  getInformacion(tabla: DataCell[][]): DatosInformacion {
+  getInformacion(tabla: Cell[][]): DatosInformacion {
     const out: DatosInformacion = {
       sonDatosAnualesPorDepartamento: sonDatosAnualesPorDepartamento(tabla),
       sonDepartamentosTest: sonDepartamentosTest(tabla),//borrar
@@ -28,10 +28,10 @@ export class TablaDatosHelper {
     return out;
   }
 
-  getTablaDatosFromRawArrays(rows: (string | number)[][]): DataCell[][] {
-    let out: DataCell[][] = [];
+  getTablaDatosFromRawArrays(rows: (string | number)[][]): Cell[][] {
+    let out: Cell[][] = [];
     out = rows.map((row, rowIndex) => {
-      const newRow: DataCell[] = [];
+      const newRow: Cell[] = [];
       row.forEach((cell, colIndex) => {
         const value = cell;
         const type = typeof cell === 'number' ? 'n' : 's';
@@ -49,16 +49,16 @@ export class TablaDatosHelper {
     return out;
   }
 
-  tieneFilaTotales(tabla: DataCell[][]): boolean {
+  tieneFilaTotales(tabla: Cell[][]): boolean {
     return this.getFilaTotalesRowIndex(tabla) > -1;
   }
 
-  getFilaTotalesRowIndex(tabla: DataCell[][]): number {
+  getFilaTotalesRowIndex(tabla: Cell[][]): number {
     return tabla.findIndex((row) => row.some((cell) => cell.v?.toString().toLowerCase().match(/total/)));
   }
 
   getRowValues(
-    tabla: DataCell[][],
+    tabla: Cell[][],
     rowIndex: number,
     startIndex: number = 0,
     endIndex?: number
@@ -69,7 +69,7 @@ export class TablaDatosHelper {
   }
 
   getColumnValues(
-    tabla: DataCell[][],
+    tabla: Cell[][],
     columnIndex: number,
     startIndex?: number,
     endIndex?: number
@@ -80,7 +80,7 @@ export class TablaDatosHelper {
   }
 
   getRowNumberValues(
-    tabla: DataCell[][],
+    tabla: Cell[][],
     rowIndex: number,
     startIndex?: number,
     endIndex?: number
@@ -92,7 +92,7 @@ export class TablaDatosHelper {
   }
 
   getColumnNumberValues(
-    tabla: DataCell[][],
+    tabla: Cell[][],
     columnIndex: number,
     startIndex?: number,
     endIndex?: number
@@ -103,7 +103,7 @@ export class TablaDatosHelper {
     });
   }
 
-  tieneCeldasCombinadas(tabla: DataCell[][]): boolean {
+  tieneCeldasCombinadas(tabla: Cell[][]): boolean {
     return tabla.some((row) => row.some((cell) => cell.rs > 1 || cell.s > 1));
   }
   parseNumber(value: string | number): number {
@@ -112,7 +112,7 @@ export class TablaDatosHelper {
     }
     return parseFloat(value.toString().replace(/,/g, ''));
   }
-  getRecomendacionGraficaAutomatica(tabla: DataCell[][]): RecomendacionGrafica {
+  getRecomendacionGraficaAutomatica(tabla: Cell[][]): RecomendacionGrafica {
     const out = {} as any;
     out.tipoGrafico = 'columnas';
     return out;
@@ -127,8 +127,8 @@ export class TablaDatosHelper {
    * @param tabla
    * @returns
    */
-  getValoresRango(tabla: DataCell[][]): RangoCeldas {
-    const valoresNumericos: DataCell[][] = [];
+  getValoresRango(tabla: Cell[][]): CellRange {
+    const valoresNumericos: Cell[][] = [];
     tabla.forEach((row, rowIndex) => {
       if (rowIndex === 0) return;
       const valores = [];
@@ -164,11 +164,11 @@ export class TablaDatosHelper {
     const rowsLn = valoresNumericos.length;
     const colsLn = valoresNumericos[0].length;
     return {
-      inicio: {
+      start: {
         colIndex: valoresNumericos[0][0].c,
         rowIndex: valoresNumericos[0][0].r,
       },
-      fin: {
+      end: {
         colIndex: valoresNumericos[rowsLn - 1][colsLn - 1].c,
         rowIndex: valoresNumericos[rowsLn - 1][colsLn - 1].r,
       }
@@ -176,7 +176,7 @@ export class TablaDatosHelper {
 
   }
 
-  sonValoresContiguos(valores: DataCell[][]): boolean {
+  sonValoresContiguos(valores: Cell[][]): boolean {
     let out = true;
     const startValueColIndex = valores[0][0].c;
     const startValueRowIndex = valores[0][0].r;

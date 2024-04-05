@@ -43,10 +43,11 @@ class EstadisticaService
                   A.estadistica_id id,
                   A.nombre,
                   B.clasificador_id clasificadorId,
-                  B.nombre mdeaComponenteNombre,
+                  C.nombre mdeaComponenteNombre,
                   A.fecha_mod fechaMod
                 FROM {$this->dbMap->estadistica} A
-                INNER JOIN {$this->dbMap->clasificador} B ON A.clasificador_id = B.clasificador_id";
+                INNER JOIN {$this->dbMap->estaClasN1} B ON A.estadistica_id = B.estadistica_id
+                INNER JOIN {$this->dbMap->clasificador} C ON B.clasificador_id = C.clasificador_id";
         return $this->wpdb->get_results($sql, ARRAY_A);
     }
     public function getEstadistica($id)

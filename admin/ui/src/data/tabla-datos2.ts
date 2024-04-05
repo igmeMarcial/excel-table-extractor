@@ -1,7 +1,7 @@
-import { DataCell } from "../types/DataCell";
+import { Cell } from "../types/Cell";
 
 // TOTO: Eliminar al final
-const tablaDatosTest2: DataCell[][] = [
+const tablaDatosTest2: Cell[][] = [
   [
     { v: 'Año', r: 0, c: 0, t: 's' },
     { v: 'Valor', r: 0, c: 1, t: 's' },

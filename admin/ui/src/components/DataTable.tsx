@@ -7,14 +7,15 @@ import {
 import {
   CELL_POSITION_BODY,
   CELL_POSITION_HEADER,
-  DataCell,
-} from '../types/DataCell';
+  Cell,
+} from '../types/Cell';
+import { numberFormat } from '../utils/numberFormat';
 
 interface DataTableProps {
-  data: DataCell[][];
+  data: Cell[][];
 }
 
-function renderCell(cell: DataCell, rowIndex: number, colIndex: number) {
+function renderCell(cell: Cell, rowIndex: number, colIndex: number) {
   const { v: value, t: type, p: position } = cell || {};
 
   let cellStyle = {
@@ -33,12 +34,7 @@ function renderCell(cell: DataCell, rowIndex: number, colIndex: number) {
       ? 'text-end whitespace-nowrap' // Aliniación a la derecha para números
       : 'text-start whitespace-nowrap';
   const formattedValue =
-    type === 'n' && position === 'b'
-      ? value
-          .toString()
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-          .replace('.', ',')
-      : value;
+    type === 'n' && position === 'b' ? numberFormat(value as number) : value;
   return (
     <td
       style={{
@@ -60,7 +56,7 @@ function renderCell(cell: DataCell, rowIndex: number, colIndex: number) {
     </td>
   );
 }
-const renderDataTableRows = (itemRow: DataCell[], rowIndex) => {
+const renderDataTableRows = (itemRow: Cell[], rowIndex) => {
   return (
     <tr key={`C${itemRow}-F${rowIndex}`}>
       {itemRow.map((cell, colIndex) => renderCell(cell, 0, colIndex))}

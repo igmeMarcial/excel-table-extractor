@@ -8,6 +8,9 @@ class Schema
     private $tables = [
         'clasificador',
         'estadistica',
+        'esta_clas_n1',
+        'esta_clas_n2',
+        'esta_clas_n3',
     ];
 
     public static function initDatabase()
@@ -81,11 +84,10 @@ CREATE TABLE {$tablePrefix}clasificador (
     activo              TINYINT(1) NOT NULL DEFAULT 1,
     numeral             VARCHAR(11) NOT NULL COMMENT 'Máx 99.99.99.99(11 caracteres)',
     nombre              VARCHAR(255) NOT NULL,
-    PRIMARY KEY  (clasificador_id)
+    PRIMARY KEY    (clasificador_id)
 ) $charset;
 CREATE TABLE {$tablePrefix}estadistica (
   estadistica_id            INT(11) NOT NULL AUTO_INCREMENT,
-  clasificador_id           INT(11) NOT NULL,
   usuario_reg_id            INT(11) NOT NULL,
   usuario_mod_id            INT(11) NOT NULL,
   fecha_reg                 DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -116,9 +118,46 @@ CREATE TABLE {$tablePrefix}estadistica (
   datos_informacion              TEXT,
   graficos                       TEXT,
   parametros_publicacion         TEXT,
-  posicion                       INT(11) NOT NULL,
-  PRIMARY KEY (estadistica_id),
-  FOREIGN KEY (clasificador_id)       REFERENCES {$tablePrefix}clasificador(clasificador_id)
+  PRIMARY KEY    (estadistica_id)
+) $charset;
+CREATE TABLE {$tablePrefix}esta_clas_n1 (
+  esta_clas_n1_id    INT(11) NOT NULL AUTO_INCREMENT,
+  usuario_reg_id     INT(11) NOT NULL,
+  usuario_mod_id     INT(11) NOT NULL,
+  fecha_reg          DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  fecha_mod          DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  activo             TINYINT(1) NOT NULL DEFAULT 1,
+  estadistica_id     INT(11) NOT NULL,
+  clasificador_id    INT(11) NOT NULL,
+  PRIMARY KEY    (esta_clas_n1_id),
+  FOREIGN KEY    (estadistica_id)   REFERENCES {$tablePrefix}estadistica(estadistica_id),
+  FOREIGN KEY    (clasificador_id)  REFERENCES {$tablePrefix}clasificador(clasificador_id)
+) $charset;
+CREATE TABLE {$tablePrefix}esta_clas_n2 (
+  esta_clas_n2_id    INT(11) NOT NULL AUTO_INCREMENT,
+  usuario_reg_id     INT(11) NOT NULL,
+  usuario_mod_id     INT(11) NOT NULL,
+  fecha_reg          DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  fecha_mod          DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  activo             TINYINT(1) NOT NULL DEFAULT 1,
+  estadistica_id     INT(11) NOT NULL,
+  clasificador_id    INT(11) NOT NULL,
+  PRIMARY KEY    (esta_clas_n2_id),
+  FOREIGN KEY    (estadistica_id)   REFERENCES {$tablePrefix}estadistica(estadistica_id),
+  FOREIGN KEY    (clasificador_id)  REFERENCES {$tablePrefix}clasificador(clasificador_id)
+) $charset;
+CREATE TABLE {$tablePrefix}esta_clas_n3 (
+  esta_clas_n3_id    INT(11) NOT NULL AUTO_INCREMENT,
+  usuario_reg_id     INT(11) NOT NULL,
+  usuario_mod_id     INT(11) NOT NULL,
+  fecha_reg          DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  fecha_mod          DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  activo             TINYINT(1) NOT NULL DEFAULT 1,
+  estadistica_id     INT(11) NOT NULL,
+  clasificador_id    INT(11) NOT NULL,
+  PRIMARY KEY    (esta_clas_n3_id),
+  FOREIGN KEY    (estadistica_id)   REFERENCES {$tablePrefix}estadistica(estadistica_id),
+  FOREIGN KEY    (clasificador_id)  REFERENCES {$tablePrefix}clasificador(clasificador_id)
 ) $charset;";
     }
 
@@ -128,6 +167,9 @@ CREATE TABLE {$tablePrefix}estadistica (
         return "
 DROP TABLE IF EXISTS {$tablePrefix}estadistica;
 DROP TABLE IF EXISTS {$tablePrefix}clasificador;
+DROP TABLE IF EXISTS {$tablePrefix}esta_clas_n1;
+DROP TABLE IF EXISTS {$tablePrefix}esta_clas_n2;
+DROP TABLE IF EXISTS {$tablePrefix}esta_clas_n3;
 ";
     }
     public static function getTablePrefix()

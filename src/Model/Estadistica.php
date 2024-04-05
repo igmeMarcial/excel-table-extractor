@@ -10,10 +10,6 @@ class Estadistica extends BaseModel
             'type' => DataTypes::INTEGER,
             'column' => 'estadistica_id',
         ],
-        'clasificadorId' => [
-            'type' => DataTypes::INTEGER,
-            'column' => 'clasificador_id',
-        ],
         'usuarioRegId' => [
             'type' => DataTypes::INTEGER,
             'column' => 'usuario_reg_id',

@@ -1,6 +1,6 @@
-import { DataCell } from '../types/DataCell';
+import { Cell } from '../types/Cell';
 
-const sonDepartamentosTest = (tabla: DataCell[][]): boolean => {
+const sonDepartamentosTest = (tabla: Cell[][]): boolean => {
   if (tabla.length === 0 || tabla[0].length === 0) {
     return false;
   }
