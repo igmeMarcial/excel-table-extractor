@@ -9,7 +9,10 @@ import {
 } from '../EstadisticaFormSlice';
 import { Link, useLocation } from 'react-router-dom';
 import { builNavPathUrl } from '../../../utils/url-utils';
-import { useAddEstadisticaMutation, useSaveEstadisticaMutation } from '../../../app/services/estadistica';
+import {
+  useAddEstadisticaMutation,
+  useSaveEstadisticaMutation,
+} from '../../../app/services/estadistica';
 
 function IndicadorEditorBottomActions() {
   const location = useLocation();
@@ -19,13 +22,15 @@ function IndicadorEditorBottomActions() {
   const postValues = useAppSelector(selectPostValues);
   console.log('postValues', postValues);
   console.log('isCreationMode', isCreationMode);
-  const [addEstadistic, { isLoading }] = useSaveEstadisticaMutation(isCreationMode);
+  const [addEstadistic, { isLoading }] =
+    useSaveEstadisticaMutation(isCreationMode);
   //const [addEstadisticax, { isLoading }] = useAddEstadisticaMutation();
   const handleSave = async () => {
     // TODO implementar llamado a la API
     if (hasChanges) {
       await addEstadistic(postValues);
       dispath(commitChanges());
+      console.log(postValues);
     } else {
       alert('No hay cambios para guardar');
     }

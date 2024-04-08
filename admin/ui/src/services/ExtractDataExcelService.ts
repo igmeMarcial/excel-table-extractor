@@ -50,8 +50,6 @@ class ExtractDataExcelService {
     try {
       const sheetName: string = workbook.SheetNames[sheetIndex];
       const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
-      console.log('Sheet:', sheet,);
-
       //text extract new table
       const tableData: any = this.getTablaDatos(sheet);
       const contentCellTitle: any = this.getTablaDatosTitulo(sheet);
@@ -312,7 +310,6 @@ class ExtractDataExcelService {
   getHtmlTablaDatos(rows: HtmlCellsMatrix): HtmlCellsMatrix {
     let out = []
     const { start: inicio, end: fin } = this.getRangoTablaDatos(rows)
-    console.log(inicio, fin)
     for (let i = inicio.rowIndex; i <= fin.rowIndex; i++) {
       const outRow = []
       for (let j = inicio.colIndex; j <= fin.colIndex; j++) {
@@ -365,6 +362,7 @@ class ExtractDataExcelService {
     return cellsDataMap;
   }
   getRangoTablaDatos(rows: HtmlCellsMatrix): CellRange {
+      //!TODO MEJORAR EL ALGORITMO DE RANGO 
     const maxDataColums = this.getMaxDataColums(rows);
     const maxColIndex = rows[0].length - 1;
     let startRowIndex = -1;
@@ -374,7 +372,6 @@ class ExtractDataExcelService {
       const notEmpty = tr.filter((td) => this.isNotEmptyCell(td));
       const totalNotEmptyCells = notEmpty.length;
       const totalUniqueCells = (new Set(notEmpty)).size;
-      console.log(totalUniqueCells)
 
       // Verificar si el número de columnas es igual al número máximo de columnas con datos
       // y si el índice de la fila de inicio aún no se ha establecido
@@ -412,7 +409,6 @@ class ExtractDataExcelService {
         if (this.isNotEmptyCell(cell)) {
           totalNotEmptyCell++;
         }
-        // console.log(cell)
       }
       // Se considera como columna de inicio la primera columna que tenga datos en todas las filas
       if (totalNotEmptyCell === endRowIndex - startRowIndex + 1 && startColIndex === -1 && uniqueCells.size > 1) {

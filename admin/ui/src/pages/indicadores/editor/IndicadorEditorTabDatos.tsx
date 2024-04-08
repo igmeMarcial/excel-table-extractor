@@ -19,7 +19,7 @@ const TextField = ({ fieldName }) => {
   let fieldValue = values[fieldName] || ''; // Valor predeterminado en caso de que sea undefined
   const err = useAppSelector(selectValidationErrors);
   // console.log(err);
-
+  // console.log(values);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispath(
       setEstadisticaDatosFieldValue({ field: fieldName, value: e.target.value })
@@ -40,6 +40,7 @@ const TextField = ({ fieldName }) => {
 
 const IndicadorEditorTabDatos = () => {
   const data = useAppSelector(selectEstadisticaData);
+  console.log(data);
   return (
     <form>
       <div className="flex flex-col gap-y-4">

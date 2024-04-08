@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import UploadFileButton from '../../../components/UploadFileButton';
 import { Modal, Button, Checkbox } from 'antd';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
@@ -12,6 +12,7 @@ import ExtractDataExcelService from '../../../services/ExtractDataExcelService';
 import { WorkBook } from 'xlsx';
 import { EstadisticaDatos } from '../../../types/EstadisticaDatos';
 import { FichaTecnicaFields } from '../../../types/Estadistica';
+import DataRangeConfirmDialog from '../../../components/chart/DataRangeConfirmDialog';
 
 const Importar: FC = () => {
   const [fileUploading, setFileUploading] = useState(false);
@@ -28,6 +29,8 @@ const Importar: FC = () => {
   const importButtonTitle = isCreationMode ? 'Importar' : 'Actualizar datos';
   const importModalTitle = importButtonTitle;
   const extractDataExcelService = new ExtractDataExcelService();
+
+  const importSelectRange = useRef(null);
 
   const handleFileChange = async (file: File | null) => {
     if (!file) return;
@@ -58,6 +61,8 @@ const Importar: FC = () => {
     }
   };
   const handleOk = () => {
+    // modal second
+    importSelectRange.current.open();
     setIsModalOpen(false);
     setFileUploading(false);
     if (showIndicadorFields && showEstadisticaData) {
@@ -104,6 +109,7 @@ const Importar: FC = () => {
         setIndicadorData(dataIndicator);
       }
       if (showEstadisticaData) {
+        // console.log(workbookFile);
         const dataTable = extractDataExcelService.extractDataFromFile(
           workbookFile,
           0
@@ -179,6 +185,7 @@ const Importar: FC = () => {
           )}
         </section>
       </Modal>
+      <DataRangeConfirmDialog ref={importSelectRange} />
     </>
   );
 };
