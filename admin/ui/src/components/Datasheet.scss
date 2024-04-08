@@ -24,26 +24,47 @@ $series-range-background-color: #f9ebec;
     text-align: center;
     padding: 4px;
   }
+  .bottom-line {
+    border-bottom: 1px solid #e1e1e1;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: -1px;
+  }
+
+  .right-line {
+    border-right: 1px solid #e1e1e1;
+    position: absolute;
+    height: 100%;
+    right: -1px;
+    top: 0;
+  }
 
   .empty-corner {
     border-right: 1px solid #e1e1e1;
     border-bottom: 1px solid #e1e1e1;
+    position: sticky;
+    left: 0;
+    top: 0;
+    z-index: 1;
   }
 
   .col-reference {
     border-right: 1px solid #e1e1e1;
     border-bottom: 1px solid #ababab;
+    position: sticky;
+    top: 0;
   }
 
   .row-reference {
     border-bottom: 1px solid #e1e1e1;
     border-right: 1px solid #ababab;
+    position: sticky;
+    left: 0;
   }
   td {
     border-right: 1px solid #e0e0e0;
     border-bottom: 1px solid #e0e0e0;
-    border-top: 1px solid #e0e0e0;
-    border-left: 1px solid #e0e0e0;
     white-space: nowrap;
     padding: 4px 6px;
     line-height: 1;

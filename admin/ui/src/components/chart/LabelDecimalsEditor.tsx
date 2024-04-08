@@ -14,7 +14,7 @@ const LabelDecimalsEditor = ({ chartIndex }: LabelDecimalsEditorProps) => {
   const fieldName = 'numeroDecimalesEtiquetas';
 
   let value =
-    useAppSelector(selectGraficoFieldValue(chartIndex, fieldName)) || '';
+    useAppSelector(selectGraficoFieldValue(chartIndex, fieldName)) || null;
   const handleChange = (e, data: TextareaOnChangeData) => {
     dispath(
       setGraficoFieldValue({
@@ -26,7 +26,12 @@ const LabelDecimalsEditor = ({ chartIndex }: LabelDecimalsEditorProps) => {
   };
   return (
     <Field label="Número de decimales en etiquetas">
-      <Input type="number" onChange={handleChange} value={value} min="0" />
+      <Input
+        type="number"
+        onChange={handleChange}
+        value={String(value)}
+        min="0"
+      />
     </Field>
   );
 };

@@ -1,6 +1,6 @@
-import { Coordenada } from "./Coordenada";
+import { CellAddress } from "./CellAddress";
 
 export interface CellRange {
-  start: Coordenada;
-  end: Coordenada;
+  start: CellAddress;
+  end: CellAddress;
 }

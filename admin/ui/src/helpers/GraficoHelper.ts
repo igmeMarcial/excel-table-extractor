@@ -3,6 +3,7 @@ import tablaDatosHelper from "./TablaDatosHelper";
 import { Grafico } from "../types/Grafico";
 import { CellRange } from "../types/CellRange";
 import { Serie } from "../types/Serie";
+import { encodeCellRange } from "../utils/encodeCellRange";
 
 export class GraficoHelper {
 
@@ -14,23 +15,19 @@ export class GraficoHelper {
     }
     return GraficoHelper._instance;
   }
-  getGraficosDefecto(tabla: Cell[][]): Grafico[] {
+  getGraficoDefecto(tabla: Cell[][]): Grafico {
     const dataInfo = tablaDatosHelper.getInformacion(tabla);
 
     // Cuando la tabla tiene una fila final con totales
     const valoresRango = dataInfo.valoresRango;
     if (!valoresRango) {
-      return [{}];
+      return {};
     }
-    console.log('valoresRango', valoresRango);
-    console.log('dataInfo', dataInfo);
     // Categoria
     const categorias = tablaDatosHelper.getRowValues(tabla, valoresRango.start.rowIndex - 1, valoresRango.start.colIndex, valoresRango.end.colIndex) as string[];
     // Datos anuales por departamento
     if (dataInfo.sonDatosAnualesPorDepartamento) {
-      return [
-        this.getGraficoParaDatosAnualesPorDepartamento(valoresRango, tabla)
-      ];
+      return this.getGraficoParaDatosAnualesPorDepartamento(valoresRango, tabla);
     }
     // Si la tabla tiene una fila de totales solo se muestra un gráfico de barras
     if (dataInfo.tieneFilaTotales) {
@@ -39,21 +36,17 @@ export class GraficoHelper {
         start: { rowIndex: filaTotalesRowIndex, colIndex: valoresRango.start.colIndex },
         end: { rowIndex: filaTotalesRowIndex, colIndex: valoresRango.end.colIndex }
       };
-      return [
-        {
-          categorias,
-          tipo: 'columnas',
-          series: this.getHorizontalSeries(tabla, totalValoresRango),
-        }
-      ];
-    }
-    return [
-      {
+      return {
         categorias,
-        tipo: 'lineas',
-        series: this.getHorizontalSeries(tabla, valoresRango),
-      }
-    ];
+        tipo: 'columnas',
+        series: this.getHorizontalSeries(tabla, totalValoresRango),
+      };
+    }
+    return {
+      categorias,
+      tipo: 'lineas',
+      series: this.getHorizontalSeries(tabla, valoresRango),
+    };
   }
 
   private getGraficoParaDatosAnualesPorDepartamento(valoresRango: CellRange, tabla: Cell[][]): Grafico {
@@ -68,7 +61,12 @@ export class GraficoHelper {
       tipo: 'columnas',
       series: this.getVerticalSeries(tabla, serieRango),
       rotacionEtiquetasCategorias: 30,
-      mostrarLeyenda: false
+      mostrarLeyenda: false,
+      referenciasTablaDatos: {
+        rangoValores: encodeCellRange(valoresRango),
+        rangoCategorias: encodeCellRange({ start: { rowIndex: valoresRango.start.rowIndex - 1, colIndex: valoresRango.start.colIndex }, end: { rowIndex: valoresRango.start.rowIndex - 1, colIndex: valoresRango.end.colIndex } }),
+        rangoSeries: encodeCellRange(serieRango),
+      }
     };
   }
 

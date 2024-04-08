@@ -1,9 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import * as XLSX from 'xlsx';
-import {
-  DT_TABLA_DATOS_BORDER_COLOR,
-  DT_TABLA_DATOS_BORDER_COLOR_HEADER,
-} from '../config/design-tokens';
 import { CellRange } from '../types/CellRange';
 import {
   CELL_POSITION_BODY,
@@ -12,23 +7,24 @@ import {
   Cell,
 } from '../types/Cell';
 import { getMaxRowLength } from '../utils/array-utils';
-import { decodeCellRange } from '../utils/decodeCellRange';
 import { numberFormat } from '../utils/numberFormat';
 
 import './Datasheet.scss';
 
 type RangeType = 'v' | 'c' | 's';
 
+export interface ChartDataRanges {
+  valuesRange: CellRange;
+  categoriesRange: CellRange;
+  seriesRange: CellRange;
+}
+
 interface DatasheetProps {
   data: Cell[][];
-  chartRanges?: {
-    valuesRange: CellRange;
-    categoriesRange: CellRange;
-    seriesRange: CellRange;
-  };
+  chartDataRanges?: ChartDataRanges;
 }
-const rangoSeleccionado = 'C3:G7';
-function renderCell(cell: Cell, selection: CellRange) {
+
+function renderCell(cell: Cell, chartDataRanges: ChartDataRanges) {
   const { v: value, t: type, p: position } = cell;
   const formattedValue =
     type === 'n' && position === 'b' ? numberFormat(value as number) : value;
@@ -37,32 +33,54 @@ function renderCell(cell: Cell, selection: CellRange) {
       key={cell.c}
       colSpan={cell.s}
       rowSpan={cell.rs}
-      className={getCellCls(cell, selection)}
+      className={getCellCls(cell, chartDataRanges)}
     >
       {formattedValue}
     </td>
   );
 }
 
-const getCellCls = (cell: Cell, selection: CellRange) => {
+const getCellCls = (cell: Cell, chartDataRanges?: ChartDataRanges) => {
   const { t: type, p: position } = cell;
   const clsStack = [];
   if (type === CELL_VALUE_TYPE_NUMBER && position === CELL_POSITION_BODY) {
     clsStack.push('data-cell--number');
   }
   // Selected
-  let bordersCls = getBordersCls(cell, selection, 's');
+  let bordersCls = getCellBorderCls(cell, chartDataRanges);
   if (bordersCls) {
     clsStack.push(bordersCls);
   }
-  const rangeCls = getRangeCls(cell, selection, 's');
+  const rangeCls = getCellBackgroundCls(cell, chartDataRanges);
   if (rangeCls) {
     clsStack.push(rangeCls);
   }
   return clsStack.join(' ');
 };
-
-const getBordersCls = (
+// Devuelve las clases de borde de la celda
+const getCellBorderCls = (cell: Cell, chartDataRanges: ChartDataRanges) => {
+  if (!chartDataRanges) return null;
+  const outStack = [];
+  const { valuesRange, categoriesRange, seriesRange } = chartDataRanges;
+  outStack.push(
+    getRangeBorderCls(cell, valuesRange, 'v'),
+    getRangeBorderCls(cell, categoriesRange, 'c'),
+    getRangeBorderCls(cell, seriesRange, 's')
+  );
+  return outStack.join(' ');
+};
+const getCellBackgroundCls = (cell: Cell, chartDataRanges: ChartDataRanges) => {
+  if (!chartDataRanges) return null;
+  const outStack = [];
+  const { valuesRange, categoriesRange, seriesRange } = chartDataRanges;
+  outStack.push(
+    getRangeBackgroudCls(cell, valuesRange, 'v'),
+    getRangeBackgroudCls(cell, categoriesRange, 'c'),
+    getRangeBackgroudCls(cell, seriesRange, 's')
+  );
+  return outStack.join(' ');
+};
+const getRangeBorderCls = (
   cell: Cell,
   range: CellRange,
   rangeType: 'v' | 'c' | 's'
@@ -103,7 +121,11 @@ const getBordersCls = (
   return null;
 };
 
-const getRangeCls = (cell: Cell, range: CellRange, rangeType: RangeType) => {
+const getRangeBackgroudCls = (
+  cell: Cell,
+  range: CellRange,
+  rangeType: RangeType
+) => {
   if (isCellInside(cell, range)) {
     return `${rangeType}range-part`;
   }
@@ -121,11 +143,15 @@ const isCellInside = (cell: Cell, range: CellRange) => {
   );
 };
 
-const renderRow = (rowData: Cell[], rowIndex: number, selection: CellRange) => {
+const renderRow = (
+  rowData: Cell[],
+  rowIndex: number,
+  chartDataRanges: ChartDataRanges
+) => {
   return (
     <tr key={rowIndex}>
       <td className="row-reference">{rowIndex + 1}</td>
-      {rowData.map((cell) => renderCell(cell, selection))}
+      {rowData.map((cell) => renderCell(cell, chartDataRanges))}
     </tr>
   );
 };
@@ -137,6 +163,9 @@ const getColumnLetter = (colIndex: number) => {
   }
   return letter;
 };
+
+const BottomLine = () => <div className="bottom-line"></div>;
+const RightLine = () => <div className="right-line"></div>;
 
 const ColLabels = ({ colsNumber }: { colsNumber: number }) => {
   const labelsStack = [
@@ -154,8 +183,7 @@ const ColLabels = ({ colsNumber }: { colsNumber: number }) => {
   return <tr>{labelsStack}</tr>;
 };
 
-const Datasheet = ({ data }: DatasheetProps) => {
-  const selection = decodeCellRange(rangoSeleccionado);
+const Datasheet = ({ data, chartDataRanges }: DatasheetProps) => {
   const maxColIndex = getMaxRowLength(data) - 1;
   const [hasScrollbar, setHasScrollbar] = useState(false);
   const tableWrapperRef = useRef(null);
@@ -179,13 +207,6 @@ const Datasheet = ({ data }: DatasheetProps) => {
   useEffect(() => {
     checkScrollbar();
   }, [data]);
-  // DataRows
-  const dataRowsStack = [];
-  let rowCounter = 0;
-  data.forEach((itemRow, rowIndex) => {
-    rowCounter++;
-    dataRowsStack.push(renderRow(itemRow, rowCounter, selection));
-  });
   // Datasheet
   return (
     <div
@@ -199,8 +220,10 @@ const Datasheet = ({ data }: DatasheetProps) => {
     >
       <table className="aesa-datasheet">
         <tbody>
-          <ColLabels colsNumber={maxColIndex} />
-          {data.map((row, rowIndex) => renderRow(row, rowIndex, selection))}
+          <ColLabels colsNumber={maxColIndex + 1} />
+          {data.map((row, rowIndex) =>
+            renderRow(row, rowIndex, chartDataRanges)
+          )}
         </tbody>
       </table>
     </div>

@@ -23,7 +23,10 @@ const GraficoToolbar = ({ chartIndex }: GraficoToolbarProps) => {
       >
         Series
       </Button>
-      <GraficoSeriesConfigWindow ref={seriesConfigWindowRef} />
+      <GraficoSeriesConfigWindow
+        ref={seriesConfigWindowRef}
+        chartIndex={chartIndex}
+      />
     </div>
   );
 };

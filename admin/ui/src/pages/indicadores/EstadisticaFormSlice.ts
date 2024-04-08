@@ -97,24 +97,24 @@ export const estadisticaFormSlice = createSlice({
     setEstadisticaDatos: (state, action: PayloadAction<EstadisticaDatos>) => {
       state.estadisticaRawModel.datos = action.payload;
       state.estadisticaRawModel.datosInformacion = tablaDatosHelper.getInformacion(action.payload.tabla || []);
-      state.estadisticaRawModel.graficos = graficoHelper.getGraficosDefecto(action.payload.tabla || []);
+      state.estadisticaRawModel.graficos = [graficoHelper.getGraficoDefecto(action.payload.tabla || [])];
       state.hasChanges = true;
     },
     setEstadisticaTablaDatos: (state, action: PayloadAction<Cell[][]>) => {
       state.estadisticaRawModel.datos.tabla = action.payload;
       if (!state.tienePresentacionGraficaPersonalizada) {
-        state.estadisticaRawModel.graficos = graficoHelper.getGraficosDefecto(action.payload);
+        state.estadisticaRawModel.graficos = [graficoHelper.getGraficoDefecto(action.payload)];
       }
       state.hasChanges = true;
     },
     setActiveTab: (state, action: PayloadAction<string>) => {
       state.activeTab = action.payload
     },
-    setResetDefault:(state)=>{
+    setResetDefault: (state) => {
       state.titulo = '';// Estado inicial de titulo
       state.estadisticaRawModel = estadisticaDefaultModel; // NAV CUANDO CLICK SE VUELVE A SU ESTADO INCIAL
-      state.isCreationMode= true;
-      state.estadisticaModel= estadisticaDefaultModel;
+      state.isCreationMode = true;
+      state.estadisticaModel = estadisticaDefaultModel;
       state.activeTab = '1'
     },
     setTipoGrafico: (state, action: PayloadAction<{ index: number, tipoGrafico: TipoGrafico }>) => {
@@ -185,7 +185,7 @@ export const selectActiveTab = (state: RootState) => state.estadisticaForm.activ
 export const selectEstadisticaData = (state: RootState) => state.estadisticaForm.estadisticaRawModel.datos.tabla;
 export const selectPostValues = (state: RootState) => state.estadisticaForm.estadisticaRawModel;
 export const selectGraficos = (state: RootState) => state.estadisticaForm.estadisticaRawModel.graficos;
-export const selectGraficoFieldValue = (index: number, field: keyof Grafico) => (state: RootState) => {
+export const selectGraficoFieldValue = <K extends keyof Grafico>(index: number, field: K): ((state: RootState) => Grafico[K]) => (state: RootState) => {
   return state.estadisticaForm.estadisticaRawModel.graficos[index][field]
 }
 export const selectValidationErrors = (state: RootState) => state.estadisticaForm.validationErrors;
