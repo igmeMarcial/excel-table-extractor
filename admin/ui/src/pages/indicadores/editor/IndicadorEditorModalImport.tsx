@@ -67,6 +67,7 @@ const Importar = () => {
       handleConfirmRangoDatos();
       return;
     }
+
     setIsModalOpen(false);
     setFileUploading(false);
     if (camposFichaChecked && tablaDatosChecked) {
@@ -97,13 +98,17 @@ const Importar = () => {
       workbookFile,
       0
     );
+    console.log(sheetDataMap);
     const sheetData = extractDataExcelService.getCellsMatrix(sheetDataMap);
+    console.log(sheetData);
     const rangoTablaDatos =
       extractDataExcelService.getRangoTablaDatos(sheetDataMap);
     confirmDataRangeDialogRef.current.open({
       data: sheetData,
       dataSelectionRange: rangoTablaDatos,
     });
+    console.log(rangoTablaDatos);
+    console.log(sheetData);
   };
 
   const handleCancel = () => {
@@ -127,6 +132,7 @@ const Importar = () => {
             1
           );
         setIndicadorData(dataIndicator);
+        console.log(dataIndicator);
       }
     }
   }, [camposFichaChecked]);
