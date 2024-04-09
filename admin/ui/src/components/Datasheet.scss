@@ -1,5 +1,8 @@
 @import "../scss/vars";
 
+$data-range-border-color: #326ac7;
+$data-range-background-color: #ebf0f9;
+
 $values-range-border-color: #326ac7;
 $values-range-background-color: #ebf0f9;
 
@@ -17,27 +20,13 @@ $series-range-background-color: #f9ebec;
   * {
     box-sizing: border-box;
   }
+
   .col-reference,
   .row-reference,
   .empty-corner {
     background-color: #f0f0f0;
     text-align: center;
     padding: 4px;
-  }
-  .bottom-line {
-    border-bottom: 1px solid #e1e1e1;
-    position: absolute;
-    width: 100%;
-    left: 0;
-    bottom: -1px;
-  }
-
-  .right-line {
-    border-right: 1px solid #e1e1e1;
-    position: absolute;
-    height: 100%;
-    right: -1px;
-    top: 0;
   }
 
   .empty-corner {
@@ -62,6 +51,7 @@ $series-range-background-color: #f9ebec;
     position: sticky;
     left: 0;
   }
+
   td {
     border-right: 1px solid #e0e0e0;
     border-bottom: 1px solid #e0e0e0;
@@ -77,24 +67,31 @@ $series-range-background-color: #f9ebec;
     &.srange-part {
       background-color: $series-range-background-color;
     }
+    &.drange-part {
+      background-color: $data-range-background-color;
+    }
     &.vrb-t,
     &.crb-t,
-    &.srb-t {
+    &.srb-t,
+    &.drb-t {
       border-top: 2px solid;
     }
     &.vrb-r,
     &.crb-r,
-    &.srb-r {
+    &.srb-r,
+    &.drb-r {
       border-right: 2px solid;
     }
     &.vrb-b,
     &.crb-b,
-    &.srb-b {
+    &.srb-b,
+    &.drb-b {
       border-bottom: 2px solid;
     }
     &.vrb-l,
     &.crb-l,
-    &.srb-l {
+    &.srb-l,
+    &.drb-l {
       border-left: 2px solid;
     }
     // Values range borders
@@ -136,7 +133,21 @@ $series-range-background-color: #f9ebec;
     &.srb-l {
       border-left-color: $series-range-border-color;
     }
+    // Data range border
+    &.drb-t {
+      border-top-color: $data-range-border-color;
+    }
+    &.drb-r {
+      border-right-color: $data-range-border-color;
+    }
+    &.drb-b {
+      border-bottom-color: $data-range-border-color;
+    }
+    &.drb-l {
+      border-left-color: $data-range-border-color;
+    }
   }
+
   .data-cell--number {
     text-align: right;
   }

@@ -279,6 +279,49 @@ class ExtractDataExcelService {
     });
     return out;
   }
+  getSheetData(workbook: XLSX.WorkBook, sheetIndex: number): Cell[][] {
+    const sheetName: string = workbook.SheetNames[sheetIndex];
+    const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
+    const htmlRows = getSheetHtmlRows(sheet);
+    const cellMap = this.createCellsDataMap(htmlRows);
+    return this.getCellsMatrix(cellMap);
+  }
+  getCellsMatrix(rows: HtmlCellsMatrix): Cell[][] {
+    const out: Cell[][] = [];
+    rows.forEach((row, rowIndex) => {
+      let colIndex = 0;
+      const rowData: Cell[] = [];
+      const cellPostion = this.getRowPosition(row, rowIndex);
+      row.forEach((td) => {
+        const colSpan = +(td?.getAttribute('colspan')) || 1;
+        const rowSpan = +(td?.getAttribute('rowspan')) || 1;
+        let value: string | number = td?.getAttribute('data-v') || '';
+        const type = td?.getAttribute('data-t') as ('n' | 's') || 's';
+        // Parse value to number if type is number
+        if (type === 'n') {
+          value = +value;
+        }
+        const dataCell: Cell = {
+          v: value,
+          r: rowIndex,
+          c: colIndex,
+          p: cellPostion,
+          t: type,
+        }
+        // Añade colspan y rowspan si son mayores a 1
+        if (colSpan > 1) {
+          dataCell.s = colSpan;
+        }
+        if (rowSpan > 1) {
+          dataCell.rs = rowSpan;
+        }
+        rowData.push(dataCell);
+        colIndex += colSpan;
+      });
+      out.push(rowData);
+    });
+    return out;
+  }
   getRowPosition(row: HTMLTableCellElement[], rowIndex): CellPosition {
     // Header row
     if (this.isHederRow(row, rowIndex)) {
@@ -296,7 +339,7 @@ class ExtractDataExcelService {
       return true
     }
     return row.every((cell) => {
-      return cell.getAttribute('data-t') === CELL_VALUE_TYPE_STRING
+      return cell?.getAttribute('data-t') === CELL_VALUE_TYPE_STRING
     })
   }
   // Función para determinar si una fila es el pie de página de la tabla
@@ -304,15 +347,20 @@ class ExtractDataExcelService {
   // - Una de las celdas de la fila contiene la palabra "total"
   isFooterRow(row: HTMLTableCellElement[], rowIndex): boolean {
     return row.some((cell) => {
-      return cell.textContent?.toLowerCase().includes('total');
+      return cell?.textContent?.toLowerCase().includes('total');
     });
   }
   getHtmlTablaDatos(rows: HtmlCellsMatrix): HtmlCellsMatrix {
+    const rango = this.getRangoTablaDatos(rows)
+    return this.getHtmlCellsRange(rows, rango)
+  }
+
+  getHtmlCellsRange(rows: HtmlCellsMatrix, range: CellRange): HtmlCellsMatrix {
     let out = []
-    const { start: inicio, end: fin } = this.getRangoTablaDatos(rows)
-    for (let i = inicio.rowIndex; i <= fin.rowIndex; i++) {
+    const { start, end } = range;
+    for (let i = start.rowIndex; i <= end.rowIndex; i++) {
       const outRow = []
-      for (let j = inicio.colIndex; j <= fin.colIndex; j++) {
+      for (let j = start.colIndex; j <= end.colIndex; j++) {
         const cell = rows[i][j]
         if (cell) {
           const { rowIndex, colIndex } = this.getCellCoordinates(cell);
@@ -339,6 +387,16 @@ class ExtractDataExcelService {
     const rowIndex = +rowNumber - 1;
     return { rowIndex, colIndex };
   }
+  /**
+   *
+   * | 0   | 1   | 2   | 3    | 4    |
+   * | 0   | 1   | 2   | 3    | 4    |
+   * | 0   | 1   | 5   | 10   | null |
+   * | 0   | 1   | 2   | 3    | null |
+   *
+   * @param rows
+   * @returns
+   */
   createCellsDataMap(rows: NodeListOf<Element>): HtmlCellsMatrix {
     const maxColIndex = this.getMaxColIndex(rows);
     const maxRowIndex = this.getMaxRowIndex(rows);
@@ -361,8 +419,14 @@ class ExtractDataExcelService {
     })
     return cellsDataMap;
   }
+  getSheetDataMap(workbook: XLSX.WorkBook, sheetIndex: number): HtmlCellsMatrix {
+    const sheetName: string = workbook.SheetNames[sheetIndex];
+    const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
+    const rows = getSheetHtmlRows(sheet);
+    return this.createCellsDataMap(rows);
+  }
   getRangoTablaDatos(rows: HtmlCellsMatrix): CellRange {
-      //!TODO MEJORAR EL ALGORITMO DE RANGO 
+    //!TODO MEJORAR EL ALGORITMO DE RANGO
     const maxDataColums = this.getMaxDataColums(rows);
     const maxColIndex = rows[0].length - 1;
     let startRowIndex = -1;

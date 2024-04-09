@@ -2,7 +2,6 @@ import { forwardRef, useImperativeHandle, useState } from 'react';
 import {
   Field,
   Input,
-  TextareaOnChangeData,
   Button,
   FluentProvider,
   webLightTheme,
@@ -18,7 +17,6 @@ import {
 } from '../../EstadisticaFormSlice';
 import Datasheet, { ChartDataRanges } from '../../../../components/Datasheet';
 import { decodeCellRange } from '../../../../utils/decodeCellRange';
-import { Grafico } from '../../../../types/Grafico';
 
 const useStyles = makeStyles({
   rangeInput: {

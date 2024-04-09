@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import UploadFileButton from '../../../components/UploadFileButton';
 import { Modal, Button, Checkbox } from 'antd';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
@@ -13,15 +13,16 @@ import { WorkBook } from 'xlsx';
 import { EstadisticaDatos } from '../../../types/EstadisticaDatos';
 import { FichaTecnicaFields } from '../../../types/Estadistica';
 import DataRangeConfirmDialog from '../../../components/chart/DataRangeConfirmDialog';
+import { decodeCellRange } from '../../../utils/decodeCellRange';
 
-const Importar: FC = () => {
+const Importar = () => {
   const [fileUploading, setFileUploading] = useState(false);
   const [workbookFile, setWorkBookFile] = useState<WorkBook>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [hasFile, setHasFile] = useState<boolean>(false);
   const [titleIndicador, setTitleIndicador] = useState<string>('');
-  const [showIndicadorFields, setShowIndicadorFields] = useState(false);
-  const [showEstadisticaData, setShowEstadisticaData] = useState(false);
+  const [camposFichaChecked, setCamposFichaChecked] = useState(false);
+  const [tablaDatosChecked, setTablaDatosChecked] = useState(false);
   const [tableData, setTableData] = useState<EstadisticaDatos>(null);
   const [indicadorData, setIndicadorData] = useState<FichaTecnicaFields>(null);
   const dispath = useAppDispatch();
@@ -30,7 +31,8 @@ const Importar: FC = () => {
   const importModalTitle = importButtonTitle;
   const extractDataExcelService = new ExtractDataExcelService();
 
-  const importSelectRange = useRef(null);
+  const confirmDataRangeDialogRef = useRef(null);
+  const tempSelRange = decodeCellRange('B2:D5');
 
   const handleFileChange = async (file: File | null) => {
     if (!file) return;
@@ -61,37 +63,55 @@ const Importar: FC = () => {
     }
   };
   const handleOk = () => {
-    // modal second
-    importSelectRange.current.open();
+    if (tablaDatosChecked) {
+      handleConfirmRangoDatos();
+      return;
+    }
     setIsModalOpen(false);
     setFileUploading(false);
-    if (showIndicadorFields && showEstadisticaData) {
+    if (camposFichaChecked && tablaDatosChecked) {
       dispath(setEstadisticaDatos(tableData));
       dispath(setEstadisticaFields(indicadorData));
-    } else if (showIndicadorFields) {
+    } else if (camposFichaChecked) {
       dispath(setEstadisticaFields(indicadorData));
-    } else if (showEstadisticaData) {
+    } else if (tablaDatosChecked) {
       dispath(setEstadisticaDatos(tableData));
     }
     setHasFile(false);
-    setShowIndicadorFields(false);
-    setShowEstadisticaData(false);
+    setCamposFichaChecked(false);
+    setTablaDatosChecked(false);
     let activeTabValue: string;
-    if (showIndicadorFields) {
+    if (camposFichaChecked) {
       activeTabValue = '1';
-    } else if (showEstadisticaData) {
+    } else if (tablaDatosChecked) {
       activeTabValue = '2';
     } else {
       activeTabValue = '1'; // Valor por defecto si ninguna opción está seleccionada
     }
     dispath(setActiveTab(activeTabValue));
   };
+
+  const handleConfirmRangoDatos = () => {
+    // Mostrar dialogo confirmar rango de datos
+    const sheetDataMap = extractDataExcelService.getSheetDataMap(
+      workbookFile,
+      0
+    );
+    const sheetData = extractDataExcelService.getCellsMatrix(sheetDataMap);
+    const rangoTablaDatos =
+      extractDataExcelService.getRangoTablaDatos(sheetDataMap);
+    confirmDataRangeDialogRef.current.open({
+      data: sheetData,
+      dataSelectionRange: rangoTablaDatos,
+    });
+  };
+
   const handleCancel = () => {
     setIsModalOpen(false);
     setFileUploading(false);
     setHasFile(false);
-    setShowIndicadorFields(false); // Reiniciar estado de los checkboxes
-    setShowEstadisticaData(false);
+    setCamposFichaChecked(false); // Reiniciar estado de los checkboxes
+    setTablaDatosChecked(false);
   };
   const modalStyles = {
     footer: {
@@ -100,7 +120,7 @@ const Importar: FC = () => {
   };
   useEffect(() => {
     if (workbookFile) {
-      if (showIndicadorFields) {
+      if (camposFichaChecked) {
         const dataIndicator =
           extractDataExcelService.getEstadisticaFieldsFichaTecnica(
             workbookFile,
@@ -108,16 +128,8 @@ const Importar: FC = () => {
           );
         setIndicadorData(dataIndicator);
       }
-      if (showEstadisticaData) {
-        // console.log(workbookFile);
-        const dataTable = extractDataExcelService.extractDataFromFile(
-          workbookFile,
-          0
-        );
-        setTableData(dataTable);
-      }
     }
-  }, [showIndicadorFields, showEstadisticaData]);
+  }, [camposFichaChecked]);
   return (
     <>
       <UploadFileButton
@@ -135,7 +147,7 @@ const Importar: FC = () => {
         width={700}
         footer={[
           <Button
-            disabled={!showIndicadorFields && !showEstadisticaData}
+            disabled={!camposFichaChecked && !tablaDatosChecked}
             key="submit"
             type="primary"
             onClick={handleOk}
@@ -164,20 +176,18 @@ const Importar: FC = () => {
                 </span>
                 <div className="flex flex-col pl-4 gap-2 mt-1">
                   <Checkbox
-                    checked={showIndicadorFields}
+                    checked={camposFichaChecked}
                     onChange={() =>
-                      setShowIndicadorFields((checked) => !checked)
+                      setCamposFichaChecked((checked) => !checked)
                     }
                   >
                     Campos de ficha técnica
                   </Checkbox>
                   <Checkbox
-                    checked={showEstadisticaData}
-                    onChange={() =>
-                      setShowEstadisticaData((checked) => !checked)
-                    }
+                    checked={tablaDatosChecked}
+                    onChange={() => setTablaDatosChecked((checked) => !checked)}
                   >
-                    Datos estadísticos
+                    Tabla de datos
                   </Checkbox>
                 </div>
               </div>
@@ -185,7 +195,7 @@ const Importar: FC = () => {
           )}
         </section>
       </Modal>
-      <DataRangeConfirmDialog ref={importSelectRange} />
+      <DataRangeConfirmDialog ref={confirmDataRangeDialogRef} />
     </>
   );
 };

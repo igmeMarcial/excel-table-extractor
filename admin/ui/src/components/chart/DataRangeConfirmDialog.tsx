@@ -9,33 +9,53 @@ import {
 } from '@fluentui/react-components';
 import { Modal, Button } from 'antd';
 import Datasheet from '../Datasheet';
+import { Cell } from '../../types/Cell';
+import { CellRange } from '../../types/CellRange';
+import { decodeCellRange } from '../../utils/decodeCellRange';
+import { encodeCellRange } from '../../utils/encodeCellRange';
 
 const useStyles = makeStyles({
   rangeInput: {
     width: '94px',
   },
 });
-
+interface DataRangeConfirmDialogDataInput {
+  data: Cell[][];
+  dataSelectionRange: CellRange;
+}
 const DataRangeConfirmDialog = forwardRef((props, ref) => {
+  const [range, setRange] = useState('');
+  const [data, setData] = useState([]);
+  const [dataSelectionRange, setDataSelectionRange] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const styles = useStyles();
-  const open = () => {
+  const open = ({
+    data,
+    dataSelectionRange,
+  }: DataRangeConfirmDialogDataInput) => {
+    setData(data);
+    setDataSelectionRange(dataSelectionRange);
+    setRange(encodeCellRange(dataSelectionRange));
     setIsOpen(true);
   };
   const close = () => {
     setIsOpen(false);
   };
-  const onValuesRangeChage = (
+  const onRangeChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     data: InputOnChangeData
-  ) => {};
+  ) => {
+    const range = data.value;
+    // TODO: Implementar validación de rango
+    setRange(range);
+    setDataSelectionRange(decodeCellRange(range));
+  };
 
   useImperativeHandle(ref, () => ({
     open,
     close,
   }));
   const handleOk = () => {};
-  const handleCancel = () => {};
   return (
     <Modal
       title="Confirmar rango de datos"
@@ -44,30 +64,26 @@ const DataRangeConfirmDialog = forwardRef((props, ref) => {
       onCancel={close}
       footer={[
         <Button disabled={true} key="submit" type="primary" onClick={handleOk}>
-          Importar
+          Confirmar
         </Button>,
-        <Button key="back" onClick={handleCancel}>
+        <Button key="back" onClick={close}>
           Cancelar
         </Button>,
       ]}
     >
       <FluentProvider theme={webLightTheme}>
-        <div>Rangos</div>
         <div className="flex gap-4 my-4">
-          <Field label="Valores">
+          <Field label="Rango de datos">
             <Input
               type="text"
               name="rangoValores"
               className={styles.rangeInput}
-              onChange={onValuesRangeChage}
-              value="K13:k12"
+              onChange={onRangeChange}
+              value={range}
             />
           </Field>
         </div>
-        {/* <Datasheet data={data} chartDataRanges={chartDataRanges} /> */}
-        {/* <Button appearance="subtle" onClick={() => close()}>
-          Cerrar
-        </Button> */}
+        <Datasheet data={data} dataSelectionRange={dataSelectionRange} />
       </FluentProvider>
     </Modal>
   );
