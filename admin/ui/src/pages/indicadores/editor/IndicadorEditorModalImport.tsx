@@ -23,17 +23,19 @@ const Importar = () => {
   const [titleIndicador, setTitleIndicador] = useState<string>('');
   const [camposFichaChecked, setCamposFichaChecked] = useState(false);
   const [tablaDatosChecked, setTablaDatosChecked] = useState(false);
-  const [tableData, setTableData] = useState<EstadisticaDatos>(null);
-  const [indicadorData, setIndicadorData] = useState<FichaTecnicaFields>(null);
+  // const [tableData, setTableData] = useState<EstadisticaDatos>(null);
+  // const [indicadorData, setIndicadorData] = useState<FichaTecnicaFields>(null);
+
+  const [confirmDialog, setConfirmDialog] = useState(false);
+
   const dispath = useAppDispatch();
   const isCreationMode = useAppSelector(selectIsCreationMode);
   const importButtonTitle = isCreationMode ? 'Importar' : 'Actualizar datos';
   const importModalTitle = importButtonTitle;
   const extractDataExcelService = new ExtractDataExcelService();
-
+  const [range, setRange] = useState(null);
   const confirmDataRangeDialogRef = useRef(null);
-  const tempSelRange = decodeCellRange('B2:D5');
-
+  // const tempSelRange = decodeCellRange('M5:X29');
   const handleFileChange = async (file: File | null) => {
     if (!file) return;
     setFileUploading(true);
@@ -62,22 +64,10 @@ const Importar = () => {
       alert('El archivo.xlsx debe ser  tipo Indicador');
     }
   };
-  const handleOk = () => {
-    if (tablaDatosChecked) {
-      handleConfirmRangoDatos();
-      return;
-    }
-
+  const handleConfirmData = () => {
+    // Lógica después de extraer los datos
     setIsModalOpen(false);
     setFileUploading(false);
-    if (camposFichaChecked && tablaDatosChecked) {
-      dispath(setEstadisticaDatos(tableData));
-      dispath(setEstadisticaFields(indicadorData));
-    } else if (camposFichaChecked) {
-      dispath(setEstadisticaFields(indicadorData));
-    } else if (tablaDatosChecked) {
-      dispath(setEstadisticaDatos(tableData));
-    }
     setHasFile(false);
     setCamposFichaChecked(false);
     setTablaDatosChecked(false);
@@ -90,6 +80,65 @@ const Importar = () => {
       activeTabValue = '1'; // Valor por defecto si ninguna opción está seleccionada
     }
     dispath(setActiveTab(activeTabValue));
+    setConfirmDialog(false);
+  };
+  const getNewRange = (range: string) => {
+    const tempSelRange = decodeCellRange(range);
+    setRange(tempSelRange);
+  };
+  const extractCamposFicha = () => {
+    if (workbookFile) {
+      if (camposFichaChecked) {
+        const dataIndicator =
+          extractDataExcelService.getEstadisticaFieldsFichaTecnica(
+            workbookFile,
+            1
+          );
+        console.log(dataIndicator);
+        dispath(setEstadisticaFields(dataIndicator));
+      }
+    }
+  };
+  const extractTablaDatos = () => {
+    const sheetDataMap = extractDataExcelService.getSheetDataMap(
+      workbookFile,
+      0
+    );
+    const newRange = extractDataExcelService.getHtmlCellsRange(
+      sheetDataMap,
+      range
+    );
+    const sheetData = extractDataExcelService.getCellsMatrix(newRange);
+    const data = extractDataExcelService.extractDataFromFile(workbookFile, 0);
+    // Combinar los datos de sheetData y data en un nuevo objeto EstadisticaDatos
+    const combinedData: EstadisticaDatos = {
+      tabla: sheetData, // Utilizar solo los datos de sheetData
+      nombre: data.nombre,
+      nota: data.nota,
+      fuente: data.fuente,
+      elaboracion: data.elaboracion,
+    };
+    console.log(combinedData);
+    dispath(setEstadisticaDatos(combinedData));
+  };
+  const handleOk = () => {
+    if (tablaDatosChecked && confirmDialog === false) {
+      handleConfirmRangoDatos();
+      return;
+    }
+    if (camposFichaChecked && tablaDatosChecked) {
+      extractCamposFicha();
+      extractTablaDatos();
+      handleConfirmData();
+    }
+    if (camposFichaChecked) {
+      extractCamposFicha();
+      handleConfirmData();
+    }
+    if (tablaDatosChecked && confirmDialog) {
+      extractTablaDatos();
+      handleConfirmData();
+    }
   };
 
   const handleConfirmRangoDatos = () => {
@@ -98,17 +147,13 @@ const Importar = () => {
       workbookFile,
       0
     );
-    console.log(sheetDataMap);
     const sheetData = extractDataExcelService.getCellsMatrix(sheetDataMap);
-    console.log(sheetData);
     const rangoTablaDatos =
       extractDataExcelService.getRangoTablaDatos(sheetDataMap);
     confirmDataRangeDialogRef.current.open({
       data: sheetData,
       dataSelectionRange: rangoTablaDatos,
     });
-    console.log(rangoTablaDatos);
-    console.log(sheetData);
   };
 
   const handleCancel = () => {
@@ -123,19 +168,6 @@ const Importar = () => {
       display: 'flex',
     },
   };
-  useEffect(() => {
-    if (workbookFile) {
-      if (camposFichaChecked) {
-        const dataIndicator =
-          extractDataExcelService.getEstadisticaFieldsFichaTecnica(
-            workbookFile,
-            1
-          );
-        setIndicadorData(dataIndicator);
-        console.log(dataIndicator);
-      }
-    }
-  }, [camposFichaChecked]);
   return (
     <>
       <UploadFileButton
@@ -201,7 +233,11 @@ const Importar = () => {
           )}
         </section>
       </Modal>
-      <DataRangeConfirmDialog ref={confirmDataRangeDialogRef} />
+      <DataRangeConfirmDialog
+        ref={confirmDataRangeDialogRef}
+        setConfirmDialog={setConfirmDialog}
+        onRange={getNewRange}
+      />
     </>
   );
 };
