@@ -32,6 +32,8 @@ class EstadisticaService
     }
     public function actualizarEstadistica(array $data, int $id)
     {
+        error_log("Datos recibidos para actualizar (ID: $id): " . print_r($data, true));
+
         $model = new Estadistica($data);
         $model->setId($id);
         $this->wpdb->update($this->dbMap->estadistica, $model->getDataForDbQuery(), ['estadistica_id' => $id]);
@@ -48,6 +50,11 @@ class EstadisticaService
                 FROM {$this->dbMap->estadistica} A
                 INNER JOIN {$this->dbMap->estaClasN1} B ON A.estadistica_id = B.estadistica_id
                 INNER JOIN {$this->dbMap->clasificador} C ON B.clasificador_id = C.clasificador_id";
+
+        // Ejecutar la consulta test 
+        $results = $this->wpdb->get_results($sql, ARRAY_A);
+        error_log(json_encode($results));
+
         return $this->wpdb->get_results($sql, ARRAY_A);
     }
     public function getEstadistica($id)
@@ -60,5 +67,17 @@ class EstadisticaService
             throw new \Exception("No se encontró el registro con id $id");
         }
         return DataParser::parseQueryResult($data, $model->getFieldsDef());
+    }
+    //add delete
+    public function eliminarEstadistica(int $id)
+    {
+        error_log("ID recibido para eliminar: $id");
+        $success = $this->wpdb->delete(
+            $this->dbMap->estadistica,
+            ['estadistica_id' => $id]
+        );
+        if (!$success) {
+            throw new \Exception("Error al eliminar la estadística con ID $id");
+        }
     }
 }

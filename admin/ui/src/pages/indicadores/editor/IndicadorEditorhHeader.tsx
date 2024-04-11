@@ -44,7 +44,6 @@ const IndicadorEditorhHeader: React.FC = () => {
       dispath(commitChanges());
       // navigate(urlIndicadores);
       dispath(setResetDefault());
-      console.log(postValues);
       alert('Cambios guardados correctamente');
     } else {
       alert('No hay cambios para guardar');

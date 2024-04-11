@@ -94,7 +94,6 @@ const Importar = () => {
             workbookFile,
             1
           );
-        console.log(dataIndicator);
         dispath(setEstadisticaFields(dataIndicator));
       }
     }
@@ -118,7 +117,6 @@ const Importar = () => {
       fuente: data.fuente,
       elaboracion: data.elaboracion,
     };
-    console.log(combinedData);
     dispath(setEstadisticaDatos(combinedData));
   };
   const handleOk = () => {

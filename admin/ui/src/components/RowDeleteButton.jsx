@@ -14,7 +14,12 @@ const useStyles = makeStyles({
 
 function RowDeteteButton({ onClick, tooltip }) {
   const styles = useStyles();
-  onClick = onClick || (() => {});
+  console.log(tooltip);
+  onClick =
+    onClick ||
+    (() => {
+      console.log('click en borrar el id ');
+    });
 
   return (
     <Button

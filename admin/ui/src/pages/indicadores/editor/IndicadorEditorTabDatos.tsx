@@ -40,7 +40,6 @@ const TextField = ({ fieldName }) => {
 
 const IndicadorEditorTabDatos = () => {
   const data = useAppSelector(selectEstadisticaData);
-  console.log(data);
   return (
     <form>
       <div className="flex flex-col gap-y-4">

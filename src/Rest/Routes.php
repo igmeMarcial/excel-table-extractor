@@ -35,6 +35,8 @@ class Routes
         $this->router->post('/estadisticas',                  EstadisticaController::class . ':registrarEstadistica');
         $this->router->get('/estadisticas/(?P<id>[\d]+)',     EstadisticaController::class . ':obtenerEstadistica');
         $this->router->put('/estadisticas/(?P<id>[\d]+)',     EstadisticaController::class . ':actualizarEstadistica');
+        //add delete
+        $this->router->delete('/estadisticas/(?P<id>[\d]+)',  EstadisticaController::class . ':eliminarEstadistica');
         $this->router->get('/plantillas',                     PlantillaController::class . ':listar');
         $this->router->get('/plantillas',                     PlantillaController::class . ':listar');
         $this->router->get(
@@ -50,7 +52,7 @@ class Routes
         );
         $this->router->get(
             '/admin/marcos-ordenadores/mdea/indice-clasificadores',
-             MdeaController::class . ':onGetIndiceClasificadores'
+            MdeaController::class . ':onGetIndiceClasificadores'
         );
         $this->router->post('/anuarios',                      AnuarioController::class . ':guardarArchivo');
         $this->router->post('/anuarios:generar-version-base', AnuarioController::class . ':generarAnuario');
@@ -60,7 +62,7 @@ class Routes
         $this->router->get('/mdea/temas-estadisticos',        MdeaController::class . ':listarTemasEstadisticos');
         $this->router->get(
             '/website/marcos-ordenadores/mdea/indice-estadisticas',
-             MdeaController::class . ':onGetIndiceEstadisticas'
+            MdeaController::class . ':onGetIndiceEstadisticas'
         );
         $this->router->get('/dev/reset-database',             DevController::class . ':resetDatabase');
     }

@@ -17,6 +17,7 @@ class EstadisticaController
     {
         $result = $this->estadisticaService->getListaEstadisticas();
         // Return the array of objects
+
         return [
             'data' => $result,
             'total' => 1000
@@ -68,5 +69,22 @@ class EstadisticaController
         return [
             'data' => $result,
         ];
+    }
+    //add delete
+    public function eliminarEstadistica(WP_REST_Request $request)
+    {
+        try {
+            $id = $request->get_param('id');
+            $this->estadisticaService->eliminarEstadistica($id);
+            return [
+                'message' => "Estadística con ID $id eliminada",
+                'status' => 'OK'
+            ];
+        } catch (\Throwable $th) {
+            return [
+                'error' => $th->getMessage(),
+                'status' => 'ERROR'
+            ];
+        }
     }
 }
