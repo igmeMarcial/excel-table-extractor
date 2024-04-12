@@ -32,7 +32,6 @@ class EstadisticaService
     }
     public function actualizarEstadistica(array $data, int $id)
     {
-        error_log("Datos recibidos para actualizar (ID: $id): " . print_r($data, true));
 
         $model = new Estadistica($data);
         $model->setId($id);
@@ -68,16 +67,8 @@ class EstadisticaService
         }
         return DataParser::parseQueryResult($data, $model->getFieldsDef());
     }
-    //add delete
     public function eliminarEstadistica(int $id)
     {
-        error_log("ID recibido para eliminar: $id");
-        $success = $this->wpdb->delete(
-            $this->dbMap->estadistica,
-            ['estadistica_id' => $id]
-        );
-        if (!$success) {
-            throw new \Exception("Error al eliminar la estadística con ID $id");
-        }
+        $this->wpdb->update($this->dbMap->estadistica, ['eliminado' => true], ['estadistica_id' => $id]);
     }
 }

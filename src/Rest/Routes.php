@@ -35,7 +35,6 @@ class Routes
         $this->router->post('/estadisticas',                  EstadisticaController::class . ':registrarEstadistica');
         $this->router->get('/estadisticas/(?P<id>[\d]+)',     EstadisticaController::class . ':obtenerEstadistica');
         $this->router->put('/estadisticas/(?P<id>[\d]+)',     EstadisticaController::class . ':actualizarEstadistica');
-        //add delete
         $this->router->delete('/estadisticas/(?P<id>[\d]+)',  EstadisticaController::class . ':eliminarEstadistica');
         $this->router->get('/plantillas',                     PlantillaController::class . ':listar');
         $this->router->get('/plantillas',                     PlantillaController::class . ':listar');

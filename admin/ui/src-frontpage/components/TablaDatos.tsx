@@ -1,5 +1,6 @@
 import { useAppSelector } from '../app/hooks';
 import {
+  selectColorComponent,
   selectComponenteIndicePath,
   selectEstadisticaData,
   selectEstadisticaDatos,
@@ -8,10 +9,12 @@ import {
 import { Button } from '@fluentui/react-components';
 import IndicadorDataGrid from '../../src/components/DataTable';
 import { useRef } from 'react';
+import DowloadsButtons from './DowloadsButtons';
 
-function TablaDatos() {
+const TablaDatos = () => {
   const dataTable = useAppSelector(selectEstadisticaDatos);
   const data = useAppSelector(selectEstadisticaData);
+  const colorComponent = useAppSelector(selectColorComponent);
   const compo = useAppSelector(selectComponenteIndicePath);
   const sub = useAppSelector(selectEstadisticaIndicePath);
   const { fuente, elaboracion, nota, nombre } = data?.datos || {}; //tabla
@@ -31,8 +34,13 @@ function TablaDatos() {
       '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body>{table}</body></html>';
     window.location.href = uri + base64(format(template, ctx));
   };
-  const handleDowload = () => {
+  const downloadXlsx = () => {
     download(downloadAreaContainer.current, 'descarga.xlsx');
+  };
+  const onDownload = (format: string) => {
+    if (format === 'xlsx') {
+      downloadXlsx();
+    }
   };
 
   if (!dataTable?.tabla?.length) {
@@ -40,38 +48,36 @@ function TablaDatos() {
   }
 
   return (
-    <div
-      ref={downloadAreaContainer}
-      className="my-5"
-      style={{ fontFamily: 'sans-serif' }}
-    >
+    <>
       <div
-        style={{ paddingRight: '110px' }}
-        className="flex justify-around my-4 items-center px-4 relative min-h-5"
+        ref={downloadAreaContainer}
+        className="my-5"
+        style={{ fontFamily: 'sans-serif' }}
       >
-        <div className="absolute -top-2 right-0 text-xs">
-          <Button
-            onClick={handleDowload}
-            style={{ color: '#217346', borderColor: '#217346' }}
+        <div className="flex justify-around my-4 items-center px-4 relative min-h-5">
+          <div
+            style={{
+              fontSize: '12px',
+              fontWeight: 'bold',
+              textAlign: 'center',
+            }}
           >
-            Descargar
-          </Button>
+            {nombre}
+          </div>
         </div>
-        <div
-          style={{ fontSize: '12px', fontWeight: 'bold', textAlign: 'center' }}
-        >
-          {nombre}
+        <IndicadorDataGrid data={dataTable.tabla} color={colorComponent} />
+        <div className="mt-2" style={{ fontSize: '10px' }}>
+          Nota: <br />
+          {nota}
+        </div>
+        <div className="mt-2" style={{ fontSize: '10px' }}>
+          Fuente: {fuente}
         </div>
       </div>
-      <IndicadorDataGrid data={dataTable.tabla} />
-      <div className="mt-2" style={{ fontSize: '10px' }}>
-        Nota: <br />
-        {nota}
+      <div>
+        <DowloadsButtons onDownload={onDownload} />
       </div>
-      <div className="mt-2" style={{ fontSize: '10px' }}>
-        Fuente: {fuente}
-      </div>
-    </div>
+    </>
   );
-}
+};
 export default TablaDatos;

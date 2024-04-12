@@ -18,7 +18,7 @@ const items = [
   { text: 'Ficha técnica', value: 'ficha' },
 ];
 
-export default function EstadisticaVistaTabs() {
+const EstadisticaVistaTabs = () => {
   const selectedValue = useAppSelector(selectActiveTabName);
   const distpath = useAppDispatch();
 
@@ -48,4 +48,5 @@ export default function EstadisticaVistaTabs() {
       </div>
     </div>
   );
-}
+};
+export default EstadisticaVistaTabs;

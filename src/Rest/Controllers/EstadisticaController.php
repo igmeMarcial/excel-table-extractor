@@ -70,7 +70,6 @@ class EstadisticaController
             'data' => $result,
         ];
     }
-    //add delete
     public function eliminarEstadistica(WP_REST_Request $request)
     {
         try {

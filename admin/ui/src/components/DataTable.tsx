@@ -1,33 +1,43 @@
 import { useEffect, useRef, useState } from 'react';
+import chroma from 'chroma-js';
 import {
   DT_TABLA_DATOS_BORDER_COLOR,
   DT_TABLA_DATOS_BORDER_COLOR_HEADER,
   DT_TABLA_DATOS_FONT_SIZE,
 } from '../config/design-tokens';
-import {
-  CELL_POSITION_BODY,
-  CELL_POSITION_HEADER,
-  Cell,
-} from '../types/Cell';
+import { CELL_POSITION_BODY, CELL_POSITION_HEADER, Cell } from '../types/Cell';
 import { numberFormat } from '../utils/numberFormat';
 
 interface DataTableProps {
   data: Cell[][];
+  color: string;
 }
 
-function renderCell(cell: Cell, rowIndex: number, colIndex: number) {
+function renderCell(
+  cell: Cell,
+  rowIndex: number,
+  colIndex: number,
+  color: string,
+  indexCount
+) {
   const { v: value, t: type, p: position } = cell || {};
 
   let cellStyle = {
     backgroundColor: '#fff',
     color: '#000',
-    borderColor: DT_TABLA_DATOS_BORDER_COLOR,
+    borderColor: chroma(color).alpha(0.7).css() || DT_TABLA_DATOS_BORDER_COLOR,
     verticalAlign: '',
+    fontWeight: 'normal',
   };
+  if (indexCount % 2 != 0 && position === CELL_POSITION_BODY) {
+    cellStyle.backgroundColor = chroma(color).alpha(0.2).css() || '#fff';
+  }
+
   if (position === CELL_POSITION_HEADER) {
-    cellStyle.backgroundColor = DT_TABLA_DATOS_BORDER_COLOR;
+    cellStyle.backgroundColor = color || DT_TABLA_DATOS_BORDER_COLOR;
     cellStyle.color = '#fff';
-    cellStyle.borderColor = DT_TABLA_DATOS_BORDER_COLOR_HEADER;
+    cellStyle.borderColor = color || DT_TABLA_DATOS_BORDER_COLOR_HEADER;
+    cellStyle.fontWeight = 'bold';
   }
   const className =
     type === 'n' && position === CELL_POSITION_BODY
@@ -56,16 +66,17 @@ function renderCell(cell: Cell, rowIndex: number, colIndex: number) {
     </td>
   );
 }
-const renderDataTableRows = (itemRow: Cell[], rowIndex) => {
+const renderDataTableRows = (itemRow: Cell[], rowIndex, color: string) => {
   return (
     <tr key={`C${itemRow}-F${rowIndex}`}>
-      {itemRow.map((cell, colIndex) => renderCell(cell, 0, colIndex))}
+      {itemRow.map((cell, colIndex) =>
+        renderCell(cell, 0, colIndex, color, rowIndex)
+      )}
     </tr>
   );
 };
 
-const DataTable = ({ data }: DataTableProps) => {
-  console.log(data);
+const DataTable = ({ data, color }: DataTableProps) => {
   const [hasScrollbar, setHasScrollbar] = useState(false);
   const tableWrapperRef = useRef(null);
   // Actualiza el estado hasScrollbar si hay scroll horizontal
@@ -94,7 +105,8 @@ const DataTable = ({ data }: DataTableProps) => {
       style={{
         borderWidth: hasScrollbar ? '1px' : '0',
         borderStyle: hasScrollbar ? 'solid' : 'none',
-        borderColor: DT_TABLA_DATOS_BORDER_COLOR,
+        borderColor:
+          chroma(color).alpha(0.7).css() || DT_TABLA_DATOS_BORDER_COLOR,
       }}
       ref={tableWrapperRef}
     >
@@ -108,7 +120,7 @@ const DataTable = ({ data }: DataTableProps) => {
       >
         <tbody>
           {data.map((itemRow, rowIndex) =>
-            renderDataTableRows(itemRow, rowIndex)
+            renderDataTableRows(itemRow, rowIndex, color)
           )}
         </tbody>
       </table>
