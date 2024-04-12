@@ -97,13 +97,13 @@ export const estadisticaFormSlice = createSlice({
     setEstadisticaDatos: (state, action: PayloadAction<EstadisticaDatos>) => {
       state.estadisticaRawModel.datos = action.payload;
       state.estadisticaRawModel.datosInformacion = tablaDatosHelper.getInformacion(action.payload.tabla || []);
-      state.estadisticaRawModel.graficos = [graficoHelper.getGraficoDefecto(action.payload.tabla || [])];
+      state.estadisticaRawModel.graficos = [graficoHelper.getGraficoDefecto(action.payload)];
       state.hasChanges = true;
     },
     setEstadisticaTablaDatos: (state, action: PayloadAction<Cell[][]>) => {
       state.estadisticaRawModel.datos.tabla = action.payload;
       if (!state.tienePresentacionGraficaPersonalizada) {
-        state.estadisticaRawModel.graficos = [graficoHelper.getGraficoDefecto(action.payload)];
+        state.estadisticaRawModel.graficos = [graficoHelper.getGraficoDefecto(state.estadisticaRawModel.datos)];
       }
       state.hasChanges = true;
     },
@@ -134,6 +134,26 @@ export const estadisticaFormSlice = createSlice({
         }
         return grafico;
       })
+      state.hasChanges = true;
+    },
+    setGraficoSerieColor: (state, action: PayloadAction<{ chartIndex: number, serieIndex: number, color: string }>) => {
+      const serieIndex = action.payload.serieIndex;
+      const color = action.payload.color;
+      state.estadisticaRawModel.graficos = state.estadisticaRawModel.graficos.map((grafico, index) => {
+        if (index === action.payload.chartIndex) {
+          return {
+            ...grafico,
+            series: grafico.series.map((serie, index) => {
+              console.log('serie', serie);
+              if (index === serieIndex) {
+                return { ...serie, color: color }
+              }
+              return serie;
+            })
+          }
+        }
+        return grafico;
+      });
       state.hasChanges = true;
     },
     setFieldValidationErrors: (state, action: PayloadAction<{ fieldName: string, errors: ValidationError[] }>) => {
@@ -168,6 +188,7 @@ export const {
   setActiveTab,
   setTipoGrafico,
   setGraficoFieldValue,
+  setGraficoSerieColor,
   resetChanges,
   commitChanges,
   setResetDefault,
@@ -189,9 +210,5 @@ export const selectGraficoFieldValue = <K extends keyof Grafico>(index: number, 
   return state.estadisticaForm.estadisticaRawModel.graficos[index][field]
 }
 export const selectValidationErrors = (state: RootState) => state.estadisticaForm.validationErrors;
-
-export const selectGraficoPropiedades = (index: number) => (state: RootState) => {
-  return state.estadisticaForm.estadisticaRawModel.graficos[index]
-}
 
 export default estadisticaFormSlice.reducer;

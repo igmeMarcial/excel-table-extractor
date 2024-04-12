@@ -10,6 +10,7 @@ export interface Grafico {
   mostrarLeyenda?: boolean;
   mostrarEtiquetas?: boolean;
   numeroDecimalesEtiquetas?: number;
+  fuente?: string;
   referenciasTablaDatos?: {
     rangoValores: string;
     rangoCategorias: string;

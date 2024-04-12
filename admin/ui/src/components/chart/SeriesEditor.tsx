@@ -1,9 +1,6 @@
-import TipoGraficoSelect from './ChartTypeSelect';
+import ChartDataConfigWindow from './ChartDataConfigWindow';
 import { DataUsageSettings20Regular } from '@fluentui/react-icons';
-import { Grafico } from '../../types/Grafico';
 import { Button } from '@fluentui/react-button';
-import { Divider } from 'antd';
-import GraficoSeriesConfigWindow from '../../pages/indicadores/editor/presentacion/GraficoSeriesConfigWindow';
 import { useRef } from 'react';
 
 interface GraficoToolbarProps {
@@ -21,9 +18,9 @@ const GraficoToolbar = ({ chartIndex }: GraficoToolbarProps) => {
         icon={<DataUsageSettings20Regular />}
         onClick={() => onConfigSeriesClick()}
       >
-        Series
+        Rango de datos
       </Button>
-      <GraficoSeriesConfigWindow
+      <ChartDataConfigWindow
         ref={seriesConfigWindowRef}
         chartIndex={chartIndex}
       />

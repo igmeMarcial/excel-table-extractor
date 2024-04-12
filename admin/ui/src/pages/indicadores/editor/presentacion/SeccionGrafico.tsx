@@ -1,14 +1,13 @@
-import ReactECharts from 'echarts-for-react';
-import { Grafico } from '../../../../types/Grafico';
-import chartProspMapper from '../../../../core/EchartsPropsMapper';
 import BlockEditorHeader from '../../../../components/BlockEditorHeader';
 import ChartOptionsEditor from '../../../../components/chart/ChartOptionsEditor';
+import Chart from '../../../../components/chart/Chart';
+
+import { Grafico } from '../../../../types/Grafico';
 interface SeccionGraficoProps {
   index: number;
   options: Grafico;
 }
 const SeccionGrafico = ({ index, options }: SeccionGraficoProps) => {
-  const chartOptions = chartProspMapper.map(options);
   return (
     <div className="border-2 border-solid border-emerald-600 rounded">
       <BlockEditorHeader title="Grafico" />
@@ -16,7 +15,7 @@ const SeccionGrafico = ({ index, options }: SeccionGraficoProps) => {
         <div className="flex-1">
           <div className="m-2 border rounded border-dashed border-gray-500">
             <div>
-              <ReactECharts {...chartOptions} />
+              <Chart options={options}></Chart>
             </div>
           </div>
         </div>

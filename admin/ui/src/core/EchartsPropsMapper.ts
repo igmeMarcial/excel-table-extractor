@@ -43,7 +43,8 @@ export class EchartsPropsMapper {
         data: serie.valores as any[],
         label: {
           show: mostrarEtiquetas
-        }
+        },
+        itemStyle: this.getItemStyle(serie)
       }
       if (this.grafico.numeroDecimalesEtiquetas || serie.numeroDecimalesEtiquetas) {
         // Redondear a n decimales
@@ -53,6 +54,14 @@ export class EchartsPropsMapper {
       }
       return deepAssign({}, ECHART_SERIES_DEFAULT_PROPS, serieProps)
     })
+  }
+  private getItemStyle(serie: Serie): echarts.EChartOption.SeriesLine['itemStyle'] {
+    if (serie.color) {
+      return {
+        color: serie.color
+      }
+    }
+    return {}
   }
   private getTypeProps(serie: Serie): echarts.EChartOption.Series {
     const tipo = serie.tipo || this.grafico.tipo || this.tipoGraficoDefecto

@@ -4,6 +4,8 @@ import { Grafico } from "../types/Grafico";
 import { CellRange } from "../types/CellRange";
 import { Serie } from "../types/Serie";
 import { encodeCellRange } from "../utils/encodeCellRange";
+import { EstadisticaDatos } from "../types/EstadisticaDatos";
+import { deepAssign } from "../utils/object-utils";
 
 export class GraficoHelper {
 
@@ -15,61 +17,99 @@ export class GraficoHelper {
     }
     return GraficoHelper._instance;
   }
-  getGraficoDefecto(tabla: Cell[][]): Grafico {
+  getGraficoDefecto(datos: EstadisticaDatos): Grafico {
+    const tabla = datos.tabla;
     const dataInfo = tablaDatosHelper.getInformacion(tabla);
-
-    // Cuando la tabla tiene una fila final con totales
+    let defaults = {
+      fuente: datos.fuente,
+    };
     const valoresRango = dataInfo.valoresRango;
     if (!valoresRango) {
-      return {};
+      return defaults;
     }
-    // Categoria
-    const categorias = tablaDatosHelper.getRowValues(tabla, valoresRango.start.rowIndex - 1, valoresRango.start.colIndex, valoresRango.end.colIndex) as string[];
-    // Datos anuales por departamento
-    if (dataInfo.sonDatosAnualesPorDepartamento) {
-      return this.getGraficoParaDatosAnualesPorDepartamento(valoresRango, tabla);
-    }
+
     // Si la tabla tiene una fila de totales solo se muestra un gráfico de barras
     if (dataInfo.tieneFilaTotales) {
-      const filaTotalesRowIndex = tablaDatosHelper.getFilaTotalesRowIndex(tabla);
-      const totalValoresRango: CellRange = {
-        start: { rowIndex: filaTotalesRowIndex, colIndex: valoresRango.start.colIndex },
-        end: { rowIndex: filaTotalesRowIndex, colIndex: valoresRango.end.colIndex }
-      };
-      return {
-        categorias,
-        tipo: 'columnas',
-        series: this.getHorizontalSeries(tabla, totalValoresRango),
-      };
+      return this.getGraficoParaDatosConFilaTotales(defaults, tabla);
     }
-    return {
+
+    // Datos anuales por departamento
+    if (dataInfo.sonDatosAnualesPorDepartamento) {
+      return this.getGraficoParaDatosAnualesPorDepartamento(defaults, tabla);
+    }
+
+    // Categoria
+    const categorias = tablaDatosHelper.getRowValues(tabla, valoresRango.start.rowIndex - 1, valoresRango.start.colIndex, valoresRango.end.colIndex) as string[];
+    return deepAssign(defaults, {
       categorias,
       tipo: 'lineas',
       series: this.getHorizontalSeries(tabla, valoresRango),
-    };
+    });
   }
 
-  private getGraficoParaDatosAnualesPorDepartamento(valoresRango: CellRange, tabla: Cell[][]): Grafico {
-    // Rango de series, solo la ultima columna
-    const serieRango: CellRange = {
-      start: { rowIndex: valoresRango.start.rowIndex, colIndex: valoresRango.end.colIndex },
-      end: { rowIndex: valoresRango.end.rowIndex, colIndex: valoresRango.end.colIndex }
+  private getGraficoParaDatosAnualesPorDepartamento(defaults: Grafico, tabla: Cell[][]): Grafico {
+    // Valores: Última columna sin considerar la primera celda
+    const lastRowIndex = tabla.length - 1;
+    const lastColIndex = tabla[0].length - 1;
+    const rangoValores: CellRange = {
+      start: { rowIndex: 1, colIndex: lastColIndex },
+      end: { rowIndex: lastRowIndex, colIndex: lastColIndex }
+    };
+    // Categorías: Primera columna sin considerar la primera celda
+    const rangoCategorias: CellRange = {
+      start: { rowIndex: 1, colIndex: 0 },
+      end: { rowIndex: lastRowIndex, colIndex: 0 }
+    };
+    // Series: Última celda de la primera fila
+    const rangoSeries: CellRange = {
+      start: { rowIndex: 0, colIndex: lastColIndex },
+      end: { rowIndex: 0, colIndex: lastColIndex }
     };
     const categorias = tablaDatosHelper.getColumnValues(tabla, 0, 1) as string[];
-    return {
+    return deepAssign(defaults, {
       categorias,
       tipo: 'columnas',
-      series: this.getVerticalSeries(tabla, serieRango),
+      series: this.getVerticalSeries(tabla, rangoValores),
       rotacionEtiquetasCategorias: 30,
       mostrarLeyenda: false,
       referenciasTablaDatos: {
-        rangoValores: encodeCellRange(valoresRango),
-        rangoCategorias: encodeCellRange({ start: { rowIndex: valoresRango.start.rowIndex - 1, colIndex: valoresRango.start.colIndex }, end: { rowIndex: valoresRango.start.rowIndex - 1, colIndex: valoresRango.end.colIndex } }),
-        rangoSeries: encodeCellRange(serieRango),
+        rangoValores: encodeCellRange(rangoValores),
+        rangoCategorias: encodeCellRange(rangoCategorias),
+        rangoSeries: encodeCellRange(rangoSeries),
       }
-    };
+    });
   }
-
+  private getGraficoParaDatosConFilaTotales(defaults: Grafico, tabla: Cell[][]): Grafico {
+    // Valores: Última fila sin considerar la primera celda
+    const lastRowIndex = tabla.length - 1;
+    const lastColIndex = tabla[0].length - 1;
+    const rangoValores: CellRange = {
+      start: { rowIndex: lastRowIndex, colIndex: 1 },
+      end: { rowIndex: lastRowIndex, colIndex: lastColIndex }
+    };
+    // Categorías: La primera celda de la primera fila
+    const rangoCategorias: CellRange = {
+      start: { rowIndex: lastRowIndex, colIndex: 0 },
+      end: { rowIndex: lastRowIndex, colIndex: 0 }
+    };
+    // Series: La primera fila sin considerar la primera celda
+    const rangoSeries: CellRange = {
+      start: { rowIndex: 0, colIndex: 1 },
+      end: { rowIndex: 0, colIndex: lastColIndex }
+    };
+    const categorias = tablaDatosHelper.getRowValues(tabla, 0, 1) as string[];
+    return deepAssign(defaults, {
+      categorias,
+      tipo: 'columnas',
+      series: this.getHorizontalSeries(tabla, rangoValores),
+      mostrarLeyenda: false,
+      referenciasTablaDatos: {
+        rangoValores: encodeCellRange(rangoValores),
+        rangoCategorias: encodeCellRange(rangoCategorias),
+        rangoSeries: encodeCellRange(rangoSeries),
+      }
+    });
+  }
   private getHorizontalSeries(tabla: Cell[][], rangoValores: CellRange): Serie[] {
     const out: Serie[] = [];
     for (let i = rangoValores.start.rowIndex; i <= rangoValores.end.rowIndex; i++) {

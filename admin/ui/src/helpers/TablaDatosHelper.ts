@@ -102,7 +102,21 @@ export class TablaDatosHelper {
       return this.parseNumber(value);
     });
   }
-
+  getRangeValues(
+    tabla: Cell[][],
+    range: CellRange
+  ): Cell['v'][][] {
+    const out: Cell['v'][][] = [];
+    for (let rowIndex = range.start.rowIndex; rowIndex <= range.end.rowIndex; rowIndex++) {
+      const row = [];
+      for (let colIndex = range.start.colIndex; colIndex <= range.end.colIndex; colIndex++) {
+        const cell = tabla[rowIndex][colIndex];
+        row.push(cell.v);
+      }
+      out.push(row);
+    }
+    return out;
+  }
   tieneCeldasCombinadas(tabla: Cell[][]): boolean {
     return tabla.some((row) => row.some((cell) => cell.rs > 1 || cell.s > 1));
   }

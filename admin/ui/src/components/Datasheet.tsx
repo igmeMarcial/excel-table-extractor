@@ -28,6 +28,7 @@ interface DatasheetProps {
   data: Cell[][];
   dataSelectionRange?: CellRange;
   chartDataRanges?: ChartDataRanges;
+  style?: React.CSSProperties;
 }
 
 function renderCell(
@@ -221,6 +222,7 @@ const Datasheet = ({
   data,
   chartDataRanges,
   dataSelectionRange,
+  style,
 }: DatasheetProps) => {
   const maxColIndex = getMaxRowLength(data) - 1;
   const [hasScrollbar, setHasScrollbar] = useState(false);
@@ -246,16 +248,19 @@ const Datasheet = ({
     checkScrollbar();
   }, [data]);
   // Datasheet
+  let finalStyle = Object.assign(
+    {},
+    {
+      borderWidth: hasScrollbar ? '1px' : '0',
+      borderStyle: hasScrollbar ? 'solid' : 'none',
+      borderColor: '#ABABAB',
+    }
+  );
+  if (style) {
+    finalStyle = Object.assign(finalStyle, style);
+  }
   return (
-    <div
-      className="overflow-auto"
-      style={{
-        borderWidth: hasScrollbar ? '1px' : '0',
-        borderStyle: hasScrollbar ? 'solid' : 'none',
-        borderColor: '#ABABAB',
-      }}
-      ref={tableWrapperRef}
-    >
+    <div className="overflow-auto" style={finalStyle} ref={tableWrapperRef}>
       <table className="aesa-datasheet">
         <tbody>
           <ColLabels colsNumber={maxColIndex + 1} />
