@@ -3,6 +3,7 @@ import NabAside from '../components/NabAside';
 import EstadisticaVistaTabs from '../blocks/EstadisticaVistaTabs';
 import EstadisticasNav from '../blocks/EstadisticasNav';
 import { ColorsType } from '../types/Colors';
+import NamePanelComponents from '../components/NamePanelComponents';
 
 export default function NavegadorEstadisticas() {
   //Colores de componentes
@@ -18,7 +19,8 @@ export default function NavegadorEstadisticas() {
   return (
     <>
       <EstadisticasNav />
-      <NamePanel colors={colors} />
+      <NamePanelComponents colors={colors} />
+      {/* <NamePanel colors={colors} /> */}
       <div className="flex sm:flex-col-reverse md:flex-row">
         <div style={{ width: '300px' }} className="bg-gray-100">
           <NabAside />
