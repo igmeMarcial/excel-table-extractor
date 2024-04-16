@@ -20,13 +20,15 @@ const useStyles = makeStyles({
   },
 });
 interface DataRangeConfirmDialogProps {
-  setConfirmDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  onRange: (range: string) => any;
-  // Otros props necesarios
+  onConfirm: (range: CellRange) => void;
 }
-interface DataRangeConfirmDialogDataInput {
+export interface DataRangeConfirmDialogDataInput {
   data: Cell[][];
   dataSelectionRange: CellRange;
+}
+export interface DataRangeConfirmDialogRef {
+  open: (data: DataRangeConfirmDialogDataInput) => void;
+  close: () => void;
 }
 // Función para validar el rango
 const validarRango = (range) => {
@@ -43,92 +45,96 @@ const validarRango = (range) => {
   return filaA <= filaB;
 };
 
-const DataRangeConfirmDialog = forwardRef(
-  (props: DataRangeConfirmDialogProps, ref) => {
-    const [range, setRange] = useState('');
-    const [data, setData] = useState([]);
-    const [dataSelectionRange, setDataSelectionRange] = useState(null);
-    const [isOpen, setIsOpen] = useState(false);
-    const [isValidRange, setIsValidRange] = useState<boolean>(false);
-    const styles = useStyles();
-    const open = ({
-      data,
-      dataSelectionRange,
-    }: DataRangeConfirmDialogDataInput) => {
-      setData(data);
-      setDataSelectionRange(dataSelectionRange);
-      setRange(encodeCellRange(dataSelectionRange));
-      setIsOpen(true);
-      setIsValidRange(validarRango(encodeCellRange(dataSelectionRange)));
-    };
-    const close = () => {
-      setIsOpen(false);
-    };
+const DataRangeConfirmDialog = forwardRef<
+  DataRangeConfirmDialogRef,
+  DataRangeConfirmDialogProps
+>((props, ref) => {
+  const [range, setRange] = useState('');
+  const [data, setData] = useState([]);
+  const [dataSelectionRange, setDataSelectionRange] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isValidRange, setIsValidRange] = useState<boolean>(false);
+  const styles = useStyles();
+  const open = ({
+    data,
+    dataSelectionRange,
+  }: DataRangeConfirmDialogDataInput) => {
+    setData(data);
+    setDataSelectionRange(dataSelectionRange);
+    setRange(encodeCellRange(dataSelectionRange));
+    setIsOpen(true);
+    setIsValidRange(validarRango(encodeCellRange(dataSelectionRange)));
+  };
+  const close = () => {
+    setIsOpen(false);
+  };
 
-    const onRangeChange = (
-      e: React.ChangeEvent<HTMLInputElement>,
-      data: InputOnChangeData
-    ) => {
-      const range = data.value.toUpperCase();
+  const onRangeChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    data: InputOnChangeData
+  ) => {
+    const range = data.value.toUpperCase();
 
-      setRange(range);
-      const isValid = validarRango(range);
-      setIsValidRange(isValid);
-      setDataSelectionRange(decodeCellRange(range));
-    };
+    setRange(range);
+    const isValid = validarRango(range);
+    setIsValidRange(isValid);
+    setDataSelectionRange(decodeCellRange(range));
+  };
 
-    useImperativeHandle(ref, () => ({
-      open,
-      close,
-    }));
-    const handleOk = () => {
-      setIsOpen(false);
-      props.onRange(range);
-      props.setConfirmDialog(true);
-    };
-    return (
-      <Modal
-        title="Confirmar rango de datos"
-        open={isOpen}
-        className="h-screen"
-        width={900}
-        onCancel={close}
-        footer={[
-          <Button
-            disabled={!isValidRange}
-            key="submit"
-            type="primary"
-            onClick={handleOk}
+  useImperativeHandle(ref, () => ({
+    open,
+    close,
+  }));
+  const handleOk = () => {
+    setIsOpen(false);
+    props.onConfirm(dataSelectionRange);
+  };
+  return (
+    <Modal
+      title="Confirmar rango de datos"
+      open={isOpen}
+      className="h-screen"
+      width={900}
+      onCancel={close}
+      footer={[
+        <Button
+          disabled={!isValidRange}
+          key="submit"
+          type="primary"
+          onClick={handleOk}
+        >
+          Confirmar
+        </Button>,
+        <Button key="back" onClick={close}>
+          Cancelar
+        </Button>,
+      ]}
+    >
+      <FluentProvider theme={webLightTheme}>
+        <div className="flex gap-4 my-4">
+          <Field
+            label="Rango de datos"
+            validationState={!isValidRange ? 'error' : 'none'}
+            validationMessage={!isValidRange ? 'Rango no valido' : ''}
           >
-            Confirmar
-          </Button>,
-          <Button key="back" onClick={close}>
-            Cancelar
-          </Button>,
-        ]}
-      >
-        <FluentProvider theme={webLightTheme}>
-          <div className="flex gap-4 my-4">
-            <Field
-              label="Rango de datos"
-              validationState={!isValidRange ? 'error' : 'none'}
-              validationMessage={!isValidRange ? 'Rango no valido' : ''}
-            >
-              <Input
-                placeholder="A4:K28"
-                type="text"
-                name="rangoValores"
-                className={styles.rangeInput}
-                onChange={onRangeChange}
-                value={range}
-              />
-            </Field>
-          </div>
-          <Datasheet data={data} dataSelectionRange={dataSelectionRange} />
-        </FluentProvider>
-      </Modal>
-    );
-  }
-);
+            <Input
+              placeholder="A4:K28"
+              type="text"
+              name="rangoValores"
+              className={styles.rangeInput}
+              onChange={onRangeChange}
+              value={range}
+            />
+          </Field>
+        </div>
+        <Datasheet
+          data={data}
+          dataSelectionRange={dataSelectionRange}
+          style={{ maxHeight: '400px' }}
+        />
+      </FluentProvider>
+    </Modal>
+  );
+});
 
 export default DataRangeConfirmDialog;

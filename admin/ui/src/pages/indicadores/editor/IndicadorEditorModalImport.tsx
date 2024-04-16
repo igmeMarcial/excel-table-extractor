@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import UploadFileButton from '../../../components/UploadFileButton';
-import { Modal, Button, Checkbox } from 'antd';
+import { useRef, useState } from 'react';
+import { Modal, Button, Checkbox, Select } from 'antd';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   selectIsCreationMode,
@@ -8,69 +7,63 @@ import {
   setEstadisticaDatos,
   setEstadisticaFields,
 } from '../EstadisticaFormSlice';
-import ExtractDataExcelService from '../../../services/ExtractDataExcelService';
+import fichaExcelService from '../../../services/ExtractDataExcelService';
 import { WorkBook } from 'xlsx';
 import { EstadisticaDatos } from '../../../types/EstadisticaDatos';
-import { FichaTecnicaFields } from '../../../types/Estadistica';
-import DataRangeConfirmDialog from '../../../components/chart/DataRangeConfirmDialog';
-import { decodeCellRange } from '../../../utils/decodeCellRange';
+import DataRangeConfirmDialog, {
+  DataRangeConfirmDialogRef,
+} from '../../../components/chart/DataRangeConfirmDialog';
+import { EstadisticaWorkbook } from '../../../core/EstadisticaWorkbook';
+import SelectFileButton from '../../../components/SelectFileButton';
+import { CellRange } from '../../../types/CellRange';
 
 const Importar = () => {
-  const [fileUploading, setFileUploading] = useState(false);
-  const [workbookFile, setWorkBookFile] = useState<WorkBook>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [hasFile, setHasFile] = useState<boolean>(false);
-  const [titleIndicador, setTitleIndicador] = useState<string>('');
-  const [camposFichaChecked, setCamposFichaChecked] = useState(false);
-  const [tablaDatosChecked, setTablaDatosChecked] = useState(false);
-  // const [tableData, setTableData] = useState<EstadisticaDatos>(null);
-  // const [indicadorData, setIndicadorData] = useState<FichaTecnicaFields>(null);
-
-  const [confirmDialog, setConfirmDialog] = useState(false);
-
   const dispath = useAppDispatch();
   const isCreationMode = useAppSelector(selectIsCreationMode);
+  const [estadisticaWorkbook, setEstadisticaWorkbook] =
+    useState<EstadisticaWorkbook | null>(null);
+  const [sheetNames, setSheetNames] = useState<string[]>([]);
+  const [camposFichaSheetIndex, setCamposFichaSheetIndex] = useState<number>(1);
+  const [tablaDatosSheetIndex, setTablaDatosSheetIndex] = useState<number>(0);
+  const [readingFile, setReadingFile] = useState(false);
+  const [workbookFile, setWorkBookFile] = useState<WorkBook>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [camposFichaChecked, setCamposFichaChecked] = useState(false);
+  const [tablaDatosChecked, setTablaDatosChecked] = useState(false);
+
   const importButtonTitle = isCreationMode ? 'Importar' : 'Actualizar datos';
   const importModalTitle = importButtonTitle;
-  const extractDataExcelService = new ExtractDataExcelService();
-  const [range, setRange] = useState(null);
-  const confirmDataRangeDialogRef = useRef(null);
-  // const tempSelRange = decodeCellRange('M5:X29');
+  const confirmDataRangeDialogRef = useRef<DataRangeConfirmDialogRef>(null);
   const handleFileChange = async (file: File | null) => {
     if (!file) return;
-    setFileUploading(true);
-    try {
-      const workbook = await extractDataExcelService.readExcelFile(file);
-      if (workbook) {
-        setWorkBookFile(workbook);
-        const tituloIndicador = extractDataExcelService.getNameIndicador(
-          workbook,
-          1
-        );
-        setTitleIndicador(tituloIndicador?.nombreIndicador);
-        setIsModalOpen(true);
-        setHasFile(true);
-
-        if (!tituloIndicador?.nombreIndicador) {
-          setFileUploading(false);
-          alert(
-            'El archivo debe ser tipo Indicador, con hoja1 de datos y hoja2 de ficha técnica'
-          );
-          return;
+    setCamposFichaChecked(isCreationMode);
+    setTablaDatosChecked(true);
+    setReadingFile(true);
+    // Lógica para leer el archivo
+    fichaExcelService
+      .getWorksbook(file)
+      .then((workbook) => {
+        const estadisticaWorkbook = new EstadisticaWorkbook(workbook);
+        setEstadisticaWorkbook(estadisticaWorkbook);
+        setSheetNames(workbook.SheetNames);
+        if (workbook) {
+          setWorkBookFile(workbook);
+          setIsModalOpen(true);
         }
-      }
-    } catch (error) {
-      setFileUploading(false);
-      alert('El archivo.xlsx debe ser  tipo Indicador');
-    }
+      })
+      .catch((error) => {
+        setReadingFile(false);
+        alert(
+          'Ocurrió un error al leer el archivo Excel, verifique que el archivo sea válido y tenga el fomato correcto.'
+        );
+      })
+      .finally(() => {
+        setReadingFile(false);
+      });
   };
-  const handleConfirmData = () => {
+  const afterImportData = () => {
     // Lógica después de extraer los datos
     setIsModalOpen(false);
-    setFileUploading(false);
-    setHasFile(false);
-    setCamposFichaChecked(false);
-    setTablaDatosChecked(false);
     let activeTabValue: string;
     if (camposFichaChecked) {
       activeTabValue = '1';
@@ -80,35 +73,31 @@ const Importar = () => {
       activeTabValue = '1'; // Valor por defecto si ninguna opción está seleccionada
     }
     dispath(setActiveTab(activeTabValue));
-    setConfirmDialog(false);
   };
-  const getNewRange = (range: string) => {
-    const tempSelRange = decodeCellRange(range);
-    setRange(tempSelRange);
-  };
+
   const extractCamposFicha = () => {
     if (workbookFile) {
       if (camposFichaChecked) {
         const dataIndicator =
-          extractDataExcelService.getEstadisticaFieldsFichaTecnica(
+          fichaExcelService.getEstadisticaFieldsFichaTecnica(
             workbookFile,
-            1
+            camposFichaSheetIndex
           );
         dispath(setEstadisticaFields(dataIndicator));
       }
     }
   };
-  const extractTablaDatos = () => {
-    const sheetDataMap = extractDataExcelService.getSheetDataMap(
+  const extractTablaDatos = (range: CellRange) => {
+    const sheetDataMap = fichaExcelService.getSheetDataMap(
       workbookFile,
-      0
+      tablaDatosSheetIndex
     );
-    const newRange = extractDataExcelService.getHtmlCellsRange(
-      sheetDataMap,
-      range
+    const newRange = fichaExcelService.getHtmlCellsRange(sheetDataMap, range);
+    const sheetData = fichaExcelService.getCellsMatrix(newRange);
+    const data = fichaExcelService.extractDataFromFile(
+      workbookFile,
+      tablaDatosSheetIndex
     );
-    const sheetData = extractDataExcelService.getCellsMatrix(newRange);
-    const data = extractDataExcelService.extractDataFromFile(workbookFile, 0);
     // Combinar los datos de sheetData y data en un nuevo objeto EstadisticaDatos
     const combinedData: EstadisticaDatos = {
       tabla: sheetData, // Utilizar solo los datos de sheetData
@@ -120,34 +109,31 @@ const Importar = () => {
     dispath(setEstadisticaDatos(combinedData));
   };
   const handleOk = () => {
-    if (tablaDatosChecked && confirmDialog === false) {
-      handleConfirmRangoDatos();
+    if (tablaDatosChecked) {
+      showConfirmRangoDatos();
       return;
     }
-    if (camposFichaChecked && tablaDatosChecked) {
-      extractCamposFicha();
-      extractTablaDatos();
-      handleConfirmData();
-    }
-    if (camposFichaChecked) {
-      extractCamposFicha();
-      handleConfirmData();
-    }
-    if (tablaDatosChecked && confirmDialog) {
-      extractTablaDatos();
-      handleConfirmData();
-    }
+    doImportCamposFicha();
   };
 
-  const handleConfirmRangoDatos = () => {
+  const doImportCamposFicha = () => {
+    extractCamposFicha();
+    afterImportData();
+  };
+
+  const doImportTablaDatos = (range: CellRange) => {
+    extractTablaDatos(range);
+    afterImportData();
+  };
+
+  const showConfirmRangoDatos = () => {
     // Mostrar dialogo confirmar rango de datos
-    const sheetDataMap = extractDataExcelService.getSheetDataMap(
+    const sheetDataMap = fichaExcelService.getSheetDataMap(
       workbookFile,
-      0
+      tablaDatosSheetIndex
     );
-    const sheetData = extractDataExcelService.getCellsMatrix(sheetDataMap);
-    const rangoTablaDatos =
-      extractDataExcelService.getRangoTablaDatos(sheetDataMap);
+    const sheetData = fichaExcelService.getCellsMatrix(sheetDataMap);
+    const rangoTablaDatos = fichaExcelService.getRangoTablaDatos(sheetDataMap);
     confirmDataRangeDialogRef.current.open({
       data: sheetData,
       dataSelectionRange: rangoTablaDatos,
@@ -156,8 +142,7 @@ const Importar = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
-    setFileUploading(false);
-    setHasFile(false);
+    setReadingFile(false);
     setCamposFichaChecked(false); // Reiniciar estado de los checkboxes
     setTablaDatosChecked(false);
   };
@@ -168,11 +153,11 @@ const Importar = () => {
   };
   return (
     <>
-      <UploadFileButton
+      <SelectFileButton
         text={importButtonTitle}
         accept=".xlsx"
         onFileChange={handleFileChange}
-        uploading={fileUploading}
+        loading={readingFile}
       />
       <Modal
         title={importModalTitle}
@@ -195,46 +180,62 @@ const Importar = () => {
           </Button>,
         ]}
       >
-        <section className="mb-5">
-          {hasFile && (
-            <>
-              <div className="mb-2">
-                <span className="text-blue-500">
-                  Indicador detectado en la ficha
-                </span>
-                {titleIndicador && (
-                  <div className="mt-1 font-semibold">{titleIndicador}</div>
-                )}
-              </div>
-              <div className="">
-                <span className="text-blue-500">
-                  Selecciona los datos a importar
-                </span>
-                <div className="flex flex-col pl-4 gap-2 mt-1">
-                  <Checkbox
-                    checked={camposFichaChecked}
-                    onChange={() =>
-                      setCamposFichaChecked((checked) => !checked)
-                    }
-                  >
-                    Campos de ficha técnica
-                  </Checkbox>
-                  <Checkbox
-                    checked={tablaDatosChecked}
-                    onChange={() => setTablaDatosChecked((checked) => !checked)}
-                  >
-                    Tabla de datos
-                  </Checkbox>
-                </div>
-              </div>
-            </>
-          )}
-        </section>
+        <div className="my-5">
+          <span>Datos a incluir:</span>
+          <div className="mt-1">
+            <Checkbox
+              checked={tablaDatosChecked}
+              onChange={() => setTablaDatosChecked((checked) => !checked)}
+            >
+              Tabla de datos, desde la hoja:
+            </Checkbox>
+
+            <Select
+              value={tablaDatosSheetIndex}
+              disabled={!tablaDatosChecked}
+              style={{ width: '100px' }}
+              options={sheetNames.map((sheet, index) => ({
+                label: sheet,
+                value: index,
+              }))}
+              size="small"
+              onChange={(value) => {
+                setTablaDatosSheetIndex(value);
+                setCamposFichaSheetIndex(value + 1);
+              }}
+            ></Select>
+          </div>
+          <div className="mt-2">
+            <Checkbox
+              checked={camposFichaChecked}
+              onChange={() => setCamposFichaChecked((checked) => !checked)}
+            >
+              Campos de ficha técnica, desde la hoja:
+            </Checkbox>
+            <Select
+              value={camposFichaSheetIndex}
+              disabled={!camposFichaChecked}
+              style={{ width: '100px' }}
+              options={sheetNames.map((sheet, index) => ({
+                label: sheet,
+                value: index,
+              }))}
+              size="small"
+              onChange={(value) => {
+                setCamposFichaSheetIndex(value);
+              }}
+            ></Select>
+          </div>
+        </div>
       </Modal>
       <DataRangeConfirmDialog
         ref={confirmDataRangeDialogRef}
-        setConfirmDialog={setConfirmDialog}
-        onRange={getNewRange}
+        onConfirm={(range) => {
+          doImportTablaDatos(range);
+          if (camposFichaChecked) {
+            doImportCamposFicha();
+          }
+        }}
       />
     </>
   );

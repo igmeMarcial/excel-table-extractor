@@ -1,15 +1,22 @@
 import { useRef } from 'react';
-import PropTypes from 'prop-types';
 import { Button } from 'antd';
 import { ArrowImport24Regular } from '@fluentui/react-icons';
 
-function UploadFileButton({
+interface SelectFileButtonProps {
+  text: string;
+  loadingText?: string;
+  loading: boolean;
+  accept: string;
+  onFileChange: (file: File) => void;
+}
+
+function SelectFileButton({
   text,
-  uploadingText,
+  loadingText,
   accept,
-  uploading,
+  loading: uploading,
   onFileChange,
-}) {
+}: SelectFileButtonProps) {
   // File input element reference
   const fileInputRef = useRef(null);
 
@@ -22,7 +29,7 @@ function UploadFileButton({
   const onClickTrigger = () => {
     fileInputRef.current.click();
   };
-  console.warn('@Deprecated: UploadFileButton, use SelectFileButton instead.');
+
   return (
     <>
       <input
@@ -38,25 +45,10 @@ function UploadFileButton({
         icon={<ArrowImport24Regular className="w-5 align-middle" />}
         loading={uploading}
       >
-        {uploading ? uploadingText : text}
+        {uploading ? loadingText || text : text}
       </Button>
     </>
   );
 }
 
-UploadFileButton.propTypes = {
-  text: PropTypes.string,
-  uploadingText: PropTypes.string,
-  uploading: PropTypes.bool,
-  accept: PropTypes.string,
-  onFileChange: PropTypes.func,
-};
-UploadFileButton.defaultProps = {
-  text: 'Subir archivo',
-  uploading: false,
-  uploadingText: 'Subiendo...',
-  accept: '*',
-  onFileChange: () => {},
-};
-
-export default UploadFileButton;
+export default SelectFileButton;

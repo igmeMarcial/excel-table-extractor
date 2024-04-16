@@ -1,30 +1,31 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import FilesIndicadoresCell from './FilesIndicadoresCell';
-import ExtractDataExcelService from '../../services/ExtractDataExcelService';
+import fichaExcelService from '../../services/ExtractDataExcelService';
 
 interface MultipleFileUploaderProps {
-  setHasFiles:Dispatch<SetStateAction<boolean>>;
-  hasFiles:boolean;
-  onFiles:any;
+  setHasFiles: Dispatch<SetStateAction<boolean>>;
+  hasFiles: boolean;
+  onFiles: any;
 }
 const MultipleFileUploader: React.FC<MultipleFileUploaderProps> = ({
-  setHasFiles,hasFiles,onFiles
+  setHasFiles,
+  hasFiles,
+  onFiles,
 }) => {
-
   const [cellValues, setCellValues] = useState(null);
-  const extractDataExcelService = new ExtractDataExcelService();
 
   const handleFileChange = async (event) => {
-   
     const archivos = [...event.target.files];
     try {
       const newCellValues = [];
       for (const file of archivos) {
         try {
-          const workbook = await extractDataExcelService.readExcelFile(file);
+          const workbook = await fichaExcelService.getWorksbook(file);
           if (workbook) {
-            const cellValueTitle =
-              await extractDataExcelService.getNameIndicador(workbook, 1);
+            const cellValueTitle = await fichaExcelService.getNameIndicador(
+              workbook,
+              1
+            );
             newCellValues.push({ key: file.name, file: cellValueTitle });
           }
         } catch (err) {
@@ -33,7 +34,7 @@ const MultipleFileUploader: React.FC<MultipleFileUploaderProps> = ({
       }
       setCellValues(newCellValues);
       onFiles(archivos);
-      setHasFiles(true)
+      setHasFiles(true);
     } catch (err) {
       console.error('Error al procesar los archivos:', err);
     }

@@ -5,6 +5,7 @@ import { FichaTecnicaFields } from '../types/Estadistica';
 import { EstadisticaDatos } from '../types/EstadisticaDatos';
 import { CellRange } from '../types/CellRange';
 import { getSheetHtmlRows } from '../utils/xmls-utils';
+import { readExcelFile } from '../utils/file-utils';
 
 type HtmlCellsMatrix = HTMLTableCellElement[][];
 interface Sheet {
@@ -19,28 +20,23 @@ interface ResultObject {
 }
 //TODO: Fusionar models
 class ExtractDataExcelService {
-  //Get wor
-  readExcelFile(file: File): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        try {
-          const data = new Uint8Array(e.target!.result as ArrayBuffer);
-          const workbook = XLSX.read(data, { type: 'array' });
-          resolve(workbook);
-        } catch (error) {
-          reject(error);
-        }
-      };
-      reader.onerror = (error: ProgressEvent<FileReader>) => {
-        reject(error);
-      };
-      reader.readAsArrayBuffer(file);
-    });
+
+  private static _instance: ExtractDataExcelService;
+
+  public static getInstance() {
+    if (!ExtractDataExcelService._instance) {
+      ExtractDataExcelService._instance = new ExtractDataExcelService();
+    }
+    return ExtractDataExcelService._instance;
   }
-  //
+
+  // Returns a workbook object from an Excel file
+  getWorksbook(file: File): Promise<XLSX.WorkBook> {
+    return readExcelFile(file);
+  }
+
   getExcelSheetNames(file: File): Promise<string[]> {
-    return this.readExcelFile(file).then((workbook: XLSX.WorkBook) => {
+    return this.getWorksbook(file).then((workbook: XLSX.WorkBook) => {
       const sheetNames: string[] = workbook.SheetNames;
       return sheetNames;
     });
@@ -683,4 +679,4 @@ class ExtractDataExcelService {
   }
 }
 
-export default ExtractDataExcelService;
+export default ExtractDataExcelService.getInstance();
