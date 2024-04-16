@@ -21,9 +21,8 @@ import { resetPathUrl } from '../../../utils/url-utils';
 import { useSaveEstadisticaMutation } from '../../../app/services/estadistica';
 import Importar from './IndicadorEditorModalImport';
 
-const IndicadorEditorhHeader: React.FC = () => {
-  const navigate = useNavigate();
-
+const IndicadorEditorhHeader = () => {
+  const [isSaving, setIsSaving] = React.useState(false);
   const location = useLocation();
   const dispath = useAppDispatch();
   const titulo = useAppSelector(selectTitulo);
@@ -39,15 +38,10 @@ const IndicadorEditorhHeader: React.FC = () => {
     dispath(resetChanges());
   };
   const handleGuardarCambios = async () => {
-    if (hasChanges) {
-      await addEstadistica(postValues);
-      dispath(commitChanges());
-      // navigate(urlIndicadores);
-      dispath(setResetDefault());
-      alert('Cambios guardados correctamente');
-    } else {
-      alert('No hay cambios para guardar');
-    }
+    setIsSaving(true);
+    await addEstadistica(postValues);
+    dispath(commitChanges());
+    setIsSaving(false);
   };
   const urlIndicadores = resetPathUrl(location, 'indicadores');
   return (
@@ -79,8 +73,9 @@ const IndicadorEditorhHeader: React.FC = () => {
           disabled={!hasChanges}
           onClick={handleGuardarCambios}
           shape="round"
+          loading={isSaving}
         >
-          <span>Guardar</span>
+          <span>{isSaving ? 'Guardando ...' : 'Guardar'}</span>
         </Button>
       </div>
       <p className="block bg-custom-grey m-0 px-12 font-semibold text-sm pb-3 truncate">

@@ -6,7 +6,6 @@ import {
   selectEstadisticaDatos,
   selectEstadisticaIndicePath,
 } from '../app/AppSlice';
-import { Button } from '@fluentui/react-components';
 import IndicadorDataGrid from '../../src/components/DataTable';
 import { useRef } from 'react';
 import DowloadsButtons from './DowloadsButtons';

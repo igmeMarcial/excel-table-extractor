@@ -32,7 +32,7 @@ class EstadisticaController
             $id = $this->estadisticaService->registrarEstadistica($estadistica);
             $newRecord = $this->estadisticaService->getEstadistica($id);
             return [
-                'data' => $newRecord,
+                'data' => array_merge($data, $newRecord),
                 'status' => 'OK'
             ];
         } catch (\Throwable $th) {

@@ -76,7 +76,8 @@ class Schema
 
         return "
 CREATE TABLE {$tablePrefix}clasificador (
-    clasificador_id  INT(11) NOT NULL AUTO_INCREMENT,
+    clasificador_id     INT(11) NOT NULL AUTO_INCREMENT,
+    marco_ordenador_id  INT(11) NOT NULL,
     usuario_reg_id      INT(11) NOT NULL,
     usuario_mod_id      INT(11) NOT NULL,
     fecha_reg           DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
