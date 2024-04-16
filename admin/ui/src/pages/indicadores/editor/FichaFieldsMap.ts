@@ -18,6 +18,7 @@ export const FICHA_FIELDS_MAP: Record<string, string> = {
   correo_electronico: "correoElectronico",
   datos_del_contacto: "datosContacto",
   telefono_celular: "telefonoCelular",
+  clasificacion_mdea: "clasificacionMdea",
 };
 
 

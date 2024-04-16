@@ -116,6 +116,11 @@ export const ESTADISTICA_FIELDS_DEF: Record<string, FieldConfig> = {
     type: 'text',
     required: true,
   },
+  clasificacionMdea: {
+    label: 'Clasificación MDEA',
+    type: 'text',
+    required: true,
+  },
 };
 
 export const DATOS_FIELDS_DEF: Record<string, FieldConfig> = {

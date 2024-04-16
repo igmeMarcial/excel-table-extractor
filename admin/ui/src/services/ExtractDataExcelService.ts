@@ -671,6 +671,7 @@ class ExtractDataExcelService {
           }
         });
       }
+      console.log(resultObject);
       return resultObject;
     } catch (error) {
       console.log(error);
