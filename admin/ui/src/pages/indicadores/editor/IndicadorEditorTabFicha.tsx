@@ -112,18 +112,18 @@ const IndicadorEditorTabFicha: React.FC = () => {
     dispath(setEstadisticaFieldValue({ field: fiendName, value: +value }));
   };
   const getSubComponentes = () => {
-    return indiceClasificadores.getSubclasificadores(values.componenteId);
+    return indiceClasificadores.getSubclasificadores(values.clasificadorN1Id);
   };
   const getTemasEstadisticos = () => {
-    return indiceClasificadores.getSubclasificadores(values.subcomponenteId);
+    return indiceClasificadores.getSubclasificadores(values.clasificadorN2Id);
   };
   const getSelectFieldOptions = (fieldName: string) => {
     switch (fieldName) {
-      case 'componenteId':
+      case 'clasificadorN1Id':
         return indiceClasificadores.getItemsNivel1();
-      case 'subcomponenteId':
+      case 'clasificadorN2Id':
         return getSubComponentes();
-      case 'temaEstadisticoId':
+      case 'clasificadorN3Id':
         return getTemasEstadisticos();
       default:
         return [];

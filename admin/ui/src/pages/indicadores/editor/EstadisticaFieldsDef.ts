@@ -1,3 +1,5 @@
+import { Estadistica } from "../../../types/Estadistica";
+
 type FieldType = 'select' | 'text' | 'url' | 'email' | 'textarea' | 'table';
 
 interface FieldConfig {
@@ -7,18 +9,20 @@ interface FieldConfig {
   vtype?: 'url' | 'email';
 }
 
-export const ESTADISTICA_FIELDS_DEF: Record<string, FieldConfig> = {
-  componenteId: {
+export const ESTADISTICA_FIELDS_DEF: {
+  [K in keyof Estadistica]?: FieldConfig
+} = {
+  clasificadorN1Id: {
     label: 'Componente',
     type: 'select',
     required: true,
   },
-  subcomponenteId: {
+  clasificadorN2Id: {
     label: 'Sub componente',
     type: 'select',
     required: true,
   },
-  temaEstadisticoId: {
+  clasificadorN3Id: {
     label: 'Tema estadístico',
     type: 'select',
     required: true,
@@ -113,11 +117,6 @@ export const ESTADISTICA_FIELDS_DEF: Record<string, FieldConfig> = {
   },
   telefonoCelular: {
     label: 'Teléfono/celular',
-    type: 'text',
-    required: true,
-  },
-  clasificacionMdea: {
-    label: 'Clasificación MDEA',
     type: 'text',
     required: true,
   },

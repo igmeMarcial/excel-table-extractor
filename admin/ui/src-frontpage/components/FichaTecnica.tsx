@@ -2,19 +2,15 @@ import { useEffect, useState } from 'react';
 import { Button } from '@fluentui/react-components';
 import { useAppSelector } from '../app/hooks';
 import { selectEstadisticaData } from '../app/AppSlice';
+import { Estadistica } from '../../src/types/Estadistica';
 
-const apiMap = {
+const apiMap: {
+  [K in keyof Estadistica]?: any;
+} = {
   id: 1,
-  componenteId: 1,
-  subcomponenteId: 1,
-  temaEstadisticoId: 1,
-  usuarioRegId: 0,
-  usuarioModId: 0,
-  fechaReg: 0,
-  fechaMod: 0,
-  activo: true,
-  archivado: false,
-  eliminado: false,
+  clasificadorN1Id: 1,
+  clasificadorN2Id: 1,
+  clasificadorN3Id: 1,
   nombre: 'Nombre del indicador o estadística ambiental',
   finalidad: 'Finalidad',
   descripcion: 'Descripción/Definición',

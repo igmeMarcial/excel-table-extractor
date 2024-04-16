@@ -73,11 +73,16 @@ abstract class BaseModel
             if (!array_key_exists($fieldName, $data)) {
                 continue;
             }
+            // By default, we persist the field
+            $persist = $fieldDef['persist'] ?? true;
+            // Persist is false, so we don't include this field in the query
+            if (!$persist) {
+                continue;
+            }
             $column = $fieldDef['column'] ?? $fieldName;
             $value = $data[$fieldName];
             if ($fieldDef['type'] === DataTypes::ARRAY) {
-                $out[$column] = json_encode($value);
-                continue;
+                $value = json_encode($value);
             }
             $out[$column] = $value;
         }
@@ -105,14 +110,28 @@ abstract class BaseModel
 
     public function getSqlColumnNamesString(): string
     {
+        $persistedFields = $this->getPersistedFields();
         $columns = array_map(function ($fieldName, $fieldDef) {
             $column = $fieldDef['column'] ?? $fieldName;
+            // If the column name is the same as the field name, we don't need to alias it
             if ($column === $fieldName) {
                 return $column;
             }
             return "$column AS $fieldName";
-        }, array_keys($this->fields), $this->fields);
+        }, array_keys($persistedFields), $persistedFields);
 
         return implode(', ', $columns);
+    }
+
+    private function getPersistedFields(): array
+    {
+        $out = [];
+        foreach ($this->fields as $fieldName => $fieldDef) {
+            $persist = $fieldDef['persist'] ?? true;
+            if ($persist) {
+                $out[$fieldName] = $fieldDef;
+            }
+        }
+        return $out;
     }
 }

@@ -199,7 +199,7 @@ export const {
 
 export const selectHasChanges = (state: RootState) => state.estadisticaForm.hasChanges;
 export const selectTitulo = (state: RootState) => state.estadisticaForm.titulo;
-export const selectEstadisticaFields = (state: RootState) => state.estadisticaForm.estadisticaRawModel;
+export const selectEstadisticaFields = (state: RootState): Estadistica => state.estadisticaForm.estadisticaRawModel;
 export const selectEstadisticaDataFields = (state: RootState) => state.estadisticaForm.estadisticaRawModel.datos;
 export const selectIsCreationMode = (state: RootState) => state.estadisticaForm.isCreationMode;
 export const selectActiveTab = (state: RootState) => state.estadisticaForm.activeTab;

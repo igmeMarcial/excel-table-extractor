@@ -3,6 +3,7 @@
 namespace Aesa\Model;
 
 use Aesa\Core\DataTypes;
+
 class Estadistica extends BaseModel
 {
     protected $fields = [
@@ -25,6 +26,18 @@ class Estadistica extends BaseModel
         'fechaMod' => [
             'type' => DataTypes::INTEGER,
             'column' => 'fecha_mod',
+        ],
+        'clasificadorN1Id' => [
+            'type' => DataTypes::INTEGER,
+            'persist' => false,
+        ],
+        'clasificadorN2Id' => [
+            'type' => DataTypes::INTEGER,
+            'persist' => false,
+        ],
+        'clasificadorN3Id' => [
+            'type' => DataTypes::INTEGER,
+            'persist' => false,
         ],
         'activo' => [
             'type' => DataTypes::BOOLEAN,
@@ -124,4 +137,20 @@ class Estadistica extends BaseModel
             'column' => 'parametros_publicacion',
         ],
     ];
+
+    // Getters
+    public function getClasificadorN1Id(): int
+    {
+        return $this->getFieldValue('clasificadorN1Id');
+    }
+
+    public function getClasificadorN2Id(): int
+    {
+        return $this->getFieldValue('clasificadorN2Id');
+    }
+
+    public function getClasificadorN3Id(): int
+    {
+        return $this->getFieldValue('clasificadorN3Id');
+    }
 }

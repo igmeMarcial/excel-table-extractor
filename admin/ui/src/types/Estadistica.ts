@@ -4,9 +4,9 @@ import { EstadisticaDatos } from './EstadisticaDatos';
 
 export interface EstadisticaBaseFields {
   id?: number;
-  componenteId?: number;
-  subcomponenteId?: number;
-  temaEstadisticoId?: number;
+  clasificadorN1Id?: number;
+  clasificadorN2Id?: number;
+  clasificadorN3Id?: number;
 }
 export interface FichaTecnicaFields {
   nombre?: string;

@@ -28,7 +28,33 @@ class EstadisticaService
         if (!$sucess) {
             throw new \Exception($this->wpdb->last_error);
         }
-        return $this->wpdb->insert_id;
+        $newId = $this->wpdb->insert_id;
+        $model->setId($newId);
+        // Classificador N1
+        $sucess2 = $this->wpdb->insert(
+            $this->dbMap->estaClasN1,
+            ['estadistica_id' => $newId, 'clasificador_id' => $model->getClasificadorN1Id()]
+        );
+        if (!$sucess2) {
+            throw new \Exception($this->wpdb->last_error);
+        }
+        // Classificador N2
+        $sucess3 = $this->wpdb->insert(
+            $this->dbMap->estaClasN2,
+            ['estadistica_id' => $newId, 'clasificador_id' => $model->getClasificadorN2Id()]
+        );
+        if (!$sucess3) {
+            throw new \Exception($this->wpdb->last_error);
+        }
+        // Classificador N3
+        $sucess4 = $this->wpdb->insert(
+            $this->dbMap->estaClasN3,
+            ['estadistica_id' => $newId, 'clasificador_id' => $model->getClasificadorN3Id()]
+        );
+        if (!$sucess4) {
+            throw new \Exception($this->wpdb->last_error);
+        }
+        return $newId;
     }
     public function actualizarEstadistica(array $data, int $id)
     {
@@ -50,7 +76,7 @@ class EstadisticaService
                 INNER JOIN {$this->dbMap->estaClasN1} B ON A.estadistica_id = B.estadistica_id
                 INNER JOIN {$this->dbMap->clasificador} C ON B.clasificador_id = C.clasificador_id";
 
-        // Ejecutar la consulta test 
+        // Ejecutar la consulta test
         $results = $this->wpdb->get_results($sql, ARRAY_A);
         error_log(json_encode($results));
 
