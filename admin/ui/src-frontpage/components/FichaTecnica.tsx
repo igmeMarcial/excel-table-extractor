@@ -35,7 +35,6 @@ const apiMap: {
   datosContacto: 'Datos del contacto',
   telefonoCelular: 'Teléfono/celular',
   datos: null,
-  parametrosPublicacion: null,
 };
 
 function FichaTecnica() {

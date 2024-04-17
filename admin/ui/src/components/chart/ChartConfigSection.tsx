@@ -1,5 +1,5 @@
 import ChartTypeSelect from './ChartTypeSelect';
-import ConfigSection from './ConfigSection';
+import ConfigSection from '../ConfigSection';
 import LabelDecimalsEditor from './LabelDecimalsEditor';
 import ShowLabelsSwitch from './ShowLabelsSwitch';
 import ShowLegendSwitch from './ShowLegendSwitch';

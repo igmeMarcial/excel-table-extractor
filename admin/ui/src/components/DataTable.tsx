@@ -8,21 +8,26 @@ import {
 import { CELL_POSITION_BODY, CELL_POSITION_HEADER, Cell } from '../types/Cell';
 import { numberFormat } from '../utils/numberFormat';
 
+interface TableFormatProps {
+  color?: string;
+  decimals?: number;
+}
 interface DataTableProps {
   data: Cell[][];
-  color: string;
+  format?: TableFormatProps;
 }
 
 function renderCell(
   cell: Cell,
   rowIndex: number,
   colIndex: number,
-  color: string,
+  format: TableFormatProps,
   indexCount
 ) {
   const { v: value, t: type, p: position } = cell || {};
-
-  let cellStyle = {
+  format = format || {};
+  const color = format.color || '';
+  let cellStyle: React.CSSProperties = {
     backgroundColor: '#fff',
     color: '#000',
     borderColor: chroma(color).alpha(0.7).css() || DT_TABLA_DATOS_BORDER_COLOR,
@@ -38,13 +43,16 @@ function renderCell(
     cellStyle.color = '#fff';
     cellStyle.borderColor = color || DT_TABLA_DATOS_BORDER_COLOR_HEADER;
     cellStyle.fontWeight = 'bold';
+    cellStyle.textAlign = colIndex === 0 ? 'left' : 'center';
   }
   const className =
     type === 'n' && position === CELL_POSITION_BODY
       ? 'text-end whitespace-nowrap' // Aliniación a la derecha para números
       : 'text-start whitespace-nowrap';
   const formattedValue =
-    type === 'n' && position === 'b' ? numberFormat(value as number) : value;
+    type === 'n' && position === 'b'
+      ? numberFormat(value as number, format.decimals)
+      : value;
   return (
     <td
       style={{
@@ -66,17 +74,17 @@ function renderCell(
     </td>
   );
 }
-const renderDataTableRows = (itemRow: Cell[], rowIndex, color: string) => {
+const renderDataTableRows = (itemRow: Cell[], rowIndex, format) => {
   return (
     <tr key={`C${itemRow}-F${rowIndex}`}>
       {itemRow.map((cell, colIndex) =>
-        renderCell(cell, 0, colIndex, color, rowIndex)
+        renderCell(cell, 0, colIndex, format, rowIndex)
       )}
     </tr>
   );
 };
 
-const DataTable = ({ data, color }: DataTableProps) => {
+const DataTable = ({ data, format }: DataTableProps) => {
   const [hasScrollbar, setHasScrollbar] = useState(false);
   const tableWrapperRef = useRef(null);
   // Actualiza el estado hasScrollbar si hay scroll horizontal
@@ -105,8 +113,9 @@ const DataTable = ({ data, color }: DataTableProps) => {
       style={{
         borderWidth: hasScrollbar ? '1px' : '0',
         borderStyle: hasScrollbar ? 'solid' : 'none',
-        borderColor:
-          chroma(color).alpha(0.7).css() || DT_TABLA_DATOS_BORDER_COLOR,
+        borderColor: format.color
+          ? chroma(format.color).alpha(0.7).css() || DT_TABLA_DATOS_BORDER_COLOR
+          : DT_TABLA_DATOS_BORDER_COLOR,
       }}
       ref={tableWrapperRef}
     >
@@ -120,7 +129,7 @@ const DataTable = ({ data, color }: DataTableProps) => {
       >
         <tbody>
           {data.map((itemRow, rowIndex) =>
-            renderDataTableRows(itemRow, rowIndex, color)
+            renderDataTableRows(itemRow, rowIndex, format)
           )}
         </tbody>
       </table>

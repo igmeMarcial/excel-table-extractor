@@ -61,7 +61,29 @@ class EstadisticaService
 
         $model = new Estadistica($data);
         $model->setId($id);
-        $this->wpdb->update($this->dbMap->estadistica, $model->getDataForDbQuery(), ['estadistica_id' => $id]);
+        $this->wpdb->update(
+            $this->dbMap->estadistica,
+            $model->getDataForDbQuery(),
+            ['estadistica_id' => $id]
+        );
+        // Classificador N1
+        $this->wpdb->update(
+            $this->dbMap->estaClasN1,
+            ['clasificador_id' => $model->getClasificadorN1Id()],
+            ['estadistica_id' => $id]
+        );
+        // Classificador N2
+        $this->wpdb->update(
+            $this->dbMap->estaClasN2,
+            ['clasificador_id' => $model->getClasificadorN2Id()],
+            ['estadistica_id' => $id]
+        );
+        // Classificador N3
+        $this->wpdb->update(
+            $this->dbMap->estaClasN3,
+            ['clasificador_id' => $model->getClasificadorN3Id()],
+            ['estadistica_id' => $id]
+        );
     }
     // TODO: corregir mdeaComponenteNombre no está listando el nombre del componente sino del clasificador
     public function getListaEstadisticas()
