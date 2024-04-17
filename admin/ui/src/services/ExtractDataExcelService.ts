@@ -1,6 +1,12 @@
 import * as XLSX from 'xlsx';
 import { FICHA_FIELDS_MAP } from '../pages/indicadores/editor/FichaFieldsMap';
-import { CellPosition, CELL_POSITION_BODY, CELL_POSITION_HEADER, CELL_VALUE_TYPE_STRING, Cell } from '../types/Cell';
+import {
+  CellPosition,
+  CELL_POSITION_BODY,
+  CELL_POSITION_HEADER,
+  CELL_VALUE_TYPE_STRING,
+  Cell,
+} from '../types/Cell';
 import { FichaTecnicaFields } from '../types/Estadistica';
 import { EstadisticaDatos } from '../types/EstadisticaDatos';
 import { CellRange } from '../types/CellRange';
@@ -20,7 +26,6 @@ interface ResultObject {
 }
 //TODO: Fusionar models
 class ExtractDataExcelService {
-
   private static _instance: ExtractDataExcelService;
 
   public static getInstance() {
@@ -42,7 +47,10 @@ class ExtractDataExcelService {
     });
   }
   //
-  extractDataFromFile(workbook: XLSX.WorkBook, sheetIndex: number): EstadisticaDatos {
+  extractDataFromFile(
+    workbook: XLSX.WorkBook,
+    sheetIndex: number
+  ): EstadisticaDatos {
     try {
       const sheetName: string = workbook.SheetNames[sheetIndex];
       const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
@@ -58,26 +66,26 @@ class ExtractDataExcelService {
       const transformedSheetData: EstadisticaDatos = {
         nombre: contentCellTitle
           ? contentCellTitle.separatedContent ||
-          contentCellTitle.description ||
-          ''
+            contentCellTitle.description ||
+            ''
           : '',
         nota: contentCellNote
           ? contentCellNote.separatedContent ||
-          contentCellNote.nextCell?.v ||
-          contentCellNote.cell?.v ||
-          ''
+            contentCellNote.nextCell?.v ||
+            contentCellNote.cell?.v ||
+            ''
           : '',
         fuente: contentCellFuente
           ? contentCellFuente.separatedContent ||
-          contentCellFuente.nextCell?.v ||
-          contentCellFuente.cell?.v ||
-          ''
+            contentCellFuente.nextCell?.v ||
+            contentCellFuente.cell?.v ||
+            ''
           : '',
         elaboracion: contentCellElaboration
           ? contentCellElaboration.separatedContent ||
-          contentCellElaboration.nextCell?.v ||
-          contentCellElaboration.cell?.v ||
-          ''
+            contentCellElaboration.nextCell?.v ||
+            contentCellElaboration.cell?.v ||
+            ''
           : '',
         tabla: tableData,
       };
@@ -249,7 +257,7 @@ class ExtractDataExcelService {
         const colSpan = +td.getAttribute('colspan') || 1;
         const rowSpan = +td.getAttribute('rowspan') || 1;
         let value: string | number = td.getAttribute('data-v') || '';
-        const type = td.getAttribute('data-t') as ('n' | 's') || 's';
+        const type = (td.getAttribute('data-t') as 'n' | 's') || 's';
         // Parse value to number if type is number
         if (type === 'n') {
           value = +value;
@@ -260,7 +268,7 @@ class ExtractDataExcelService {
           c: colIndex,
           p: cellPostion,
           t: type,
-        }
+        };
         // Añade colspan y rowspan si son mayores a 1
         if (colSpan > 1) {
           dataCell.s = colSpan;
@@ -289,10 +297,10 @@ class ExtractDataExcelService {
       const rowData: Cell[] = [];
       const cellPostion = this.getRowPosition(row, rowIndex);
       row.forEach((td) => {
-        const colSpan = +(td?.getAttribute('colspan')) || 1;
-        const rowSpan = +(td?.getAttribute('rowspan')) || 1;
+        const colSpan = +td?.getAttribute('colspan') || 1;
+        const rowSpan = +td?.getAttribute('rowspan') || 1;
         let value: string | number = td?.getAttribute('data-v') || '';
-        const type = td?.getAttribute('data-t') as ('n' | 's') || 's';
+        const type = (td?.getAttribute('data-t') as 'n' | 's') || 's';
         // Parse value to number if type is number
         if (type === 'n') {
           value = +value;
@@ -303,7 +311,7 @@ class ExtractDataExcelService {
           c: colIndex,
           p: cellPostion,
           t: type,
-        }
+        };
         // Añade colspan y rowspan si son mayores a 1
         if (colSpan > 1) {
           dataCell.s = colSpan;
@@ -321,22 +329,22 @@ class ExtractDataExcelService {
   getRowPosition(row: HTMLTableCellElement[], rowIndex): CellPosition {
     // Header row
     if (this.isHederRow(row, rowIndex)) {
-      return CELL_POSITION_HEADER
+      return CELL_POSITION_HEADER;
     }
     // Footer row
     if (this.isFooterRow(row, rowIndex)) {
-      return CELL_POSITION_BODY
+      return CELL_POSITION_BODY;
     }
     // Body row
-    return CELL_POSITION_BODY
+    return CELL_POSITION_BODY;
   }
   isHederRow(row: HTMLTableCellElement[], rowIndex): boolean {
     if (rowIndex === 0) {
-      return true
+      return true;
     }
     return row.every((cell) => {
-      return cell?.getAttribute('data-t') === CELL_VALUE_TYPE_STRING
-    })
+      return cell?.getAttribute('data-t') === CELL_VALUE_TYPE_STRING;
+    });
   }
   // Función para determinar si una fila es el pie de página de la tabla
   // Condiciones:
@@ -347,36 +355,46 @@ class ExtractDataExcelService {
     });
   }
   getHtmlTablaDatos(rows: HtmlCellsMatrix): HtmlCellsMatrix {
-    const rango = this.getRangoTablaDatos(rows)
-    return this.getHtmlCellsRange(rows, rango)
+    const rango = this.getRangoTablaDatos(rows);
+    return this.getHtmlCellsRange(rows, rango);
   }
 
   getHtmlCellsRange(rows: HtmlCellsMatrix, range: CellRange): HtmlCellsMatrix {
-    let out = []
+    let out = [];
     const { start, end } = range;
     for (let i = start.rowIndex; i <= end.rowIndex; i++) {
-      const outRow = []
+      const outRow = [];
       for (let j = start.colIndex; j <= end.colIndex; j++) {
-        const cell = rows[i][j]
+        const cell = rows[i][j];
         if (cell) {
           const { rowIndex, colIndex } = this.getCellCoordinates(cell);
           if (i === rowIndex && j === colIndex) {
-            outRow.push(cell)
+            outRow.push(cell);
           }
         }
       }
-      out.push(outRow)
+      out.push(outRow);
     }
-    return out
+    return out;
   }
-  setDataMapValues(map: any[][], value: any, rowIndex: number, colIndex: number, rows: number = 1, cols: number = 1) {
+  setDataMapValues(
+    map: any[][],
+    value: any,
+    rowIndex: number,
+    colIndex: number,
+    rows: number = 1,
+    cols: number = 1
+  ) {
     for (let i = rowIndex; i < rowIndex + rows; i++) {
       for (let j = colIndex; j < colIndex + cols; j++) {
         map[i][j] = value;
       }
     }
   }
-  cellAddressToCoordinates(cellAddress: string): { rowIndex: number, colIndex: number } {
+  cellAddressToCoordinates(cellAddress: string): {
+    rowIndex: number;
+    colIndex: number;
+  } {
     const colLetter = cellAddress.match(/[A-Z]+/g)[0];
     const rowNumber = cellAddress.match(/[0-9]+/g)[0];
     const colIndex = XLSX.utils.decode_col(colLetter);
@@ -409,13 +427,24 @@ class ExtractDataExcelService {
         const colSpan = +td.getAttribute('colspan') || 1;
         const rowSpan = +td.getAttribute('rowspan') || 1;
         const cellAddress = td.getAttribute('id').replace('sjs-', '');
-        const { rowIndex, colIndex } = this.cellAddressToCoordinates(cellAddress);
-        this.setDataMapValues(cellsDataMap, td, rowIndex, colIndex, rowSpan, colSpan);
-      })
-    })
+        const { rowIndex, colIndex } =
+          this.cellAddressToCoordinates(cellAddress);
+        this.setDataMapValues(
+          cellsDataMap,
+          td,
+          rowIndex,
+          colIndex,
+          rowSpan,
+          colSpan
+        );
+      });
+    });
     return cellsDataMap;
   }
-  getSheetDataMap(workbook: XLSX.WorkBook, sheetIndex: number): HtmlCellsMatrix {
+  getSheetDataMap(
+    workbook: XLSX.WorkBook,
+    sheetIndex: number
+  ): HtmlCellsMatrix {
     const sheetName: string = workbook.SheetNames[sheetIndex];
     const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
     const rows = getSheetHtmlRows(sheet);
@@ -431,7 +460,7 @@ class ExtractDataExcelService {
     rows.forEach((tr, i) => {
       const notEmpty = tr.filter((td) => this.isNotEmptyCell(td));
       const totalNotEmptyCells = notEmpty.length;
-      const totalUniqueCells = (new Set(notEmpty)).size;
+      const totalUniqueCells = new Set(notEmpty).size;
 
       // Verificar si el número de columnas es igual al número máximo de columnas con datos
       // y si el índice de la fila de inicio aún no se ha establecido
@@ -471,11 +500,19 @@ class ExtractDataExcelService {
         }
       }
       // Se considera como columna de inicio la primera columna que tenga datos en todas las filas
-      if (totalNotEmptyCell === endRowIndex - startRowIndex + 1 && startColIndex === -1 && uniqueCells.size > 1) {
+      if (
+        totalNotEmptyCell === endRowIndex - startRowIndex + 1 &&
+        startColIndex === -1 &&
+        uniqueCells.size > 1
+      ) {
         startColIndex = colIndex;
       }
       // Se considera como columna de fin la última columna que tenga datos en todas las filas
-      if (totalNotEmptyCell === endRowIndex - startRowIndex + 1 && startColIndex !== -1 && uniqueCells.size > 1) {
+      if (
+        totalNotEmptyCell === endRowIndex - startRowIndex + 1 &&
+        startColIndex !== -1 &&
+        uniqueCells.size > 1
+      ) {
         endColIndex = colIndex;
       }
     }
@@ -486,8 +523,8 @@ class ExtractDataExcelService {
       },
       end: {
         rowIndex: endRowIndex,
-        colIndex: endColIndex
-      }
+        colIndex: endColIndex,
+      },
     };
   }
   getMaxDataColums(rows: HtmlCellsMatrix): number {
@@ -535,7 +572,10 @@ class ExtractDataExcelService {
   getCellAddress(cell: HTMLTableCellElement): string {
     return cell.getAttribute('id').replace('sjs-', '');
   }
-  getCellCoordinates(cell: HTMLTableCellElement): { rowIndex: number, colIndex: number } {
+  getCellCoordinates(cell: HTMLTableCellElement): {
+    rowIndex: number;
+    colIndex: number;
+  } {
     const cellAddress = this.getCellAddress(cell);
     return this.cellAddressToCoordinates(cellAddress);
   }
@@ -592,21 +632,35 @@ class ExtractDataExcelService {
   ): FichaTecnicaFields {
     try {
       const sheetName = workbook.SheetNames[sheetIndex];
+      // console.log(sheetName)
       const sheet = workbook.Sheets[sheetName];
+      let test = 0;
+      //Prueba del metodo
+      this.getEstadisticaFieldsFichaTecnic(workbook, sheetIndex);
+      // console.log(sheet)
       const range = XLSX.utils.decode_range(sheet['!ref']);
+      // console.log(range)
       const resultObject: ResultObject = {};
       let result: string[][] = [];
       let combinedData: string[] = [];
       const { rowIndex } = this.getNameIndicador(workbook, sheetIndex);
       let start = rowIndex || 3; //range.s.r
-      for (let rowNum = start; rowNum <= range.e.r; rowNum++) {
+      let end = range.e.r || 999;
+      for (let rowNum = start; rowNum <= end; rowNum++) {
+        // console.log(rowNum)
         let rowHasPattern = false;
         let rowData: string[] = [];
         for (let colNum = range.s.c; colNum <= range.e.c; colNum++) {
+          // console.log(colNum)
+          test++;
+          // console.log("==0>" + test)
           let cellAddress = XLSX.utils.encode_cell({ r: rowNum, c: colNum });
           let cellValue = sheet[cellAddress] ? sheet[cellAddress].w : '';
+          // console.log(cellAddress)
+          // console.log(cellValue)
           if (cellValue.trim().length > 0) {
             rowData.push(cellValue);
+            // console.log(cellValue)
             rowHasPattern = true;
           }
         }
@@ -617,6 +671,7 @@ class ExtractDataExcelService {
         if (rowHasPattern) {
           if (rowData.length > 1) {
             if (combinedData.length > 0) {
+              // console.log(combinedData)
               result.push(combinedData); // Agrega datos combinados previamente almacenados al resultado
               combinedData = []; // Reinicia combinedData
             }
@@ -627,6 +682,7 @@ class ExtractDataExcelService {
         }
       }
       if (combinedData.length > 0) {
+        // console.log(combinedData)
         result.push(combinedData);
       }
 
@@ -654,6 +710,7 @@ class ExtractDataExcelService {
 
       if (result && result.length > 0) {
         result.forEach((row) => {
+          // console.log(row)
           const firstNonNumberValue = row.find((value) => isNaN(Number(value)));
           if (typeof firstNonNumberValue === 'string') {
             const snakeCaseKey = toSnakeCase(firstNonNumberValue);
@@ -671,12 +728,105 @@ class ExtractDataExcelService {
           }
         });
       }
-      console.log(resultObject);
+      // console.log(resultObject);
       return resultObject;
     } catch (error) {
       console.log(error);
       throw error;
     }
+  }
+  getEstadisticaFieldsFichaTecnic(workbook: XLSX.WorkBook, sheetIndex: number) {
+    const sheetName: string = workbook.SheetNames[sheetIndex];
+    const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
+    const htmlRows = getSheetHtmlRows(sheet);
+    const cellMap = this.createCellsDataMap(htmlRows);
+    const calculateSimilarity = (str1, str2) => {
+      const len = Math.min(str1.length, str2.length);
+      let commonChars = 0;
+      for (let i = 0; i < len; i++) {
+        if (str1[i] === str2[i]) {
+          commonChars++;
+        }
+      }
+      return commonChars / len;
+    };
+    const removeAccents = (string) => {
+      return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    };
+
+    const toSnakeCase = (string) => {
+      return removeAccents(string)
+        .replace(/[^a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ]+/g, '_')
+        .replace(/^(?:_+|_+)$/g, '')
+        .toLowerCase();
+    };
+    const out: Cell[][] = [];
+    cellMap.forEach((row, rowIndex) => {
+      let colIndex = 0;
+      const rowData: Cell[] = [];
+      const cellPostion = this.getRowPosition(row, rowIndex);
+      row.forEach((td) => {
+        if (td !== null) {
+          const colSpan = +td.getAttribute('colspan') || 1;
+          const rowSpan = +td.getAttribute('rowspan') || 1;
+          let value: string | number = td.getAttribute('data-v') || '';
+          const type = (td.getAttribute('data-t') as 'n' | 's') || 's';
+          // Parse value to number if type is number
+          if (type === 'n') {
+            value = +value;
+          }
+          const dataCell: Cell = {
+            v: value,
+            r: rowIndex,
+            c: colIndex,
+            p: cellPostion,
+            t: type,
+          };
+          // Añade colspan y rowspan si son mayores a 1
+          if (colSpan > 1) {
+            dataCell.s = colSpan;
+          }
+          if (rowSpan > 1) {
+            dataCell.rs = rowSpan;
+          }
+          if (
+            (typeof dataCell.v === 'number' && !isNaN(dataCell.v)) ||
+            (typeof dataCell.v === 'string' && dataCell.v.trim() !== '')
+          ) {
+            rowData.push(dataCell);
+            colIndex += colSpan;
+          }
+        }
+      });
+      out.push(rowData);
+    });
+    const resultMap = {};
+    out.forEach((row) => {
+      row.forEach((cell, index) => {
+        const snakeCaseKey = toSnakeCase(cell.v.toString());
+        const matchedKey = Object.keys(FICHA_FIELDS_MAP).find((key) => {
+          const camelCaseKey = toSnakeCase(key);
+          const similarity = calculateSimilarity(snakeCaseKey, camelCaseKey);
+          return similarity >= 0.5;
+        });
+        if (matchedKey) {
+          const nextIndex = index + 1;
+          if (nextIndex < row.length) {
+            const nextCell = row[nextIndex];
+            const newValue = nextCell.v;
+            const resultMapKey = FICHA_FIELDS_MAP[matchedKey];
+            if (!resultMap.hasOwnProperty(resultMapKey)) {
+              // Si no existe, inicializarla con el nuevo valor
+              resultMap[resultMapKey] = `${newValue}`;
+            } else {
+              // Si existe, concatenar el nuevo valor al valor existente
+              resultMap[resultMapKey] += `, ${newValue}`;
+            }
+          }
+        }
+      });
+    });
+    console.log(resultMap);
   }
 }
 

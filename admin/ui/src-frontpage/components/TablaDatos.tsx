@@ -17,7 +17,7 @@ const TablaDatos = () => {
   const colorComponent = useAppSelector(selectColorComponent);
   const compo = useAppSelector(selectComponenteIndicePath);
   const sub = useAppSelector(selectEstadisticaIndicePath);
-  const { fuente, elaboracion, nota, nombre } = data?.datos || {}; //tabla
+  const { fuente, elaboracion, nota, nombre, tabla } = data?.datos || {}; //tabla
 
   const downloadAreaContainer = useRef(null);
   const base64 = (s) => window.btoa(unescape(encodeURIComponent(s)));
@@ -37,9 +37,48 @@ const TablaDatos = () => {
   const downloadXlsx = () => {
     download(downloadAreaContainer.current, 'descarga.xlsx');
   };
+  const downloadCsv = () => {
+    // const csvContent = tabla
+    //   .map((row) => row.map((cell) => cell.v).join(','))
+    //   .join('\n');
+
+    // const csvData = tabla.map((row) => row.map((cell) => cell.v));
+    // console.log(csvData);
+    const csvData = tabla.map((row) => row.map((cell) => cell.v));
+
+    // Convertir csvData en formato CSV
+    const separator = ';'; // Separador de valores en CSV
+    const csvContent = csvData.map((row) => row.join(separator)).join('\n');
+
+    // Descargar el archivo CSV
+    const filename = 'exported_data.csv'; // Nombre del archivo CSV
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+    // Crear el enlace de descarga y simular el clic para descargar el archivo
+    //  const link = document.createElement('a');
+    //  if (link.download !== undefined) {
+    //    // Browsers que soportan el atributo 'download' de HTML5
+    //    const url = URL.createObjectURL(blob);
+    //    link.setAttribute('href', url);
+    //    link.setAttribute('download', filename);
+    //    link.style.visibility = 'hidden';
+    //    document.body.appendChild(link);
+    //    link.click();
+    //    document.body.removeChild(link);
+    //  } else if (navigator.msSaveBlob) {
+    //    // Para IE 10+
+    //    navigator.msSaveBlob(blob, filename);
+    //  } else {
+    //    // No se puede descargar el archivo
+    //    console.error('Descarga de archivos no soportada en este navegador.');
+    //  }
+  };
   const onDownload = (format: string) => {
     if (format === 'xlsx') {
       downloadXlsx();
+    }
+    if (format === 'csv') {
+      downloadCsv();
     }
   };
 

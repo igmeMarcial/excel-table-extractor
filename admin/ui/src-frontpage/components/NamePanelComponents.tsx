@@ -47,7 +47,6 @@ const NamePanelComponents: React.FC<NamePanelProps> = ({ colors }) => {
   const clasificadoresN1 = useAppSelector(selectClasificadoresNivel1);
   const numItemActivo = useAppSelector(selectComponenteIndicePath);
   const distpath = useAppDispatch();
-  console.log('Componente cargado ========');
 
   const handleClick = (color: string) => {
     distpath(setColorComponent(color));
