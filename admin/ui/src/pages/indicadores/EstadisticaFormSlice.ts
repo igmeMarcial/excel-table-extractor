@@ -11,6 +11,7 @@ import fieldValidationsHelper from '../../helpers/FieldValidationsHelper';
 import { Cell } from '../../types/Cell';
 import { ValidationError } from '../../types/ValidationError';
 import { Grafico } from '../../types/Grafico';
+import { PresentacionTabla } from '../../types/PresentacionTabla';
 
 const estadisticaDefaultModel: Estadistica = {
   datos: {
@@ -19,7 +20,8 @@ const estadisticaDefaultModel: Estadistica = {
   datosInformacion: {},
   graficos: [
     {}
-  ]
+  ],
+  presentacionTabla: {}
 }
 
 const initialState: EstadisticaFormState = {
@@ -165,6 +167,15 @@ export const estadisticaFormSlice = createSlice({
     setValidationErrors: (state, action: PayloadAction<Record<string, ValidationError[]>>) => {
       state.validationErrors = action.payload;
     },
+    setPresentacionTablaFieldValue: (state, action: PayloadAction<{ field: keyof PresentacionTabla, value: any }>) => {
+      const fielName = action.payload.field;
+      const value = action.payload.value;
+      state.estadisticaRawModel.presentacionTabla = {
+        ...state.estadisticaRawModel.presentacionTabla,
+        [fielName]: value
+      }
+      state.hasChanges = true;
+    },
   },
   extraReducers: (builder) => {
     builder.addMatcher(getEstadistica.matchFulfilled, (state, action) => {
@@ -172,6 +183,7 @@ export const estadisticaFormSlice = createSlice({
       state.estadisticaRawModel = { ...estadisticaDefaultModel, ...action.payload };
       state.estadisticaRawModel.datos = action.payload.datos || { tabla: [] };
       state.estadisticaRawModel.graficos = action.payload.graficos || [{}];
+      state.estadisticaRawModel.presentacionTabla = action.payload.presentacionTabla || {};
       state.titulo = action.payload.nombre || '';
       state.isCreationMode = false;
       state.hasChanges = false;
@@ -192,6 +204,7 @@ export const {
   resetChanges,
   commitChanges,
   setResetDefault,
+  setPresentacionTablaFieldValue,
   // field validation
   setFieldValidationErrors,
   setValidationErrors
@@ -209,6 +222,10 @@ export const selectGraficos = (state: RootState) => state.estadisticaForm.estadi
 export const selectGraficoFieldValue = <K extends keyof Grafico>(index: number, field: K): ((state: RootState) => Grafico[K]) => (state: RootState) => {
   return state.estadisticaForm.estadisticaRawModel.graficos[index][field]
 }
+export const selectPresentacionTablaFieldValue = <K extends keyof PresentacionTabla>(field: K): ((state: RootState) => PresentacionTabla[K]) => (state: RootState) => {
+  return state.estadisticaForm.estadisticaRawModel.presentacionTabla[field]
+}
+
 export const selectValidationErrors = (state: RootState) => state.estadisticaForm.validationErrors;
 
 export default estadisticaFormSlice.reducer;

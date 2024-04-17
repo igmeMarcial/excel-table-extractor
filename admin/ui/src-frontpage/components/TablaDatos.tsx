@@ -64,7 +64,10 @@ const TablaDatos = () => {
             {nombre}
           </div>
         </div>
-        <IndicadorDataGrid data={dataTable.tabla} color={colorComponent} />
+        <IndicadorDataGrid
+          data={dataTable.tabla}
+          format={{ color: colorComponent }}
+        />
         <div className="mt-2" style={{ fontSize: '10px' }}>
           Nota: <br />
           {nota}

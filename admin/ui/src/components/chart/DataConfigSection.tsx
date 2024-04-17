@@ -8,7 +8,7 @@ import {
 } from '../../pages/indicadores/EstadisticaFormSlice';
 import { serieColor } from '../../utils/serieColor';
 
-import ConfigSection from './ConfigSection';
+import ConfigSection from '../ConfigSection';
 import SeriesEditor from './SeriesEditor';
 
 interface DataConfigSectionProps {
