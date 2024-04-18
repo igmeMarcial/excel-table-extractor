@@ -1,3 +1,5 @@
+import { Button } from '@fluentui/react-components';
+import { CsvIcon, XlsxIcon } from './Icons';
 import { useAppSelector } from '../app/hooks';
 import {
   selectColorComponent,
@@ -8,7 +10,7 @@ import {
 } from '../app/AppSlice';
 import IndicadorDataGrid from '../../src/components/DataTable';
 import { useRef } from 'react';
-import DowloadsButtons from './DowloadsButtons';
+import BlockTablaDatos from '../../src/public/components/BlockTablaDatos';
 
 const TablaDatos = () => {
   const dataTable = useAppSelector(selectEstadisticaDatos);
@@ -72,14 +74,6 @@ const TablaDatos = () => {
     //    console.error('Descarga de archivos no soportada en este navegador.');
     //  }
   };
-  const onDownload = (format: string) => {
-    if (format === 'xlsx') {
-      downloadXlsx();
-    }
-    if (format === 'csv') {
-      downloadCsv();
-    }
-  };
 
   if (!dataTable?.tabla?.length) {
     return <div className="pl-4 pt-4">No hay datos disponibles.</div>;
@@ -92,31 +86,22 @@ const TablaDatos = () => {
         className="my-5"
         style={{ fontFamily: 'sans-serif' }}
       >
-        <div className="flex justify-around my-4 items-center px-4 relative min-h-5">
-          <div
-            style={{
-              fontSize: '12px',
-              fontWeight: 'bold',
-              textAlign: 'center',
-            }}
-          >
-            {nombre}
-          </div>
-        </div>
-        <IndicadorDataGrid
-          data={dataTable.tabla}
-          format={{ color: colorComponent }}
+        <BlockTablaDatos
+          props={{
+            titulo: nombre,
+            tabla: dataTable.tabla,
+            fuente,
+            nota,
+          }}
         />
-        <div className="mt-2" style={{ fontSize: '10px' }}>
-          Nota: <br />
-          {nota}
-        </div>
-        <div className="mt-2" style={{ fontSize: '10px' }}>
-          Fuente: {fuente}
-        </div>
       </div>
       <div>
-        <DowloadsButtons onDownload={onDownload} />
+        <Button onClick={() => downloadXlsx()} icon={<XlsxIcon />}>
+          Descargar XLSX
+        </Button>
+        <Button onClick={() => downloadCsv()} icon={<CsvIcon />}>
+          Descargar CSV
+        </Button>
       </div>
     </>
   );

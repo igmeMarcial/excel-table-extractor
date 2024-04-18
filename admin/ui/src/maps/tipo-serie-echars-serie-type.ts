@@ -12,7 +12,8 @@ export const TIPO_SERIE_TO_ECHARS_SERIE_TYPE: Record<TipoSerie, echarts.EChartOp
     areaStyle: {}
   },
   lineas: {
-    type: 'line'
+    type: 'line',
+    areaStyle: undefined
   },
   pie: {
     type: 'pie'
