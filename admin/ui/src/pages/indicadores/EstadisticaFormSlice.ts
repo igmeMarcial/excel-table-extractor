@@ -23,7 +23,6 @@ const estadisticaDefaultModel: Estadistica = {
   graficos: [
     {}
   ],
-  presentacionTabla: {}
 }
 
 const initialState: EstadisticaFormState = {
@@ -168,7 +167,7 @@ export const estadisticaFormSlice = createSlice({
     setValidationErrors: (state, action: PayloadAction<Record<string, ValidationError[]>>) => {
       state.validationErrors = action.payload;
     },
-    setPresentacionTablaFieldValue: (state, action: PayloadAction<{ field: keyof FormatoTabla, value: any }>) => {
+    setFormatoTablaFieldValue: (state, action: PayloadAction<{ field: keyof FormatoTabla, value: any }>) => {
       const fielName = action.payload.field;
       const value = action.payload.value;
       state.estadisticaRawModel.datos.formato = {
@@ -203,7 +202,7 @@ export const {
   resetChanges,
   commitChanges,
   setResetDefault,
-  setPresentacionTablaFieldValue,
+  setFormatoTablaFieldValue,
   // field validation
   setFieldValidationErrors,
   setValidationErrors
@@ -221,7 +220,7 @@ export const selectGraficos = (state: RootState) => state.estadisticaForm.estadi
 export const selectGraficoFieldValue = <K extends keyof Grafico>(index: number, field: K): ((state: RootState) => Grafico[K]) => (state: RootState) => {
   return state.estadisticaForm.estadisticaRawModel.graficos[index][field]
 }
-export const selectPresentacionTablaFieldValue = <K extends keyof FormatoTabla>(field: K): ((state: RootState) => FormatoTabla[K]) => (state: RootState) => {
+export const selectFormatoTablaFieldValue = <K extends keyof FormatoTabla>(field: K): ((state: RootState) => FormatoTabla[K]) => (state: RootState) => {
   return state.estadisticaForm.estadisticaRawModel.datos.formato[field]
 }
 

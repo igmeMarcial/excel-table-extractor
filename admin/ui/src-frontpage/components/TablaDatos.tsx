@@ -1,24 +1,13 @@
 import { Button } from '@fluentui/react-components';
 import { CsvIcon, XlsxIcon } from './Icons';
 import { useAppSelector } from '../app/hooks';
-import {
-  selectColorComponent,
-  selectComponenteIndicePath,
-  selectEstadisticaData,
-  selectEstadisticaDatos,
-  selectEstadisticaIndicePath,
-} from '../app/AppSlice';
-import IndicadorDataGrid from '../../src/components/DataTable';
+import { selectEstadisticaDatos } from '../app/AppSlice';
 import { useRef } from 'react';
 import BlockTablaDatos from '../../src/public/components/BlockTablaDatos';
 
 const TablaDatos = () => {
   const dataTable = useAppSelector(selectEstadisticaDatos);
-  const data = useAppSelector(selectEstadisticaData);
-  const colorComponent = useAppSelector(selectColorComponent);
-  const compo = useAppSelector(selectComponenteIndicePath);
-  const sub = useAppSelector(selectEstadisticaIndicePath);
-  const { fuente, elaboracion, nota, nombre, tabla } = data?.datos || {}; //tabla
+  const { tabla } = dataTable.datos || {}; //tabla
 
   const downloadAreaContainer = useRef(null);
   const base64 = (s) => window.btoa(unescape(encodeURIComponent(s)));
@@ -86,16 +75,9 @@ const TablaDatos = () => {
         className="my-5"
         style={{ fontFamily: 'sans-serif' }}
       >
-        <BlockTablaDatos
-          props={{
-            titulo: nombre,
-            tabla: dataTable.tabla,
-            fuente,
-            nota,
-          }}
-        />
+        <BlockTablaDatos props={dataTable} />
       </div>
-      <div>
+      <div className="flex gap-4">
         <Button onClick={() => downloadXlsx()} icon={<XlsxIcon />}>
           Descargar XLSX
         </Button>

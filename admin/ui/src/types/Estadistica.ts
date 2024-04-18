@@ -1,7 +1,6 @@
 import { Grafico } from './Grafico'
 import { DatosInformacion } from './DatosInformacion'
 import { EstadisticaDatos } from './EstadisticaDatos'
-import { PresentacionTabla } from './PresentacionTabla'
 
 export interface EstadisticaBaseFields {
   id?: number;
@@ -38,5 +37,4 @@ export interface Estadistica
   datos?: EstadisticaDatos
   datosInformacion?: DatosInformacion
   graficos?: Grafico[]
-  presentacionTabla?: PresentacionTabla
 }

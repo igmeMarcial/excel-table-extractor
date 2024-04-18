@@ -6,18 +6,18 @@ import {
 } from '@fluentui/react-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
-  selectPresentacionTablaFieldValue,
-  setPresentacionTablaFieldValue,
+  selectFormatoTablaFieldValue,
+  setFormatoTablaFieldValue,
 } from '../../pages/indicadores/EstadisticaFormSlice';
 
 const DecimalsEditor = () => {
   const dispath = useAppDispatch();
   const fieldName = 'decimales';
   let value =
-    useAppSelector(selectPresentacionTablaFieldValue(fieldName)) || null;
+    useAppSelector(selectFormatoTablaFieldValue(fieldName)) || null;
   const handleChange = (e, data: TextareaOnChangeData) => {
     dispath(
-      setPresentacionTablaFieldValue({
+      setFormatoTablaFieldValue({
         field: fieldName,
         value: data.value,
       })
