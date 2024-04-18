@@ -2,7 +2,7 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   selectEstadisticaData,
-  selectEstadisticaDataFields,
+  selectEstadisticaDatos,
   selectValidationErrors,
   setEstadisticaDatosFieldValue,
 } from '../EstadisticaFormSlice';
@@ -15,7 +15,7 @@ const fieldsArray = DATOS_FIELDS_DEF;
 const TextField = ({ fieldName }) => {
   const fieldDef = fieldsArray[fieldName];
   const dispath = useAppDispatch();
-  const values = useAppSelector(selectEstadisticaDataFields);
+  const values = useAppSelector(selectEstadisticaDatos);
   let fieldValue = values[fieldName] || ''; // Valor predeterminado en caso de que sea undefined
   const err = useAppSelector(selectValidationErrors);
   // console.log(err);
@@ -43,7 +43,7 @@ const IndicadorEditorTabDatos = () => {
   return (
     <form>
       <div className="flex flex-col gap-y-4">
-        <TextField fieldName="nombre" />
+        <TextField fieldName="titulo" />
         <Field label="Tabla de datos">
           <div className="p-3 border border-solid  border-gray-300 rounded overflow-hidden">
             <Datasheet data={data} />

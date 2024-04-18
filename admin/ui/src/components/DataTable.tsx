@@ -4,29 +4,27 @@ import {
   DT_TABLA_DATOS_BORDER_COLOR,
   DT_TABLA_DATOS_BORDER_COLOR_HEADER,
   DT_TABLA_DATOS_FONT_SIZE,
+  DT_TABLA_DATOS_PRIMARY_COLOR,
 } from '../config/design-tokens';
 import { CELL_POSITION_BODY, CELL_POSITION_HEADER, Cell } from '../types/Cell';
 import { numberFormat } from '../utils/numberFormat';
+import { FormatoTabla } from '../types/FormatoTabla';
 
-interface TableFormatProps {
-  color?: string;
-  decimals?: number;
-}
 interface DataTableProps {
   data: Cell[][];
-  format?: TableFormatProps;
+  format?: FormatoTabla;
 }
 
 function renderCell(
   cell: Cell,
   rowIndex: number,
   colIndex: number,
-  format: TableFormatProps,
+  format: FormatoTabla,
   indexCount
 ) {
   const { v: value, t: type, p: position } = cell || {};
   format = format || {};
-  const color = format.color || '';
+  const color = format.color || DT_TABLA_DATOS_PRIMARY_COLOR;
   let cellStyle: React.CSSProperties = {
     backgroundColor: '#fff',
     color: '#000',
@@ -51,7 +49,7 @@ function renderCell(
       : 'text-start whitespace-nowrap';
   const formattedValue =
     type === 'n' && position === 'b'
-      ? numberFormat(value as number, format.decimals)
+      ? numberFormat(value as number, format.decimales)
       : value;
   return (
     <td
@@ -85,6 +83,7 @@ const renderDataTableRows = (itemRow: Cell[], rowIndex, format) => {
 };
 
 const DataTable = ({ data, format }: DataTableProps) => {
+  format = format || {};
   const [hasScrollbar, setHasScrollbar] = useState(false);
   const tableWrapperRef = useRef(null);
   // Actualiza el estado hasScrollbar si hay scroll horizontal

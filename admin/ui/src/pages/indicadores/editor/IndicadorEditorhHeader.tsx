@@ -13,7 +13,7 @@ import {
   commitChanges,
   selectPostValues,
   setResetDefault,
-  selectEstadisticaFields,
+  selectFichaTecnica,
 } from '../EstadisticaFormSlice';
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -30,7 +30,7 @@ const IndicadorEditorhHeader = () => {
   const isCreationMode = useAppSelector(selectIsCreationMode);
   const postValues = useAppSelector(selectPostValues);
 
-  const valuesTest = useAppSelector(selectEstadisticaFields);
+  const valuesTest = useAppSelector(selectFichaTecnica);
 
   const [addEstadistica, { isLoading }] =
     useSaveEstadisticaMutation(isCreationMode);

@@ -18,8 +18,8 @@ interface DataConfigSectionProps {
 const DataConfigSection = ({ chartIndex }: DataConfigSectionProps) => {
   const dispath = useAppDispatch();
   const [selectedSerieIndex, setSelectedSerieIndex] = useState(0);
-  const series = useAppSelector(selectGraficoFieldValue(chartIndex, 'series'));
-  console.log('series', series);
+  const series =
+    useAppSelector(selectGraficoFieldValue(chartIndex, 'series')) || [];
   const selectedSerieColor =
     series[selectedSerieIndex]?.color || serieColor(selectedSerieIndex);
 

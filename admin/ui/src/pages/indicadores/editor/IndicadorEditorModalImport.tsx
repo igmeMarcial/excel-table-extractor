@@ -101,7 +101,7 @@ const Importar = () => {
     // Combinar los datos de sheetData y data en un nuevo objeto EstadisticaDatos
     const combinedData: EstadisticaDatos = {
       tabla: sheetData, // Utilizar solo los datos de sheetData
-      nombre: data.nombre,
+      titulo: data.titulo,
       nota: data.nota,
       fuente: data.fuente,
       elaboracion: data.elaboracion,

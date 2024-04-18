@@ -1,8 +1,8 @@
 import DataTable from '../../components/DataTable';
-import { TablaDatosProps } from '../types/TablaDatosProps';
+import { EstadisticaDatos } from '../../types/EstadisticaDatos';
 
 interface BlockTablaDatosProps {
-  props: TablaDatosProps;
+  props: EstadisticaDatos;
 }
 // Tokens
 const TITULO_FONT_SIZE = '12px';
@@ -32,7 +32,7 @@ function BlockTablaDatos({ props }: Readonly<BlockTablaDatosProps>) {
       >
         {props.titulo}
       </div>
-      <DataTable data={props.tabla} format={{ color: 'orange' }} />
+      <DataTable data={props.tabla} format={props.formato} />
       <div style={{ fontSize: FOOTER_FONT_SIZE, marginTop: '8px' }}>
         {renderNota(props.nota)}
         <div>Fuente: {props.fuente}</div>

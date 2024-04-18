@@ -3,7 +3,7 @@ import { Select } from '@fluentui/react-components';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import {
   setEstadisticaFieldValue,
-  selectEstadisticaFields,
+  selectFichaTecnica,
   selectValidationErrors,
 } from '../EstadisticaFormSlice';
 import { Input } from 'antd';
@@ -93,7 +93,7 @@ const WPTextAreaField = ({ fieldName, label, onChange, value, required }) => {
 
 const IndicadorEditorTabFicha: React.FC = () => {
   const dispath = useAppDispatch();
-  const values = useAppSelector(selectEstadisticaFields);
+  const values = useAppSelector(selectFichaTecnica);
   const validationErrors = useAppSelector(selectValidationErrors);
   const { data: clasificadores } = useGetIndiceClasificadoresQuery();
   const indiceClasificadores = new IndiceClasificadores(clasificadores || []);

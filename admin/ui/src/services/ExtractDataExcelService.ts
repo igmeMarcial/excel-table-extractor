@@ -64,28 +64,28 @@ class ExtractDataExcelService {
         'Elaboración:'
       );
       const transformedSheetData: EstadisticaDatos = {
-        nombre: contentCellTitle
+        titulo: contentCellTitle
           ? contentCellTitle.separatedContent ||
-            contentCellTitle.description ||
-            ''
+          contentCellTitle.description ||
+          ''
           : '',
         nota: contentCellNote
           ? contentCellNote.separatedContent ||
-            contentCellNote.nextCell?.v ||
-            contentCellNote.cell?.v ||
-            ''
+          contentCellNote.nextCell?.v ||
+          contentCellNote.cell?.v ||
+          ''
           : '',
         fuente: contentCellFuente
           ? contentCellFuente.separatedContent ||
-            contentCellFuente.nextCell?.v ||
-            contentCellFuente.cell?.v ||
-            ''
+          contentCellFuente.nextCell?.v ||
+          contentCellFuente.cell?.v ||
+          ''
           : '',
         elaboracion: contentCellElaboration
           ? contentCellElaboration.separatedContent ||
-            contentCellElaboration.nextCell?.v ||
-            contentCellElaboration.cell?.v ||
-            ''
+          contentCellElaboration.nextCell?.v ||
+          contentCellElaboration.cell?.v ||
+          ''
           : '',
         tabla: tableData,
       };

@@ -128,7 +128,7 @@ export const ESTADISTICA_FIELDS_DEF: {
 };
 
 export const DATOS_FIELDS_DEF: Record<string, FieldConfig> = {
-  nombre: {
+  titulo: {
     label: 'Título',
     type: 'text',
     required: true,
