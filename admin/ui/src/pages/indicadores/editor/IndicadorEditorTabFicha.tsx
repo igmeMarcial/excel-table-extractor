@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Select } from '@fluentui/react-components';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import {
@@ -97,10 +97,6 @@ const IndicadorEditorTabFicha: React.FC = () => {
   const validationErrors = useAppSelector(selectValidationErrors);
   const { data: clasificadores } = useGetIndiceClasificadoresQuery();
   const indiceClasificadores = new IndiceClasificadores(clasificadores || []);
-
-  // console.log('datos Ficha');
-  // console.log(values);
-  console.log(validationErrors);
 
   const handleChange = (e) => {
     const { name: fiendName, value } = e.target;

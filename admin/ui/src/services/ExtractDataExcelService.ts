@@ -629,113 +629,7 @@ class ExtractDataExcelService {
   getEstadisticaFieldsFichaTecnica(
     workbook: XLSX.WorkBook,
     sheetIndex: number
-  ): FichaTecnicaFields {
-    try {
-      const sheetName = workbook.SheetNames[sheetIndex];
-      // console.log(sheetName)
-      const sheet = workbook.Sheets[sheetName];
-      let test = 0;
-      //Prueba del metodo
-      this.getEstadisticaFieldsFichaTecnic(workbook, sheetIndex);
-      // console.log(sheet)
-      const range = XLSX.utils.decode_range(sheet['!ref']);
-      // console.log(range)
-      const resultObject: ResultObject = {};
-      let result: string[][] = [];
-      let combinedData: string[] = [];
-      const { rowIndex } = this.getNameIndicador(workbook, sheetIndex);
-      let start = rowIndex || 3; //range.s.r
-      let end = range.e.r || 999;
-      for (let rowNum = start; rowNum <= end; rowNum++) {
-        // console.log(rowNum)
-        let rowHasPattern = false;
-        let rowData: string[] = [];
-        for (let colNum = range.s.c; colNum <= range.e.c; colNum++) {
-          // console.log(colNum)
-          test++;
-          // console.log("==0>" + test)
-          let cellAddress = XLSX.utils.encode_cell({ r: rowNum, c: colNum });
-          let cellValue = sheet[cellAddress] ? sheet[cellAddress].w : '';
-          // console.log(cellAddress)
-          // console.log(cellValue)
-          if (cellValue.trim().length > 0) {
-            rowData.push(cellValue);
-            // console.log(cellValue)
-            rowHasPattern = true;
-          }
-        }
-
-        if (rowData.length === 0) {
-          break;
-        }
-        if (rowHasPattern) {
-          if (rowData.length > 1) {
-            if (combinedData.length > 0) {
-              // console.log(combinedData)
-              result.push(combinedData); // Agrega datos combinados previamente almacenados al resultado
-              combinedData = []; // Reinicia combinedData
-            }
-            combinedData = combinedData.concat(rowData); // Almacena datos combinados en combinedData
-          } else {
-            combinedData[combinedData.length - 1] += ', ' + rowData.join(', ');
-          }
-        }
-      }
-      if (combinedData.length > 0) {
-        // console.log(combinedData)
-        result.push(combinedData);
-      }
-
-      //transforData
-      const calculateSimilarity = (str1, str2) => {
-        const len = Math.min(str1.length, str2.length);
-        let commonChars = 0;
-        for (let i = 0; i < len; i++) {
-          if (str1[i] === str2[i]) {
-            commonChars++;
-          }
-        }
-        return commonChars / len;
-      };
-      const removeAccents = (string) => {
-        return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-      };
-
-      const toSnakeCase = (string) => {
-        return removeAccents(string)
-          .replace(/[^a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ]+/g, '_')
-          .replace(/^(?:_+|_+)$/g, '')
-          .toLowerCase();
-      };
-
-      if (result && result.length > 0) {
-        result.forEach((row) => {
-          // console.log(row)
-          const firstNonNumberValue = row.find((value) => isNaN(Number(value)));
-          if (typeof firstNonNumberValue === 'string') {
-            const snakeCaseKey = toSnakeCase(firstNonNumberValue);
-            const matchedKey = Object.keys(FICHA_FIELDS_MAP).find((key) => {
-              const camelCaseKey = toSnakeCase(key);
-              const similarity = calculateSimilarity(
-                snakeCaseKey,
-                camelCaseKey
-              );
-              return similarity >= 0.5;
-            });
-            if (matchedKey) {
-              resultObject[FICHA_FIELDS_MAP[matchedKey]] = row[row.length - 1];
-            }
-          }
-        });
-      }
-      // console.log(resultObject);
-      return resultObject;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  }
-  getEstadisticaFieldsFichaTecnic(workbook: XLSX.WorkBook, sheetIndex: number) {
+  ) {
     const sheetName: string = workbook.SheetNames[sheetIndex];
     const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
     const htmlRows = getSheetHtmlRows(sheet);
@@ -822,11 +716,18 @@ class ExtractDataExcelService {
               // Si existe, concatenar el nuevo valor al valor existente
               resultMap[resultMapKey] += `, ${newValue}`;
             }
+          } else {
+            const resultMapKey = FICHA_FIELDS_MAP[matchedKey];
+            if (!resultMap.hasOwnProperty(resultMapKey)) {
+              resultMap[resultMapKey] = '';
+              console.log(resultMapKey);
+            }
           }
         }
       });
     });
-    console.log(resultMap);
+    // console.log(resultMap)
+    return resultMap;
   }
 }
 

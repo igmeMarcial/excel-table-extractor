@@ -29,6 +29,7 @@ export interface FichaTecnicaFields {
   correoElectronico?: string
   datosContacto?: string
   telefonoCelular?: string
+  clasificacionMdea?:string
 }
 
 export interface Estadistica
