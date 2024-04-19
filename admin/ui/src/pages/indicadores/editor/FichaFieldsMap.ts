@@ -21,4 +21,11 @@ export const FICHA_FIELDS_MAP: Record<string, string> = {
   clasificacion_mdea: "clasificacionMdea",
 };
 
+export const ESTADISTICA_DATOS: Record<string, string> = {
+  fuente: 'fuente',
+  nota: 'nota',
+  elaboracion: 'elaboracion',
+  
+};
+
 

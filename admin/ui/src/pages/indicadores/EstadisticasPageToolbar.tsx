@@ -4,10 +4,10 @@ import {
   MoreVertical24Filled,
   Add24Filled,
   Search24Regular,
+  ArrowUpRightFilled,
 } from '@fluentui/react-icons';
 import { Link, useLocation } from 'react-router-dom';
 import { builNavPathUrl } from '../../utils/url-utils';
-import IndicadorModalImport from './IndicadorModalImport';
 
 function EstadisticasPageToolbar() {
   const location = useLocation();
@@ -28,8 +28,17 @@ function EstadisticasPageToolbar() {
           Registrar
         </Button>
       </Link>
-      <IndicadorModalImport />
-      <Button appearance="subtle" icon={<MoreVertical24Filled />}></Button>
+      <Link
+        to="https://aesa.bex.pe/anuario-estadistico/estadisticas/"
+        target="_blank"
+      >
+        <Button
+          icon={<ArrowUpRightFilled className="align-middle" />}
+          appearance="subtle"
+        >
+          Visualizar estadística
+        </Button>
+      </Link>
     </div>
   );
 }

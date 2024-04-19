@@ -6,11 +6,11 @@ const sonDepartamentosTest = (tabla: Cell[][]): boolean => {
   }
   // Obtiene la primera celda de la tabla
   const firstCell = tabla[0][0];
-  console.log(firstCell);
+  // console.log(firstCell);
   //   console.log('son departamentos');
   // 1.- La primera celda de la tabla debe conterner la palabra "departamento"
   if (firstCell.v.toString().toLowerCase().includes('departamento') === false) {
-    console.log('no es departamento');
+    // console.log('no es departamento');
     return false;
   }
   // Obtiene la primera columna de la tabla

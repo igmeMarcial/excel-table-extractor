@@ -169,7 +169,6 @@ const IndicadorEditorTabFicha: React.FC = () => {
               })}
             </tbody>
           </table>
-          <button type="submit"> enviar</button>
         </form>
       </div>
     </div>

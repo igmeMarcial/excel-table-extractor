@@ -7,7 +7,7 @@ import {
   setEstadisticaDatosFieldValue,
 } from '../EstadisticaFormSlice';
 import { DATOS_FIELDS_DEF } from './EstadisticaFieldsDef';
-import { Field, Input } from '@fluentui/react-components';
+import { Field, Input, Textarea } from '@fluentui/react-components';
 import Datasheet from '../../../components/Datasheet';
 
 const fieldsArray = DATOS_FIELDS_DEF;
@@ -20,20 +20,34 @@ const TextField = ({ fieldName }) => {
   const err = useAppSelector(selectValidationErrors);
   // console.log(err);
   // console.log(values);
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLTextAreaElement>
+      | React.ChangeEvent<HTMLInputElement>
+  ) => {
     dispath(
       setEstadisticaDatosFieldValue({ field: fieldName, value: e.target.value })
     );
   };
   return (
     <Field label={fieldDef.label}>
-      <Input
-        name={fieldName}
-        type="text"
-        value={fieldValue}
-        onChange={handleChange}
-        required={fieldDef.required}
-      />
+      {fieldName === 'nota' ? (
+        <Textarea
+          style={{ height: 100, resize: 'none', scrollbarWidth: 'thin' }}
+          name={fieldName}
+          value={fieldValue}
+          onChange={handleChange}
+          required={fieldDef.required}
+        />
+      ) : (
+        <Input
+          name={fieldName}
+          type="text"
+          value={fieldValue}
+          onChange={handleChange}
+          required={fieldDef.required}
+        />
+      )}
     </Field>
   );
 };

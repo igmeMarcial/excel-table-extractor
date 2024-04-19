@@ -1,5 +1,8 @@
 import * as XLSX from 'xlsx';
-import { FICHA_FIELDS_MAP } from '../pages/indicadores/editor/FichaFieldsMap';
+import {
+  ESTADISTICA_DATOS,
+  FICHA_FIELDS_MAP,
+} from '../pages/indicadores/editor/FichaFieldsMap';
 import {
   CellPosition,
   CELL_POSITION_BODY,
@@ -56,6 +59,8 @@ class ExtractDataExcelService {
       const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
       //text extract new table
       const tableData: any = this.getTablaDatos(sheet);
+      this.getCellTabla(sheet);
+
       const contentCellTitle: any = this.getTablaDatosTitulo(sheet);
       const contentCellFuente: any = this.getContentCell(sheet, 'Fuente:');
       const contentCellNote: any = this.getContentCell(sheet, 'Nota:');
@@ -66,26 +71,26 @@ class ExtractDataExcelService {
       const transformedSheetData: EstadisticaDatos = {
         titulo: contentCellTitle
           ? contentCellTitle.separatedContent ||
-          contentCellTitle.description ||
-          ''
+            contentCellTitle.description ||
+            ''
           : '',
         nota: contentCellNote
           ? contentCellNote.separatedContent ||
-          contentCellNote.nextCell?.v ||
-          contentCellNote.cell?.v ||
-          ''
+            contentCellNote.nextCell?.v ||
+            contentCellNote.cell?.v ||
+            ''
           : '',
         fuente: contentCellFuente
           ? contentCellFuente.separatedContent ||
-          contentCellFuente.nextCell?.v ||
-          contentCellFuente.cell?.v ||
-          ''
+            contentCellFuente.nextCell?.v ||
+            contentCellFuente.cell?.v ||
+            ''
           : '',
         elaboracion: contentCellElaboration
           ? contentCellElaboration.separatedContent ||
-          contentCellElaboration.nextCell?.v ||
-          contentCellElaboration.cell?.v ||
-          ''
+            contentCellElaboration.nextCell?.v ||
+            contentCellElaboration.cell?.v ||
+            ''
           : '',
         tabla: tableData,
       };
@@ -634,26 +639,10 @@ class ExtractDataExcelService {
     const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
     const htmlRows = getSheetHtmlRows(sheet);
     const cellMap = this.createCellsDataMap(htmlRows);
-    const calculateSimilarity = (str1, str2) => {
-      const len = Math.min(str1.length, str2.length);
-      let commonChars = 0;
-      for (let i = 0; i < len; i++) {
-        if (str1[i] === str2[i]) {
-          commonChars++;
-        }
-      }
-      return commonChars / len;
-    };
-    const removeAccents = (string) => {
-      return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    };
-
-    const toSnakeCase = (string) => {
-      return removeAccents(string)
-        .replace(/[^a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ]+/g, '_')
-        .replace(/^(?:_+|_+)$/g, '')
-        .toLowerCase();
-    };
+    const matrix = this.getCellsMatrixFichaTecnica(cellMap);
+    return this.filterValueFichaTecnica(matrix);
+  }
+  getCellsMatrixFichaTecnica(cellMap) {
     const out: Cell[][] = [];
     cellMap.forEach((row, rowIndex) => {
       let colIndex = 0;
@@ -694,13 +683,38 @@ class ExtractDataExcelService {
       });
       out.push(rowData);
     });
+    return out;
+  }
+  calculateSimilarity = (str1, str2) => {
+    const len = Math.min(str1.length, str2.length);
+    let commonChars = 0;
+    for (let i = 0; i < len; i++) {
+      if (str1[i] === str2[i]) {
+        commonChars++;
+      }
+    }
+    return commonChars / len;
+  };
+  removeAccents = (string) => {
+    return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  };
+  toSnakeCase = (string) => {
+    return this.removeAccents(string)
+      .replace(/[^a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ]+/g, '_')
+      .replace(/^(?:_+|_+)$/g, '')
+      .toLowerCase();
+  };
+  filterValueFichaTecnica(out) {
     const resultMap = {};
     out.forEach((row) => {
       row.forEach((cell, index) => {
-        const snakeCaseKey = toSnakeCase(cell.v.toString());
+        const snakeCaseKey = this.toSnakeCase(cell.v.toString());
         const matchedKey = Object.keys(FICHA_FIELDS_MAP).find((key) => {
-          const camelCaseKey = toSnakeCase(key);
-          const similarity = calculateSimilarity(snakeCaseKey, camelCaseKey);
+          const camelCaseKey = this.toSnakeCase(key);
+          const similarity = this.calculateSimilarity(
+            snakeCaseKey,
+            camelCaseKey
+          );
           return similarity >= 0.5;
         });
         if (matchedKey) {
@@ -726,8 +740,44 @@ class ExtractDataExcelService {
         }
       });
     });
-    // console.log(resultMap)
+    console.log(resultMap);
     return resultMap;
+  }
+  getCellTabla(sheet) {
+    const htmlRows = getSheetHtmlRows(sheet);
+    const cellMap = this.createCellsDataMap(htmlRows);
+    const matrix = this.getCellsMatrixFichaTecnica(cellMap);
+    const data = {};
+    console.log(matrix)
+    let title = ''
+    matrix.forEach((row) => {
+      row.forEach((cell, index) => {
+        if (typeof cell.v === 'number' && typeof cell.v !== 'string') {
+          return;
+        }
+        
+        const snakeCaseKey = this.toSnakeCase(cell.v.toString());
+        // console.log(snakeCaseKey);
+        const matchedKey = Object.keys(ESTADISTICA_DATOS).find((key) => {
+          // console.log("key ===00> "+ key)
+          const camelCaseKey = this.toSnakeCase(key);
+          // console.log(camelCaseKey)
+          const similarity = this.calculateSimilarity(
+            snakeCaseKey,
+            camelCaseKey
+          );
+          // console.log(" similaridad : " + similarity)
+          return similarity >= 0.5;
+        });
+        if (matchedKey) {
+          const resultMapKey = ESTADISTICA_DATOS[matchedKey];
+          // console.log(matchedKey)
+          console.log(resultMapKey)
+          console.log(cell)
+          // console.log(cell);
+        }
+      });
+    });
   }
 }
 
