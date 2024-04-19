@@ -2,45 +2,15 @@ import { useEffect, useState } from 'react';
 import { Button } from '@fluentui/react-components';
 import { useAppSelector } from '../app/hooks';
 import { selectEstadisticaData } from '../app/AppSlice';
-import { Estadistica } from '../../src/types/Estadistica';
-
-const apiMap: {
-  [K in keyof Estadistica]?: any;
-} = {
-  id: 1,
-  clasificadorN1Id: 1,
-  clasificadorN2Id: 1,
-  clasificadorN3Id: 1,
-  nombre: 'Nombre del indicador o estadística ambiental',
-  finalidad: 'Finalidad',
-  descripcion: 'Descripción/Definición',
-  unidadMedida: 'Unidad de medida',
-  formulaCalculo: 'Fórmula de cálculo',
-  metodologiaCalculo: 'Metodología de cálculo',
-  fuente: 'Fuente',
-  unidadOrganicaGeneradora: 'Unidad orgánica generadora',
-  url: 'URL',
-  periodicidadGeneracion:
-    'Periodicidad de generación de la información por la entidad',
-  periodicidadEntrega:
-    'Periodicidad de entrega/registro de la información por la entidad',
-  periodoSerieTiempo: 'Periodo de serie de tiempo',
-  ambitoGeografico: 'Ámbito geográfico',
-  limitaciones: 'Limitaciones',
-  relacionObjetivosNacionales:
-    'Relación con objetivos de política, normas, metas ambientales nacionales',
-  relacionIniciativasInternacionales:
-    'Relación con iniciativas internacionales',
-  correoElectronico: 'Correo electrónico',
-  datosContacto: 'Datos del contacto',
-  telefonoCelular: 'Teléfono/celular',
-  datos: null,
-};
+import { PdfIcon } from './Icons';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import { apiMap } from './FichaTecnicaMap';
 
 function FichaTecnica() {
   const [dataIndicator, setDataIndicator] = useState([]);
   const data = useAppSelector(selectEstadisticaData);
-
+  console.log(data);
   useEffect(() => {
     if (data && typeof data === 'object') {
       convertObjectToArr();
@@ -59,6 +29,21 @@ function FichaTecnica() {
       limitaciones: data?.limitaciones,
       metodologiaCalculo: data?.metodologiaCalculo,
       fuente: data?.fuente,
+
+      unidadMedida: data?.unidadMedida,
+      formulaCalculo: data?.formulaCalculo,
+      unidadOrganicaGeneradora: data?.unidadOrganicaGeneradora,
+      url: data?.url,
+      periodicidadGeneracion: data?.periodicidadGeneracion,
+      periodicidadEntrega: data?.periodicidadEntrega,
+      periodoSerieTiempo: data?.periodoSerieTiempo,
+      ambitoGeografico: data?.ambitoGeografico,
+      relacionObjetivosNacionales: data?.relacionObjetivosNacionales,
+      relacionIniciativasInternacionales:
+        data?.relacionIniciativasInternacionales,
+      correoElectronico: data?.correoElectronico,
+      datosContacto: data?.datosContacto,
+      telefonoCelular: data?.telefonoCelular,
     };
 
     const filteredEntries = Object.entries(newArrNecessary).filter(
@@ -86,24 +71,32 @@ function FichaTecnica() {
     return <div>No hay datos disponibles.</div>;
   }
 
-  const handleDowload = () => {
-    const url = window.URL.createObjectURL(new Blob([data]));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'fichaEstadistico.pdf');
-    document.body.appendChild(link);
-    link.click();
+  const downloadPdf = () => {
+    const downloadArea = document.getElementById('downloadArea');
+    html2canvas(downloadArea).then((canvas) => {
+      const pdf = new jsPDF();
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+
+      const ratio = canvas.width / canvas.height;
+      const width = pdfWidth - 40;
+      const height = width / ratio;
+
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 20, 20, width, height);
+      pdf.save('documento.pdf');
+    });
   };
+
   return (
     <div className="overflow-auto">
-      <div className="p-4">
+      <div id="downloadArea" className="p-4">
         <div className="relative my-1 mx-2">
-          <div className="absolute top-2 right-0 text-xs">
-            <Button onClick={handleDowload}>Descargar</Button>
-          </div>
           <div>
             {dataIndicator.map((item, rowIndex) => (
-              <div key={`row-${item.id}`}>
+              <div
+                key={`row-${item.id}`}
+                style={{ display: item.id > 6 ? 'none' : 'block' }}
+              >
                 <div
                   style={{
                     color: 'rgb(12, 113, 195)',
@@ -132,6 +125,11 @@ function FichaTecnica() {
             ))}
           </div>
         </div>
+      </div>
+      <div className="flex gap-4  mb-4 pl-4">
+        <Button onClick={() => downloadPdf()} icon={<PdfIcon />}>
+          Descargar PDF
+        </Button>
       </div>
     </div>
   );

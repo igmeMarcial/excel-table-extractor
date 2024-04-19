@@ -7,8 +7,6 @@ import BlockTablaDatos from '../../src/public/components/BlockTablaDatos';
 
 const TablaDatos = () => {
   const dataTable = useAppSelector(selectEstadisticaDatos);
-  const { tabla } = dataTable.datos || {}; //tabla
-
   const downloadAreaContainer = useRef(null);
   const base64 = (s) => window.btoa(unescape(encodeURIComponent(s)));
   const format = (s, c) => {
@@ -28,40 +26,18 @@ const TablaDatos = () => {
     download(downloadAreaContainer.current, 'descarga.xlsx');
   };
   const downloadCsv = () => {
-    // const csvContent = tabla
-    //   .map((row) => row.map((cell) => cell.v).join(','))
-    //   .join('\n');
+    const csvRows = dataTable.tabla.map((row) =>
+      row.map((cell) => cell.v).join(',')
+    );
 
-    // const csvData = tabla.map((row) => row.map((cell) => cell.v));
-    // console.log(csvData);
-    const csvData = tabla.map((row) => row.map((cell) => cell.v));
+    const csvContent = csvRows.join('\n');
 
-    // Convertir csvData en formato CSV
-    const separator = ';'; // Separador de valores en CSV
-    const csvContent = csvData.map((row) => row.join(separator)).join('\n');
-
-    // Descargar el archivo CSV
-    const filename = 'exported_data.csv'; // Nombre del archivo CSV
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-    // Crear el enlace de descarga y simular el clic para descargar el archivo
-    //  const link = document.createElement('a');
-    //  if (link.download !== undefined) {
-    //    // Browsers que soportan el atributo 'download' de HTML5
-    //    const url = URL.createObjectURL(blob);
-    //    link.setAttribute('href', url);
-    //    link.setAttribute('download', filename);
-    //    link.style.visibility = 'hidden';
-    //    document.body.appendChild(link);
-    //    link.click();
-    //    document.body.removeChild(link);
-    //  } else if (navigator.msSaveBlob) {
-    //    // Para IE 10+
-    //    navigator.msSaveBlob(blob, filename);
-    //  } else {
-    //    // No se puede descargar el archivo
-    //    console.error('Descarga de archivos no soportada en este navegador.');
-    //  }
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'descarga.csv');
+    document.body.appendChild(link);
+    link.click();
   };
 
   if (!dataTable?.tabla?.length) {
@@ -72,12 +48,12 @@ const TablaDatos = () => {
     <>
       <div
         ref={downloadAreaContainer}
-        className="my-5"
+        className="mt-5"
         style={{ fontFamily: 'sans-serif' }}
       >
         <BlockTablaDatos props={dataTable} />
       </div>
-      <div className="flex gap-4">
+      <div className="flex gap-4 justify-center mb-4">
         <Button onClick={() => downloadXlsx()} icon={<XlsxIcon />}>
           Descargar XLSX
         </Button>

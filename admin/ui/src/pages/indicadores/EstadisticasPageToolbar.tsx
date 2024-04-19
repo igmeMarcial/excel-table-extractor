@@ -1,11 +1,6 @@
 import { Button, Input } from '@fluentui/react-components';
 
-import {
-  MoreVertical24Filled,
-  Add24Filled,
-  Search24Regular,
-  ArrowUpRightFilled,
-} from '@fluentui/react-icons';
+import { Add24Filled, Search24Regular } from '@fluentui/react-icons';
 import { Link, useLocation } from 'react-router-dom';
 import { builNavPathUrl } from '../../utils/url-utils';
 
@@ -26,17 +21,6 @@ function EstadisticasPageToolbar() {
           icon={<Add24Filled />}
         >
           Registrar
-        </Button>
-      </Link>
-      <Link
-        to="https://aesa.bex.pe/anuario-estadistico/estadisticas/"
-        target="_blank"
-      >
-        <Button
-          icon={<ArrowUpRightFilled className="align-middle" />}
-          appearance="subtle"
-        >
-          Visualizar estadística
         </Button>
       </Link>
     </div>

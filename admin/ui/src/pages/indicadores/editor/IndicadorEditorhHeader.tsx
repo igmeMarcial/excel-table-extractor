@@ -2,6 +2,7 @@ import { Button, Tooltip } from 'antd';
 import {
   ArrowCurveDownLeft24Regular,
   ArrowCircleLeft24Regular,
+  ArrowUpRightFilled,
 } from '@fluentui/react-icons';
 import { SaveOutlined } from '@ant-design/icons';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
@@ -61,6 +62,17 @@ const IndicadorEditorhHeader = () => {
         <div className="text-2xl md:text-2xl font-bold p-0">Indicador</div>
         <span className="flex-1"></span>
         <Importar />
+        <Link
+          to="https://aesa.bex.pe/anuario-estadistico/estadisticas/"
+          target="_blank"
+        >
+          <Button
+            icon={<ArrowUpRightFilled className="align-middle" />}
+            type="text"
+          >
+            Visualizar estadística
+          </Button>
+        </Link>
         <Button
           type="text"
           icon={<ArrowCurveDownLeft24Regular className="w-5 align-middle" />}

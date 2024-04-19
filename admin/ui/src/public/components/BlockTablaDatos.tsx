@@ -27,7 +27,7 @@ function BlockTablaDatos({ props }: Readonly<BlockTablaDatosProps>) {
           fontSize: TITULO_FONT_SIZE,
           fontWeight: 'bold',
           textAlign: 'center',
-          marginBottom: '8px',
+          marginBottom: '12px',
         }}
       >
         {props.titulo}
