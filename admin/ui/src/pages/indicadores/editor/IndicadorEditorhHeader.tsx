@@ -40,8 +40,10 @@ const IndicadorEditorhHeader = () => {
   const handleGuardarCambios = async () => {
     setIsSaving(true);
     await addEstadistica(postValues);
+    console.log(postValues);
     dispath(commitChanges());
     setIsSaving(false);
+    console.log('enviado correctamente');
   };
   const urlIndicadores = resetPathUrl(location, 'indicadores');
   return (
