@@ -108,16 +108,16 @@ abstract class BaseModel
         }
     }
 
-    public function getSqlColumnNamesString(): string
+    public function getSqlColumnNamesString($tableAlias = ''): string
     {
         $persistedFields = $this->getPersistedFields();
-        $columns = array_map(function ($fieldName, $fieldDef) {
+        $columns = array_map(function ($fieldName, $fieldDef) use ($tableAlias) {
             $column = $fieldDef['column'] ?? $fieldName;
             // If the column name is the same as the field name, we don't need to alias it
             if ($column === $fieldName) {
-                return $column;
+                return "$tableAlias . $column";
             }
-            return "$column AS $fieldName";
+            return "$tableAlias.$column AS $fieldName";
         }, array_keys($persistedFields), $persistedFields);
 
         return implode(', ', $columns);
