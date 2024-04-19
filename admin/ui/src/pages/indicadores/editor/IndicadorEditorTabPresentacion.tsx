@@ -5,6 +5,7 @@ import SeccionTabla from './presentacion/SeccionTabla';
 
 const IndicadorEditorTabPresentacion = () => {
   const graficos = useAppSelector(selectGraficos);
+  if (!graficos) return null;
   return (
     <>
       {graficos.map((grafico, index) => (

@@ -15,7 +15,7 @@ const fieldsArray = DATOS_FIELDS_DEF;
 const TextField = ({ fieldName }) => {
   const fieldDef = fieldsArray[fieldName];
   const dispath = useAppDispatch();
-  const values = useAppSelector(selectEstadisticaDatos);
+  const values = useAppSelector(selectEstadisticaDatos) || {};
   let fieldValue = values[fieldName] || ''; // Valor predeterminado en caso de que sea undefined
   const err = useAppSelector(selectValidationErrors);
   // console.log(err);

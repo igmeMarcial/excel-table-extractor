@@ -13,7 +13,11 @@ const SeccionTabla = () => {
         <div className="flex-1 overflow-hidden bg-gray-50">
           <div className="m-2 border border-solid border-gray-300 bg-white">
             <div>
-              <BlockTablaDatos props={datos} />
+              <BlockTablaDatos
+                props={datos}
+                contextoVisual="mdea"
+                numeralNivel1={1}
+              />
             </div>
           </div>
         </div>

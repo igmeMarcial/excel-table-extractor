@@ -1,12 +1,18 @@
 import { Button } from '@fluentui/react-components';
 import { CsvIcon, XlsxIcon } from './Icons';
 import { useAppSelector } from '../app/hooks';
-import { selectEstadisticaDatos } from '../app/AppSlice';
+import {
+  selectEstadisticaDatos,
+  selectEstadisticaMarcoOrdenador,
+} from '../app/AppSlice';
 import { useRef } from 'react';
 import BlockTablaDatos from '../../src/public/components/BlockTablaDatos';
 
 const TablaDatos = () => {
-  const dataTable = useAppSelector(selectEstadisticaDatos);
+  const datos = useAppSelector(selectEstadisticaDatos) || null;
+  const marcoOrdenador =
+    useAppSelector(selectEstadisticaMarcoOrdenador) || null;
+
   const downloadAreaContainer = useRef(null);
   const base64 = (s) => window.btoa(unescape(encodeURIComponent(s)));
   const format = (s, c) => {
@@ -26,7 +32,7 @@ const TablaDatos = () => {
     download(downloadAreaContainer.current, 'descarga.xlsx');
   };
   const downloadCsv = () => {
-    const csvRows = dataTable.tabla.map((row) =>
+    const csvRows = datos.tabla.map((row) =>
       row.map((cell) => cell.v).join(',')
     );
 
@@ -39,10 +45,11 @@ const TablaDatos = () => {
     document.body.appendChild(link);
     link.click();
   };
-
-  if (!dataTable?.tabla?.length) {
+  if (!datos) {
     return <div className="pl-4 pt-4">No hay datos disponibles.</div>;
   }
+
+  const numeralNivel1 = +marcoOrdenador?.numeral.split('.')[0];
 
   return (
     <>
@@ -51,7 +58,11 @@ const TablaDatos = () => {
         className="mt-5"
         style={{ fontFamily: 'sans-serif' }}
       >
-        <BlockTablaDatos props={dataTable} />
+        <BlockTablaDatos
+          props={datos}
+          contextoVisual={marcoOrdenador.codigo}
+          numeralNivel1={numeralNivel1}
+        />
       </div>
       <div className="flex gap-4 justify-center mb-4">
         <Button onClick={() => downloadXlsx()} icon={<XlsxIcon />}>

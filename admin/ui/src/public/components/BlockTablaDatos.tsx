@@ -1,7 +1,11 @@
 import DataTable from '../../components/DataTable';
+import { CodigoMarcoOrdenador } from '../../types/CodigoMarcoOrdenador';
 import { EstadisticaDatos } from '../../types/EstadisticaDatos';
+import { getContextoVisualColor } from '../../utils/color-utils';
 
 interface BlockTablaDatosProps {
+  contextoVisual: CodigoMarcoOrdenador;
+  numeralNivel1: number;
   props: EstadisticaDatos;
 }
 // Tokens
@@ -19,7 +23,13 @@ const renderNota = (nota: string) => {
   }
 };
 
-function BlockTablaDatos({ props }: Readonly<BlockTablaDatosProps>) {
+function BlockTablaDatos({
+  props,
+  contextoVisual,
+  numeralNivel1,
+}: Readonly<BlockTablaDatosProps>) {
+  const color = getContextoVisualColor(contextoVisual, numeralNivel1);
+  const format = { ...props.formato, color };
   return (
     <>
       <div
@@ -32,7 +42,7 @@ function BlockTablaDatos({ props }: Readonly<BlockTablaDatosProps>) {
       >
         {props.titulo}
       </div>
-      <DataTable data={props.tabla} format={props.formato} />
+      <DataTable data={props.tabla} format={format} />
       <div style={{ fontSize: FOOTER_FONT_SIZE, marginTop: '8px' }}>
         {renderNota(props.nota)}
         <div>Fuente: {props.fuente}</div>

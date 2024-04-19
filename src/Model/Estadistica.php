@@ -136,6 +136,10 @@ class Estadistica extends BaseModel
             'type' => DataTypes::ARRAY,
             'column' => 'presentacion_tabla',
         ],
+        'marcoOrdenador' => [
+            'type' => DataTypes::ARRAY,
+            'persist' => false,
+        ],
     ];
 
     // Getters

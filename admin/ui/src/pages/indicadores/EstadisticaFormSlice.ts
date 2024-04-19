@@ -214,14 +214,15 @@ export const selectFichaTecnica = (state: RootState): Estadistica => state.estad
 export const selectEstadisticaDatos = (state: RootState) => state.estadisticaForm.estadisticaRawModel.datos;
 export const selectIsCreationMode = (state: RootState) => state.estadisticaForm.isCreationMode;
 export const selectActiveTab = (state: RootState) => state.estadisticaForm.activeTab;
-export const selectEstadisticaData = (state: RootState) => state.estadisticaForm.estadisticaRawModel.datos.tabla;
+export const selectEstadisticaData = (state: RootState) => state.estadisticaForm.estadisticaRawModel.datos?.tabla;
 export const selectPostValues = (state: RootState) => state.estadisticaForm.estadisticaRawModel;
 export const selectGraficos = (state: RootState) => state.estadisticaForm.estadisticaRawModel.graficos;
 export const selectGraficoFieldValue = <K extends keyof Grafico>(index: number, field: K): ((state: RootState) => Grafico[K]) => (state: RootState) => {
   return state.estadisticaForm.estadisticaRawModel.graficos[index][field]
 }
 export const selectFormatoTablaFieldValue = <K extends keyof FormatoTabla>(field: K): ((state: RootState) => FormatoTabla[K]) => (state: RootState) => {
-  return state.estadisticaForm.estadisticaRawModel.datos.formato[field]
+  const formato = state.estadisticaForm.estadisticaRawModel.datos?.formato || {};
+  return formato[field];
 }
 
 export const selectValidationErrors = (state: RootState) => state.estadisticaForm.validationErrors;

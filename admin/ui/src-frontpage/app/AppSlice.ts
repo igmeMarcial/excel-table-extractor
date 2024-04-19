@@ -3,6 +3,7 @@ import { getEstadistica, getIndice } from './services/estadistica'
 import type { RootState } from './store'
 import { Estadistica } from '../../src/types/Estadistica'
 import { IndiceItem } from '../types/IndiceItem'
+import { EstadisticaMarcoOrdenador } from '../../src/types/EstadisticaMarcoOrdenador'
 
 interface AppState {
   activeNetworkActivity: boolean
@@ -14,7 +15,7 @@ interface AppState {
   clasificadorNivel1?: string,
   marcoOrdenadorSeleccionado: string,
   menuNivel2: IndiceItem[],
-  colorComponent:string,
+  colorComponent: string,
 }
 
 const initialState: AppState = {
@@ -27,7 +28,7 @@ const initialState: AppState = {
   estadisticaIndicePath: '1.1.1.1',
   clasificadorNivel1: '1',
   menuNivel2: [],
-  colorComponent:'#575757'
+  colorComponent: '#575757'
 };
 const getMenuNivel2 = (indice: IndiceItem[], clasificadorNivel1: string) => {
   return indice.map((item) => {
@@ -69,7 +70,7 @@ export const appSlice = createSlice({
         state.menuNivel2 = getMenuNivel2(state.indiceEstadisticas, state.clasificadorNivel1)
       }
     },
-    setColorComponent:(state,action:PayloadAction<string>)=>{
+    setColorComponent: (state, action: PayloadAction<string>) => {
       state.colorComponent = action.payload;
     },
     toggleMenuNivel2Item: (state, action: PayloadAction<IndiceItem>) => {
@@ -131,8 +132,9 @@ export const selectActiveNetworkActivity = (state: RootState) => state.app.activ
 export const selectCurrentEstadisticaId = (state: RootState) => state.app.currentEstadisticaId
 export const selectIdEstadisitico = (state: RootState) => state.app.idEstadistica
 export const selectActiveTabName = (state: RootState) => state.app.activeTabName
-export const selectEstadisticaData = (state: RootState) => state.app.estadisticaModel
+export const selectEstadisticaData = (state: RootState): Estadistica => state.app.estadisticaModel
 export const selectEstadisticaDatos = (state: RootState) => state.app.estadisticaModel.datos
+export const selectEstadisticaMarcoOrdenador = (state: RootState): EstadisticaMarcoOrdenador => state.app.estadisticaModel.marcoOrdenador
 export const selectEstadisticaGraficos = (state: RootState) => state.app.estadisticaModel.graficos || []
 export const selectIndiceEstadisticas = (state: RootState) => state.app.indiceEstadisticas
 export const selectClaficadorNivel1Activo = (state: RootState) => state.app.clasificadorNivel1
@@ -164,6 +166,6 @@ export const selectTemaEstadisticoIndicePath = (state: RootState) => {
 export const selectEstadisticaIndicePath = (state: RootState) => {
   return state.app.estadisticaIndicePath
 }
-export const selectColorComponent = (state: RootState)=>state.app.colorComponent
+export const selectColorComponent = (state: RootState) => state.app.colorComponent
 
 export default appSlice.reducer

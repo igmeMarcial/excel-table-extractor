@@ -264,7 +264,7 @@ const Datasheet = ({
       <table className="aesa-datasheet">
         <tbody>
           <ColLabels colsNumber={maxColIndex + 1} />
-          {data.map((row, rowIndex) =>
+          {(data || []).map((row, rowIndex) =>
             renderRow(row, rowIndex, dataSelectionRange, chartDataRanges)
           )}
         </tbody>

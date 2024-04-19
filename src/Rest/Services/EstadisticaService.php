@@ -95,7 +95,7 @@ class EstadisticaService
                   C.nombre mdeaComponenteNombre,
                   A.fecha_mod fechaMod
                 FROM {$this->dbMap->estadistica} A
-                INNER JOIN {$this->dbMap->estaClasN3} B ON A.estadistica_id = B.estadistica_id
+                INNER JOIN {$this->dbMap->estaClasN1} B ON A.estadistica_id = B.estadistica_id
                 INNER JOIN {$this->dbMap->clasificador} C ON B.clasificador_id = C.clasificador_id";
 
         // Ejecutar la consulta test
@@ -111,16 +111,23 @@ class EstadisticaService
         $sql = "SELECT $columns,
                        B.clasificador_id clasificadorN1Id,
                        C.clasificador_id clasificadorN2Id,
-                       D.clasificador_id clasificadorN3Id
+                       D.clasificador_id clasificadorN3Id,
+                       E.numeral
                 FROM {$this->dbMap->estadistica} A
                 INNER JOIN {$this->dbMap->estaClasN1} B ON A.estadistica_id = B.estadistica_id
                 INNER JOIN {$this->dbMap->estaClasN2} C ON A.estadistica_id = C.estadistica_id
                 INNER JOIN {$this->dbMap->estaClasN3} D ON A.estadistica_id = D.estadistica_id
+                INNER JOIN {$this->dbMap->clasificador} E ON D.clasificador_id = E.clasificador_id
         WHERE A.estadistica_id = $id";
         $data = $this->wpdb->get_row($sql, ARRAY_A);
         if (!$data) {
             throw new \Exception("No se encontró el registro con id $id");
         }
+        // Añadi datos de marco ordenador
+        $data['marcoOrdenador'] = json_encode([
+            'codigo'  => 'MDEA',
+            'numeral' => $data['numeral'],
+        ]);
         return DataParser::parseQueryResult($data, $model->getFieldsDef());
     }
     public function eliminarEstadistica(int $id)
