@@ -2,6 +2,10 @@ import DataTable from '../../components/DataTable';
 import { CodigoMarcoOrdenador } from '../../types/CodigoMarcoOrdenador';
 import { EstadisticaDatos } from '../../types/EstadisticaDatos';
 import { getContextoVisualColor } from '../../utils/color-utils';
+import {
+  obtenerTextoEntreParentesis,
+  quitarParentesis,
+} from '../../utils/string-utils';
 
 interface BlockTablaDatosProps {
   contextoVisual: CodigoMarcoOrdenador;
@@ -40,7 +44,8 @@ function BlockTablaDatos({
           marginBottom: '12px',
         }}
       >
-        {props.titulo}
+        {quitarParentesis(props.titulo)} <br />
+        {obtenerTextoEntreParentesis(props.titulo)}
       </div>
       <DataTable data={props.tabla} format={format} />
       <div style={{ fontSize: FOOTER_FONT_SIZE, marginTop: '8px' }}>

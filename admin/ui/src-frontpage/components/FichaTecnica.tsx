@@ -72,19 +72,25 @@ function FichaTecnica() {
   }
 
   const downloadPdf = () => {
-    const downloadArea = document.getElementById('downloadArea');
-    html2canvas(downloadArea).then((canvas) => {
-      const pdf = new jsPDF();
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
+    //  const downloadArea = document.getElementById('downloadArea');
+    let doc = new jsPDF('p', 'pt', 'A4');
+    let y = 80;
+    let margins = {
+      top: 80,
+      bottom: 60,
+      left: 40,
+      right: 40,
+      width: 522,
+    };
 
-      const ratio = canvas.width / canvas.height;
-      const width = pdfWidth - 40;
-      const height = width / ratio;
-
-      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 20, 20, width, height);
-      pdf.save('documento.pdf');
+    dataIndicator.forEach((item) => {
+      const textoCompleto = `${item.key}:\n${item.value}`;
+      const { h } = doc.getTextDimensions(textoCompleto);
+      doc.text(textoCompleto, margins.left, y);
+      y += h + 50;
     });
+
+    doc.save('test.pdf');
   };
 
   return (

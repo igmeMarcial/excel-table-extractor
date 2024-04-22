@@ -8,13 +8,28 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { newPathUrl } from '../../src/utils/url-utils';
 import { selectMarcoOrdenadorSeleccionado } from '../app/AppSlice';
 import { useAppSelector } from '../app/hooks';
-import { QUERY_PARAM_MARCO_ORDENADOR } from '../../src/core/constantes';
+import {
+  MARCO_ORDENADOR_DEFECTO,
+  QUERY_PARAM_MARCO_ORDENADOR,
+} from '../../src/core/constantes';
+import { useEffect } from 'react';
 
 function SubNavbar() {
-  console.log('SubNavbar rendered');
   const navigate = useNavigate();
   const location = useLocation();
   const activeItem = useAppSelector(selectMarcoOrdenadorSeleccionado);
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (!params.has(QUERY_PARAM_MARCO_ORDENADOR)) {
+      const loadPath = newPathUrl(
+        location,
+        QUERY_PARAM_MARCO_ORDENADOR,
+        MARCO_ORDENADOR_DEFECTO
+      );
+      navigate(loadPath);
+    }
+  }, []);
+
   const onTabSelect = (event: SelectTabEvent, data: SelectTabData) => {
     const newPath = newPathUrl(
       location,

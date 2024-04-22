@@ -32,17 +32,24 @@ const TablaDatos = () => {
     download(downloadAreaContainer.current, 'descarga.xlsx');
   };
   const downloadCsv = () => {
-    const csvRows = datos.tabla.map((row) =>
+    const datosMatrix = datos.tabla;
+    // Convierte cada fila de datos en una cadena CSV
+    const csvRows = datosMatrix.map((row) =>
       row.map((cell) => cell.v).join(',')
     );
-
     const csvContent = csvRows.join('\n');
-
-    const encodedUri = encodeURI(csvContent);
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+    const fileName = `datos-${new Date().toLocaleDateString('es-PE', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    })}.csv`;
+    saveAs(blob, fileName);
+  };
+  const saveAs = (blob, fileName) => {
     const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', 'descarga.csv');
-    document.body.appendChild(link);
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
     link.click();
   };
   if (!datos) {
@@ -64,14 +71,16 @@ const TablaDatos = () => {
           numeralNivel1={numeralNivel1}
         />
       </div>
-      <div className="flex gap-4 justify-center mb-4">
-        <Button onClick={() => downloadXlsx()} icon={<XlsxIcon />}>
-          Descargar XLSX
-        </Button>
-        <Button onClick={() => downloadCsv()} icon={<CsvIcon />}>
-          Descargar CSV
-        </Button>
-      </div>
+      {datos.tabla && datos.tabla.length > 0 && (
+        <div className="flex gap-4 mb-4 mt-2">
+          <Button onClick={() => downloadXlsx()} icon={<XlsxIcon />}>
+            Descargar XLSX
+          </Button>
+          <Button onClick={() => downloadCsv()} icon={<CsvIcon />}>
+            Descargar CSV
+          </Button>
+        </div>
+      )}
     </>
   );
 };

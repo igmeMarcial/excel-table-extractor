@@ -1,6 +1,6 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { ColorsType } from '../types/Colors';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import chroma from 'chroma-js';
 import {
@@ -10,6 +10,10 @@ import {
 } from '../app/AppSlice';
 import { newPathUrl } from '../../src/utils/url-utils';
 import { IndiceItem } from '../types/IndiceItem';
+import {
+  QUERY_PARAM_ESTADISTICA_INDICE_PATH,
+  QUERY_PARAM_MARCO_ORDENADOR,
+} from '../../src/core/constantes';
 
 interface NamePanelProps {
   colors: ColorsType; // Tipo definido para los colores
@@ -33,11 +37,11 @@ const PanelItem: React.FC<PanelItemProps> = ({
     <Link
       key={item.numeral}
       to={newPathUrl(location, 'estadistica', item.numeral + '.1.1.1')}
-      className={`p-2 rounded-lg mb-2 md:mb-4 min-h-20 flex justify-center text-center items-center cursor-pointer no-underline hover:bg-black`}
+      className={`p-2 rounded-lg mb-2 md:mb-4 min-h-16 flex justify-center text-center items-center cursor-pointer no-underline hover:bg-black`}
       style={transformStyles(item)}
       onClick={() => handleClick(colors[item.numeral])}
     >
-      <h4 className="font-normal text-white text-lg md:text-base leading-3 sm:leading-5 md:leading-4 p-0 m-0">
+      <h4 className="font-normal text-white text-xm md:text-sm leading-3 sm:leading-5 md:leading-4 p-0 m-0">
         {item.nombre}
       </h4>
     </Link>
@@ -47,10 +51,24 @@ const NamePanelComponents: React.FC<NamePanelProps> = ({ colors }) => {
   const clasificadoresN1 = useAppSelector(selectClasificadoresNivel1);
   const numItemActivo = useAppSelector(selectComponenteIndicePath);
   const distpath = useAppDispatch();
-
   const handleClick = (color: string) => {
     distpath(setColorComponent(color));
   };
+  //Use location se repite ojo
+  const location = useLocation();
+  const navigate = useNavigate();
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const marcoOrdenador = params.get(QUERY_PARAM_MARCO_ORDENADOR);
+    if (marcoOrdenador && !params.has(QUERY_PARAM_ESTADISTICA_INDICE_PATH)) {
+      const loadPath = newPathUrl(
+        location,
+        QUERY_PARAM_ESTADISTICA_INDICE_PATH,
+        '1.1.1.1'
+      );
+      navigate(loadPath);
+    }
+  }, [location.search]);
 
   const transformStyles = useMemo(() => {
     const calculateStyles = (item: IndiceItem) => {
@@ -80,7 +98,7 @@ const NamePanelComponents: React.FC<NamePanelProps> = ({ colors }) => {
   }, [numItemActivo, colors]);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-10 mb-5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-5 mb-5">
       {clasificadoresN1.map((item: IndiceItem) => (
         <PanelItem
           key={item.numeral}
