@@ -45,7 +45,9 @@ function BlockTablaDatos({
         }}
       >
         {quitarParentesis(props.titulo)} <br />
-        {obtenerTextoEntreParentesis(props.titulo)}
+        <span className="font-normal">
+          {obtenerTextoEntreParentesis(props.titulo)}
+        </span>
       </div>
       <DataTable data={props.tabla} format={format} />
       <div style={{ fontSize: FOOTER_FONT_SIZE, marginTop: '8px' }}>

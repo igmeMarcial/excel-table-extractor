@@ -61,8 +61,6 @@ const MenuItem = ({ model, onExpandToggleClick }: MenuItemProps) => {
   }
   // Estadistica
   const location = useLocation();
-  // console.log(model.estadisticaId);
-  // console.log(model);
   let paramValue = getQueryParam(location, QUERY_PARAM_ESTADISTICA_ID) || '1';
   return (
     <Link
@@ -78,32 +76,11 @@ const MenuItem = ({ model, onExpandToggleClick }: MenuItemProps) => {
 };
 
 function NabAside() {
-  const location = useLocation();
   const dispath = useAppDispatch();
   const menuNivel2 = useAppSelector(selectMenuNivel2);
-  const [dataReady, setDataReady] = useState(false);
-
   const toggleMenu = (model) => {
     dispath(toggleMenuNivel2Item(model));
   };
-  //TODO: El useEfect no funciona para hacer focus a estadisitca seleccionado.
-  useEffect(() => {
-    const params = getQueryParam(location, QUERY_PARAM_ESTADISTICA_INDICE_PATH);
-    if (!dataReady && menuNivel2.length > 0) {
-      // Los datos están listos, podemos continuar
-      setDataReady(true);
-    }
-    if (dataReady && params) {
-      // console.log('=======');
-      // console.log(menuNivel2);
-      const itemToExpand = menuNivel2.find(
-        (item) => item.estadisticaId === parseInt(params)
-      );
-      if (itemToExpand) {
-        toggleMenu(itemToExpand);
-      }
-    }
-  }, []);
   return (
     <div className="py-3 border-x-0 border-b-0 border-t-4 border-t-custom-blue border-solid">
       <div className="flex flex-col pl-0 my-0">

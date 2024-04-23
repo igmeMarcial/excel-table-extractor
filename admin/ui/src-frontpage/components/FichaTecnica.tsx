@@ -3,14 +3,12 @@ import { Button } from '@fluentui/react-components';
 import { useAppSelector } from '../app/hooks';
 import { selectEstadisticaData } from '../app/AppSlice';
 import { PdfIcon } from './Icons';
-import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { apiMap } from './FichaTecnicaMap';
 
 function FichaTecnica() {
   const [dataIndicator, setDataIndicator] = useState([]);
   const data = useAppSelector(selectEstadisticaData);
-  console.log(data);
   useEffect(() => {
     if (data && typeof data === 'object') {
       convertObjectToArr();
@@ -29,7 +27,7 @@ function FichaTecnica() {
       limitaciones: data?.limitaciones,
       metodologiaCalculo: data?.metodologiaCalculo,
       fuente: data?.fuente,
-
+      // campos ocultos >6 el orden de cada propiedad es importante.
       unidadMedida: data?.unidadMedida,
       formulaCalculo: data?.formulaCalculo,
       unidadOrganicaGeneradora: data?.unidadOrganicaGeneradora,
@@ -72,25 +70,34 @@ function FichaTecnica() {
   }
 
   const downloadPdf = () => {
-    //  const downloadArea = document.getElementById('downloadArea');
-    let doc = new jsPDF('p', 'pt', 'A4');
-    let y = 80;
-    let margins = {
-      top: 80,
-      bottom: 60,
-      left: 40,
-      right: 40,
-      width: 522,
-    };
-
-    dataIndicator.forEach((item) => {
-      const textoCompleto = `${item.key}:\n${item.value}`;
-      const { h } = doc.getTextDimensions(textoCompleto);
-      doc.text(textoCompleto, margins.left, y);
-      y += h + 50;
+    let doc = new jsPDF('p', 'pt', 'a4');
+    const hiddenElements = document.querySelectorAll(
+      '#downloadArea .indicadores'
+    );
+    hiddenElements.forEach((element) => {
+      if (element instanceof HTMLElement) {
+        element.style.display = 'block'; // Mostrar el elemento
+      }
     });
-
-    doc.save('test.pdf');
+    let elementHTML = document.querySelector('#downloadArea').innerHTML;
+    hiddenElements.forEach((element) => {
+      if (element instanceof HTMLElement) {
+        element.style.display = 'none'; // Ocultar el elemento nuevamente
+      }
+    });
+    const pdfWidth = doc.internal.pageSize.getWidth();
+    doc.html(elementHTML, {
+      callback: function (doc) {
+        // Save the PDF
+        doc.save('documento.pdf');
+      },
+      margin: [30, 30, 10, 30],
+      autoPaging: 'text',
+      x: 0,
+      y: 0,
+      width: pdfWidth, //target width in the PDF document
+      windowWidth: 675, //window width in CSS pixels
+    });
   };
 
   return (
@@ -98,8 +105,21 @@ function FichaTecnica() {
       <div id="downloadArea" className="p-4">
         <div className="relative my-1 mx-2">
           <div>
+            <div
+              className="indicadores"
+              style={{
+                fontWeight: 'bold',
+                fontSize: '1rem',
+                marginBottom: '0.75rem',
+                display: 'none',
+                fontFamily: 'sans-serif,Arial',
+              }}
+            >
+              Ficha de Divulgación de Estadística Ambiental - MINAN.
+            </div>
             {dataIndicator.map((item, rowIndex) => (
               <div
+                className={item.id > 6 ? 'indicadores' : ''}
                 key={`row-${item.id}`}
                 style={{ display: item.id > 6 ? 'none' : 'block' }}
               >
@@ -109,6 +129,7 @@ function FichaTecnica() {
                     fontSize: '12px',
                     fontWeight: 'bold',
                     marginTop: item.id === 1 ? '0px' : '10px',
+                    fontFamily: 'Arial, sans-serif',
                   }}
                 >
                   {item.key}
@@ -123,6 +144,7 @@ function FichaTecnica() {
                         ? 'bold'
                         : 'normal',
                     paddingRight: '110px',
+                    fontFamily: 'Arial, sans-serif',
                   }}
                 >
                   {renderValue(item.key, item.value)}
@@ -132,7 +154,7 @@ function FichaTecnica() {
           </div>
         </div>
       </div>
-      <div className="flex gap-4  mb-4 pl-4">
+      <div className="flex gap-4  mb-4 pl-6">
         <Button onClick={() => downloadPdf()} icon={<PdfIcon />}>
           Descargar PDF
         </Button>

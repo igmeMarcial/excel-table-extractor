@@ -57,7 +57,7 @@ const TablaDatos = () => {
   }
 
   const numeralNivel1 = +marcoOrdenador?.numeral.split('.')[0];
-
+  console.log(datos);
   return (
     <>
       <div
