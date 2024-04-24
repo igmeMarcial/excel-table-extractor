@@ -44,6 +44,7 @@ export const objetivosODS = [
     numero: 18,
     titulo: 'Objetivos de desarrollo sostenible',
     color: '#f5f5f5',
+    urlImg:'https://www.un.org/sustainabledevelopment/es/wp-content/uploads/sites/3/2015/09/S_SDG_Icons-01-18.jpg'
   },
 ];
 export const objetivosOCDE = [
@@ -79,5 +80,49 @@ export const objetivosOCDE = [
     titulo: 'Inversión y Financiamiento',
     color: '#8F1838',
   },
+  {
+    titulo: 'Inversión y Financiamiento',
+    color: '#8F1838',
+  },
   // Puedes agregar más objetivos según tus necesidades
+];
+export const lineamientosPolitica = [
+  {
+    titulo: "Mejorar la conservación de las especies y de la diversidad genética",
+    color: "#009245",
+  },
+  {
+    titulo: "Reducir los niveles de deforestación y degradación de los ecosistemas",
+    color: "#58AE31",
+  },
+  {
+    titulo: "Reducir la contaminación del aire, agua y suelo",
+    color: "#23C1BB",
+  },
+  {
+    titulo: "Incrementar la disposición adecuada de los residuos sólidos",
+    color: "#07C4EC",
+  },
+  {
+    titulo: "Incrementar la adaptación ante los efectos del cambio climático del país",
+    color: "#049BD4",
+  },
+  {
+    titulo:
+      "Fortalecer la Gobernanza ambiental con enfoque territorial en las entidades públicas y privadas",
+    color: "#0071BC",
+  },
+  {
+    titulo:
+      "Mejorar el desempeño ambiental de las cadenas productivas y de consumo de bienes y servicios, aplicando la economía circular",
+    color: "#DDA63A",
+  },
+  {
+    titulo: "Reducir las emisiones de gases de efecto invernadero del país",
+    color: "#A21942",
+  },
+  {
+    titulo: "Mejorar el comportamiento ambiental de la ciudadanía",
+    color: "#FD6925",
+  },
 ];

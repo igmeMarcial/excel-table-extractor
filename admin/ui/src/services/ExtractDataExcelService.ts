@@ -62,42 +62,20 @@ class ExtractDataExcelService {
       this.getCellTabla(sheet);
 
       const contentCellTitle: any = this.getTablaDatosTitulo(sheet);
-      const contentCellFuente: any = this.getContentCell(sheet, 'Fuente:');
-      const contentCellNote: any = this.getContentCell(sheet, 'Nota:');
-      const contentCellElaboration: any = this.getContentCell(
-        sheet,
-        'Elaboración:'
-      );
-      const transformedSheetData: EstadisticaDatos = {
+      const contentCellTabla: any = this.getCellTabla(sheet);
+      const estadisticaDatos: EstadisticaDatos = {
         titulo: contentCellTitle
           ? contentCellTitle.separatedContent ||
             contentCellTitle.description ||
             ''
           : '',
-        nota: contentCellNote
-          ? contentCellNote.separatedContent ||
-            contentCellNote.nextCell?.v ||
-            contentCellNote.cell?.v ||
-            ''
-          : '',
-        fuente: contentCellFuente
-          ? contentCellFuente.separatedContent ||
-            contentCellFuente.nextCell?.v ||
-            contentCellFuente.cell?.v ||
-            ''
-          : '',
-        elaboracion: contentCellElaboration
-          ? contentCellElaboration.separatedContent ||
-            contentCellElaboration.nextCell?.v ||
-            contentCellElaboration.cell?.v ||
-            ''
-          : '',
+        fuente: contentCellTabla.fuente,
+        nota: contentCellTabla.nota,
+        elaboracion: contentCellTabla.elaboracion,
         tabla: tableData,
       };
-      //tranfor Data
-      return transformedSheetData;
+      return estadisticaDatos;
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }
@@ -734,50 +712,78 @@ class ExtractDataExcelService {
             const resultMapKey = FICHA_FIELDS_MAP[matchedKey];
             if (!resultMap.hasOwnProperty(resultMapKey)) {
               resultMap[resultMapKey] = '';
-              console.log(resultMapKey);
             }
           }
         }
       });
     });
-    console.log(resultMap);
+    // console.log(resultMap);
     return resultMap;
   }
   getCellTabla(sheet) {
     const htmlRows = getSheetHtmlRows(sheet);
     const cellMap = this.createCellsDataMap(htmlRows);
     const matrix = this.getCellsMatrixFichaTecnica(cellMap);
-    const data = {};
-    console.log(matrix)
-    let title = ''
-    matrix.forEach((row) => {
-      row.forEach((cell, index) => {
+    const data = { fuente: '', nota: '', elaboracion: '' };
+    let title = '';
+    let allMatched = [];
+
+    matrix.forEach((row, rowIndex) => {
+      row.forEach((cell, cellIndex) => {
         if (typeof cell.v === 'number' && typeof cell.v !== 'string') {
           return;
         }
-        
-        const snakeCaseKey = this.toSnakeCase(cell.v.toString());
-        // console.log(snakeCaseKey);
-        const matchedKey = Object.keys(ESTADISTICA_DATOS).find((key) => {
-          // console.log("key ===00> "+ key)
-          const camelCaseKey = this.toSnakeCase(key);
-          // console.log(camelCaseKey)
-          const similarity = this.calculateSimilarity(
-            snakeCaseKey,
-            camelCaseKey
-          );
-          // console.log(" similaridad : " + similarity)
-          return similarity >= 0.5;
-        });
-        if (matchedKey) {
-          const resultMapKey = ESTADISTICA_DATOS[matchedKey];
-          // console.log(matchedKey)
-          console.log(resultMapKey)
-          console.log(cell)
-          // console.log(cell);
+        const matched = this.checkCell(cell, rowIndex, cellIndex);
+        if (matched) {
+          // console.log(matched)
+          // console.log(cell)
+          allMatched.push(matched);
         }
       });
     });
+    // console.log(allMatched);
+    allMatched.forEach((match, i) => {
+      const resultMapKey = ESTADISTICA_DATOS[match.matchedKey];
+      data[resultMapKey] = this.iterationData(
+        matrix,
+        match.rowIndex,
+        match.cellIndex
+      );
+    });
+    // console.log(data);
+    return data;
+  }
+  iterationData(matrix, startRow, startCell) {
+    let allCellValues = '';
+    for (let rowIndex = startRow; rowIndex < matrix.length; rowIndex++) {
+      const row = matrix[rowIndex];
+      //  const startCellIndex = rowIndex === startRow ? startCell : 0; 
+      //  console.log(startCellIndex)
+       
+      for (let cellIndex = startCell; cellIndex < row.length; cellIndex++) {
+        const cell = row[cellIndex];
+        // console.log(cell)
+        // console.log("==========")
+        allCellValues += cell.v.toString() + ' ';
+      }
+    }
+    console.log(allCellValues)
+    return allCellValues.trim();
+  }
+  checkCell(cell, rowIndex, cellIndex) {
+    const snakeCaseKey = this.toSnakeCase(cell.v.toString());
+    const matchedKey = Object.keys(ESTADISTICA_DATOS).find((key) => {
+      const camelCaseKey = this.toSnakeCase(key);
+      const snakeCaseKeyWords = snakeCaseKey.split('_');
+
+      if (snakeCaseKeyWords.includes(camelCaseKey)) {
+        const similarity = this.calculateSimilarity(snakeCaseKey, camelCaseKey);
+        return similarity >= 0.5;
+      }
+    });
+    if (matchedKey) {
+      return { matchedKey, rowIndex, cellIndex };
+    }
   }
 }
 

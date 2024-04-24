@@ -6,8 +6,11 @@ function PrimaryNavOcde({ items }) {
       {items.map((item, index) => (
         <div
           key={item.color}
-          className={` min-h-16 p-2 rounded-lg`}
-          style={{ backgroundColor: item.color }}
+          className={` min-h-16 p-2 rounded-lg text-center`}
+          style={{
+            backgroundColor: item.color,
+            width: 'calc(11.1111% - ( 0.83333333333333 * 30px ) )',
+          }}
         >
           <span className="text-xs text-white">{item?.titulo}</span>
         </div>
