@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { getEstadistica } from '../../app/services/estadistica';
 import type { RootState } from '../../app/store';
 import { TipoGrafico } from '../../types/TipoGrafico';
 import { EstadisticaDatos } from '../../types/EstadisticaDatos';
@@ -7,12 +6,12 @@ import { Estadistica, FichaTecnicaFields } from '../../types/Estadistica';
 import { EstadisticaFormState } from '../../types/EstadisticarFormState';
 import tablaDatosHelper from '../../helpers/TablaDatosHelper';
 import graficoHelper from '../../helpers/GraficoHelper';
-import fieldValidationsHelper from '../../helpers/FieldValidationsHelper';
+import validationsHelper from '../../helpers/ValidationsHelper';
 import { Cell } from '../../types/Cell';
-import { ValidationError } from '../../types/ValidationError';
 import { Grafico } from '../../types/Grafico';
-import { deepAssign } from '../../utils/object-utils';
 import { FormatoTabla } from '../../types/FormatoTabla';
+import { ValidationErrors } from '../../core/Validators';
+import { ESTADISTICA_FIELDS_DEF } from './editor/EstadisticaFieldsDef';
 
 const estadisticaDefaultModel: Estadistica = {
   datos: {
@@ -63,6 +62,43 @@ export const estadisticaFormSlice = createSlice({
       state.titulo = action.payload.nombre || '';
       state.hasChanges = true;
     },
+    setEstadisticaModel: (state, action: PayloadAction<Estadistica>) => {
+      const data = action.payload;
+      state.estadisticaModel = data;
+      state.estadisticaRawModel = data;
+      state.titulo = data.nombre || '';
+      state.isCreationMode = !!data.id;
+      state.hasChanges = false;
+    },
+    resetEstadisticaModel: (state) => {
+      state.estadisticaModel = estadisticaDefaultModel;
+      state.estadisticaRawModel = estadisticaDefaultModel;
+      state.titulo = '';
+      state.isCreationMode = true;
+      state.hasChanges = false;
+    },
+    validateEstadisticaFields: (state) => {
+      // Validar los campos de la ficha técnica
+      const validationErrors = Object.keys(ESTADISTICA_FIELDS_DEF).reduce((errors, fieldName) => {
+        const value = state.estadisticaRawModel[fieldName];
+        const fieldErrors = validationsHelper.getFieldErrors(ESTADISTICA_FIELDS_DEF[fieldName], value);
+        if (fieldErrors) {
+          return { ...errors, [fieldName]: fieldErrors };
+        }
+        return errors;
+      }, {});
+      state.validationErrors = validationErrors;
+    },
+    validateEstadisticaField: (state, action: PayloadAction<{ field: keyof Estadistica, value: any }>) => {
+      const fielName = action.payload.field;
+      const value = action.payload.value;
+      state.validationErrors = validationsHelper.getGroupValidationErrorsWith(
+        ESTADISTICA_FIELDS_DEF[fielName],
+        fielName,
+        value,
+        state.validationErrors
+      );
+    },
     setEstadisticaFieldValue: (state, action: PayloadAction<{ field: string, value: any }>) => {
       const fielName = action.payload.field;
       const value = action.payload.value;
@@ -70,21 +106,15 @@ export const estadisticaFormSlice = createSlice({
         ...state.estadisticaRawModel,
         [fielName]: value
       }
-      // Validar el campo
-      const fieldErrors = fieldValidationsHelper.getFieldErrors(value, state.validations[fielName]);
-      if (fieldErrors) {
-        state.validationErrors = {
-          ...state.validationErrors,
-          [fielName]: fieldErrors
-        }
-      } else {
-        // Eliminar el error si existe
-        // TODO: Verificar código
-        const { [fielName]: _, ...rest } = state.validationErrors;
-        state.validationErrors = rest;
-      }
+      // Validar campo
+      state.validationErrors = validationsHelper.getGroupValidationErrorsWith(
+        ESTADISTICA_FIELDS_DEF[fielName],
+        fielName,
+        value,
+        state.validationErrors
+      );
 
-      if (action.payload.field === 'nombre') {
+      if (fielName === 'nombre') {
         state.titulo = action.payload.value || '';
       }
       state.hasChanges = true;
@@ -158,13 +188,13 @@ export const estadisticaFormSlice = createSlice({
       });
       state.hasChanges = true;
     },
-    setFieldValidationErrors: (state, action: PayloadAction<{ fieldName: string, errors: ValidationError[] }>) => {
+    setFieldValidationErrors: (state, action: PayloadAction<{ fieldName: string, errors: ValidationErrors }>) => {
       state.validationErrors = {
         ...state.validationErrors,
         [action.payload.fieldName]: action.payload.errors
       }
     },
-    setValidationErrors: (state, action: PayloadAction<Record<string, ValidationError[]>>) => {
+    setValidationErrors: (state, action: PayloadAction<Record<string, ValidationErrors>>) => {
       state.validationErrors = action.payload;
     },
     setFormatoTablaFieldValue: (state, action: PayloadAction<{ field: keyof FormatoTabla, value: any }>) => {
@@ -177,20 +207,14 @@ export const estadisticaFormSlice = createSlice({
       state.hasChanges = true;
     },
   },
-  extraReducers: (builder) => {
-    builder.addMatcher(getEstadistica.matchFulfilled, (state, action) => {
-      const data = deepAssign({}, estadisticaDefaultModel, action.payload);
-      state.estadisticaModel = data;
-      state.estadisticaRawModel = data;
-      state.titulo = data.nombre || '';
-      state.isCreationMode = false;
-      state.hasChanges = false;
-    })
-  },
 });
 
 export const {
+  setEstadisticaModel,
+  resetEstadisticaModel,
   setEstadisticaFields,
+  validateEstadisticaFields,
+  validateEstadisticaField,
   setEstadisticaDatos,
   setEstadisticaTablaDatos,
   setEstadisticaFieldValue,

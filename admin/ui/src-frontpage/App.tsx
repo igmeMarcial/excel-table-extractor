@@ -20,6 +20,7 @@ import {
   useGetEstadisticaQuery,
   useGetIndiceQuery,
 } from './app/services/estadistica';
+import NavegadorEstadisticasAlt2 from './secctions/NavegadorEstadisticasAlt2';
 
 function App() {
   const dispath = useAppDispatch();
@@ -50,6 +51,7 @@ function App() {
   return (
     <ParamRoutes param="view">
       <ParamRoute default element={<NavegadorEstadisticas />} />
+      <ParamRoute value="vista2" element={<NavegadorEstadisticasAlt2 />} />
     </ParamRoutes>
   );
 }

@@ -1,16 +1,18 @@
+import { ValidatorFn } from "../../../core/Validators";
 import { Estadistica } from "../../../types/Estadistica";
 
 type FieldType = 'select' | 'text' | 'url' | 'email' | 'textarea' | 'table';
 
-interface FieldConfig {
+export interface FieldDef {
   label: string;
   type: FieldType;
   required?: boolean;
   vtype?: 'url' | 'email';
+  customValidators?: ValidatorFn[];
 }
 
 export const ESTADISTICA_FIELDS_DEF: {
-  [K in keyof Estadistica]?: FieldConfig
+  [K in keyof Estadistica]?: FieldDef
 } = {
   clasificadorN1Id: {
     label: 'Componente',
@@ -58,37 +60,31 @@ export const ESTADISTICA_FIELDS_DEF: {
     required: true,
   },
   fuente: {
-    label: 'Fuente', type: 'text', required: true
+    label: 'Fuente', type: 'text',
   },
   unidadOrganicaGeneradora: {
     label: 'Unidad orgánica generadora',
     type: 'text',
-    required: true,
   },
   url: {
     label: 'URL', type: 'url',
-    required: true,
     vtype: 'url',
   },
   periodicidadGeneracion: {
     label: 'Periodicidad de generación',
     type: 'textarea',
-    required: true,
   },
   periodicidadEntrega: {
     label: 'Periodicidad de entrega/registro',
     type: 'textarea',
-    required: true,
   },
   periodoSerieTiempo: {
     label: 'Periodo de serie de tiempo',
     type: 'text',
-    required: true,
   },
   ambitoGeografico: {
     label: 'Ámbito geográfico',
     type: 'textarea',
-    required: true,
   },
   limitaciones: {
     label: 'Limitaciones',
@@ -98,36 +94,30 @@ export const ESTADISTICA_FIELDS_DEF: {
   relacionObjetivosNacionales: {
     label: 'Relación con objetivos nacionales',
     type: 'textarea',
-    required: true,
   },
   relacionIniciativasInternacionales: {
     label: 'Relación con iniciativas internacionales',
     type: 'textarea',
-    required: true,
   },
   correoElectronico: {
     label: 'Correo electrónico',
     type: 'email',
-    required: true,
   },
   datosContacto: {
     label: 'Datos del contacto',
     type: 'text',
-    required: true,
   },
   telefonoCelular: {
     label: 'Teléfono/celular',
     type: 'text',
-    required: true,
   },
   clasificacionMdea: {
-    label: 'Clasificador',
+    label: 'Clasificación MDEA',
     type: 'text',
-    required: true,
   },
 };
 
-export const DATOS_FIELDS_DEF: Record<string, FieldConfig> = {
+export const DATOS_FIELDS_DEF: Record<string, FieldDef> = {
   titulo: {
     label: 'Título',
     type: 'text',

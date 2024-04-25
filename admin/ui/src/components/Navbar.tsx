@@ -1,7 +1,5 @@
 import { makeStyles } from '@fluentui/react-components';
 import { NavLink, useLocation } from 'react-router-dom';
-import { useAppDispatch } from '../app/hooks';
-import { setResetDefault } from '../pages/indicadores/EstadisticaFormSlice';
 
 const items = [
   { text: 'Estadisticas', path: 'indicadores' },
@@ -28,7 +26,6 @@ const useStyles = makeStyles({
 
 export default function Navbar() {
   const classes = useStyles();
-  const dispath = useAppDispatch();
   // Get the current location params
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -37,9 +34,6 @@ export default function Navbar() {
     queryParams.set('view', view);
     queryParams.delete('rid');
     return '?' + queryParams.toString();
-  };
-  const handleNav = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    dispath(setResetDefault());
   };
   return (
     <nav
@@ -56,7 +50,6 @@ export default function Navbar() {
               `no-underline block px-2 ${classes.item}  ` +
               (currentTab === item.path ? classes.active : '')
             }
-            onClick={handleNav}
           >
             {item.text}
           </NavLink>

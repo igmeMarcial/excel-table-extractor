@@ -6,21 +6,31 @@ import IndicadorEditorTabs from './IndicadorEditorTabs';
 import { useGetEstadisticaQuery } from '../../../app/services/estadistica';
 import { getPathResourceId } from '../../../utils/url-utils';
 import { useAppDispatch } from '../../../app/hooks';
-import { setEstadisticaTablaDatos } from '../EstadisticaFormSlice';
-import tablaDatosTest from '../../../data/tabla-datos';
-import { useGetIndiceClasificadoresQuery } from '../../../app/services/clasificador';
+import { useEffect } from 'react';
+import {
+  resetEstadisticaModel,
+  setEstadisticaModel,
+} from '../EstadisticaFormSlice';
 
 function IndicadorEditorPage() {
   const dispath = useAppDispatch();
   const location = useLocation();
   const resourceId = getPathResourceId(location);
   // Get data from the API
-  if (resourceId) useGetEstadisticaQuery(+resourceId);
-  // Cargar indice de clasificadores
-  useGetIndiceClasificadoresQuery();
-  setTimeout(() => {
-    //dispath(setEstadisticaTablaDatos(tablaDatosTest));
-  }, 0);
+  const estadistica = useGetEstadisticaQuery(+resourceId, {
+    skip: !resourceId,
+  });
+  // Reset the form
+  useEffect(() => {
+    dispath(resetEstadisticaModel());
+  }, [resourceId]);
+  // Set the model
+  useEffect(() => {
+    if (!resourceId || !estadistica.data) {
+      return;
+    }
+    dispath(setEstadisticaModel(estadistica.data));
+  }, [estadistica.data]);
 
   return (
     <MainLayout>

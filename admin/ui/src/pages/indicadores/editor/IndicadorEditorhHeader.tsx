@@ -1,4 +1,4 @@
-import { Button, Tooltip } from 'antd';
+import { Button, Tooltip, notification, message } from 'antd';
 import {
   ArrowCurveDownLeft24Regular,
   ArrowCircleLeft24Regular,
@@ -13,17 +13,17 @@ import {
   resetChanges,
   commitChanges,
   selectPostValues,
-  setResetDefault,
-  selectFichaTecnica,
+  validateEstadisticaFields,
 } from '../EstadisticaFormSlice';
-import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { resetPathUrl } from '../../../utils/url-utils';
 import { useSaveEstadisticaMutation } from '../../../app/services/estadistica';
 import Importar from './IndicadorEditorModalImport';
+import validationsHelper from '../../../helpers/ValidationsHelper';
+import { ESTADISTICA_FIELDS_DEF } from './EstadisticaFieldsDef';
 
 const IndicadorEditorhHeader = () => {
-  const [isSaving, setIsSaving] = React.useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
   const location = useLocation();
   const dispath = useAppDispatch();
   const titulo = useAppSelector(selectTitulo);
@@ -31,32 +31,58 @@ const IndicadorEditorhHeader = () => {
   const isCreationMode = useAppSelector(selectIsCreationMode);
   const postValues = useAppSelector(selectPostValues);
 
-  const valuesTest = useAppSelector(selectFichaTecnica);
-
-  const [addEstadistica, { isLoading }] =
+  const [saveEstadistica, { isLoading: isSaving }] =
     useSaveEstadisticaMutation(isCreationMode);
   const handleDescartarCambios = () => {
     dispath(resetChanges());
   };
+  const showValidationErrorMessage = () => {
+    messageApi.error({
+      content: (
+        <>
+          <b>Campos con errores</b>, corrije los campos con errores e intenta
+          nuevamente.
+        </>
+      ),
+      style: {
+        marginTop: '90px',
+      },
+    });
+  };
+  const showSuccessMessage = () => {
+    messageApi.success({
+      content: (
+        <>
+          <b>Guardado exitoso</b>, la estadística ha sido guardada
+          correctamente.
+        </>
+      ),
+      style: {
+        marginTop: '90px',
+      },
+    });
+  };
+  const validFields = () => {
+    return validationsHelper.validValues(ESTADISTICA_FIELDS_DEF, postValues);
+  };
   const handleGuardarCambios = async () => {
-    setIsSaving(true);
-    await addEstadistica(postValues);
-    console.log(postValues);
+    // Validar campos
+    if (!validFields()) {
+      dispath(validateEstadisticaFields());
+      showValidationErrorMessage();
+      return;
+    }
+    await saveEstadistica(postValues);
     dispath(commitChanges());
-    setIsSaving(false);
-    console.log('enviado correctamente');
   };
   const urlIndicadores = resetPathUrl(location, 'indicadores');
   return (
     <>
+      {contextHolder}
       <div className="bg-custom-grey flex px-12 pt-3 pb-3 gap-2 items-center relative">
         <Link to={urlIndicadores} className="absolute top-3 left-2">
           <Tooltip title="Volver a la lista de indicadores">
-            <Button
-              onClick={() => dispath(setResetDefault())}
-              type="text"
-              icon={<ArrowCircleLeft24Regular />}
-            ></Button>
+            <Button type="text" icon={<ArrowCircleLeft24Regular />}></Button>
           </Tooltip>
         </Link>
         <div className="text-2xl md:text-2xl font-bold p-0">Indicador</div>

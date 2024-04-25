@@ -1,0 +1,73 @@
+import { Field, Select } from '@fluentui/react-components';
+import { VALIDATION_MESSAGES } from '../../config/validation-messages';
+import { FieldDef } from '../../pages/indicadores/editor/EstadisticaFieldsDef';
+
+interface WpSelectFieldProps {
+  fieldDef: FieldDef;
+  fieldName: string;
+  onChange: (e: any, fieldName: string) => void;
+  onTouched: (e: any, fieldName: string) => void;
+  textRenderer?: (value: any) => string;
+  textField?: string;
+  valueField?: string;
+  value: string;
+  options: any[];
+  validationErrors: any;
+}
+
+const WpSelectField = ({
+  fieldDef,
+  fieldName,
+  onChange,
+  onTouched,
+  options,
+  value,
+  validationErrors,
+  textRenderer: textRender,
+  textField,
+  valueField,
+}: WpSelectFieldProps) => {
+  // Default values
+  textField = textField || 'text';
+  valueField = valueField || 'value';
+  value = value || '';
+  validationErrors = validationErrors || {};
+  textRender = textRender || ((option) => option[textField]);
+  let validationMessage = '';
+  if (validationErrors.required) {
+    validationMessage = VALIDATION_MESSAGES.required;
+  }
+  return (
+    <tr key={fieldName}>
+      <th scope="row">
+        <label htmlFor={fieldName}>
+          {fieldDef.label}{' '}
+          {fieldDef.required ? <span className="text-red-600">*</span> : null}
+        </label>
+      </th>
+      <td>
+        <Field
+          required={fieldDef.required}
+          validationMessage={validationMessage}
+        >
+          <Select
+            onChange={(e) => onChange(e, fieldName)}
+            value={value}
+            name={fieldName}
+            id={fieldName}
+            onBlur={(e) => onTouched(e, fieldName)}
+          >
+            <option value="">-- Seleccionar --</option>
+            {options.map((option) => (
+              <option key={option.id} value={option[valueField]}>
+                {textRender(option)}
+              </option>
+            ))}
+          </Select>
+        </Field>
+      </td>
+    </tr>
+  );
+};
+
+export default WpSelectField;
