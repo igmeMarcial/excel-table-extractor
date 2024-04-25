@@ -49,40 +49,52 @@ export const objetivosODS = [
 ];
 export const objetivosOCDE = [
   {
-    titulo: 'Crecimiento Económico Sostenible',
+    titulo: 'Agricultura',
     color: '#EB1C2D',
   },
   {
-    titulo: 'Empleo y Desarrollo de Habilidades',
+    titulo: 'Desarrollo',
     color: '#D3A029',
   },
   {
-    titulo: 'Innovación y Competitividad',
+    titulo: 'Economía',
     color: '#279B48',
   },
   {
-    titulo: 'Gobernanza y Transparencia',
+    titulo: 'Educación',
     color: '#C31F33',
   },
   {
-    titulo: 'Desarrollo Sostenible',
+    titulo: 'Energía',
     color: '#EF402B',
   },
   {
-    titulo: 'Desarrollo Regional',
+    titulo: 'Finanzas',
     color: '#00AED9',
   },
   {
-    titulo: 'Educación y Capacitación',
+    titulo: 'Gobierno',
     color: '#FDB713',
   },
   {
-    titulo: 'Inversión y Financiamiento',
+    titulo: 'Innovación y Tecnologia',
     color: '#8F1838',
   },
   {
-    titulo: 'Inversión y Financiamiento',
-    color: '#8F1838',
+    titulo: 'Medio Ambiente',
+    color: '#049BD4',
+  },
+  {
+    titulo: 'Salud',
+    color: '#58AE31',
+  },
+  {
+    titulo: 'Sociedad',
+    color: '#FD6925',
+  },
+  {
+    titulo: 'Trabajos',
+    color: '#DDA63A',
   },
   // Puedes agregar más objetivos según tus necesidades
 ];

@@ -79,6 +79,7 @@ function NabAside() {
   const dispath = useAppDispatch();
   const menuNivel2 = useAppSelector(selectMenuNivel2);
   const toggleMenu = (model) => {
+    console.log(model);
     dispath(toggleMenuNivel2Item(model));
   };
   return (

@@ -20,7 +20,11 @@ const Item = ({ item }) => {
           </div>
         </>
       ) : (
-        <img src={item.urlImg} className="w-full h-full object-cover" />
+        <img
+          alt="img"
+          src={item.urlImg}
+          className="w-full h-full object-cover"
+        />
       )}
     </div>
   );

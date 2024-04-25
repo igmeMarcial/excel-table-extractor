@@ -11,12 +11,14 @@ interface PanelItemProps {
   colors: ColorsType;
   transformStyles: (item: IndiceItem) => React.CSSProperties;
   handleClick: (color: string) => void;
+  index: number;
 }
 const PanelItem: React.FC<PanelItemProps> = ({
   item,
   colors,
   transformStyles,
   handleClick,
+  index,
 }) => {
   const location = useLocation();
 
@@ -24,11 +26,12 @@ const PanelItem: React.FC<PanelItemProps> = ({
     <Link
       key={item.numeral}
       to={newPathUrl(location, 'estadistica', item.numeral + '.1.1.1')}
-      className={`p-2 rounded-lg mb-2 md:mb-4 min-h-16 flex justify-center text-center items-center cursor-pointer no-underline hover:bg-black`}
+      className={`p-2 rounded-lg mb-2 md:mb-4 min-h-16 flex justify-center text-center items-center cursor-pointer no-underline hover:bg-black flex flex-col`}
       style={transformStyles(item)}
       onClick={() => handleClick(colors[item.numeral])}
     >
-      <h4 className="font-normal text-white text-xm md:text-sm leading-3 sm:leading-5 md:leading-4 p-0 m-0">
+      <span className="text-white text-2xl font-bold h-1/3">{index}</span>
+      <h4 className="content-center h-2/3 font-normal text-white text-xm md:text-sm leading-3 sm:leading-5 md:leading-4 p-0 m-0">
         {item.nombre}
       </h4>
     </Link>
@@ -70,13 +73,14 @@ function PrimaryNavMdea({ items, colors }) {
   }, [numItemActivo, colors]);
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-5 mb-5">
-      {items.map((item: IndiceItem) => (
+      {items.map((item: IndiceItem, index) => (
         <PanelItem
           key={item.numeral}
           item={item}
           colors={colors}
           transformStyles={transformStyles}
           handleClick={handleClick}
+          index={index + 1}
         />
       ))}
     </div>

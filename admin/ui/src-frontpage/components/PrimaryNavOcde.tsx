@@ -1,21 +1,39 @@
 import React from 'react';
 
 function PrimaryNavOcde({ items }) {
+  const mitad1 = items.slice(0, Math.ceil(items.length / 2));
+  const mitad2 = items.slice(Math.ceil(items.length / 2));
   return (
-    <div className="flex justify-between flex-wrap mt-5 mb-5">
-      {items.map((item, index) => (
-        <div
-          key={item.color}
-          className={` min-h-16 p-2 rounded-lg text-center`}
-          style={{
-            backgroundColor: item.color,
-            width: 'calc(11.1111% - ( 0.83333333333333 * 30px ) )',
-          }}
-        >
-          <span className="text-xs text-white">{item?.titulo}</span>
-        </div>
-      ))}
-    </div>
+    <>
+      <div className="flex justify-between flex-wrap mt-5 mb-2">
+        {mitad1.map((item, index) => (
+          <div
+            key={item.color}
+            className={` min-h-16 p-2 rounded-lg text-center text-white content-center`}
+            style={{
+              backgroundColor: item.color,
+              width: 'calc(16.6666667% - ( 0.83333333333333 * 30px ))',
+            }}
+          >
+            {item?.titulo}
+          </div>
+        ))}
+      </div>
+      <div className="flex justify-between flex-wrap mt-2 mb-5">
+        {mitad2.map((item, index) => (
+          <div
+            key={item.color}
+            className={` min-h-16 p-2 rounded-lg text-center text-white content-center`}
+            style={{
+              backgroundColor: item.color,
+              width: 'calc(16.6666667% - ( 0.83333333333333 * 30px ) )',
+            }}
+          >
+            {item?.titulo}
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
 

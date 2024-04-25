@@ -59,16 +59,14 @@ class ExtractDataExcelService {
       const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
       //text extract new table
       const tableData: any = this.getTablaDatos(sheet);
-      this.getCellTabla(sheet);
-
       const contentCellTitle: any = this.getTablaDatosTitulo(sheet);
+
       const contentCellTabla: any = this.getCellTabla(sheet);
       const estadisticaDatos: EstadisticaDatos = {
         titulo: contentCellTitle
           ? contentCellTitle.separatedContent ||
-            contentCellTitle.description ||
-            ''
-          : '',
+            contentCellTitle.description
+          : contentCellTabla.titulo,
         fuente: contentCellTabla.fuente,
         nota: contentCellTabla.nota,
         elaboracion: contentCellTabla.elaboracion,
@@ -717,57 +715,67 @@ class ExtractDataExcelService {
         }
       });
     });
-    // console.log(resultMap);
     return resultMap;
   }
   getCellTabla(sheet) {
     const htmlRows = getSheetHtmlRows(sheet);
     const cellMap = this.createCellsDataMap(htmlRows);
     const matrix = this.getCellsMatrixFichaTecnica(cellMap);
-    const data = { fuente: '', nota: '', elaboracion: '' };
-    let title = '';
+    const data = { fuente: '', nota: '', elaboracion: '',titulo:'' };
     let allMatched = [];
-
     matrix.forEach((row, rowIndex) => {
       row.forEach((cell, cellIndex) => {
         if (typeof cell.v === 'number' && typeof cell.v !== 'string') {
           return;
         }
+         if (!data.titulo) {
+          data.titulo = cell.v.toString();
+        }
+        
         const matched = this.checkCell(cell, rowIndex, cellIndex);
         if (matched) {
-          // console.log(matched)
-          // console.log(cell)
           allMatched.push(matched);
         }
       });
     });
-    // console.log(allMatched);
     allMatched.forEach((match, i) => {
       const resultMapKey = ESTADISTICA_DATOS[match.matchedKey];
-      data[resultMapKey] = this.iterationData(
+      data[resultMapKey] =this.extractInformation(this.iterationData(
         matrix,
         match.rowIndex,
         match.cellIndex
-      );
+      ),resultMapKey) 
     });
-    // console.log(data);
     return data;
+  }
+  extractInformation(texto,palabra){
+    //TODO: MEJORAR EL ALGORTIMO para seperar el string
+    const index =this.removeAccents(texto.toLowerCase()).indexOf(palabra);
+    if (index !== -1) {
+        const subTexto = texto.substring(index);
+        const partes = subTexto.split(': ');
+        if (partes.length > 1) {
+           const palabras = partes[1].trim().split(' ');
+            const ultimaPalabra = palabras[palabras.length - 1];
+            const palabrasClave = ['nota', 'fuente', 'elaboración'];
+            if (palabrasClave.includes(ultimaPalabra.toLowerCase())) {
+                return palabras.slice(0, -1).join(' ');
+            }
+            // Si la última palabra no es una palabra clave, devolver el texto original
+            return partes[1];
+        }
+    }
+    return '';
   }
   iterationData(matrix, startRow, startCell) {
     let allCellValues = '';
     for (let rowIndex = startRow; rowIndex < matrix.length; rowIndex++) {
-      const row = matrix[rowIndex];
-      //  const startCellIndex = rowIndex === startRow ? startCell : 0; 
-      //  console.log(startCellIndex)
-       
+      const row = matrix[rowIndex];   
       for (let cellIndex = startCell; cellIndex < row.length; cellIndex++) {
         const cell = row[cellIndex];
-        // console.log(cell)
-        // console.log("==========")
         allCellValues += cell.v.toString() + ' ';
       }
     }
-    console.log(allCellValues)
     return allCellValues.trim();
   }
   checkCell(cell, rowIndex, cellIndex) {
@@ -775,7 +783,6 @@ class ExtractDataExcelService {
     const matchedKey = Object.keys(ESTADISTICA_DATOS).find((key) => {
       const camelCaseKey = this.toSnakeCase(key);
       const snakeCaseKeyWords = snakeCaseKey.split('_');
-
       if (snakeCaseKeyWords.includes(camelCaseKey)) {
         const similarity = this.calculateSimilarity(snakeCaseKey, camelCaseKey);
         return similarity >= 0.5;
