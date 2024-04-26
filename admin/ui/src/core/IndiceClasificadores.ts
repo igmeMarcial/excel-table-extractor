@@ -17,4 +17,7 @@ export class IndiceClasificadores {
   getItemsNivel1(): Clasificador[] {
     return this.items.filter(item => item.nivel === 1)
   }
+  getItemIdByNumeral(numeral: string): number {
+    return this.items.find(item => item.numeral === numeral).id
+  }
 }

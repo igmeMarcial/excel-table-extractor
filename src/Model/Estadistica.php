@@ -140,6 +140,26 @@ class Estadistica extends BaseModel
             'type' => DataTypes::ARRAY,
             'persist' => false,
         ],
+        'presentacionTablaTitulo' => [
+            'type' => DataTypes::STRING,
+            'column' => 'pres_tabla_titulo',
+        ],
+        'presentacionTablaSubtitulo' => [
+            'type' => DataTypes::STRING,
+            'column' => 'pres_tabla_subtitulo',
+        ],
+        'presentacionTablaNota' => [
+            'type' => DataTypes::STRING,
+            'column' => 'pres_tabla_nota',
+        ],
+        'presentacionTablaFuente' => [
+            'type' => DataTypes::STRING,
+            'column' => 'pres_tabla_fuente',
+        ],
+        'presentacionTablaElaboracion' => [
+            'type' => DataTypes::STRING,
+            'column' => 'pres_tabla_elaboracion',
+        ],
     ];
 
     // Getters

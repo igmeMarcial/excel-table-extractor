@@ -1,17 +1,17 @@
 import { ValidatorFn } from "../../../core/Validators";
 import { Estadistica } from "../../../types/Estadistica";
-
-type FieldType = 'select' | 'text' | 'url' | 'email' | 'textarea' | 'table';
+import { FieldType } from "../../../types/FieldType";
 
 export interface FieldDef {
   label: string;
+  placeholder?: string;
   type: FieldType;
   required?: boolean;
   vtype?: 'url' | 'email';
   customValidators?: ValidatorFn[];
 }
 
-export const ESTADISTICA_FIELDS_DEF: {
+export const ESTADISTICA_FICHA_FIELDS_DEF: {
   [K in keyof Estadistica]?: FieldDef
 } = {
   clasificadorN1Id: {
@@ -111,33 +111,33 @@ export const ESTADISTICA_FIELDS_DEF: {
     label: 'Teléfono/celular',
     type: 'text',
   },
-  clasificacionMdea: {
-    label: 'Clasificación MDEA',
-    type: 'text',
-  },
 };
 
 export const DATOS_FIELDS_DEF: Record<string, FieldDef> = {
-  titulo: {
+  presentacionTablaTitulo: {
     label: 'Título',
     type: 'text',
-    required: true,
+  },
+  presentacionTablaNota: {
+    label: 'Nota',
+    type: 'textarea',
+  },
+  presentacionTablaFuente: {
+    label: 'Fuente',
+    type: 'textarea',
   },
   datos: {
-    label: 'Tabla de datos',
+    label: 'Tabla',
     type: 'table',
     required: true,
   },
-  nota: {
-    label: 'Nota',
-    type: 'text',
-  },
-  fuente: {
-    label: 'Fuente',
-    type: 'text',
-  },
-  elaboracion: {
+  presentacionTablaElaboracion: {
     label: 'Elaboración',
-    type: 'text',
+    type: 'textarea',
   }
+};
+
+export const ESTADISTICA_FULL_FIELDS_DEF = {
+  ...ESTADISTICA_FICHA_FIELDS_DEF,
+  ...DATOS_FIELDS_DEF,
 };

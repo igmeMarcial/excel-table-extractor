@@ -1,4 +1,4 @@
-import { Button, Tooltip, notification, message } from 'antd';
+import { Button, Tooltip, message } from 'antd';
 import {
   ArrowCurveDownLeft24Regular,
   ArrowCircleLeft24Regular,
@@ -20,7 +20,7 @@ import { resetPathUrl } from '../../../utils/url-utils';
 import { useSaveEstadisticaMutation } from '../../../app/services/estadistica';
 import Importar from './IndicadorEditorModalImport';
 import validationsHelper from '../../../helpers/ValidationsHelper';
-import { ESTADISTICA_FIELDS_DEF } from './EstadisticaFieldsDef';
+import { ESTADISTICA_FULL_FIELDS_DEF } from './EstadisticaFieldsDef';
 
 const IndicadorEditorhHeader = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -63,7 +63,10 @@ const IndicadorEditorhHeader = () => {
     });
   };
   const validFields = () => {
-    return validationsHelper.validValues(ESTADISTICA_FIELDS_DEF, postValues);
+    return validationsHelper.validValues(
+      ESTADISTICA_FULL_FIELDS_DEF,
+      postValues
+    );
   };
   const handleGuardarCambios = async () => {
     // Validar campos

@@ -42,10 +42,10 @@ export class ValidationsHelper {
     }
     let errors: ValidationErrors = null;
     // Required validation
-    // TODO : Implementar demás validaciones
     if (fieldDef.required) {
       errors = Validators.required(value);
     }
+    // TODO : Implementar demás validaciones
     fieldDef.customValidators?.forEach((validator) => {
       const error = validator(value);
       if (error) {

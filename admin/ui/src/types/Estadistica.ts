@@ -28,13 +28,16 @@ export interface FichaTecnicaFields {
   correoElectronico?: string
   datosContacto?: string
   telefonoCelular?: string
-  clasificacionMdea?:string
+  clasificacionMdea?: string
 }
 
-export interface Estadistica
-  extends EstadisticaBaseFields,
-  FichaTecnicaFields {
+export interface Estadistica extends EstadisticaBaseFields, FichaTecnicaFields {
   datos?: EstadisticaDatos
   datosInformacion?: DatosInformacion
   graficos?: Grafico[]
+  // Presentacion
+  presentacionTablaTitulo?: string
+  presentacionTablaNota?: string
+  presentacionTablaFuente?: string
+  presentacionTablaElaboracion?: string
 }

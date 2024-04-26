@@ -1,6 +1,6 @@
-import { Field, Select } from '@fluentui/react-components';
-import { VALIDATION_MESSAGES } from '../../config/validation-messages';
+import { Select } from '@fluentui/react-components';
 import { FieldDef } from '../../pages/indicadores/editor/EstadisticaFieldsDef';
+import WpField from './WpField';
 
 interface WpSelectFieldProps {
   fieldDef: FieldDef;
@@ -33,40 +33,27 @@ const WpSelectField = ({
   value = value || '';
   validationErrors = validationErrors || {};
   textRender = textRender || ((option) => option[textField]);
-  let validationMessage = '';
-  if (validationErrors.required) {
-    validationMessage = VALIDATION_MESSAGES.required;
-  }
   return (
-    <tr key={fieldName}>
-      <th scope="row">
-        <label htmlFor={fieldName}>
-          {fieldDef.label}{' '}
-          {fieldDef.required ? <span className="text-red-600">*</span> : null}
-        </label>
-      </th>
-      <td>
-        <Field
-          required={fieldDef.required}
-          validationMessage={validationMessage}
-        >
-          <Select
-            onChange={(e) => onChange(e, fieldName)}
-            value={value}
-            name={fieldName}
-            id={fieldName}
-            onBlur={(e) => onTouched(e, fieldName)}
-          >
-            <option value="">-- Seleccionar --</option>
-            {options.map((option) => (
-              <option key={option.id} value={option[valueField]}>
-                {textRender(option)}
-              </option>
-            ))}
-          </Select>
-        </Field>
-      </td>
-    </tr>
+    <WpField
+      fieldDef={fieldDef}
+      fieldName={fieldName}
+      validationErrors={validationErrors}
+    >
+      <Select
+        onChange={(e) => onChange(e, fieldName)}
+        value={value}
+        name={fieldName}
+        id={fieldName}
+        onBlur={(e) => onTouched(e, fieldName)}
+      >
+        <option value="">-- Seleccionar --</option>
+        {options.map((option) => (
+          <option key={option.id} value={option[valueField]}>
+            {textRender(option)}
+          </option>
+        ))}
+      </Select>
+    </WpField>
   );
 };
 

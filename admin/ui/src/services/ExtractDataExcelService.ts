@@ -10,23 +10,17 @@ import {
   CELL_VALUE_TYPE_STRING,
   Cell,
 } from '../types/Cell';
-import { FichaTecnicaFields } from '../types/Estadistica';
 import { EstadisticaDatos } from '../types/EstadisticaDatos';
 import { CellRange } from '../types/CellRange';
 import { getSheetHtmlRows } from '../utils/xmls-utils';
 import { readExcelFile } from '../utils/file-utils';
+import { FichaTecnicaFields } from '../types/Estadistica';
 
 type HtmlCellsMatrix = HTMLTableCellElement[][];
 interface Sheet {
   [key: string]: any; // Tipo genérico para la celda
 }
-interface Range {
-  s: { r: number; c: number }; // Coordenadas de la primera celda en el rango
-  e: { r: number; c: number }; // Coordenadas de la última celda en el rango
-}
-interface ResultObject {
-  [key: string]: string;
-}
+
 //TODO: Fusionar models
 class ExtractDataExcelService {
   private static _instance: ExtractDataExcelService;
@@ -65,7 +59,7 @@ class ExtractDataExcelService {
       const estadisticaDatos: EstadisticaDatos = {
         titulo: contentCellTitle
           ? contentCellTitle.separatedContent ||
-            contentCellTitle.description
+          contentCellTitle.description
           : contentCellTabla.titulo,
         fuente: contentCellTabla.fuente,
         nota: contentCellTabla.nota,
@@ -610,7 +604,7 @@ class ExtractDataExcelService {
   getEstadisticaFieldsFichaTecnica(
     workbook: XLSX.WorkBook,
     sheetIndex: number
-  ) {
+  ): FichaTecnicaFields {
     const sheetName: string = workbook.SheetNames[sheetIndex];
     const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
     const htmlRows = getSheetHtmlRows(sheet);
@@ -721,17 +715,17 @@ class ExtractDataExcelService {
     const htmlRows = getSheetHtmlRows(sheet);
     const cellMap = this.createCellsDataMap(htmlRows);
     const matrix = this.getCellsMatrixFichaTecnica(cellMap);
-    const data = { fuente: '', nota: '', elaboracion: '',titulo:'' };
+    const data = { fuente: '', nota: '', elaboracion: '', titulo: '' };
     let allMatched = [];
     matrix.forEach((row, rowIndex) => {
       row.forEach((cell, cellIndex) => {
         if (typeof cell.v === 'number' && typeof cell.v !== 'string') {
           return;
         }
-         if (!data.titulo) {
+        if (!data.titulo) {
           data.titulo = cell.v.toString();
         }
-        
+
         const matched = this.checkCell(cell, rowIndex, cellIndex);
         if (matched) {
           allMatched.push(matched);
@@ -740,37 +734,37 @@ class ExtractDataExcelService {
     });
     allMatched.forEach((match, i) => {
       const resultMapKey = ESTADISTICA_DATOS[match.matchedKey];
-      data[resultMapKey] =this.extractInformation(this.iterationData(
+      data[resultMapKey] = this.extractInformation(this.iterationData(
         matrix,
         match.rowIndex,
         match.cellIndex
-      ),resultMapKey) 
+      ), resultMapKey)
     });
     return data;
   }
-  extractInformation(texto,palabra){
+  extractInformation(texto, palabra) {
     //TODO: MEJORAR EL ALGORTIMO para seperar el string
-    const index =this.removeAccents(texto.toLowerCase()).indexOf(palabra);
+    const index = this.removeAccents(texto.toLowerCase()).indexOf(palabra);
     if (index !== -1) {
-        const subTexto = texto.substring(index);
-        const partes = subTexto.split(': ');
-        if (partes.length > 1) {
-           const palabras = partes[1].trim().split(' ');
-            const ultimaPalabra = palabras[palabras.length - 1];
-            const palabrasClave = ['nota', 'fuente', 'elaboración'];
-            if (palabrasClave.includes(ultimaPalabra.toLowerCase())) {
-                return palabras.slice(0, -1).join(' ');
-            }
-            // Si la última palabra no es una palabra clave, devolver el texto original
-            return partes[1];
+      const subTexto = texto.substring(index);
+      const partes = subTexto.split(': ');
+      if (partes.length > 1) {
+        const palabras = partes[1].trim().split(' ');
+        const ultimaPalabra = palabras[palabras.length - 1];
+        const palabrasClave = ['nota', 'fuente', 'elaboración'];
+        if (palabrasClave.includes(ultimaPalabra.toLowerCase())) {
+          return palabras.slice(0, -1).join(' ');
         }
+        // Si la última palabra no es una palabra clave, devolver el texto original
+        return partes[1];
+      }
     }
     return '';
   }
   iterationData(matrix, startRow, startCell) {
     let allCellValues = '';
     for (let rowIndex = startRow; rowIndex < matrix.length; rowIndex++) {
-      const row = matrix[rowIndex];   
+      const row = matrix[rowIndex];
       for (let cellIndex = startCell; cellIndex < row.length; cellIndex++) {
         const cell = row[cellIndex];
         allCellValues += cell.v.toString() + ' ';

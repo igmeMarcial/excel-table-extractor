@@ -16,6 +16,9 @@ import DataRangeConfirmDialog, {
 import { EstadisticaWorkbook } from '../../../core/EstadisticaWorkbook';
 import SelectFileButton from '../../../components/SelectFileButton';
 import { CellRange } from '../../../types/CellRange';
+import { useGetIndiceClasificadoresQuery } from '../../../app/services/clasificador';
+import { IndiceClasificadores } from '../../../core/IndiceClasificadores';
+import { Estadistica } from '../../../types/Estadistica';
 
 const Importar = () => {
   const dispath = useAppDispatch();
@@ -30,7 +33,8 @@ const Importar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [camposFichaChecked, setCamposFichaChecked] = useState(false);
   const [tablaDatosChecked, setTablaDatosChecked] = useState(false);
-
+  const { data: clasificadores } = useGetIndiceClasificadoresQuery();
+  const indiceClasificadores = new IndiceClasificadores(clasificadores || []);
   const importButtonTitle = isCreationMode ? 'Importar' : 'Actualizar datos';
   const importModalTitle = importButtonTitle;
   const confirmDataRangeDialogRef = useRef<DataRangeConfirmDialogRef>(null);
@@ -78,12 +82,28 @@ const Importar = () => {
   const extractCamposFicha = () => {
     if (workbookFile) {
       if (camposFichaChecked) {
-        const dataIndicator =
+        const fields: Estadistica =
           fichaExcelService.getEstadisticaFieldsFichaTecnica(
             workbookFile,
             camposFichaSheetIndex
           );
-        dispath(setEstadisticaFields(dataIndicator));
+        // MDEA Clasificadores path
+        const clasificacionMdea = fields.clasificacionMdea || '';
+        const pathRe = /(\d+\.\d+\.\d+.*-.*\d+)/;
+        if (pathRe.test(clasificacionMdea)) {
+          const path = clasificacionMdea.split('-')[0].trim();
+          const numerals = path.split('.');
+          fields.clasificadorN1Id = indiceClasificadores.getItemIdByNumeral(
+            numerals[0]
+          );
+          fields.clasificadorN2Id = indiceClasificadores.getItemIdByNumeral(
+            `${numerals[0]}.${numerals[1]}`
+          );
+          fields.clasificadorN3Id = indiceClasificadores.getItemIdByNumeral(
+            `${numerals[0]}.${numerals[1]}.${numerals[2]}`
+          );
+        }
+        dispath(setEstadisticaFields(fields));
       }
     }
   };
@@ -101,11 +121,14 @@ const Importar = () => {
     // Combinar los datos de sheetData y data en un nuevo objeto EstadisticaDatos
     const combinedData: EstadisticaDatos = {
       tabla: sheetData, // Utilizar solo los datos de sheetData
-      titulo: data.titulo,
-      nota: data.nota,
-      fuente: data.fuente,
-      elaboracion: data.elaboracion,
     };
+    const estadisticaFields: Estadistica = {
+      presentacionTablaTitulo: data.titulo,
+      presentacionTablaNota: data.nota,
+      presentacionTablaFuente: data.fuente,
+      presentacionTablaElaboracion: data.elaboracion,
+    };
+    dispath(setEstadisticaFields(estadisticaFields));
     dispath(setEstadisticaDatos(combinedData));
   };
   const handleOk = () => {

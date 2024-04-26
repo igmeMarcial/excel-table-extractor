@@ -1,6 +1,6 @@
-import { Field, Input } from '@fluentui/react-components';
-import { VALIDATION_MESSAGES } from '../../config/validation-messages';
+import { Input } from '@fluentui/react-components';
 import { FieldDef } from '../../pages/indicadores/editor/EstadisticaFieldsDef';
+import WpField from './WpField';
 
 interface WpTextFieldProps {
   fieldDef: FieldDef;
@@ -9,6 +9,7 @@ interface WpTextFieldProps {
   onTouched: (e: any, fieldName: string) => void;
   value: string;
   validationErrors: any;
+  placeholder?: string;
 }
 
 const WpTextField = ({
@@ -18,35 +19,23 @@ const WpTextField = ({
   onTouched,
   value,
   validationErrors,
+  placeholder,
 }: WpTextFieldProps) => {
   value = value || '';
-  validationErrors = validationErrors || {};
-  let validationMessage = '';
-  if (validationErrors.required) {
-    validationMessage = VALIDATION_MESSAGES.required;
-  }
   return (
-    <tr key={fieldName}>
-      <th scope="row">
-        <label htmlFor={fieldName}>
-          {fieldDef.label}{' '}
-          {fieldDef.required ? <span className="text-red-600">*</span> : null}
-        </label>
-      </th>
-      <td>
-        <Field
-          required={fieldDef.required}
-          validationMessage={validationMessage}
-        >
-          <Input
-            name={fieldName}
-            value={value}
-            onChange={(e) => onChange(e, fieldName)}
-            onBlur={(e) => onTouched(e, fieldName)}
-          />
-        </Field>
-      </td>
-    </tr>
+    <WpField
+      fieldDef={fieldDef}
+      fieldName={fieldName}
+      validationErrors={validationErrors}
+    >
+      <Input
+        name={fieldName}
+        value={value}
+        onChange={(e) => onChange(e, fieldName)}
+        onBlur={(e) => onTouched(e, fieldName)}
+        placeholder={placeholder || fieldDef.placeholder}
+      />
+    </WpField>
   );
 };
 

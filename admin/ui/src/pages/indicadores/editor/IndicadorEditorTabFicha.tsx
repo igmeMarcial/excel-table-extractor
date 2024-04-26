@@ -1,20 +1,19 @@
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import {
   setEstadisticaFieldValue,
-  selectFichaTecnica,
   selectValidationErrors,
   validateEstadisticaField,
+  selectEstadisticaValues,
 } from '../EstadisticaFormSlice';
-import { ESTADISTICA_FIELDS_DEF } from './EstadisticaFieldsDef';
+import { ESTADISTICA_FICHA_FIELDS_DEF } from './EstadisticaFieldsDef';
 import { useGetIndiceClasificadoresQuery } from '../../../app/services/clasificador';
 import { IndiceClasificadores } from '../../../core/IndiceClasificadores';
-import WpTextField from '../../../components/form/WpTextField';
-import WpTextareaField from '../../../components/form/WpTextareaField';
 import WpSelectField from '../../../components/form/WpSelectField';
+import WpDynamicField from '../../../components/form/WpDynamicField';
 
 const IndicadorEditorTabFicha = () => {
   const dispath = useAppDispatch();
-  const values = useAppSelector(selectFichaTecnica);
+  const values = useAppSelector(selectEstadisticaValues);
   const validationErrors = useAppSelector(selectValidationErrors);
   const { data: clasificadores } = useGetIndiceClasificadoresQuery();
   const indiceClasificadores = new IndiceClasificadores(clasificadores || []);
@@ -55,7 +54,7 @@ const IndicadorEditorTabFicha = () => {
         <form className="h-full flex flex-col justify-between">
           <table className="form-table">
             <tbody>
-              {Object.entries(ESTADISTICA_FIELDS_DEF).map(
+              {Object.entries(ESTADISTICA_FICHA_FIELDS_DEF).map(
                 ([fieldName, fieldDef]) => {
                   if (fieldDef.type === 'select') {
                     return (
@@ -74,31 +73,18 @@ const IndicadorEditorTabFicha = () => {
                         validationErrors={validationErrors[fieldName]}
                       />
                     );
-                  } else if (fieldDef.type === 'textarea') {
-                    return (
-                      <WpTextareaField
-                        fieldDef={fieldDef}
-                        key={fieldName}
-                        fieldName={fieldName}
-                        onChange={handleChange}
-                        onTouched={handleTouched}
-                        value={values[fieldName]}
-                        validationErrors={validationErrors[fieldName]}
-                      />
-                    );
-                  } else {
-                    return (
-                      <WpTextField
-                        key={fieldName}
-                        fieldDef={fieldDef}
-                        fieldName={fieldName}
-                        onChange={handleChange}
-                        onTouched={handleTouched}
-                        value={values[fieldName]}
-                        validationErrors={validationErrors[fieldName]}
-                      />
-                    );
                   }
+                  return (
+                    <WpDynamicField
+                      fieldDef={fieldDef}
+                      fieldName={fieldName}
+                      validationErrors={validationErrors[fieldName]}
+                      value={values[fieldName]}
+                      onChange={handleChange}
+                      onTouched={handleTouched}
+                      key={fieldName}
+                    />
+                  );
                 }
               )}
             </tbody>

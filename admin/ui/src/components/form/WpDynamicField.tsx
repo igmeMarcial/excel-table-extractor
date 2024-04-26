@@ -1,24 +1,32 @@
-import { Textarea } from '@fluentui/react-components';
 import { FieldDef } from '../../pages/indicadores/editor/EstadisticaFieldsDef';
+import WpDynamicInput from './WpDynamicInput';
 import WpField from './WpField';
 
-interface WpTextareaFieldProps {
+interface WpDynamicFieldProps {
   fieldDef: FieldDef;
   fieldName: string;
   onChange: (e: any, fieldName: string) => void;
   onTouched: (e: any, fieldName: string) => void;
   value: string;
   validationErrors: any;
+  options?: any[];
+  textField?: string;
+  valueField?: string;
+  textRenderer?: (value: any) => string;
 }
 
-const WpTextareaField = ({
+const WpDynamicField = ({
   fieldDef,
   fieldName,
   onChange,
   onTouched,
   value,
   validationErrors,
-}: WpTextareaFieldProps) => {
+  options,
+  textField,
+  valueField,
+  textRenderer,
+}: WpDynamicFieldProps) => {
   value = value || '';
   return (
     <WpField
@@ -26,15 +34,19 @@ const WpTextareaField = ({
       fieldName={fieldName}
       validationErrors={validationErrors}
     >
-      <Textarea
-        name={fieldName}
+      <WpDynamicInput
+        fieldName={fieldName}
         value={value}
+        type={fieldDef.type}
+        options={options}
+        textField={textField}
+        valueField={valueField}
+        textRenderer={textRenderer}
         onChange={(e) => onChange(e, fieldName)}
-        onBlur={(e) => onTouched(e, fieldName)}
-        resize="vertical"
+        onTouched={(e) => onTouched(e, fieldName)}
       />
     </WpField>
   );
 };
 
-export default WpTextareaField;
+export default WpDynamicField;

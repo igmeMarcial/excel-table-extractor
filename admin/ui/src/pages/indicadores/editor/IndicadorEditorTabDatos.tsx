@@ -1,72 +1,95 @@
-import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   selectEstadisticaData,
-  selectEstadisticaDatos,
+  selectEstadisticaValues,
   selectValidationErrors,
-  setEstadisticaDatosFieldValue,
+  setEstadisticaFieldValue,
+  validateEstadisticaField,
 } from '../EstadisticaFormSlice';
 import { DATOS_FIELDS_DEF } from './EstadisticaFieldsDef';
-import { Field, Input, Textarea } from '@fluentui/react-components';
 import Datasheet from '../../../components/Datasheet';
+import WpField from '../../../components/form/WpField';
+import WpDynamicField from '../../../components/form/WpDynamicField';
+import WpTextField from '../../../components/form/WpTextField';
 
-const fieldsArray = DATOS_FIELDS_DEF;
-
-const TextField = ({ fieldName }) => {
-  const fieldDef = fieldsArray[fieldName];
+const Field = ({ fieldName }) => {
+  const fieldDef = DATOS_FIELDS_DEF[fieldName];
   const dispath = useAppDispatch();
-  const values = useAppSelector(selectEstadisticaDatos) || {};
-  let fieldValue = values[fieldName] || ''; // Valor predeterminado en caso de que sea undefined
-  const err = useAppSelector(selectValidationErrors);
-  // console.log(err);
-  // console.log(values);
-  const handleChange = (
-    e:
-      | React.ChangeEvent<HTMLTextAreaElement>
-      | React.ChangeEvent<HTMLInputElement>
-  ) => {
-    dispath(
-      setEstadisticaDatosFieldValue({ field: fieldName, value: e.target.value })
-    );
+  const validationErrors = useAppSelector(selectValidationErrors);
+  const values = useAppSelector(selectEstadisticaValues) || {};
+  const handleChange = (e) => {
+    const { name: fiendName, value } = e.target;
+    dispath(setEstadisticaFieldValue({ field: fiendName, value }));
+  };
+
+  const handleTouched = (e) => {
+    const { name: fieldName, value } = e.target;
+    dispath(validateEstadisticaField({ field: fieldName, value }));
   };
   return (
-    <Field label={fieldDef.label}>
-      {fieldName === 'nota' ? (
-        <Textarea
-          style={{ height: 100, resize: 'none', scrollbarWidth: 'thin' }}
-          name={fieldName}
-          value={fieldValue}
-          onChange={handleChange}
-          required={fieldDef.required}
-        />
-      ) : (
-        <Input
-          name={fieldName}
-          type="text"
-          value={fieldValue}
-          onChange={handleChange}
-          required={fieldDef.required}
-        />
-      )}
-    </Field>
+    <WpDynamicField
+      fieldDef={fieldDef}
+      fieldName={fieldName}
+      validationErrors={validationErrors[fieldName]}
+      value={values[fieldName]}
+      onChange={handleChange}
+      onTouched={handleTouched}
+    ></WpDynamicField>
   );
 };
+const TituloField = () => {
+  const fieldName = 'presentacionTablaTitulo';
+  const fieldDef = DATOS_FIELDS_DEF[fieldName];
+  const dispath = useAppDispatch();
+  const validationErrors = useAppSelector(selectValidationErrors);
+  const values = useAppSelector(selectEstadisticaValues) || {};
+  const placeholder = `${values.nombre}, ${values.periodoSerieTiempo}`;
+  const handleChange = (e) => {
+    const { name: fiendName, value } = e.target;
+    dispath(setEstadisticaFieldValue({ field: fiendName, value }));
+  };
 
+  const handleTouched = (e) => {
+    const { name: fieldName, value } = e.target;
+    dispath(validateEstadisticaField({ field: fieldName, value }));
+  };
+  return (
+    <WpTextField
+      fieldDef={fieldDef}
+      fieldName={fieldName}
+      validationErrors={validationErrors[fieldName]}
+      value={values[fieldName]}
+      onChange={handleChange}
+      onTouched={handleTouched}
+      placeholder={placeholder}
+    ></WpTextField>
+  );
+};
 const IndicadorEditorTabDatos = () => {
   const data = useAppSelector(selectEstadisticaData);
+  const validationErrors = useAppSelector(selectValidationErrors);
   return (
     <form>
-      <div className="flex flex-col gap-y-4">
-        <TextField fieldName="titulo" />
-        <Field label="Tabla de datos">
-          <div className="p-3 border border-solid  border-gray-300 rounded overflow-hidden">
-            <Datasheet data={data} />
-          </div>
-        </Field>
-        <TextField fieldName="nota" />
-        <TextField fieldName="fuente" />
-        <TextField fieldName="elaboracion" />
-      </div>
+      <table className="form-table">
+        <tbody>
+          <TituloField />
+          <WpField
+            fieldDef={DATOS_FIELDS_DEF.datos}
+            fieldName="datos"
+            validationErrors={validationErrors.datos}
+          >
+            <div
+              className="p-3 border border-solid rounded overflow-hidden"
+              style={{ borderColor: '#b3b3b3' }}
+            >
+              <Datasheet data={data} />
+            </div>
+          </WpField>
+          <Field fieldName="presentacionTablaNota" />
+          <Field fieldName="presentacionTablaFuente" />
+          <Field fieldName="presentacionTablaElaboracion" />
+        </tbody>
+      </table>
     </form>
   );
 };
