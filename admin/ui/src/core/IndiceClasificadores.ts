@@ -18,6 +18,6 @@ export class IndiceClasificadores {
     return this.items.filter(item => item.nivel === 1)
   }
   getItemIdByNumeral(numeral: string): number {
-    return this.items.find(item => item.numeral === numeral).id
+    return this.items.find(item => item.numeral === numeral)?.id || null
   }
 }

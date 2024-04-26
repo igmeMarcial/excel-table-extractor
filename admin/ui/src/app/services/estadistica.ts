@@ -43,6 +43,7 @@ export const estadisticaApi = api.injectEndpoints({
 })
 // Add/Update
 export const useSaveEstadisticaMutation = (creating: boolean) => {
+  console.log('creating::', creating)
   if (creating) {
     return useAddEstadisticaMutation()
   } else {

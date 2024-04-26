@@ -68,7 +68,7 @@ export const estadisticaFormSlice = createSlice({
       state.estadisticaModel = data;
       state.estadisticaRawModel = data;
       state.titulo = data.nombre || '';
-      state.isCreationMode = !!data.id;
+      state.isCreationMode = !data.id;
       state.hasChanges = false;
     },
     resetEstadisticaModel: (state) => {

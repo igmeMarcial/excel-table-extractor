@@ -612,7 +612,7 @@ class ExtractDataExcelService {
     const matrix = this.getCellsMatrixFichaTecnica(cellMap);
     return this.filterValueFichaTecnica(matrix);
   }
-  getCellsMatrixFichaTecnica(cellMap) {
+  getCellsMatrixFichaTecnica(cellMap): Cell[][] {
     const out: Cell[][] = [];
     cellMap.forEach((row, rowIndex) => {
       let colIndex = 0;
@@ -656,14 +656,15 @@ class ExtractDataExcelService {
     return out;
   }
   calculateSimilarity = (str1, str2) => {
-    const len = Math.min(str1.length, str2.length);
+    const minLn = Math.min(str1.length, str2.length);
+    const maxLn = Math.max(str1.length, str2.length);
     let commonChars = 0;
-    for (let i = 0; i < len; i++) {
+    for (let i = 0; i < minLn; i++) {
       if (str1[i] === str2[i]) {
         commonChars++;
       }
     }
-    return commonChars / len;
+    return commonChars / maxLn;
   };
   removeAccents = (string) => {
     return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -698,7 +699,7 @@ class ExtractDataExcelService {
               resultMap[resultMapKey] = `${newValue}`;
             } else {
               // Si existe, concatenar el nuevo valor al valor existente
-              resultMap[resultMapKey] += `, ${newValue}`;
+              resultMap[resultMapKey] += `\n${newValue}`;
             }
           } else {
             const resultMapKey = FICHA_FIELDS_MAP[matchedKey];
@@ -715,62 +716,79 @@ class ExtractDataExcelService {
     const htmlRows = getSheetHtmlRows(sheet);
     const cellMap = this.createCellsDataMap(htmlRows);
     const matrix = this.getCellsMatrixFichaTecnica(cellMap);
-    const data = { fuente: '', nota: '', elaboracion: '', titulo: '' };
-    let allMatched = [];
-    matrix.forEach((row, rowIndex) => {
-      row.forEach((cell, cellIndex) => {
+    const data = {
+      fuente: this.getFieldData('Fuente:', matrix),
+      nota: this.getFieldData('Nota:', matrix),
+      elaboracion: this.getFieldData('Elaboración:', matrix),
+      titulo: ''
+    };
+    matrix.forEach((row) => {
+      row.forEach((cell) => {
         if (typeof cell.v === 'number' && typeof cell.v !== 'string') {
           return;
         }
         if (!data.titulo) {
           data.titulo = cell.v.toString();
         }
-
-        const matched = this.checkCell(cell, rowIndex, cellIndex);
-        if (matched) {
-          allMatched.push(matched);
-        }
       });
-    });
-    allMatched.forEach((match, i) => {
-      const resultMapKey = ESTADISTICA_DATOS[match.matchedKey];
-      data[resultMapKey] = this.extractInformation(this.iterationData(
-        matrix,
-        match.rowIndex,
-        match.cellIndex
-      ), resultMapKey)
     });
     return data;
   }
-  extractInformation(texto, palabra) {
-    //TODO: MEJORAR EL ALGORTIMO para seperar el string
-    const index = this.removeAccents(texto.toLowerCase()).indexOf(palabra);
-    if (index !== -1) {
-      const subTexto = texto.substring(index);
-      const partes = subTexto.split(': ');
-      if (partes.length > 1) {
-        const palabras = partes[1].trim().split(' ');
-        const ultimaPalabra = palabras[palabras.length - 1];
-        const palabrasClave = ['nota', 'fuente', 'elaboración'];
-        if (palabrasClave.includes(ultimaPalabra.toLowerCase())) {
-          return palabras.slice(0, -1).join(' ');
-        }
-        // Si la última palabra no es una palabra clave, devolver el texto original
-        return partes[1];
+  getFieldData(fieldKeyword, matrix: Cell[][]): string {
+    const cellRef = this.getMatchedFieldCell(matrix, fieldKeyword);
+    if (!cellRef) {
+      return '';
+    }
+    const out = [];
+    const cellRefValue = cellRef.v.toString();
+    const cellRefColIndex = cellRef.c;
+    const cellRefRowIndex = cellRef.r;
+    // Extraer la nota de la misma celda
+    let nota = cellRefValue.replace(fieldKeyword, '').trim();
+    if (nota) {
+      out.push(nota);
+    }
+    // Exraer nota de la siguiente celda
+    const nextCell = matrix[cellRefRowIndex][cellRefColIndex + 1];
+    nota = nextCell?.v.toString().trim();
+    if (nota) {
+      out.push(nota);
+    }
+    // Extraer nota de la siguientes celdas
+    for (let rowIndex = cellRefRowIndex + 1; rowIndex < matrix.length; rowIndex++) {
+      const cell = matrix[rowIndex][cellRefColIndex];
+      const cellValue = cell.v.toString().trim();
+      // La celda contiene un valor y no hace match con otro campo
+      if (cellValue && !this.isFieldKeywordCell(cell)) {
+        out.push(cellValue);
+      } else {
+        break;
       }
     }
-    return '';
+    return out.join('\n');
   }
-  iterationData(matrix, startRow, startCell) {
-    let allCellValues = '';
-    for (let rowIndex = startRow; rowIndex < matrix.length; rowIndex++) {
-      const row = matrix[rowIndex];
-      for (let cellIndex = startCell; cellIndex < row.length; cellIndex++) {
-        const cell = row[cellIndex];
-        allCellValues += cell.v.toString() + ' ';
+  isFieldKeywordCell(cell: Cell) {
+    const cellValue = cell.v.toString().trim();
+    const keywords = ['Nota:', 'Fuente:', 'Elaboración:', 'Elaboracion:'];
+    for (const keyword of keywords) {
+      const re = new RegExp(keyword, 'i');
+      if (re.test(cellValue)) {
+        return true;
       }
     }
-    return allCellValues.trim();
+    return false;
+  }
+  getMatchedFieldCell(matrix: Cell[][], fieldKeyword): Cell {
+    const re = new RegExp(fieldKeyword, 'i');
+    let matchedCell = null;
+    matrix.forEach((row) => {
+      row.forEach((cell) => {
+        if (re.test(cell.v.toString())) {
+          matchedCell = cell;
+        }
+      });
+    });
+    return matchedCell;
   }
   checkCell(cell, rowIndex, cellIndex) {
     const snakeCaseKey = this.toSnakeCase(cell.v.toString());

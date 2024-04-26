@@ -11,9 +11,11 @@ export const FICHA_FIELDS_MAP: Record<string, string> = {
   periodicidad_de_generacion_de_la_informacion_por_la_entidad: "periodicidadGeneracion",
   periodicidad_de_entrega_registro_de_la_informacion_por_la_entidad: "periodicidadEntrega",
   periodo_serie_tiempo: "periodoSerieTiempo",
+  periodo_de_serie_tiempo: "periodoSerieTiempo",
   ambito_geografico: "ambitoGeografico",
   limitaciones: "limitaciones",
   relacion_con_objetivos_de_politica: "relacionObjetivosNacionales",
+  "relacion_con_objetivos_de_politica,_normas,_metas_ambientales_nacionales": "relacionObjetivosNacionales",
   relacion_con_iniciativas_internacionales: "relacionIniciativasInternacionales",
   correo_electronico: "correoElectronico",
   datos_del_contacto: "datosContacto",
@@ -25,7 +27,7 @@ export const ESTADISTICA_DATOS: Record<string, string> = {
   fuente: 'fuente',
   nota: 'nota',
   elaboracion: 'elaboracion',
-  
+
 };
 
 

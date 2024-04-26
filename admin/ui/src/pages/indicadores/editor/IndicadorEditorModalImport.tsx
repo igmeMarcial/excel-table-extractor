@@ -88,11 +88,12 @@ const Importar = () => {
             camposFichaSheetIndex
           );
         // MDEA Clasificadores path
-        const clasificacionMdea = fields.clasificacionMdea || '';
-        const pathRe = /(\d+\.\d+\.\d+.*-.*\d+)/;
-        if (pathRe.test(clasificacionMdea)) {
-          const path = clasificacionMdea.split('-')[0].trim();
-          const numerals = path.split('.');
+        const mdeaPathInput = fields.clasificacionMdea || '';
+        const pathRe = /\d+\.\d+\.\d+\s*-\s*\d+/;
+        if (pathRe.test(mdeaPathInput)) {
+          const mdeaFullPath = pathRe.exec(mdeaPathInput)[0];
+          const mdeaPath = mdeaFullPath.split('-')[0].trim();
+          const numerals = mdeaPath.split('.');
           fields.clasificadorN1Id = indiceClasificadores.getItemIdByNumeral(
             numerals[0]
           );
