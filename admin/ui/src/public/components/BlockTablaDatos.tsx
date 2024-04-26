@@ -1,5 +1,6 @@
 import DataTable from '../../components/DataTable';
 import { CodigoMarcoOrdenador } from '../../types/CodigoMarcoOrdenador';
+import { Estadistica } from '../../types/Estadistica';
 import { EstadisticaDatos } from '../../types/EstadisticaDatos';
 import { getContextoVisualColor } from '../../utils/color-utils';
 import {
@@ -11,6 +12,7 @@ interface BlockTablaDatosProps {
   contextoVisual: CodigoMarcoOrdenador;
   numeralNivel1: number;
   props: EstadisticaDatos;
+  estadistica: Estadistica;
 }
 // Tokens
 const TITULO_FONT_SIZE = '12px';
@@ -28,6 +30,7 @@ const renderNota = (nota: string) => {
 };
 
 function BlockTablaDatos({
+  estadistica,
   props,
   contextoVisual,
   numeralNivel1,
@@ -44,15 +47,15 @@ function BlockTablaDatos({
           marginBottom: '12px',
         }}
       >
-        {quitarParentesis(props.titulo)} <br />
+        {quitarParentesis(estadistica.presentacionTablaTitulo)} <br />
         <span className="font-normal">
           {obtenerTextoEntreParentesis(props.titulo)}
         </span>
       </div>
       <DataTable data={props.tabla} format={format} />
       <div style={{ fontSize: FOOTER_FONT_SIZE, marginTop: '8px' }}>
-        {renderNota(props.nota)}
-        <div>Fuente: {props.fuente}</div>
+        {renderNota(estadistica.presentacionTablaNota)}
+        <div>Fuente: {estadistica.presentacionTablaFuente}</div>
       </div>
     </>
   );

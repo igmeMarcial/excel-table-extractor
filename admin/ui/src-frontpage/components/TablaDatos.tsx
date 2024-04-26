@@ -2,6 +2,7 @@ import { Button } from '@fluentui/react-components';
 import { CsvIcon, XlsxIcon } from './Icons';
 import { useAppSelector } from '../app/hooks';
 import {
+  selectEstadisticaData,
   selectEstadisticaDatos,
   selectEstadisticaMarcoOrdenador,
 } from '../app/AppSlice';
@@ -10,6 +11,7 @@ import BlockTablaDatos from '../../src/public/components/BlockTablaDatos';
 
 const TablaDatos = () => {
   const datos = useAppSelector(selectEstadisticaDatos) || null;
+  const estadistica = useAppSelector(selectEstadisticaData) || null;
   const marcoOrdenador =
     useAppSelector(selectEstadisticaMarcoOrdenador) || null;
 
@@ -66,6 +68,7 @@ const TablaDatos = () => {
         style={{ fontFamily: 'sans-serif' }}
       >
         <BlockTablaDatos
+          estadistica={estadistica}
           props={datos}
           contextoVisual={marcoOrdenador.codigo}
           numeralNivel1={numeralNivel1}
