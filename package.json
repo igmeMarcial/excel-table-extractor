@@ -1,1 +1,15 @@
-{}
+{
+    "name": "aesa",
+    "description": "Plugin para WordPress para la generaci\u0000n de anuarios estad\u0000sticos",
+    "version": "1.0.0",
+    "author": "Jaime Cruz",
+    "license": "ISC",
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@gitlab.com/minamprojects/aesa/aesa-wp-plugin.git"
+    },
+    "bugs": {
+        "url": "https://gitlab.com/minamprojects/aesa/aesa-wp-plugin/issues"
+    },
+    "homepage": "https://gitlab.com/minamprojects/aesa/aesa-wp-plugin#readme"
+}
