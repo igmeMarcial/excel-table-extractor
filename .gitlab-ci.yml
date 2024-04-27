@@ -1,3 +1,6 @@
+stages:
+  - release
+
 # Ejecutar semantic-release para el versionado automático
 release:
   stage: release
