@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
-  selectEstadisticaData,
+  selectEstadisticaDatos,
   selectEstadisticaValues,
   selectValidationErrors,
   setEstadisticaFieldValue,
@@ -65,8 +65,8 @@ const TituloField = () => {
     ></WpTextField>
   );
 };
-const IndicadorEditorTabDatos = () => {
-  const data = useAppSelector(selectEstadisticaData);
+const EstadisticaEditorTabDatos = () => {
+  const data = useAppSelector(selectEstadisticaDatos);
   const validationErrors = useAppSelector(selectValidationErrors);
   return (
     <form>
@@ -94,4 +94,4 @@ const IndicadorEditorTabDatos = () => {
   );
 };
 
-export default IndicadorEditorTabDatos;
+export default EstadisticaEditorTabDatos;

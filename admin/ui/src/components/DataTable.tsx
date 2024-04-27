@@ -120,7 +120,6 @@ const DataTable = ({ data, format }: DataTableProps) => {
     >
       <table
         id="DataTableEstadistica"
-        className="mx-auto"
         style={{
           borderCollapse: 'collapse',
           borderSpacing: '0',

@@ -1,11 +1,11 @@
-import { Cell } from "../types/Cell";
-import tablaDatosHelper from "./TablaDatosHelper";
-import { Grafico } from "../types/Grafico";
-import { CellRange } from "../types/CellRange";
-import { Serie } from "../types/Serie";
-import { encodeCellRange } from "../utils/encodeCellRange";
-import { EstadisticaDatos } from "../types/EstadisticaDatos";
-import { deepAssign } from "../utils/object-utils";
+import { Cell } from '../types/Cell';
+import { Grafico } from '../types/Grafico';
+import { CellRange } from '../types/CellRange';
+import { Serie } from '../types/Serie';
+import { encodeCellRange } from '../utils/encodeCellRange';
+import { deepAssign } from '../utils/object-utils';
+import { Estadistica } from '../types/Estadistica';
+import tablaDatosHelper from './TablaDatosHelper';
 
 export class GraficoHelper {
 
@@ -17,11 +17,11 @@ export class GraficoHelper {
     }
     return GraficoHelper._instance;
   }
-  getGraficoDefecto(datos: EstadisticaDatos): Grafico {
-    const tabla = datos.tabla;
+  getGraficoDefecto(estadistica: Estadistica): Grafico {
+    const tabla = estadistica.datos;
     const dataInfo = tablaDatosHelper.getInformacion(tabla);
     let defaults = {
-      fuente: datos.fuente,
+      fuente: estadistica.fuente,
     };
     const valoresRango = dataInfo.valoresRango;
     if (!valoresRango) {

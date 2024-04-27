@@ -3,14 +3,12 @@ import { CsvIcon, XlsxIcon } from './Icons';
 import { useAppSelector } from '../app/hooks';
 import {
   selectEstadisticaData,
-  selectEstadisticaDatos,
   selectEstadisticaMarcoOrdenador,
 } from '../app/AppSlice';
 import { useRef } from 'react';
 import BlockTablaDatos from '../../src/public/components/BlockTablaDatos';
 
 const TablaDatos = () => {
-  const datos = useAppSelector(selectEstadisticaDatos) || null;
   const estadistica = useAppSelector(selectEstadisticaData) || null;
   const marcoOrdenador =
     useAppSelector(selectEstadisticaMarcoOrdenador) || null;
@@ -34,7 +32,7 @@ const TablaDatos = () => {
     download(downloadAreaContainer.current, 'descarga.xlsx');
   };
   const downloadCsv = () => {
-    const datosMatrix = datos.tabla;
+    const datosMatrix = estadistica.datos;
     // Convierte cada fila de datos en una cadena CSV
     const csvRows = datosMatrix.map((row) =>
       row.map((cell) => cell.v).join(',')
@@ -54,12 +52,11 @@ const TablaDatos = () => {
     link.download = fileName;
     link.click();
   };
-  if (!datos) {
+  if (!estadistica.datos) {
     return <div className="pl-4 pt-4">No hay datos disponibles.</div>;
   }
 
   const numeralNivel1 = +marcoOrdenador?.numeral.split('.')[0];
-  console.log(datos);
   return (
     <>
       <div
@@ -69,12 +66,11 @@ const TablaDatos = () => {
       >
         <BlockTablaDatos
           estadistica={estadistica}
-          props={datos}
           contextoVisual={marcoOrdenador.codigo}
           numeralNivel1={numeralNivel1}
         />
       </div>
-      {datos.tabla && datos.tabla.length > 0 && (
+      {estadistica.datos && estadistica.datos.length > 0 && (
         <div className="flex gap-4 mb-4 mt-2">
           <Button onClick={() => downloadXlsx()} icon={<XlsxIcon />}>
             Descargar XLSX

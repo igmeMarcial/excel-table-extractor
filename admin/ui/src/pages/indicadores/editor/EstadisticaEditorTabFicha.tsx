@@ -11,7 +11,7 @@ import { IndiceClasificadores } from '../../../core/IndiceClasificadores';
 import WpSelectField from '../../../components/form/WpSelectField';
 import WpDynamicField from '../../../components/form/WpDynamicField';
 
-const IndicadorEditorTabFicha = () => {
+const EstadisticaEditorTabFicha = () => {
   const dispath = useAppDispatch();
   const values = useAppSelector(selectEstadisticaValues);
   const validationErrors = useAppSelector(selectValidationErrors);
@@ -95,4 +95,4 @@ const IndicadorEditorTabFicha = () => {
   );
 };
 
-export default IndicadorEditorTabFicha;
+export default EstadisticaEditorTabFicha;

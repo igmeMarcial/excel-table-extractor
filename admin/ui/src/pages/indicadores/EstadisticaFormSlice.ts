@@ -1,24 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../../app/store';
 import { TipoGrafico } from '../../types/TipoGrafico';
-import { EstadisticaDatos } from '../../types/EstadisticaDatos';
 import { Estadistica, FichaTecnicaFields } from '../../types/Estadistica';
 import { EstadisticaFormState } from '../../types/EstadisticarFormState';
+import validationsHelper from '../../helpers/ValidationsHelper';
 import tablaDatosHelper from '../../helpers/TablaDatosHelper';
 import graficoHelper from '../../helpers/GraficoHelper';
-import validationsHelper from '../../helpers/ValidationsHelper';
-import { Cell } from '../../types/Cell';
 import { Grafico } from '../../types/Grafico';
 import { FormatoTabla } from '../../types/FormatoTabla';
 import { ValidationErrors } from '../../core/Validators';
 import { ESTADISTICA_FULL_FIELDS_DEF } from './editor/EstadisticaFieldsDef';
+import { Cell } from '../../types/Cell';
 
 const estadisticaDefaultModel: Estadistica = {
-  datos: {
-    tabla: [],
-    formato: {}
-  },
+  datos: [],
   datosInformacion: {},
+  presentacionTablaFormato: {},
   graficos: [
     {}
   ],
@@ -87,7 +84,7 @@ export const estadisticaFormSlice = createSlice({
       const value = action.payload.value;
       state.validationErrors = getValidationErrorsWith(fielName, value, state.validationErrors);
     },
-    setEstadisticaFieldValue: (state, action: PayloadAction<{ field: string, value: any }>) => {
+    setEstadisticaFieldValue: (state, action: PayloadAction<{ field: keyof Estadistica, value: any }>) => {
       const fielName = action.payload.field;
       const value = action.payload.value;
       state.estadisticaRawModel = {
@@ -102,26 +99,12 @@ export const estadisticaFormSlice = createSlice({
       }
       state.hasChanges = true;
     },
-    setEstadisticaDatosFieldValue: (state, action: PayloadAction<{ field: string, value: any }>) => {
-      const fielName = action.payload.field;
-      const value = action.payload.value;
-      state.estadisticaRawModel.datos = {
-        ...state.estadisticaRawModel.datos,
-        [fielName]: value
-      }
-    },
-    setEstadisticaDatos: (state, action: PayloadAction<EstadisticaDatos>) => {
-      state.estadisticaRawModel.datos = { ...state.estadisticaRawModel.datos, ...action.payload };
-      state.estadisticaRawModel.datosInformacion = tablaDatosHelper.getInformacion(action.payload.tabla || []);
-      state.estadisticaRawModel.graficos = [graficoHelper.getGraficoDefecto(action.payload)];
+    setEstadisticaDatos: (state, action: PayloadAction<Cell[][]>) => {
+      const datos = action.payload;
+      state.estadisticaRawModel.datos = datos;
+      state.estadisticaRawModel.datosInformacion = tablaDatosHelper.getInformacion(datos || []);
+      state.estadisticaRawModel.graficos = [graficoHelper.getGraficoDefecto(state.estadisticaRawModel)];
       state.validationErrors = getFullValidationErrors(state.estadisticaRawModel);
-      state.hasChanges = true;
-    },
-    setEstadisticaTablaDatos: (state, action: PayloadAction<Cell[][]>) => {
-      state.estadisticaRawModel.datos.tabla = action.payload;
-      if (!state.tienePresentacionGraficaPersonalizada) {
-        state.estadisticaRawModel.graficos = [graficoHelper.getGraficoDefecto(state.estadisticaRawModel.datos)];
-      }
       state.hasChanges = true;
     },
     setActiveTab: (state, action: PayloadAction<string>) => {
@@ -184,8 +167,8 @@ export const estadisticaFormSlice = createSlice({
     setFormatoTablaFieldValue: (state, action: PayloadAction<{ field: keyof FormatoTabla, value: any }>) => {
       const fielName = action.payload.field;
       const value = action.payload.value;
-      state.estadisticaRawModel.datos.formato = {
-        ...state.estadisticaRawModel.datos.formato,
+      state.estadisticaRawModel.presentacionTablaFormato = {
+        ...state.estadisticaRawModel.presentacionTablaFormato,
         [fielName]: value
       }
       state.hasChanges = true;
@@ -220,9 +203,7 @@ export const {
   validateEstadisticaFields,
   validateEstadisticaField,
   setEstadisticaDatos,
-  setEstadisticaTablaDatos,
   setEstadisticaFieldValue,
-  setEstadisticaDatosFieldValue,
   setActiveTab,
   setTipoGrafico,
   setGraficoFieldValue,
@@ -243,7 +224,6 @@ export const selectFichaTecnica = (state: RootState): Estadistica => state.estad
 export const selectEstadisticaDatos = (state: RootState) => state.estadisticaForm.estadisticaRawModel.datos;
 export const selectIsCreationMode = (state: RootState) => state.estadisticaForm.isCreationMode;
 export const selectActiveTab = (state: RootState) => state.estadisticaForm.activeTab;
-export const selectEstadisticaData = (state: RootState) => state.estadisticaForm.estadisticaRawModel.datos?.tabla;
 export const selectPostValues = (state: RootState) => state.estadisticaForm.estadisticaRawModel;
 export const selectGraficos = (state: RootState) => state.estadisticaForm.estadisticaRawModel.graficos;
 export const selectGraficoFieldValue = <K extends keyof Grafico>(index: number, field: K): ((state: RootState) => Grafico[K]) => (state: RootState) => {

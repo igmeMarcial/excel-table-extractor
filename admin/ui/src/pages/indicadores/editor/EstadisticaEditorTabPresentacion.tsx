@@ -3,7 +3,7 @@ import { useAppSelector } from '../../../app/hooks';
 import { selectGraficos } from '../EstadisticaFormSlice';
 import SeccionTabla from './presentacion/SeccionTabla';
 
-const IndicadorEditorTabPresentacion = () => {
+const EstadisticaEditorTabPresentacion = () => {
   const graficos = useAppSelector(selectGraficos);
   if (!graficos) return null;
   return (
@@ -18,4 +18,4 @@ const IndicadorEditorTabPresentacion = () => {
   );
 };
 
-export default IndicadorEditorTabPresentacion;
+export default EstadisticaEditorTabPresentacion;

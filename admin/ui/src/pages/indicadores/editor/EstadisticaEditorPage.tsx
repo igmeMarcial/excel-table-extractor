@@ -12,7 +12,7 @@ import {
   setEstadisticaModel,
 } from '../EstadisticaFormSlice';
 
-function IndicadorEditorPage() {
+function EstadisticaEditorPage() {
   const dispath = useAppDispatch();
   const location = useLocation();
   const resourceId = getPathResourceId(location);
@@ -42,4 +42,4 @@ function IndicadorEditorPage() {
   );
 }
 
-export default IndicadorEditorPage;
+export default EstadisticaEditorPage;

@@ -9,11 +9,9 @@ import {
 } from '../EstadisticaFormSlice';
 import fichaExcelService from '../../../services/ExtractDataExcelService';
 import { WorkBook } from 'xlsx';
-import { EstadisticaDatos } from '../../../types/EstadisticaDatos';
 import DataRangeConfirmDialog, {
   DataRangeConfirmDialogRef,
 } from '../../../components/chart/DataRangeConfirmDialog';
-import { EstadisticaWorkbook } from '../../../core/EstadisticaWorkbook';
 import SelectFileButton from '../../../components/SelectFileButton';
 import { CellRange } from '../../../types/CellRange';
 import { useGetIndiceClasificadoresQuery } from '../../../app/services/clasificador';
@@ -23,8 +21,6 @@ import { Estadistica } from '../../../types/Estadistica';
 const Importar = () => {
   const dispath = useAppDispatch();
   const isCreationMode = useAppSelector(selectIsCreationMode);
-  const [estadisticaWorkbook, setEstadisticaWorkbook] =
-    useState<EstadisticaWorkbook | null>(null);
   const [sheetNames, setSheetNames] = useState<string[]>([]);
   const [camposFichaSheetIndex, setCamposFichaSheetIndex] = useState<number>(1);
   const [tablaDatosSheetIndex, setTablaDatosSheetIndex] = useState<number>(0);
@@ -47,8 +43,6 @@ const Importar = () => {
     fichaExcelService
       .getWorksbook(file)
       .then((workbook) => {
-        const estadisticaWorkbook = new EstadisticaWorkbook(workbook);
-        setEstadisticaWorkbook(estadisticaWorkbook);
         setSheetNames(workbook.SheetNames);
         if (workbook) {
           setWorkBookFile(workbook);
@@ -114,15 +108,11 @@ const Importar = () => {
       tablaDatosSheetIndex
     );
     const newRange = fichaExcelService.getHtmlCellsRange(sheetDataMap, range);
-    const sheetData = fichaExcelService.getCellsMatrix(newRange);
+    const datos = fichaExcelService.getCellsMatrix(newRange);
     const data = fichaExcelService.extractDataFromFile(
       workbookFile,
       tablaDatosSheetIndex
     );
-    // Combinar los datos de sheetData y data en un nuevo objeto EstadisticaDatos
-    const combinedData: EstadisticaDatos = {
-      tabla: sheetData, // Utilizar solo los datos de sheetData
-    };
     const estadisticaFields: Estadistica = {
       presentacionTablaTitulo: data.titulo,
       presentacionTablaNota: data.nota,
@@ -130,7 +120,7 @@ const Importar = () => {
       presentacionTablaElaboracion: data.elaboracion,
     };
     dispath(setEstadisticaFields(estadisticaFields));
-    dispath(setEstadisticaDatos(combinedData));
+    dispath(setEstadisticaDatos(datos));
   };
   const handleOk = () => {
     if (tablaDatosChecked) {

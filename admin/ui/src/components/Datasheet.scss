@@ -58,6 +58,9 @@ $series-range-background-color: #f9ebec;
     white-space: nowrap;
     padding: 4px 6px;
     line-height: 1;
+    &:not(.row-reference):not(.empty-corner) {
+      min-width: 66px;
+    }
     &.vrange-part {
       background-color: $values-range-background-color;
     }

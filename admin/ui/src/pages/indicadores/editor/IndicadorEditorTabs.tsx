@@ -1,8 +1,7 @@
-import React from 'react';
 import { Tabs } from 'antd';
-import IndicadorEditorTabFicha from './IndicadorEditorTabFicha';
-import IndicadorEditorTabDatos from './IndicadorEditorTabDatos';
-import IndicadorEditorTabPresentacion from './IndicadorEditorTabPresentacion';
+import EstadisticaEditorTabFicha from './EstadisticaEditorTabFicha';
+import EstadisticaEditorTabDatos from './EstadisticaEditorTabDatos';
+import EstadisticaEditorTabPresentacion from './EstadisticaEditorTabPresentacion';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { selectActiveTab, setActiveTab } from '../EstadisticaFormSlice';
 interface TabItem {
@@ -11,7 +10,7 @@ interface TabItem {
   children: React.ReactNode;
 }
 
-const IndicadorEditorTabs: React.FC = () => {
+const IndicadorEditorTabs = () => {
   const activeTabKey = useAppSelector(selectActiveTab);
   const dispath = useAppDispatch();
 
@@ -19,17 +18,17 @@ const IndicadorEditorTabs: React.FC = () => {
     {
       key: '1',
       label: 'Ficha',
-      children: <IndicadorEditorTabFicha />,
+      children: <EstadisticaEditorTabFicha />,
     },
     {
       key: '2',
       label: 'Datos',
-      children: <IndicadorEditorTabDatos/>,
+      children: <EstadisticaEditorTabDatos />,
     },
     {
       key: '3',
       label: 'Presentación',
-      children: <IndicadorEditorTabPresentacion/>,
+      children: <EstadisticaEditorTabPresentacion />,
     },
   ];
   const onChangeTab = (key) => {

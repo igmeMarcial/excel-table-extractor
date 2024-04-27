@@ -5,7 +5,7 @@ import ParamRoute from './ParamRoute';
 
 import Dev from './pages/dev/Dev';
 
-import IndicadorEditorPage from './pages/indicadores/editor/IndicadorEditorPage';
+import EstadisticaEditorPage from './pages/indicadores/editor/EstadisticaEditorPage';
 import ConfiguracionPage from './pages/configuracion/ConfiguracionPage';
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
       <ParamRoute value="anuarios" element={<AnuariosPage />} />
       <ParamRoute value="configuracion" element={<ConfiguracionPage />} />
       <ParamRoute value="dev" element={<Dev />} />
-      <ParamRoute value="indicador-editor" element={<IndicadorEditorPage />} />
+      <ParamRoute value="indicador-editor" element={<EstadisticaEditorPage />} />
     </ParamRoutes>
   );
 }

@@ -121,9 +121,9 @@ CREATE TABLE {$tablePrefix}estadistica (
   pres_tabla_nota                TEXT,
   pres_tabla_fuente              VARCHAR(1000),
   pres_tabla_elaboracion         VARCHAR(1000),
+  pres_tabla_formato             TEXT,
   datos_informacion              TEXT,
   graficos                       TEXT,
-  presentacion_tabla             TEXT,
   PRIMARY KEY    (estadistica_id)
 ) $charset;
 CREATE TABLE {$tablePrefix}esta_clas_n1 (

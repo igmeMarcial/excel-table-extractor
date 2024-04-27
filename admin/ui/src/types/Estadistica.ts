@@ -1,6 +1,7 @@
 import { Grafico } from './Grafico'
 import { DatosInformacion } from './DatosInformacion'
-import { EstadisticaDatos } from './EstadisticaDatos'
+import { Cell } from './Cell'
+import { FormatoTabla } from './FormatoTabla';
 
 export interface EstadisticaBaseFields {
   id?: number;
@@ -32,7 +33,7 @@ export interface FichaTecnicaFields {
 }
 
 export interface Estadistica extends EstadisticaBaseFields, FichaTecnicaFields {
-  datos?: EstadisticaDatos
+  datos?: Cell[][]
   datosInformacion?: DatosInformacion
   graficos?: Grafico[]
   // Presentacion
@@ -40,4 +41,5 @@ export interface Estadistica extends EstadisticaBaseFields, FichaTecnicaFields {
   presentacionTablaNota?: string
   presentacionTablaFuente?: string
   presentacionTablaElaboracion?: string
+  presentacionTablaFormato?: FormatoTabla
 }

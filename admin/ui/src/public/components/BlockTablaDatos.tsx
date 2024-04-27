@@ -1,64 +1,88 @@
 import DataTable from '../../components/DataTable';
 import { CodigoMarcoOrdenador } from '../../types/CodigoMarcoOrdenador';
 import { Estadistica } from '../../types/Estadistica';
-import { EstadisticaDatos } from '../../types/EstadisticaDatos';
 import { getContextoVisualColor } from '../../utils/color-utils';
-import {
-  obtenerTextoEntreParentesis,
-  quitarParentesis,
-} from '../../utils/string-utils';
+import { quitarParentesis } from '../../utils/string-utils';
 
 interface BlockTablaDatosProps {
   contextoVisual: CodigoMarcoOrdenador;
   numeralNivel1: number;
-  props: EstadisticaDatos;
   estadistica: Estadistica;
 }
 // Tokens
 const TITULO_FONT_SIZE = '12px';
 const FOOTER_FONT_SIZE = '10px';
 
-const renderNota = (nota: string) => {
-  if (nota) {
+const renderFootField = (field, text) => {
+  text = (text || '').trim();
+  // Si contiene saltos de línea, añadir <br /> al principio, si aún no hay
+  if (/\n/.test(text) && !text.startsWith('<br')) {
+    text = '<br />' + text;
+  }
+  // Añadir <br /> si hay saltos de línea
+  text = text.replace(/\n/g, '<br />');
+  if (text) {
     return (
       <div style={{ marginBottom: '4px' }}>
-        Nota: <br />
-        {nota}
+        <b>{field}:</b> <span dangerouslySetInnerHTML={{ __html: text }}></span>
       </div>
     );
   }
 };
+const renderNota = (nota: string) => {
+  nota = (nota || '').trim();
+  // Si empieza con \w*\/, añadir <br /> si no hay
+  if (/^\w*\//.test(nota)) {
+    nota = '<br />' + nota;
+  }
+  return renderFootField('Nota', nota);
+};
+const renderElaboracion = (text: string) => {
+  return renderFootField('Elaboración', text);
+};
+const renderFuente = (text: string) => {
+  return renderFootField('Fuente', text);
+};
 
 function BlockTablaDatos({
   estadistica,
-  props,
   contextoVisual,
   numeralNivel1,
 }: Readonly<BlockTablaDatosProps>) {
   const color = getContextoVisualColor(contextoVisual, numeralNivel1);
-  const format = { ...props.formato, color };
+  const format = { ...estadistica.presentacionTablaFormato, color };
   return (
     <>
       <div
         style={{
           fontSize: TITULO_FONT_SIZE,
           fontWeight: 'bold',
-          textAlign: 'center',
           marginBottom: '12px',
         }}
       >
-        {quitarParentesis(estadistica.presentacionTablaTitulo)} <br />
-        <span className="font-normal">
-          {obtenerTextoEntreParentesis(props.titulo)}
-        </span>
+        <div>{quitarParentesis(estadistica.presentacionTablaTitulo)}</div>
+        <div className="font-normal">
+          ({getUnidadMedidaTexto(estadistica.unidadMedida)})
+        </div>
       </div>
-      <DataTable data={props.tabla} format={format} />
+      <DataTable data={estadistica.datos} format={format} />
       <div style={{ fontSize: FOOTER_FONT_SIZE, marginTop: '8px' }}>
         {renderNota(estadistica.presentacionTablaNota)}
-        <div>Fuente: {estadistica.presentacionTablaFuente}</div>
+        {renderFuente(estadistica.presentacionTablaFuente)}
+        {renderElaboracion(estadistica.presentacionTablaElaboracion)}
       </div>
     </>
   );
 }
+
+const getUnidadMedidaTexto = (unidadMedida: string) => {
+  let out = '';
+  unidadMedida = unidadMedida || '';
+  // Borrar simbolo entre paréntesis
+  out = unidadMedida.replace(/\(.*\)/, '').trim();
+  // Capitalizar primera letra
+  out = out.charAt(0).toUpperCase() + out.slice(1);
+  return out;
+};
 
 export default BlockTablaDatos;

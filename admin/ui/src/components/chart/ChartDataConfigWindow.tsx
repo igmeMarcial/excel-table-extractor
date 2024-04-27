@@ -10,7 +10,7 @@ import {
 import { Modal } from 'antd';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
-  selectEstadisticaData,
+  selectEstadisticaDatos,
   selectGraficoFieldValue,
   setGraficoFieldValue,
 } from '../../pages/indicadores/EstadisticaFormSlice';
@@ -44,7 +44,7 @@ const ChartDataConfigWindow = forwardRef(
     const dispath = useAppDispatch();
     const styles = useStyles();
 
-    const data = useAppSelector(selectEstadisticaData);
+    const data = useAppSelector(selectEstadisticaDatos);
     let referencias = useAppSelector(
       selectGraficoFieldValue(chartIndex, 'referenciasTablaDatos')
     );
