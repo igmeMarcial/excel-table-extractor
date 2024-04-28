@@ -3,6 +3,7 @@
  */
 module.exports = {
     branches: ["main", "develop"],
+    repositoryUrl: "https://jaimecruz:${GL_TOKEN}@gitlab.com/gitlab-org/gitlab",
     plugins: [
         ['@semantic-release/commit-analyzer'],
         ['@semantic-release/release-notes-generator'],
