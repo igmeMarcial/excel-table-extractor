@@ -3,7 +3,6 @@
  */
 module.exports = {
     branches: ["main", "develop"],
-    repositoryUrl: "https://jaimecruz:${GL_TOKEN}@gitlab.com/minamprojects/aesa/aesa-wp-plugin.git",
     plugins: [
         ['@semantic-release/commit-analyzer'],
         ['@semantic-release/release-notes-generator'],
@@ -11,7 +10,6 @@ module.exports = {
         [
             "@semantic-release/gitlab",
             {
-                "gitlabUrl": "https://custom.gitlab.com",
                 "assets": [
                     { "path": "dist/asset.min.css", "label": "CSS distribution" },
                     { "path": "dist/asset.min.js", "label": "JS distribution", "target": "generic_package" },
