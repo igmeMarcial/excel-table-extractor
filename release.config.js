@@ -7,9 +7,17 @@ module.exports = {
         ['@semantic-release/commit-analyzer'],
         ['@semantic-release/release-notes-generator'],
         ['@semantic-release/changelog'],
-        ['@semantic-release/git', {
-            assets: ['package.json', 'CHANGELOG.md'],
-            message: 'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}'
-        }]
+        [
+            "@semantic-release/gitlab",
+            {
+                "gitlabUrl": "https://custom.gitlab.com",
+                "assets": [
+                    { "path": "dist/asset.min.css", "label": "CSS distribution" },
+                    { "path": "dist/asset.min.js", "label": "JS distribution", "target": "generic_package" },
+                    { "path": "dist/asset.min.js", "label": "v${nextRelease.version}.js" },
+                    { "url": "https://gitlab.com/gitlab-org/gitlab/-/blob/master/README.md" }
+                ]
+            }
+        ]
     ]
 };
