@@ -8,4 +8,5 @@ release:
   stage: release
   script:
     - npm install --global semantic-release
+    - npm install --global @semantic-release/git @semantic-release/changelog -D
     - npx semantic-release
