@@ -6,7 +6,7 @@
     "license": "ISC",
     "repository": {
         "type": "git",
-        "url": "git+ssh://git@gitlab.com/minamprojects/aesa/aesa-wp-plugin.git"
+        "url": "https://gitlab.com/minamprojects/aesa/aesa-wp-plugin.git"
     },
     "bugs": {
         "url": "https://gitlab.com/minamprojects/aesa/aesa-wp-plugin/issues"
