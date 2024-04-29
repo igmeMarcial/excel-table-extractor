@@ -1,6 +1,7 @@
 image: node:20
 
 stages:
+  - build
   - release
 
 # Compilar proyectos
