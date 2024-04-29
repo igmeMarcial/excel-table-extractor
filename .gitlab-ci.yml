@@ -3,9 +3,29 @@ image: node:20
 stages:
   - release
 
+# Compilar proyectos
+build_react_projects:
+  stage: build
+  image: node:20
+  script:
+    # Cambia el directorio de trabajo a la subcarpeta del proyecto de React
+    - cd admin/ui
+    # Instala las dependencias del proyecto
+    - npm install
+    # Compila proyecto principal
+    - npm run build
+    # Compilar frontend de la aplicación
+    - npm rub build-fontpage
+  artifacts:
+    paths:
+      - admin/ui/build
+
+
 # Ejecutar semantic-release para el versionado automático
 release:
   stage: release
+  dependencies:
+    - build_react_projects
   script:
     - npm install --global semantic-release
     - npm install @semantic-release/git @semantic-release/changelog @semantic-release/gitlab -D
