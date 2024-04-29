@@ -1,6 +1,7 @@
 image: node:20
 
 stages:
+  - build
   - release
 
 # Compilar proyectos
@@ -15,7 +16,7 @@ build_react_projects:
     # Compila proyecto principal
     - npm run build
     # Compilar frontend de la aplicación
-    - npm rub build-fontpage
+    - npm run build-fontpage
   artifacts:
     paths:
       - admin/ui/build
