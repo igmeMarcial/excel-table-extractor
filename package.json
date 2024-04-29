@@ -11,5 +11,8 @@
     "bugs": {
         "url": "https://gitlab.com/minamprojects/aesa/aesa-wp-plugin/issues"
     },
-    "homepage": "https://gitlab.com/minamprojects/aesa/aesa-wp-plugin#readme"
+    "homepage": "https://gitlab.com/minamprojects/aesa/aesa-wp-plugin#readme",
+    "dependencies": {
+        "semantic-release": "^23.0.8"
+    }
 }

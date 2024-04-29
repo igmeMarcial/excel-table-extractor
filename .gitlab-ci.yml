@@ -8,5 +8,5 @@ release:
   stage: release
   script:
     - npm install --global semantic-release
-    - npm install --global @semantic-release/gitlab @semantic-release/changelog @semantic-release/git -D
-    - npx semantic-release
+    - npm install @semantic-release/git @semantic-release/changelog @semantic-release/gitlab -D
+    - npx semantic-release --repository-url=https://jaimecruz:$GITLAB_TOKEN@gitlab.com/minamprojects/aesa/aesa-wp-plugin.git
