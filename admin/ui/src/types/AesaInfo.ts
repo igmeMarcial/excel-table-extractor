@@ -1,3 +1,5 @@
 export interface AesaInfo {
-  apiUrl: string
+  apiUrl: string,
+  pluginUrl: string,
+  estadisticasUrl: string,
 }

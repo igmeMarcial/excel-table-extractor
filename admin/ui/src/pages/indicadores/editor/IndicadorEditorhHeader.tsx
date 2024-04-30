@@ -79,6 +79,13 @@ const IndicadorEditorhHeader = () => {
     dispath(commitChanges());
   };
   const urlIndicadores = resetPathUrl(location, 'indicadores');
+  const getEstadisticaUlr = () => {
+    const estadisticaId = postValues.id;
+    if (!estadisticaId) {
+      return '';
+    }
+    return window.AesaInfo.estadisticasUrl + '?eid=' + estadisticaId;
+  };
   return (
     <>
       {contextHolder}
@@ -91,10 +98,7 @@ const IndicadorEditorhHeader = () => {
         <div className="text-2xl md:text-2xl font-bold p-0">Indicador</div>
         <span className="flex-1"></span>
         <Importar />
-        <Link
-          to="https://aesa.bex.pe/anuario-estadistico/estadisticas/"
-          target="_blank"
-        >
+        <Link to={getEstadisticaUlr()} target="_blank">
           <Button
             icon={<ArrowUpRightFilled className="align-middle" />}
             type="text"

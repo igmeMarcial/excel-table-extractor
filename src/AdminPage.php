@@ -88,9 +88,10 @@ class AdminPage
     private function getPluginBasicInfo()
     {
         return array(
-            'pluginVersion' => AESA_PLUGIN_VERSION,
-            'pluginUrl'     => AESA_PLUGIN_URL,
-            'apiUrl'        => get_rest_url(null, AESA_API_REST_NAMESPACE),
+            'pluginVersion'   => AESA_PLUGIN_VERSION,
+            'pluginUrl'       => AESA_PLUGIN_URL,
+            'apiUrl'          => get_rest_url(null, AESA_API_REST_NAMESPACE),
+            'estadisticasUrl' => get_page_link(get_page_by_path(AESA_ESTADISTICAS_PAGE_PATH)->ID),
         );
     }
 }
