@@ -3,6 +3,7 @@ import EstadisticaVistaTabs from '../blocks/EstadisticaVistaTabs';
 import EstadisticasNav from '../blocks/EstadisticasNav';
 import { ColorsType } from '../types/Colors';
 import NamePanelComponents from '../components/NamePanelComponents';
+import NavEstaditicas from '../components/NavEstadisticas';
 
 export default function NavegadorEstadisticasAlt2() {
   //Colores de componentes
@@ -18,7 +19,7 @@ export default function NavegadorEstadisticasAlt2() {
   return (
     <>
       <EstadisticasNav />
-
+      <NavEstaditicas />
       <div>
         <EstadisticaVistaTabs />
       </div>

@@ -6,6 +6,9 @@ import { PdfIcon } from './Icons';
 import jsPDF from 'jspdf';
 import { apiMap } from './FichaTecnicaMap';
 
+const logoSiniaUrl =
+  window.AesaInfo.pluginUrl + '/public/assets/images/logo_sinia.png';
+
 function FichaTecnica() {
   const [dataIndicator, setDataIndicator] = useState([]);
   const data = useAppSelector(selectEstadisticaData);
@@ -27,21 +30,6 @@ function FichaTecnica() {
       limitaciones: data?.limitaciones,
       metodologiaCalculo: data?.metodologiaCalculo,
       fuente: data?.fuente,
-      // campos ocultos >6 el orden de cada propiedad es importante.
-      unidadMedida: data?.unidadMedida,
-      formulaCalculo: data?.formulaCalculo,
-      unidadOrganicaGeneradora: data?.unidadOrganicaGeneradora,
-      url: data?.url,
-      periodicidadGeneracion: data?.periodicidadGeneracion,
-      periodicidadEntrega: data?.periodicidadEntrega,
-      periodoSerieTiempo: data?.periodoSerieTiempo,
-      ambitoGeografico: data?.ambitoGeografico,
-      relacionObjetivosNacionales: data?.relacionObjetivosNacionales,
-      relacionIniciativasInternacionales:
-        data?.relacionIniciativasInternacionales,
-      correoElectronico: data?.correoElectronico,
-      datosContacto: data?.datosContacto,
-      telefonoCelular: data?.telefonoCelular,
     };
 
     const filteredEntries = Object.entries(newArrNecessary).filter(
@@ -100,11 +88,16 @@ function FichaTecnica() {
     });
   };
 
+  console.log(logoSiniaUrl);
+
   return (
     <div className="overflow-auto">
       <div id="downloadArea" className="p-4">
         <div className="relative my-1 mx-2">
           <div>
+            <div className="flex">
+              <img src={logoSiniaUrl} alt="Sinia" />
+            </div>
             <div
               className="indicadores"
               style={{
@@ -119,9 +112,9 @@ function FichaTecnica() {
             </div>
             {dataIndicator.map((item, rowIndex) => (
               <div
-                className={item.id > 6 ? 'indicadores' : ''}
+                className="indicadores"
                 key={`row-${item.id}`}
-                style={{ display: item.id > 6 ? 'none' : 'block' }}
+                // style={{ display: item.id > 6 ? 'none' : 'block' }}
               >
                 <div
                   style={{

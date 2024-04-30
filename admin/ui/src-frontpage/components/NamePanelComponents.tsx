@@ -16,12 +16,13 @@ import {
 import PrimaryNavMdea from './PrimaryNavMdea';
 import PrimaryNavOds from './PrimaryNavOds';
 import PrimaryNavOcde from './PrimaryNavOcde';
-import {
-  lineamientosPolitica,
-  objetivosOCDE,
-  objetivosODS,
-} from '../data/objectsOds';
+
 import PrimaryNavPna from './PrimaryNavPna';
+import {
+  LINIAMIENTOS_POLITICA,
+  OBJETIVOS_OCDE,
+  OBJETIVOS_ODS,
+} from '../../src/config/colors';
 
 interface NamePanelProps {
   colors: ColorsType; // Tipo definido para los colores
@@ -52,9 +53,9 @@ const NamePanelComponents: React.FC<NamePanelProps> = ({ colors }) => {
       {activeItem === 'mdea' && (
         <PrimaryNavMdea items={clasificadoresN1} colors={colors} />
       )}
-      {activeItem === 'ods' && <PrimaryNavOds items={objetivosODS} />}
-      {activeItem === 'ocde' && <PrimaryNavOcde items={objetivosOCDE} />}
-      {activeItem === 'pna' && <PrimaryNavPna items={lineamientosPolitica} />}
+      {activeItem === 'ods' && <PrimaryNavOds items={OBJETIVOS_ODS} />}
+      {activeItem === 'ocde' && <PrimaryNavOcde items={OBJETIVOS_OCDE} />}
+      {activeItem === 'pna' && <PrimaryNavPna items={LINIAMIENTOS_POLITICA} />}
     </>
   );
 };
