@@ -2,7 +2,7 @@ import DataTable from '../../components/DataTable';
 import { CodigoMarcoOrdenador } from '../../types/CodigoMarcoOrdenador';
 import { Estadistica } from '../../types/Estadistica';
 import { getContextoVisualColor } from '../../utils/color-utils';
-import { quitarParentesis } from '../../utils/string-utils';
+import { removerTextoEntreParentesisDelFinal } from '../../utils/estadistica-utils';
 
 interface BlockTablaDatosProps {
   contextoVisual: CodigoMarcoOrdenador;
@@ -51,19 +51,26 @@ function BlockTablaDatos({
 }: Readonly<BlockTablaDatosProps>) {
   const color = getContextoVisualColor(contextoVisual, numeralNivel1);
   const format = { ...estadistica.presentacionTablaFormato, color };
+  const subtitulo = removerTextoEntreParentesisDelFinal(estadistica.unidadMedida);
   return (
     <>
       <div
         style={{
           fontSize: TITULO_FONT_SIZE,
-          fontWeight: 'bold',
           marginBottom: '12px',
+          lineHeight: 1,
         }}
       >
-        <div>{quitarParentesis(estadistica.presentacionTablaTitulo)}</div>
-        <div className="font-normal">
-          ({getUnidadMedidaTexto(estadistica.unidadMedida)})
+        <div
+          style={{
+            fontWeight: 'bold',
+            marginTop: '4px',
+            marginBottom: '4px',
+          }}
+        >
+          {removerTextoEntreParentesisDelFinal(estadistica.presentacionTablaTitulo)}
         </div>
+        {subtitulo && <div>({subtitulo})</div>}
       </div>
       <DataTable data={estadistica.datos} format={format} />
       <div style={{ fontSize: FOOTER_FONT_SIZE, marginTop: '8px' }}>
@@ -74,15 +81,5 @@ function BlockTablaDatos({
     </>
   );
 }
-
-const getUnidadMedidaTexto = (unidadMedida: string) => {
-  let out = '';
-  unidadMedida = unidadMedida || '';
-  // Borrar simbolo entre paréntesis
-  out = unidadMedida.replace(/\(.*\)/, '').trim();
-  // Capitalizar primera letra
-  out = out.charAt(0).toUpperCase() + out.slice(1);
-  return out;
-};
 
 export default BlockTablaDatos;

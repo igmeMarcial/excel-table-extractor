@@ -8,14 +8,20 @@ import {
   selectGraficoFieldValue,
   setGraficoFieldValue,
 } from '../../pages/indicadores/EstadisticaFormSlice';
+import { Grafico } from '../../types/Grafico';
 
-interface TitleEditorProps {
+interface TextareaFieldEditorProps {
   chartIndex: number;
+  fieldName: keyof Grafico;
+  label: string;
 }
 
-const TitleEditor = ({ chartIndex }: TitleEditorProps) => {
+const TextareaFieldEditor = ({
+  chartIndex,
+  fieldName,
+  label,
+}: TextareaFieldEditorProps) => {
   const dispath = useAppDispatch();
-  const fieldName = 'titulo';
   let value = useAppSelector(selectGraficoFieldValue(chartIndex, fieldName));
   const handleChange = (e, data: TextareaOnChangeData) => {
     dispath(
@@ -27,10 +33,14 @@ const TitleEditor = ({ chartIndex }: TitleEditorProps) => {
     );
   };
   return (
-    <Field label="Título">
-      <Textarea onChange={handleChange} value={value} />
+    <Field label={label}>
+      <Textarea
+        onChange={handleChange}
+        value={value as string}
+        resize="vertical"
+      />
     </Field>
   );
 };
 
-export default TitleEditor;
+export default TextareaFieldEditor;

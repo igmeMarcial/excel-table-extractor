@@ -6,6 +6,7 @@ import * as echarts from 'echarts'
 import { TIPO_SERIE_TO_ECHARS_SERIE_TYPE } from "../maps/tipo-serie-echars-serie-type"
 import { Serie } from "../types/Serie"
 import { TipoGrafico } from "../types/TipoGrafico"
+import { DT_GRAFICO_DECIMALES_DEFECTO } from "../config/design-tokens"
 
 export class EchartsPropsMapper {
   private static readonly _instance = new EchartsPropsMapper()
@@ -24,6 +25,7 @@ export class EchartsPropsMapper {
       option: {
         title: {
           text: grafico.titulo || 'Título del gráfico',
+          subtext: grafico.subtitulo
         },
         xAxis: this.getXAxisConfig(),
         yAxis: this.getYAxisConfig(),
@@ -46,12 +48,11 @@ export class EchartsPropsMapper {
         },
         itemStyle: this.getItemStyle(serie)
       }
-      if (this.grafico.numeroDecimalesEtiquetas || serie.numeroDecimalesEtiquetas) {
-        // Redondear a n decimales
-        serieProps.label.formatter = (params) => {
-          return params.value.toFixed(this.grafico.numeroDecimalesEtiquetas)
-        }
+      // Redondear a n decimales
+      serieProps.label.formatter = (params) => {
+        return params.value.toFixed(serie.numeroDecimalesEtiquetas || this.grafico.numeroDecimalesEtiquetas || DT_GRAFICO_DECIMALES_DEFECTO)
       }
+
       return deepAssign({}, ECHART_SERIES_DEFAULT_PROPS, serieProps)
     })
   }

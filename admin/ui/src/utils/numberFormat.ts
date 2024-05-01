@@ -3,7 +3,7 @@ export const numberFormat = (value: number, decimals?: number) => {
   const parts = str.split('.');
   const integer = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   let decimal = parts[1] || '';
-  if (decimals) {
+  if (decimals !== undefined) {
     decimal = decimal.slice(0, decimals).padEnd(decimals, '0');
   }
   return `${integer}${decimal ? ',' + decimal : ''}`;

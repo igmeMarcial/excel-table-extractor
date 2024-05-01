@@ -10,7 +10,9 @@ const Chart = ({ options }: ChartProps) => {
   return (
     <div>
       <ReactECharts {...chartOptions} />
-      <div style={{ fontSize: '10px' }}>Fuente: {options.fuente}</div>
+      <div style={{ fontSize: '10px' }}>
+        <b>Fuente:</b> {options.fuente}
+      </div>
     </div>
   );
 };

@@ -8,7 +8,14 @@ export const ECHATS_DEFALT_PROPS: EChartsReactProps = {
   },
   option: {
     color: getChartColors(),
-    toolbox: {
+    grid: {
+      left: 0,
+      right: 0,
+      top: 60,
+      bottom: 20,
+      containLabel: true,
+    },
+/*     toolbox: {
       right: 8,
       top: 8,
       feature: {
@@ -20,12 +27,15 @@ export const ECHATS_DEFALT_PROPS: EChartsReactProps = {
         },
         saveAsImage: {}
       }
-    },
+    }, */
     title: {
-      left: 'center',
+      left: 'left',
       textStyle: {
         fontSize: DT_GRAFICO_FONT_SIZE,
-      }
+        overflow: 'break',
+        width: 500,
+      },
+      padding: [8, 0],
     },
     xAxis: {
       type: 'category',

@@ -70,7 +70,7 @@ export class GraficoHelper {
       categorias,
       tipo: 'columnas',
       series: this.getVerticalSeries(tabla, rangoValores),
-      rotacionEtiquetasCategorias: 30,
+      rotacionEtiquetasCategorias: 90,
       mostrarLeyenda: false,
       referenciasTablaDatos: {
         rangoValores: encodeCellRange(rangoValores),

@@ -5,6 +5,7 @@ import {
   TextareaOnChangeData,
 } from '@fluentui/react-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { DT_TABLA_DATOS_DECIMALES_DEFECTO } from '../../config/design-tokens';
 import {
   selectFormatoTablaFieldValue,
   setFormatoTablaFieldValue,
@@ -13,8 +14,7 @@ import {
 const DecimalsEditor = () => {
   const dispath = useAppDispatch();
   const fieldName = 'decimales';
-  let value =
-    useAppSelector(selectFormatoTablaFieldValue(fieldName)) || null;
+  let value = useAppSelector(selectFormatoTablaFieldValue(fieldName)) || null;
   const handleChange = (e, data: TextareaOnChangeData) => {
     dispath(
       setFormatoTablaFieldValue({
@@ -32,7 +32,7 @@ const DecimalsEditor = () => {
         value={String(value)}
         min="0"
         max="4"
-        placeholder="Todas"
+        placeholder={DT_TABLA_DATOS_DECIMALES_DEFECTO + ''}
       />
     </div>
   );

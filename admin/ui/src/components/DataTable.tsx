@@ -3,6 +3,7 @@ import chroma from 'chroma-js';
 import {
   DT_TABLA_DATOS_BORDER_COLOR,
   DT_TABLA_DATOS_BORDER_COLOR_HEADER,
+  DT_TABLA_DATOS_DECIMALES_DEFECTO,
   DT_TABLA_DATOS_FONT_SIZE,
   DT_TABLA_DATOS_PRIMARY_COLOR,
 } from '../config/design-tokens';
@@ -49,7 +50,10 @@ function renderCell(
       : 'text-start whitespace-nowrap';
   const formattedValue =
     type === 'n' && position === 'b'
-      ? numberFormat(value as number, format.decimales)
+      ? numberFormat(
+          value as number,
+          format.decimales || DT_TABLA_DATOS_DECIMALES_DEFECTO
+        )
       : value;
   return (
     <td
@@ -58,9 +62,10 @@ function renderCell(
         border: 'solid 1px',
         borderColor: DT_TABLA_DATOS_BORDER_COLOR,
         fontWeight: '400',
-        padding: '4px 6px',
+        padding: '4px 8px',
         fontFamily: 'Arial, sans-serif',
         lineHeight: 1,
+        minWidth: '32px',
         ...cellStyle,
       }}
       key={colIndex}

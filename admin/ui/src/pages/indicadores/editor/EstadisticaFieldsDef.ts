@@ -118,6 +118,10 @@ export const DATOS_FIELDS_DEF: Record<string, FieldDef> = {
     label: 'Título',
     type: 'text',
   },
+  presentacionTablaSubtitulo: {
+    label: 'Subtítulo',
+    type: 'text',
+  },
   presentacionTablaNota: {
     label: 'Nota',
     type: 'textarea',

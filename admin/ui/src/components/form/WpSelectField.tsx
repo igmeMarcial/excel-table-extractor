@@ -46,7 +46,9 @@ const WpSelectField = ({
         id={fieldName}
         onBlur={(e) => onTouched(e, fieldName)}
       >
-        <option value="">-- Seleccionar --</option>
+        <option value="" disabled>
+          -- Seleccionar --
+        </option>
         {options.map((option) => (
           <option key={option.id} value={option[valueField]}>
             {textRender(option)}

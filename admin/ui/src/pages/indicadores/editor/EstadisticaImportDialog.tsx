@@ -18,7 +18,7 @@ import { useGetIndiceClasificadoresQuery } from '../../../app/services/clasifica
 import { IndiceClasificadores } from '../../../core/IndiceClasificadores';
 import { Estadistica } from '../../../types/Estadistica';
 
-const Importar = () => {
+const EstadisticaImportDialog = () => {
   const dispath = useAppDispatch();
   const isCreationMode = useAppSelector(selectIsCreationMode);
   const [sheetNames, setSheetNames] = useState<string[]>([]);
@@ -31,7 +31,9 @@ const Importar = () => {
   const [tablaDatosChecked, setTablaDatosChecked] = useState(false);
   const { data: clasificadores } = useGetIndiceClasificadoresQuery();
   const indiceClasificadores = new IndiceClasificadores(clasificadores || []);
-  const importButtonTitle = isCreationMode ? 'Importar' : 'Actualizar datos';
+  const importButtonTitle = isCreationMode
+    ? 'Importar'
+    : 'Actualizar datos';
   const importModalTitle = importButtonTitle;
   const confirmDataRangeDialogRef = useRef<DataRangeConfirmDialogRef>(null);
   const handleFileChange = async (file: File | null) => {
@@ -156,8 +158,11 @@ const Importar = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    resetState();
+  };
+  const resetState = () => {
     setReadingFile(false);
-    setCamposFichaChecked(false); // Reiniciar estado de los checkboxes
+    setCamposFichaChecked(false);
     setTablaDatosChecked(false);
   };
   const modalStyles = {
@@ -255,4 +260,4 @@ const Importar = () => {
   );
 };
 
-export default Importar;
+export default EstadisticaImportDialog;

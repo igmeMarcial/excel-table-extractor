@@ -4,6 +4,7 @@ import { TipoGrafico } from "./TipoGrafico";
 export interface Grafico {
   tipo?: TipoGrafico;
   titulo?: string;
+  subtitulo?: string;
   series?: Serie[];
   categorias?: string[];
   rotacionEtiquetasCategorias?: number;

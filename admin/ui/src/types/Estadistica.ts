@@ -38,6 +38,7 @@ export interface Estadistica extends EstadisticaBaseFields, FichaTecnicaFields {
   graficos?: Grafico[]
   // Presentacion
   presentacionTablaTitulo?: string
+  presentacionTablaSubtitulo?: string
   presentacionTablaNota?: string
   presentacionTablaFuente?: string
   presentacionTablaElaboracion?: string
