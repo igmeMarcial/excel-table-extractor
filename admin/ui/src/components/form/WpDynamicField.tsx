@@ -1,4 +1,4 @@
-import { FieldDef } from '../../pages/indicadores/editor/EstadisticaFieldsDef';
+import { FieldDef } from '../../pages/estadisticas/editor/EstadisticaFieldsDef';
 import WpDynamicInput from './WpDynamicInput';
 import WpField from './WpField';
 

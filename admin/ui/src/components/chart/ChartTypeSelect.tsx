@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   selectGraficoFieldValue,
   setGraficoFieldValue,
-} from '../../pages/indicadores/EstadisticaFormSlice';
+} from '../../pages/estadisticas/EstadisticaFormSlice';
 import { TipoGrafico } from '../../types/TipoGrafico';
 const useStyles = makeStyles({
   active: { backgroundColor: '#E6E6E6' },

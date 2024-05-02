@@ -13,7 +13,7 @@ import {
   selectEstadisticaDatos,
   selectGraficoFieldValue,
   setGraficoFieldValue,
-} from '../../pages/indicadores/EstadisticaFormSlice';
+} from '../../pages/estadisticas/EstadisticaFormSlice';
 import { decodeCellRange } from '../../utils/decodeCellRange';
 import Datasheet, { ChartDataRanges } from '../Datasheet';
 

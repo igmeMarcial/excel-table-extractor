@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   selectGraficoFieldValue,
   setGraficoSerieColor,
-} from '../../pages/indicadores/EstadisticaFormSlice';
+} from '../../pages/estadisticas/EstadisticaFormSlice';
 import { serieColor } from '../../utils/serieColor';
 
 import ConfigSection from '../ConfigSection';

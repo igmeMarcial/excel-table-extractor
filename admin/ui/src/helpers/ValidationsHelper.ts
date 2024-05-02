@@ -1,5 +1,5 @@
 import { ValidationErrors, Validators } from "../core/Validators";
-import { FieldDef } from "../pages/indicadores/editor/EstadisticaFieldsDef";
+import { FieldDef } from "../pages/estadisticas/editor/EstadisticaFieldsDef";
 
 export class ValidationsHelper {
 

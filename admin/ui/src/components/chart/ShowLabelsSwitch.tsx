@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   selectGraficoFieldValue,
   setGraficoFieldValue,
-} from '../../pages/indicadores/EstadisticaFormSlice';
+} from '../../pages/estadisticas/EstadisticaFormSlice';
 
 const ShowLabelsSwitch = ({ chartIndex }) => {
   const dispath = useAppDispatch();

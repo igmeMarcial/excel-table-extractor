@@ -1,6 +1,6 @@
 import { Field } from '@fluentui/react-components';
 import { VALIDATION_MESSAGES } from '../../config/validation-messages';
-import { FieldDef } from '../../pages/indicadores/editor/EstadisticaFieldsDef';
+import { FieldDef } from '../../pages/estadisticas/editor/EstadisticaFieldsDef';
 
 interface WpFieldProps {
   fieldDef: FieldDef;

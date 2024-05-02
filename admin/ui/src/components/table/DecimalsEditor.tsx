@@ -9,7 +9,7 @@ import { DT_TABLA_DATOS_DECIMALES_DEFECTO } from '../../config/design-tokens';
 import {
   selectFormatoTablaFieldValue,
   setFormatoTablaFieldValue,
-} from '../../pages/indicadores/EstadisticaFormSlice';
+} from '../../pages/estadisticas/EstadisticaFormSlice';
 
 const DecimalsEditor = () => {
   const dispath = useAppDispatch();

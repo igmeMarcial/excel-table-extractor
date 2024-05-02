@@ -1,5 +1,5 @@
 import { Select } from '@fluentui/react-components';
-import { FieldDef } from '../../pages/indicadores/editor/EstadisticaFieldsDef';
+import { FieldDef } from '../../pages/estadisticas/editor/EstadisticaFieldsDef';
 import WpField from './WpField';
 
 interface WpSelectFieldProps {

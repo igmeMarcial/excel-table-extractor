@@ -1,11 +1,11 @@
-import IndicadoresPage from './pages/indicadores/EstadisticasPage';
+import IndicadoresPage from './pages/estadisticas/EstadisticasPage';
 import AnuariosPage from './pages/anuarios/AnuariosPage';
 import ParamRoutes from './ParamRoutes';
 import ParamRoute from './ParamRoute';
 
 import Dev from './pages/dev/Dev';
 
-import EstadisticaEditorPage from './pages/indicadores/editor/EstadisticaEditorPage';
+import EstadisticaEditorPage from './pages/estadisticas/editor/EstadisticaEditorPage';
 import ConfiguracionPage from './pages/configuracion/ConfiguracionPage';
 
 function App() {

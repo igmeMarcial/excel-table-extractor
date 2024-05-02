@@ -1,7 +1,7 @@
 import { configureStore, ConfigureStoreOptions } from '@reduxjs/toolkit'
 import { api } from './services/api'
 import appReducer from './AppSlice'
-import estadisticaFormReducer from '../pages/indicadores/EstadisticaFormSlice'
+import estadisticaFormReducer from '../pages/estadisticas/EstadisticaFormSlice'
 
 export const createStore = (
   options?: ConfigureStoreOptions['preloadedState'] | undefined,

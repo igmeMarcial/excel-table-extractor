@@ -4,7 +4,7 @@ import { DT_GRAFICO_DECIMALES_DEFECTO } from '../../config/design-tokens';
 import {
   selectGraficoFieldValue,
   setGraficoFieldValue,
-} from '../../pages/indicadores/EstadisticaFormSlice';
+} from '../../pages/estadisticas/EstadisticaFormSlice';
 
 interface LabelDecimalsEditorProps {
   chartIndex: number;

@@ -2,7 +2,7 @@ import * as XLSX from 'xlsx';
 import {
   ESTADISTICA_DATOS,
   FICHA_FIELDS_MAP,
-} from '../pages/indicadores/editor/FichaFieldsMap';
+} from '../pages/estadisticas/editor/FichaFieldsMap';
 import {
   CellPosition,
   CELL_POSITION_BODY,

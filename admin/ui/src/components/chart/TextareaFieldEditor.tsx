@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   selectGraficoFieldValue,
   setGraficoFieldValue,
-} from '../../pages/indicadores/EstadisticaFormSlice';
+} from '../../pages/estadisticas/EstadisticaFormSlice';
 import { Grafico } from '../../types/Grafico';
 
 interface TextareaFieldEditorProps {
