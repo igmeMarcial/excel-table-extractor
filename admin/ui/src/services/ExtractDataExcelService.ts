@@ -51,8 +51,6 @@ class ExtractDataExcelService {
     try {
       const sheetName: string = workbook.SheetNames[sheetIndex];
       const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
-      //text extract new table
-      const tableData: any = this.getTablaDatos(sheet);
       const contentCellTitle: any = this.getTablaDatosTitulo(sheet);
 
       const contentCellTabla: any = this.getCellTabla(sheet);
@@ -64,7 +62,6 @@ class ExtractDataExcelService {
         fuente: contentCellTabla.fuente,
         nota: contentCellTabla.nota,
         elaboracion: contentCellTabla.elaboracion,
-        tabla: tableData,
       };
       return estadisticaDatos;
     } catch (error) {
@@ -218,54 +215,14 @@ class ExtractDataExcelService {
     }
     return null;
   }
-
-  getTablaDatos(sheet: Sheet): Cell[][] {
-    const out: Cell[][] = [];
-    const htmlRows = getSheetHtmlRows(sheet);
-    const cellMap = this.createCellsDataMap(htmlRows);
-    let htmlTablaDatos = this.getHtmlTablaDatos(cellMap);
-    htmlTablaDatos.forEach((row, rowIndex) => {
-      let colIndex = 0;
-      const rowData: Cell[] = [];
-      const cellPostion = this.getRowPosition(row, rowIndex);
-      row.forEach((td) => {
-        const colSpan = +td.getAttribute('colspan') || 1;
-        const rowSpan = +td.getAttribute('rowspan') || 1;
-        let value: string | number = td.getAttribute('data-v') || '';
-        const type = (td.getAttribute('data-t') as 'n' | 's') || 's';
-        // Parse value to number if type is number
-        if (type === 'n') {
-          value = +value;
-        }
-        const dataCell: Cell = {
-          v: value,
-          r: rowIndex,
-          c: colIndex,
-          p: cellPostion,
-          t: type,
-        };
-        // Añade colspan y rowspan si son mayores a 1
-        if (colSpan > 1) {
-          dataCell.s = colSpan;
-        }
-        if (rowSpan > 1) {
-          dataCell.rs = rowSpan;
-        }
-        rowData.push(dataCell);
-        colIndex += colSpan;
-      });
-      out.push(rowData);
-    });
-    return out;
-  }
   getSheetData(workbook: XLSX.WorkBook, sheetIndex: number): Cell[][] {
     const sheetName: string = workbook.SheetNames[sheetIndex];
     const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
     const htmlRows = getSheetHtmlRows(sheet);
     const cellMap = this.createCellsDataMap(htmlRows);
-    return this.getCellsMatrix(cellMap);
+    return this.getCellsMatrix(cellMap, sheet);
   }
-  getCellsMatrix(rows: HtmlCellsMatrix): Cell[][] {
+  getCellsMatrix(rows: HtmlCellsMatrix, sheet: XLSX.WorkSheet): Cell[][] {
     const out: Cell[][] = [];
     rows.forEach((row, rowIndex) => {
       let colIndex = 0;
@@ -276,6 +233,14 @@ class ExtractDataExcelService {
         const rowSpan = +td?.getAttribute('rowspan') || 1;
         let value: string | number = td?.getAttribute('data-v') || '';
         const type = (td?.getAttribute('data-t') as 'n' | 's') || 's';
+        let formatoNumero = '';
+        let textoFormateado = '';
+        if (td) {
+          const cellAddress = td.getAttribute('id').replace('sjs-', '');
+          const cell = sheet[cellAddress];
+          formatoNumero = cell?.z || '';
+          textoFormateado = cell?.w || '';
+        }
         // Parse value to number if type is number
         if (type === 'n') {
           value = +value;
@@ -287,6 +252,12 @@ class ExtractDataExcelService {
           p: cellPostion,
           t: type,
         };
+        if (textoFormateado) {
+          dataCell.w = textoFormateado
+        }
+        if (formatoNumero) {
+          dataCell.z = formatoNumero
+        }
         // Añade colspan y rowspan si son mayores a 1
         if (colSpan > 1) {
           dataCell.s = colSpan;
@@ -424,6 +395,10 @@ class ExtractDataExcelService {
     const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
     const rows = getSheetHtmlRows(sheet);
     return this.createCellsDataMap(rows);
+  }
+  getSheetByIndex(workbook: XLSX.WorkBook, sheetIndex: number): XLSX.WorkSheet {
+    const sheetName: string = workbook.SheetNames[sheetIndex];
+    return workbook.Sheets[sheetName];
   }
   getRangoTablaDatos(rows: HtmlCellsMatrix): CellRange {
     //!TODO MEJORAR EL ALGORITMO DE RANGO

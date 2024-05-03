@@ -4,10 +4,10 @@ import { api } from './api'
 
 export const estadisticaApi = api.injectEndpoints({
   endpoints: (build) => ({
-    addEstadistica: build.mutation<Estadistica, Partial<Estadistica>>({
+    createEstadistica: build.mutation<Estadistica, Partial<Estadistica>>({
       query(body) {
         return {
-          url: `estadisticas`,
+          url: 'estadisticas',
           method: 'POST',
           body,
         }
@@ -43,20 +43,19 @@ export const estadisticaApi = api.injectEndpoints({
 })
 // Add/Update
 export const useSaveEstadisticaMutation = (creating: boolean) => {
-  console.log('creating::', creating)
   if (creating) {
-    return useAddEstadisticaMutation()
+    return useCreateEstadisticaMutation()
   } else {
     return useUpdateEstadisticaMutation()
   }
 }
 export const {
-  useAddEstadisticaMutation,
+  useCreateEstadisticaMutation,
   useDeleteEstadisticaMutation,
   useGetEstadisticaQuery,
   useUpdateEstadisticaMutation,
 } = estadisticaApi
 
 export const {
-  endpoints: { getEstadistica, addEstadistica, updateEstadistica, deleteEstadistica },
+  endpoints: { getEstadistica, createEstadistica: addEstadistica, updateEstadistica, deleteEstadistica },
 } = estadisticaApi

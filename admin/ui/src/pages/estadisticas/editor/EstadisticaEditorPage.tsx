@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 
 import MainLayout from '../../../layout/MainLayout';
-import IndicadorEditorhHeader from './IndicadorEditorhHeader';
+import IndicadorEditorHeader from './IndicadorEditorHeader';
 import IndicadorEditorTabs from './IndicadorEditorTabs';
 import { useGetEstadisticaQuery } from '../../../app/services/estadistica';
 import { getPathResourceId } from '../../../utils/url-utils';
@@ -34,7 +34,7 @@ function EstadisticaEditorPage() {
 
   return (
     <MainLayout>
-      <IndicadorEditorhHeader />
+      <IndicadorEditorHeader />
       <div className="px-12 pb-8">
         <IndicadorEditorTabs />
       </div>

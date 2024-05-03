@@ -31,14 +31,22 @@ interface DatasheetProps {
   style?: React.CSSProperties;
 }
 
+function renderInnerCell(cell: Cell) {
+  const { v: value, t: type, p: position, w: textoFormateadoExcel } = cell;
+  console.log('cell', cell);
+  if (textoFormateadoExcel) {
+    return textoFormateadoExcel;
+  }
+  const formattedValue =
+    type === 'n' && position === 'b' ? numberFormat(value as number) : value;
+  return formattedValue;
+}
+
 function renderCell(
   cell: Cell,
   dataSelectionRange: CellRange,
   chartDataRanges: ChartDataRanges
 ) {
-  const { v: value, t: type, p: position } = cell;
-  const formattedValue =
-    type === 'n' && position === 'b' ? numberFormat(value as number) : value;
   return (
     <td
       key={cell.c}
@@ -46,7 +54,7 @@ function renderCell(
       rowSpan={cell.rs}
       className={getCellCls(cell, dataSelectionRange, chartDataRanges)}
     >
-      {formattedValue}
+      {renderInnerCell(cell)}
     </td>
   );
 }

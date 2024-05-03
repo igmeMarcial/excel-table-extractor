@@ -15,7 +15,25 @@ interface DataTableProps {
   data: Cell[][];
   format?: FormatoTabla;
 }
-
+function renderInnerCell(cell: Cell, format: FormatoTabla) {
+  const {
+    v: value,
+    t: type,
+    p: position,
+    w: textoFormateadoExcel,
+  } = cell || {};
+  if (textoFormateadoExcel) {
+    return textoFormateadoExcel;
+  }
+  const formattedValue =
+    type === 'n' && position === 'b'
+      ? numberFormat(
+          value as number,
+          format.decimales || DT_TABLA_DATOS_DECIMALES_DEFECTO
+        )
+      : value;
+  return formattedValue;
+}
 function renderCell(
   cell: Cell,
   rowIndex: number,
@@ -23,7 +41,7 @@ function renderCell(
   format: FormatoTabla,
   indexCount
 ) {
-  const { v: value, t: type, p: position } = cell || {};
+  const { t: type, p: position } = cell || {};
   format = format || {};
   const color = format.color || DT_TABLA_DATOS_PRIMARY_COLOR;
   let cellStyle: React.CSSProperties = {
@@ -48,13 +66,6 @@ function renderCell(
     type === 'n' && position === CELL_POSITION_BODY
       ? 'text-end whitespace-nowrap' // Aliniación a la derecha para números
       : 'text-start whitespace-nowrap';
-  const formattedValue =
-    type === 'n' && position === 'b'
-      ? numberFormat(
-          value as number,
-          format.decimales || DT_TABLA_DATOS_DECIMALES_DEFECTO
-        )
-      : value;
   return (
     <td
       style={{
@@ -73,7 +84,7 @@ function renderCell(
       rowSpan={cell.rs}
       className={className}
     >
-      {formattedValue}
+      {renderInnerCell(cell, format)}
     </td>
   );
 }

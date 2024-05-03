@@ -1,0 +1,1 @@
+export const FICHA_TECNICA_NRO_CAMPO_RANGO_DATOS = 21;

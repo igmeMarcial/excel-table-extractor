@@ -14,5 +14,7 @@ export interface Cell {
   s?: number
   rs?: number
   p?: CellPosition
-  t: CellValueType
+  t: CellValueType,
+  w?: string, // Texto formateado
+  z?: string, // Formato de número
 }

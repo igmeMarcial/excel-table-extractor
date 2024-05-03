@@ -31,9 +31,7 @@ const EstadisticaImportDialog = () => {
   const [tablaDatosChecked, setTablaDatosChecked] = useState(false);
   const { data: clasificadores } = useGetIndiceClasificadoresQuery();
   const indiceClasificadores = new IndiceClasificadores(clasificadores || []);
-  const importButtonTitle = isCreationMode
-    ? 'Importar'
-    : 'Actualizar datos';
+  const importButtonTitle = isCreationMode ? 'Importar' : 'Actualizar datos';
   const importModalTitle = importButtonTitle;
   const confirmDataRangeDialogRef = useRef<DataRangeConfirmDialogRef>(null);
   const handleFileChange = async (file: File | null) => {
@@ -110,7 +108,10 @@ const EstadisticaImportDialog = () => {
       tablaDatosSheetIndex
     );
     const newRange = fichaExcelService.getHtmlCellsRange(sheetDataMap, range);
-    const datos = fichaExcelService.getCellsMatrix(newRange);
+    const datos = fichaExcelService.getCellsMatrix(
+      newRange,
+      fichaExcelService.getSheetByIndex(workbookFile, tablaDatosSheetIndex)
+    );
     const data = fichaExcelService.extractDataFromFile(
       workbookFile,
       tablaDatosSheetIndex
@@ -148,7 +149,10 @@ const EstadisticaImportDialog = () => {
       workbookFile,
       tablaDatosSheetIndex
     );
-    const sheetData = fichaExcelService.getCellsMatrix(sheetDataMap);
+    const sheetData = fichaExcelService.getCellsMatrix(
+      sheetDataMap,
+      fichaExcelService.getSheetByIndex(workbookFile, tablaDatosSheetIndex)
+    );
     const rangoTablaDatos = fichaExcelService.getRangoTablaDatos(sheetDataMap);
     confirmDataRangeDialogRef.current.open({
       data: sheetData,

@@ -1,7 +1,19 @@
-import { Button, Input } from '@fluentui/react-components';
+import {
+  Button,
+  Input,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  MenuPopover,
+  MenuTrigger,
+  Tooltip,
+} from '@fluentui/react-components';
+import { MoreVerticalRegular } from '@fluentui/react-icons';
 
 import { Add24Filled, Search24Regular } from '@fluentui/react-icons';
 import { Link, useLocation } from 'react-router-dom';
+import EstadisticasPageToolbarImportButton from './EstadisticasPageToolbarImportButton';
 import { builNavPathUrl } from '../../utils/url-utils';
 
 function EstadisticasPageToolbar() {
@@ -14,6 +26,7 @@ function EstadisticasPageToolbar() {
         type="search"
       />
       <span className="flex-1"></span>
+      <EstadisticasPageToolbarImportButton />
       <Link to={builNavPathUrl(location, 'indicador-editor')}>
         <Button
           style={{ color: '#2271B1' }}
@@ -23,6 +36,23 @@ function EstadisticasPageToolbar() {
           Registrar
         </Button>
       </Link>
+      <Menu>
+        <MenuTrigger disableButtonEnhancement>
+          <Tooltip
+            content="Más opciones"
+            relationship="label"
+            appearance="inverted"
+            withArrow
+          >
+            <MenuButton appearance="subtle" icon={<MoreVerticalRegular />} />
+          </Tooltip>
+        </MenuTrigger>
+        <MenuPopover>
+          <MenuList>
+            <MenuItem>Item a</MenuItem>
+          </MenuList>
+        </MenuPopover>
+      </Menu>
     </div>
   );
 }

@@ -49,19 +49,6 @@ const IndicadorEditorhHeader = () => {
       },
     });
   };
-  const showSuccessMessage = () => {
-    messageApi.success({
-      content: (
-        <>
-          <b>Guardado exitoso</b>, la estadística ha sido guardada
-          correctamente.
-        </>
-      ),
-      style: {
-        marginTop: '90px',
-      },
-    });
-  };
   const validFields = () => {
     return validationsHelper.validValues(
       ESTADISTICA_FULL_FIELDS_DEF,

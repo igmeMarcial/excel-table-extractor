@@ -39,8 +39,6 @@ export const getUnidadMedidaParaSubtitulo = (tituloTablaDatos: string, unidadMed
   // Si el título de la tabla de datos contiene texto entre paréntesis, obtenerlo
   const unidadMedidaDesdeTitulo = getTextoEntreParentesisDelFinal(tituloTablaDatos)
   const unidadMedidaDesdeFicha = removerTextoEntreParentesisDelFinal(unidadMedida)
-  console.log('unidadMedidaDesdeTitulo', unidadMedidaDesdeTitulo)
-  console.log('unidadMedidaDesdeFicha', unidadMedidaDesdeFicha)
   // Retornar unidad de medida desde el título si es que existe, de lo contrario, desde la ficha técnica
   // Retornar el texto más largo
   const out = unidadMedidaDesdeTitulo.length > unidadMedidaDesdeFicha.length ? unidadMedidaDesdeTitulo : unidadMedidaDesdeFicha
