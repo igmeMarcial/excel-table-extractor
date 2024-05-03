@@ -3,11 +3,14 @@ import { Button } from '@fluentui/react-components';
 import { useAppSelector } from '../app/hooks';
 import { selectEstadisticaData } from '../app/AppSlice';
 import { PdfIcon } from './Icons';
-import jsPDF from 'jspdf';
 import { apiMap } from './FichaTecnicaMap';
-
-const logoSiniaUrl =
-  window.AesaInfo.pluginUrl + '/public/assets/images/logo_sinia.png';
+import jsPDF from 'jspdf';
+import { PDFViewer, PDFDownloadLink } from '@react-pdf/renderer';
+import { FichaTecnicaPdf } from './FichaTecnicaPdf';
+import html2canvas from 'html2canvas';
+const logoSinia = 'images/logo_sinia.png',
+  logoMinanSvg = 'images/LogoMinan.svg',
+  logoMinan = 'images/logo_minan2.png';
 
 function FichaTecnica() {
   const [dataIndicator, setDataIndicator] = useState([]);
@@ -59,99 +62,112 @@ function FichaTecnica() {
 
   const downloadPdf = () => {
     let doc = new jsPDF('p', 'pt', 'a4');
-    const hiddenElements = document.querySelectorAll(
-      '#downloadArea .indicadores'
-    );
-    hiddenElements.forEach((element) => {
-      if (element instanceof HTMLElement) {
-        element.style.display = 'block'; // Mostrar el elemento
-      }
-    });
-    let elementHTML = document.querySelector('#downloadArea').innerHTML;
-    hiddenElements.forEach((element) => {
-      if (element instanceof HTMLElement) {
-        element.style.display = 'none'; // Ocultar el elemento nuevamente
-      }
-    });
-    const pdfWidth = doc.internal.pageSize.getWidth();
-    doc.html(elementHTML, {
-      callback: function (doc) {
-        // Save the PDF
-        doc.save('documento.pdf');
-      },
-      margin: [30, 30, 10, 30],
-      autoPaging: 'text',
-      x: 0,
-      y: 0,
-      width: pdfWidth, //target width in the PDF document
-      windowWidth: 675, //window width in CSS pixels
-    });
-  };
 
-  console.log(logoSiniaUrl);
+    // Obtiene el tamaño de la página
+    const pageSize = doc.internal.pageSize;
+    const pageWidth = pageSize.width;
+    let pad = 20;
+    // Definir las coordenadas y dimensiones de la primera imagen
+    let x1 = pad;
+    let y1 = 50;
+    let width1 = 300;
+    let height1 = 60;
+
+    // Definir las coordenadas y dimensiones de la segunda imagen
+    let x2 = pageWidth - 200; // Añadir un espacio de 10 unidades entre las imágenes
+    let y2 = y1;
+    let width2 = 150;
+    let height2 = 80;
+
+    // Agregar la primera imagen
+    // doc.addImage(logoMinan, 'PNG', x1, y1, width1, height1);
+
+    // // Agregar la segunda imagen
+    // doc.addImage(logoSinia, 'PNG', x2, y2, width2, height2);
+
+    let elementHTML = document.querySelector('#downloadArea');
+
+    if (elementHTML instanceof HTMLElement) {
+      html2canvas(elementHTML)
+        .then((canvas) => {
+          const imageData = canvas.toDataURL('image/png');
+
+          const pdfWidth = doc.internal.pageSize.getWidth();
+          const pdfHeight = doc.internal.pageSize.getHeight();
+
+          const ratio = canvas.width / canvas.height;
+          const width = pdfWidth - 40;
+          const height = width / ratio;
+          // Agrega la imagen al documento PDF
+          doc.addImage(imageData, 'PNG', 0, 0, width, height);
+
+          // Guarda el documento PDF
+          doc.save('image.pdf');
+        })
+        .catch((error) => {
+          console.error('Error al convertir HTML a canvas:', error);
+        });
+    }
+  };
 
   return (
     <div className="overflow-auto">
-      <div id="downloadArea" className="p-4">
-        <div className="relative my-1 mx-2">
-          <div>
-            <div className="flex">
-              <img src={logoSiniaUrl} alt="Sinia" />
-            </div>
-            <div
-              className="indicadores"
-              style={{
-                fontWeight: 'bold',
-                fontSize: '1rem',
-                marginBottom: '0.75rem',
-                display: 'none',
-                fontFamily: 'sans-serif,Arial',
-              }}
-            >
-              Ficha de Divulgación de Estadística Ambiental - MINAN.
-            </div>
-            {dataIndicator.map((item, rowIndex) => (
-              <div
-                className="indicadores"
-                key={`row-${item.id}`}
-                // style={{ display: item.id > 6 ? 'none' : 'block' }}
-              >
-                <div
-                  style={{
-                    color: 'rgb(12, 113, 195)',
-                    fontSize: '12px',
-                    fontWeight: 'bold',
-                    marginTop: item.id === 1 ? '0px' : '10px',
-                    fontFamily: 'Arial, sans-serif',
-                  }}
-                >
-                  {item.key}
-                </div>
-                <div
-                  style={{
-                    fontSize: '12px',
-                    textAlign: 'justify',
-                    fontWeight:
-                      item.key ===
-                      'Nombre del indicador o estadística ambiental'
-                        ? 'bold'
-                        : 'normal',
-                    paddingRight: '110px',
-                    fontFamily: 'Arial, sans-serif',
-                  }}
-                >
-                  {renderValue(item.key, item.value)}
-                </div>
-              </div>
-            ))}
+      <div id="downloadArea" className="py-4">
+        <div className="relative my-1">
+          <div className="justify-between " style={{ display: 'flex' }}>
+            <img style={{ maxWidth: '30%' }} src={logoMinan} alt="Minan" />
+            <img
+              style={{ maxWidth: '30%', maxHeight: '60px' }}
+              src={logoSinia}
+              alt="Sinia"
+            />
           </div>
+          {dataIndicator.map((item, rowIndex) => (
+            <div className="indicadores" key={`row-${item.id}`}>
+              <div
+                style={{
+                  color: 'rgb(12, 113, 195)',
+                  fontSize: '12px',
+                  fontWeight: 'bold',
+                  marginTop: item.id === 1 ? '0px' : '10px',
+                  fontFamily: 'Arial, sans-serif',
+                }}
+              >
+                {item.key}
+              </div>
+              <div
+                style={{
+                  fontSize: '12px',
+                  textAlign: 'justify',
+                  fontWeight:
+                    item.key === 'Nombre del indicador o estadística ambiental'
+                      ? 'bold'
+                      : 'normal',
+
+                  fontFamily: 'Arial, sans-serif',
+                }}
+              >
+                {renderValue(item.key, item.value)}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-      <div className="flex gap-4  mb-4 pl-6">
+      <div className="flex gap-4  mb-4">
         <Button onClick={() => downloadPdf()} icon={<PdfIcon />}>
           Descargar PDF
         </Button>
       </div>
+      {/* <div>
+        <PDFDownloadLink
+          document={<FichaTecnicaPdf />}
+          fileName="fichaTecnica.pdf"
+        >
+          {({ loading, url, error, blob }) =>
+            loading ? <button>Cargando...</button> : <button>Descargar</button>
+          }
+        </PDFDownloadLink>
+      </div> */}
     </div>
   );
 }

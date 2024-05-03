@@ -3,6 +3,7 @@ import {
   Tab,
   SelectTabEvent,
   SelectTabData,
+  makeStyles,
 } from '@fluentui/react-components';
 import FichaTecnica from '../components/FichaTecnica';
 import Grafico from '../components/Grafico';
@@ -18,7 +19,20 @@ const items = [
   { text: 'Ficha técnica', value: 'ficha' },
 ];
 
+const useStyles = makeStyles({
+  item: {
+    paddingLeft: '0',
+    ':after': {
+      left: '3px',
+    },
+    ':before': {
+      left: '3px',
+    },
+  },
+});
+
 const EstadisticaVistaTabs = () => {
+  const classes = useStyles();
   const selectedValue = useAppSelector(selectActiveTabName);
   const distpath = useAppDispatch();
 
@@ -33,9 +47,14 @@ const EstadisticaVistaTabs = () => {
   return (
     <div className="pl-6 pr-6">
       <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
-        {items.map((item) => {
+        {items.map((item, index) => {
           return (
-            <Tab key={item.value} value={item.value}>
+            <Tab
+              key={item.value}
+              value={item.value}
+              // style={index === 0 ? { paddingLeft: 0 } : {}}
+              className={index === 0 ? classes.item : ''}
+            >
               {item.text}
             </Tab>
           );
