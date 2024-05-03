@@ -5,30 +5,66 @@ import {
   View,
   Document,
   StyleSheet,
-  Svg,
   Image,
 } from '@react-pdf/renderer';
 
 const logosinia = 'images/logo_sinia.png',
-  logoMinan = 'images/LogoMinan.svg';
+  logoMinan = 'images/logo_minan2.png';
 
-export const FichaTecnicaPdf = () => {
+const styles = StyleSheet.create({
+  page: {
+    backgroundColor: '#ffffff',
+    paddingTop: '40px',
+    paddingLeft: '20px',
+    paddingRight: '20px',
+  },
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    marginBottom: '29px',
+    alignItems: 'center',
+  },
+  img: {
+    maxWidth: '35%',
+    maxHeight: '40px',
+  },
+  imgSinia: {
+    maxWidth: '144px',
+    maxHeight: '65px',
+  },
+  key: {
+    color: 'rgb(12, 113, 195)',
+    fontSize: '12px',
+    fontWeight: 'bold',
+    marginBottom: '5px',
+  },
+  info: {
+    fontSize: '12px',
+    textAlign: 'justify',
+    fontWeight: 'normal',
+  },
+  section: {
+    marginBottom: '15px',
+  },
+});
+
+export const FichaTecnicaPdf = ({ data }) => {
   return (
     <Document>
-      <Page size="A4">
-        <Image src={logosinia} />
-        <Svg>
-          <Image src={logoMinan} />
-        </Svg>
-        <View>
-          {/* <Image src="https://sinia.minam.gob.pe/sites/default/files/nuevo_logo_sinia.png" /> */}
-          {/* <Image style={styles.img} src={sinia} /> */}
+      <Page style={styles.page} size="A4" orientation="portrait">
+        <View style={styles.header}>
+          <Image style={styles.img} src={logoMinan} />
+          <Image style={styles.imgSinia} src={logosinia} />
         </View>
+
         <View>
-          <Text>Section #1</Text>
-        </View>
-        <View>
-          <Text>Section #2</Text>
+          {data.map((item) => (
+            <View style={styles.section} key={item.key}>
+              <Text style={styles.key}>{item.key}</Text>
+              <Text style={styles.info}>{item.value}</Text>
+            </View>
+          ))}
         </View>
       </Page>
     </Document>

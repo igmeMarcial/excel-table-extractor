@@ -63,6 +63,7 @@ class ExtractDataExcelService {
         nota: contentCellTabla.nota,
         elaboracion: contentCellTabla.elaboracion,
       };
+     
       return estadisticaDatos;
     } catch (error) {
       throw error;
@@ -685,6 +686,7 @@ class ExtractDataExcelService {
         }
       });
     });
+    
     return resultMap;
   }
   getCellTabla(sheet) {

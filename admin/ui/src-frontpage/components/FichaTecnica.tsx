@@ -60,68 +60,10 @@ function FichaTecnica() {
     return <div>No hay datos disponibles.</div>;
   }
 
-  const downloadPdf = () => {
-    let doc = new jsPDF('p', 'pt', 'a4');
-
-    // Obtiene el tamaño de la página
-    const pageSize = doc.internal.pageSize;
-    const pageWidth = pageSize.width;
-    let pad = 20;
-    // Definir las coordenadas y dimensiones de la primera imagen
-    let x1 = pad;
-    let y1 = 50;
-    let width1 = 300;
-    let height1 = 60;
-
-    // Definir las coordenadas y dimensiones de la segunda imagen
-    let x2 = pageWidth - 200; // Añadir un espacio de 10 unidades entre las imágenes
-    let y2 = y1;
-    let width2 = 150;
-    let height2 = 80;
-
-    // Agregar la primera imagen
-    // doc.addImage(logoMinan, 'PNG', x1, y1, width1, height1);
-
-    // // Agregar la segunda imagen
-    // doc.addImage(logoSinia, 'PNG', x2, y2, width2, height2);
-
-    let elementHTML = document.querySelector('#downloadArea');
-
-    if (elementHTML instanceof HTMLElement) {
-      html2canvas(elementHTML)
-        .then((canvas) => {
-          const imageData = canvas.toDataURL('image/png');
-
-          const pdfWidth = doc.internal.pageSize.getWidth();
-          const pdfHeight = doc.internal.pageSize.getHeight();
-
-          const ratio = canvas.width / canvas.height;
-          const width = pdfWidth - 40;
-          const height = width / ratio;
-          // Agrega la imagen al documento PDF
-          doc.addImage(imageData, 'PNG', 0, 0, width, height);
-
-          // Guarda el documento PDF
-          doc.save('image.pdf');
-        })
-        .catch((error) => {
-          console.error('Error al convertir HTML a canvas:', error);
-        });
-    }
-  };
-
   return (
     <div className="overflow-auto">
       <div id="downloadArea" className="py-4">
         <div className="relative my-1">
-          <div className="justify-between " style={{ display: 'flex' }}>
-            <img style={{ maxWidth: '30%' }} src={logoMinan} alt="Minan" />
-            <img
-              style={{ maxWidth: '30%', maxHeight: '60px' }}
-              src={logoSinia}
-              alt="Sinia"
-            />
-          </div>
           {dataIndicator.map((item, rowIndex) => (
             <div className="indicadores" key={`row-${item.id}`}>
               <div
@@ -154,20 +96,19 @@ function FichaTecnica() {
         </div>
       </div>
       <div className="flex gap-4  mb-4">
-        <Button onClick={() => downloadPdf()} icon={<PdfIcon />}>
-          Descargar PDF
-        </Button>
-      </div>
-      {/* <div>
         <PDFDownloadLink
-          document={<FichaTecnicaPdf />}
+          document={<FichaTecnicaPdf data={dataIndicator} />}
           fileName="fichaTecnica.pdf"
         >
           {({ loading, url, error, blob }) =>
-            loading ? <button>Cargando...</button> : <button>Descargar</button>
+            loading ? (
+              <Button icon={<PdfIcon />}>Cargando...</Button>
+            ) : (
+              <Button icon={<PdfIcon />}>Descargar PDF</Button>
+            )
           }
         </PDFDownloadLink>
-      </div> */}
+      </div>
     </div>
   );
 }
