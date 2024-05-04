@@ -20,9 +20,7 @@ export class GraficoHelper {
   getGraficoDefecto(estadistica: Estadistica): Grafico {
     const tabla = estadistica.datos;
     const dataInfo = tablaDatosHelper.getInformacion(tabla);
-    let defaults = {
-      fuente: estadistica.fuente,
-    };
+    let defaults = {};
     const valoresRango = dataInfo.valoresRango;
     if (!valoresRango) {
       return defaults;

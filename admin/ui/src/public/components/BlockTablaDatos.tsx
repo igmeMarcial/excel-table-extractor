@@ -2,7 +2,10 @@ import DataTable from '../../components/DataTable';
 import { CodigoMarcoOrdenador } from '../../types/CodigoMarcoOrdenador';
 import { Estadistica } from '../../types/Estadistica';
 import { getContextoVisualColor } from '../../utils/color-utils';
-import { removerTextoEntreParentesisDelFinal } from '../../utils/estadistica-utils';
+import {
+  determinarTituloTablaDatosDefecto,
+  removerTextoEntreParentesisDelFinal,
+} from '../../utils/estadistica-utils';
 
 interface BlockTablaDatosProps {
   contextoVisual: CodigoMarcoOrdenador;
@@ -51,7 +54,15 @@ function BlockTablaDatos({
 }: Readonly<BlockTablaDatosProps>) {
   const color = getContextoVisualColor(contextoVisual, numeralNivel1);
   const format = { ...estadistica.presentacionTablaFormato, color };
-  const subtitulo = removerTextoEntreParentesisDelFinal(estadistica.unidadMedida);
+  const titulo =
+    removerTextoEntreParentesisDelFinal(estadistica.presentacionTablaTitulo) ||
+    determinarTituloTablaDatosDefecto(
+      estadistica.nombre,
+      estadistica.periodoSerieTiempo
+    );
+  const subtitulo = removerTextoEntreParentesisDelFinal(
+    estadistica.unidadMedida
+  );
   return (
     <>
       <div
@@ -68,7 +79,7 @@ function BlockTablaDatos({
             marginBottom: '4px',
           }}
         >
-          {removerTextoEntreParentesisDelFinal(estadistica.presentacionTablaTitulo)}
+          {titulo}
         </div>
         {subtitulo && <div>({subtitulo})</div>}
       </div>

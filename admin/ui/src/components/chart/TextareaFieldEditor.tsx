@@ -14,12 +14,14 @@ interface TextareaFieldEditorProps {
   chartIndex: number;
   fieldName: keyof Grafico;
   label: string;
+  placeholder?: string;
 }
 
 const TextareaFieldEditor = ({
   chartIndex,
   fieldName,
   label,
+  placeholder,
 }: TextareaFieldEditorProps) => {
   const dispath = useAppDispatch();
   let value = useAppSelector(selectGraficoFieldValue(chartIndex, fieldName));
@@ -38,6 +40,7 @@ const TextareaFieldEditor = ({
         onChange={handleChange}
         value={value as string}
         resize="vertical"
+        placeholder={placeholder}
       />
     </Field>
   );

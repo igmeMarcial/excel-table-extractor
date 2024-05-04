@@ -12,7 +12,10 @@ import WpField from '../../../components/form/WpField';
 import WpDynamicField from '../../../components/form/WpDynamicField';
 import WpTextField from '../../../components/form/WpTextField';
 import { Estadistica } from '../../../types/Estadistica';
-import { getUnidadMedidaParaSubtitulo } from '../../../utils/estadistica-utils';
+import {
+  determinarTituloTablaDatosDefecto,
+  getUnidadMedidaParaSubtitulo,
+} from '../../../utils/estadistica-utils';
 
 const Field = ({ fieldName }) => {
   const fieldDef = DATOS_FIELDS_DEF[fieldName];
@@ -77,9 +80,7 @@ const getFieldPlaceholder = (
   const { nombre, periodoSerieTiempo, unidadMedida, presentacionTablaTitulo } =
     estadistica;
   if (fieldName === 'presentacionTablaTitulo') {
-    return (
-      (nombre || '') + (periodoSerieTiempo ? ', ' + periodoSerieTiempo : '')
-    );
+    return determinarTituloTablaDatosDefecto(nombre, periodoSerieTiempo);
   }
   if (fieldName === 'presentacionTablaSubtitulo') {
     return getUnidadMedidaParaSubtitulo(presentacionTablaTitulo, unidadMedida);

@@ -45,6 +45,10 @@ export const getUnidadMedidaParaSubtitulo = (tituloTablaDatos: string, unidadMed
   return capitalizarPrimeraLetra(out)
 }
 
+export const determinarTituloTablaDatosDefecto = (nombreEstadistica: string, periodoSerieTiempo: string) => {
+  return (nombreEstadistica || '') + (periodoSerieTiempo ? ', ' + periodoSerieTiempo : '')
+}
+
 export const determinarSubtituloParaGrafico = (subtituloGrafico: string, subtituloTablaDatos: string, tituloTablaDatos: string, unidadMedida) => {
   if (subtituloGrafico) {
     return subtituloGrafico

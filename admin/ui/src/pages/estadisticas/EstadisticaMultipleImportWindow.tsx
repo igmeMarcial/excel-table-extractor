@@ -66,10 +66,11 @@ const EstadisticaMultipleImportWindow = forwardRef<
   >([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
   const [isCancelled, setIsCancelled] = useState(false);
   const { data: clasificadores } = useGetIndiceClasificadoresQuery();
   const indiceClasificadores = new IndiceClasificadores(clasificadores || []);
-  const [postEstadistica, { isLoading: isImporting }] =
+  const [postEstadistica, { isLoading: isSaving }] =
     useCreateEstadisticaMutation();
 
   const open = ({
@@ -108,12 +109,14 @@ const EstadisticaMultipleImportWindow = forwardRef<
   }));
   const doStartImport = () => {
     console.log('doStartImport');
+    setIsImporting(true);
     saveEstadistica(0);
   };
   // Guarda la siguiente estadística en la lista
   const saveEstadistica = (selectionIndex: number) => {
     const key = selectedRowKeys[selectionIndex];
     if (!key || isCancelled) {
+      setIsImporting(false);
       return;
     }
     const model = getEstadisticaModelByKey(key);
@@ -152,7 +155,7 @@ const EstadisticaMultipleImportWindow = forwardRef<
           disabled={!hasSelection || isImporting}
           loading={isImporting}
         >
-          Iniciar importación
+          {isImporting ? 'Importando...' : 'Iniciar importación'}
         </Button>,
         <Button key="back" onClick={close}>
           Cancelar

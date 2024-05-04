@@ -22,7 +22,7 @@ function renderInnerCell(cell: Cell, format: FormatoTabla) {
     p: position,
     w: textoFormateadoExcel,
   } = cell || {};
-  if (textoFormateadoExcel) {
+  if (textoFormateadoExcel && isNaN(Number(textoFormateadoExcel))) {
     return textoFormateadoExcel;
   }
   const formattedValue =

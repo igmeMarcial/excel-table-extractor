@@ -1,4 +1,3 @@
-import console from 'console'
 import * as XLSX from 'xlsx'
 import { FICHA_TECNICA_NRO_CAMPO_RANGO_DATOS } from '../config/constantes'
 import GraficoHelper from '../helpers/GraficoHelper'
@@ -153,7 +152,7 @@ export class EstadisticasWorkbook {
     const sheet = this.getSheet(sheetName);
     const htmlRows = getSheetHtmlRows(sheet);
     const cellMap = this.createCellsDataMap(htmlRows);
-    const matrix = this.getCellsMatrixFichaTecnica(cellMap);
+    const matrix = this.getCellsMatrix(cellMap, sheet);
     const fields: Estadistica = this.filterValueFichaTecnica(matrix);
     // MDEA Clasificadores path
     const mdeaPathInput = fields.clasificacionMdea || '';
@@ -192,7 +191,7 @@ export class EstadisticasWorkbook {
     const sheet = this.getSheet(sheetName);
     const htmlRows = getSheetHtmlRows(sheet);
     const cellMap = this.createCellsDataMap(htmlRows);
-    const matrix = this.getCellsMatrixFichaTecnica(cellMap);
+    const matrix = this.getCellsMatrix(cellMap, sheet);
     const data: Estadistica = {
       presentacionTablaFuente: this.getFieldData('Fuente:', matrix),
       presentacionTablaNota: this.getFieldData('Nota:', matrix),
@@ -476,15 +475,15 @@ export class EstadisticasWorkbook {
     return resultMap;
   }
   /**
- *
- * | 0   | 1   | 2   | 3    | 4    |
- * | 0   | 1   | 2   | 3    | 4    |
- * | 0   | 1   | 5   | 10   | null |
- * | 0   | 1   | 2   | 3    | null |
- *
- * @param rows
- * @returns
- */
+   *
+   * | 0   | 1   | 2   | 3    | 4    |
+   * | 0   | 1   | 2   | 3    | 4    |
+   * | 0   | 1   | 5   | 10   | null |
+   * | 0   | 1   | 2   | 3    | null |
+   *
+   * @param rows
+   * @returns
+   */
   createCellsDataMap(rows: NodeListOf<Element>): HtmlCellsMatrix {
     const maxColIndex = this.getMaxColIndex(rows);
     const maxRowIndex = this.getMaxRowIndex(rows);
@@ -538,7 +537,7 @@ export class EstadisticasWorkbook {
       row.forEach((td) => {
         const colSpan = +td?.getAttribute('colspan') || 1;
         const rowSpan = +td?.getAttribute('rowspan') || 1;
-        let value: string | number = td?.getAttribute('data-v') || '';
+        let value: string | number = '';
         const type = (td?.getAttribute('data-t') as 'n' | 's') || 's';
         let formatoNumero = '';
         let textoFormateado = '';
@@ -547,6 +546,7 @@ export class EstadisticasWorkbook {
           const cell = sheet[cellAddress];
           formatoNumero = cell?.z || '';
           textoFormateado = cell?.w || '';
+          value = cell?.v || '';
         }
         // Parse value to number if type is number
         if (type === 'n') {
@@ -574,49 +574,6 @@ export class EstadisticasWorkbook {
         }
         rowData.push(dataCell);
         colIndex += colSpan;
-      });
-      out.push(rowData);
-    });
-    return out;
-  }
-  getCellsMatrixFichaTecnica(cellMap): Cell[][] {
-    const out: Cell[][] = [];
-    cellMap.forEach((row, rowIndex) => {
-      let colIndex = 0;
-      const rowData: Cell[] = [];
-      const cellPostion = this.getRowPosition(row, rowIndex);
-      row.forEach((td) => {
-        if (td !== null) {
-          const colSpan = +td.getAttribute('colspan') || 1;
-          const rowSpan = +td.getAttribute('rowspan') || 1;
-          let value: string | number = td.getAttribute('data-v') || '';
-          const type = (td.getAttribute('data-t') as 'n' | 's') || 's';
-          // Parse value to number if type is number
-          if (type === 'n') {
-            value = +value;
-          }
-          const dataCell: Cell = {
-            v: value,
-            r: rowIndex,
-            c: colIndex,
-            p: cellPostion,
-            t: type,
-          };
-          // Añade colspan y rowspan si son mayores a 1
-          if (colSpan > 1) {
-            dataCell.s = colSpan;
-          }
-          if (rowSpan > 1) {
-            dataCell.rs = rowSpan;
-          }
-          if (
-            (typeof dataCell.v === 'number' && !isNaN(dataCell.v)) ||
-            (typeof dataCell.v === 'string' && dataCell.v.trim() !== '')
-          ) {
-            rowData.push(dataCell);
-            colIndex += colSpan;
-          }
-        }
       });
       out.push(rowData);
     });

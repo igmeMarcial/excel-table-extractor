@@ -96,7 +96,7 @@ function FichaTecnica() {
         </div>
       </div>
       <div className="flex gap-4  mb-4">
-        <PDFDownloadLink
+        {/* <PDFDownloadLink
           document={<FichaTecnicaPdf data={dataIndicator} />}
           fileName="fichaTecnica.pdf"
         >
@@ -107,7 +107,7 @@ function FichaTecnica() {
               <Button icon={<PdfIcon />}>Descargar PDF</Button>
             )
           }
-        </PDFDownloadLink>
+        </PDFDownloadLink> */}
       </div>
     </div>
   );

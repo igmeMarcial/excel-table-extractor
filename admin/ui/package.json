@@ -16,6 +16,7 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@fluentui/react-components": "^9.49.0",
+    "@react-pdf/renderer": "^3.4.4",
     "@reduxjs/toolkit": "^2.2.1",
     "antd": "^5.13.2",
     "axios": "^1.6.7",

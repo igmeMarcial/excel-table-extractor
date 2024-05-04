@@ -15,25 +15,25 @@ export const ECHATS_DEFALT_PROPS: EChartsReactProps = {
       bottom: 20,
       containLabel: true,
     },
-/*     toolbox: {
-      right: 8,
-      top: 8,
-      feature: {
-        dataZoom: {
-          yAxisIndex: "none"
-        },
-        magicType: {
-          type: ["line", "bar", "stack", "tiled"]
-        },
-        saveAsImage: {}
-      }
-    }, */
+    /*     toolbox: {
+          right: 8,
+          top: 8,
+          feature: {
+            dataZoom: {
+              yAxisIndex: "none"
+            },
+            magicType: {
+              type: ["line", "bar", "stack", "tiled"]
+            },
+            saveAsImage: {}
+          }
+        }, */
     title: {
       left: 'left',
       textStyle: {
         fontSize: DT_GRAFICO_FONT_SIZE,
         overflow: 'break',
-        width: 500,
+        width: 660,
       },
       padding: [8, 0],
     },

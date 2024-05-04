@@ -230,7 +230,7 @@ export const selectGraficoFieldValue = <K extends keyof Grafico>(index: number, 
   return state.estadisticaForm.estadisticaRawModel.graficos[index][field]
 }
 export const selectFormatoTablaFieldValue = <K extends keyof FormatoTabla>(field: K): ((state: RootState) => FormatoTabla[K]) => (state: RootState) => {
-  const formato = state.estadisticaForm.estadisticaRawModel.datos?.formato || {};
+  const formato = state.estadisticaForm.estadisticaRawModel.presentacionTablaFormato || {};
   return formato[field];
 }
 
