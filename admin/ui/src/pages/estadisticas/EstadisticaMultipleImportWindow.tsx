@@ -85,6 +85,10 @@ const EstadisticaMultipleImportWindow = forwardRef<
     setIsCancelled(true);
     setIsOpen(false);
   };
+  useImperativeHandle(ref, () => ({
+    open,
+    close,
+  }));
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
@@ -103,10 +107,7 @@ const EstadisticaMultipleImportWindow = forwardRef<
     });
     setListaEstadisticas(listaEstadisticas);
   };
-  useImperativeHandle(ref, () => ({
-    open,
-    close,
-  }));
+
   const doStartImport = () => {
     console.log('doStartImport');
     setIsImporting(true);

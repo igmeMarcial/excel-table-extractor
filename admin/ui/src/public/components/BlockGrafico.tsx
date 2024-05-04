@@ -4,6 +4,7 @@ import { Grafico } from '../../types/Grafico';
 import {
   determinarSubtituloParaGrafico,
   determinarTituloTablaDatosDefecto,
+  removerTextoEntreParentesisDelFinal,
 } from '../../utils/estadistica-utils';
 import { deepAssign } from '../../utils/object-utils';
 
@@ -16,7 +17,7 @@ function BlockGrafico({ grafico, estadistica }: Readonly<BlockGraficoProps>) {
   const options: Grafico = deepAssign({}, grafico);
   options.titulo =
     grafico.titulo ||
-    estadistica.presentacionTablaTitulo ||
+    removerTextoEntreParentesisDelFinal(estadistica.presentacionTablaTitulo) ||
     determinarTituloTablaDatosDefecto(
       estadistica.nombre,
       estadistica.periodoSerieTiempo
