@@ -1,148 +1,162 @@
-import * as XLSX from 'xlsx'
-import { FICHA_TECNICA_NRO_CAMPO_RANGO_DATOS } from '../config/constantes'
-import GraficoHelper from '../helpers/GraficoHelper'
-import TablaDatosHelper from '../helpers/TablaDatosHelper'
-import { FICHA_FIELDS_MAP } from '../pages/estadisticas/editor/FichaFieldsMap'
-import { Cell, CellPosition, CELL_POSITION_BODY, CELL_POSITION_HEADER, CELL_VALUE_TYPE_STRING } from '../types/Cell'
-import { CellRange } from '../types/CellRange'
-import { Estadistica, FichaTecnicaFields } from '../types/Estadistica'
-import { HtmlCellsMatrix } from '../types/HtmlCellMatrix'
-import { WorkbookEstadisticaItem } from '../types/WorkbookEstadisticaItem'
-import { decodeCellRange } from '../utils/decodeCellRange'
-import { calculateSimilarity, toSnakeCase } from '../utils/string-utils'
-import { getSheetHtmlRows } from '../utils/xmls-utils'
-import { IndiceClasificadores } from './IndiceClasificadores'
+import * as XLSX from 'xlsx';
+import { FICHA_TECNICA_NRO_CAMPO_RANGO_DATOS } from '../config/constantes';
+import GraficoHelper from '../helpers/GraficoHelper';
+import TablaDatosHelper from '../helpers/TablaDatosHelper';
+import { FICHA_FIELDS_MAP } from '../pages/estadisticas/editor/FichaFieldsMap';
+import {
+  Cell,
+  CellPosition,
+  CELL_POSITION_BODY,
+  CELL_POSITION_HEADER,
+  CELL_VALUE_TYPE_STRING,
+} from '../types/Cell';
+import { CellRange } from '../types/CellRange';
+import { Estadistica, FichaTecnicaFields } from '../types/Estadistica';
+import { HtmlCellsMatrix } from '../types/HtmlCellMatrix';
+import { WorkbookEstadisticaItem } from '../types/WorkbookEstadisticaItem';
+import { decodeCellRange } from '../utils/decodeCellRange';
+import { calculateSimilarity, toSnakeCase } from '../utils/string-utils';
+import { getSheetHtmlRows } from '../utils/xmls-utils';
+import { IndiceClasificadores } from './IndiceClasificadores';
 
-const FICHA_SHEET_NAME_REGEX = /^FT(\d{1,4})$/
-const DATOS_SHEET_NAME_REGEX = /^C(\d{1,4})$/
+const FICHA_SHEET_NAME_REGEX = /^FT(\d{1,4})$/;
+const DATOS_SHEET_NAME_REGEX = /^C(\d{1,4})$/;
 /**
  * Modelo de datos para basado en el formato de Excel para el recojo de datos estadísticos por extadistica,
  * que incluye campos de ficha técnica y datos estadísticos.
  */
 export class EstadisticasWorkbook {
-  private workbook: XLSX.WorkBook
+  private workbook: XLSX.WorkBook;
 
   constructor(workbook: XLSX.WorkBook) {
-    this.workbook = workbook
+    this.workbook = workbook;
   }
 
   // The workbook object
   getWorkbook(): XLSX.WorkBook {
-    return this.workbook
+    return this.workbook;
   }
 
   // The sheet names
   getSheetNames(): string[] {
-    return this.workbook.SheetNames || []
+    return this.workbook.SheetNames || [];
   }
 
   getSheet(sheetName: string): XLSX.WorkSheet {
-    return this.workbook.Sheets[sheetName]
+    return this.workbook.Sheets[sheetName];
   }
-  getSheetDataMap(
-    sheetName: string
-  ): HtmlCellsMatrix {
+  getSheetDataMap(sheetName: string): HtmlCellsMatrix {
     const sheet: XLSX.WorkSheet = this.workbook.Sheets[sheetName];
     const rows = getSheetHtmlRows(sheet);
     return this.createCellsDataMap(rows);
   }
   // Lista de estadísticas
   getListaEstadisticas(): WorkbookEstadisticaItem[] {
-    const out = new Map<number, WorkbookEstadisticaItem>()
+    const out = new Map<number, WorkbookEstadisticaItem>();
     this.getSheetNames().forEach((sheetName, index) => {
-      const matchs = FICHA_SHEET_NAME_REGEX.exec(sheetName)
+      const matchs = FICHA_SHEET_NAME_REGEX.exec(sheetName);
       if (matchs) {
-        const id = parseInt(matchs[1])
+        const id = parseInt(matchs[1]);
         const item: WorkbookEstadisticaItem = out.get(id) || {
           id,
           nombre: null,
           hojaDatos: null,
           hojaFicha: null,
           rangoDatos: null,
-        }
-        item.hojaFicha = sheetName
-        item.nombre = this.getNombreEstadistica(sheetName)
-        item.rangoDatos = this.getCampoFichaTecnicaPorNumero(sheetName, FICHA_TECNICA_NRO_CAMPO_RANGO_DATOS)
-        out.set(id, item)
-        return
+        };
+        item.hojaFicha = sheetName;
+        item.nombre = this.getNombreEstadistica(sheetName);
+        item.rangoDatos = this.getCampoFichaTecnicaPorNumero(
+          sheetName,
+          FICHA_TECNICA_NRO_CAMPO_RANGO_DATOS
+        );
+        out.set(id, item);
+        return;
       }
 
-      const matchs2 = DATOS_SHEET_NAME_REGEX.exec(sheetName)
+      const matchs2 = DATOS_SHEET_NAME_REGEX.exec(sheetName);
       if (matchs2) {
-        const id = parseInt(matchs2[1])
+        const id = parseInt(matchs2[1]);
         const item: WorkbookEstadisticaItem = out.get(id) || {
           id,
           nombre: null,
           hojaDatos: null,
           hojaFicha: null,
           rangoDatos: null,
-        }
-        item.hojaDatos = sheetName
-        out.set(id, item)
+        };
+        item.hojaDatos = sheetName;
+        out.set(id, item);
       }
-    })
-    return Array.from(out.values())
+    });
+    return Array.from(out.values());
   }
 
-  getNombreEstadistica(
-    sheetName: string
-  ): string {
-    let out = ''
-    const sheet = this.getSheet(sheetName)
-    const range = XLSX.utils.decode_range(sheet['!ref'])
+  getNombreEstadistica(sheetName: string): string {
+    let out = '';
+    const sheet = this.getSheet(sheetName);
+    const range = XLSX.utils.decode_range(sheet['!ref']);
 
     //iterando
     for (let i = range.s.r; i <= range.e.r; i++) {
       for (let j = range.s.c; j <= range.e.c; j++) {
-        const cellref = XLSX.utils.encode_cell({ c: j, r: i })
-        const cell = sheet[cellref]
-        const cellValue = (cell?.v || '').toString().trim()
+        const cellref = XLSX.utils.encode_cell({ c: j, r: i });
+        const cell = sheet[cellref];
+        const cellValue = (cell?.v || '').toString().trim();
         // El nombre del indicador o estadística ambiental se encuentra en la primera fila con el número de campo 1
         if (cellValue === '1') {
-          const cellref2 = XLSX.utils.encode_cell({ c: j + 2, r: i })
-          const cell2 = sheet[cellref2]
-          return String(cell2?.v).trim()
+          const cellref2 = XLSX.utils.encode_cell({ c: j + 2, r: i });
+          const cell2 = sheet[cellref2];
+          return String(cell2?.v).trim();
         }
       }
     }
-    return out
+    return out;
   }
   getCampoFichaTecnicaPorNumero(
     sheetName: string,
     numeroCampo: number
   ): string {
-    let out = ''
-    const sheet = this.getSheet(sheetName)
-    const columnaNumerosIndex = this.getInicioFichaTecnicaColumnIndex(sheetName)
+    let out = '';
+    const sheet = this.getSheet(sheetName);
+    const columnaNumerosIndex =
+      this.getInicioFichaTecnicaColumnIndex(sheetName);
     if (columnaNumerosIndex === -1) {
-      return out
+      return out;
     }
     // Rango de la hoja de excel
-    const range = XLSX.utils.decode_range(sheet['!ref'])
+    const range = XLSX.utils.decode_range(sheet['!ref']);
     for (let i = range.s.r; i <= range.e.r; i++) {
-      const cellRefAddress = XLSX.utils.encode_cell({ c: columnaNumerosIndex, r: i })
-      const cell = sheet[cellRefAddress]
-      const cellValue = (cell?.v || '').toString().trim()
+      const cellRefAddress = XLSX.utils.encode_cell({
+        c: columnaNumerosIndex,
+        r: i,
+      });
+      const cell = sheet[cellRefAddress];
+      const cellValue = (cell?.v || '').toString().trim();
       if (cellValue === numeroCampo.toString()) {
-        const valueAddress = XLSX.utils.encode_cell({ c: columnaNumerosIndex + 2, r: i })
-        const valueCell = sheet[valueAddress]
-        return String(valueCell?.v).trim()
+        const valueAddress = XLSX.utils.encode_cell({
+          c: columnaNumerosIndex + 2,
+          r: i,
+        });
+        const valueCell = sheet[valueAddress];
+        return String(valueCell?.v).trim();
       }
     }
-    return out
+    return out;
   }
   getInicioFichaTecnicaColumnIndex(sheetName: string): number {
-    const sheet = this.getSheet(sheetName)
-    const range = XLSX.utils.decode_range(sheet['!ref'])
-    for (let j = range.s.c; j <= range.e.c; j++) {
-      const cellref = XLSX.utils.encode_cell({ c: j, r: range.s.r })
-      const cell = sheet[cellref]
-      const cellValue = (cell?.v || '').toString().trim()
-      if (cellValue === '1') {
-        return j
+    const sheet = this.getSheet(sheetName);
+    const range = XLSX.utils.decode_range(sheet['!ref']);
+    for (let i = range.s.r; i <= range.e.r; i++) {
+      for (let j = range.s.c; j <= range.e.c; j++) {
+        const cellref = XLSX.utils.encode_cell({ c: j, r: i });
+        const cell = sheet[cellref];
+        const cellValue = (cell?.v || '').toString().trim();
+        if (cellValue === '1') {
+          return j;
+        }
       }
     }
-    return -1
+    return -1;
   }
   // Retorna los campos de la ficha técnica de una hoja de excel
   getCamposFichaTecnica(
@@ -161,9 +175,7 @@ export class EstadisticasWorkbook {
       const mdeaFullPath = pathRe.exec(mdeaPathInput)[0];
       const mdeaPath = mdeaFullPath.split('-')[0].trim();
       const numerals = mdeaPath.split('.');
-      fields.clasificadorN1Id = clasificadores.getItemIdByNumeral(
-        numerals[0]
-      );
+      fields.clasificadorN1Id = clasificadores.getItemIdByNumeral(numerals[0]);
       fields.clasificadorN2Id = clasificadores.getItemIdByNumeral(
         `${numerals[0]}.${numerals[1]}`
       );
@@ -173,18 +185,27 @@ export class EstadisticasWorkbook {
     }
     return fields;
   }
-  getEstadistica(workbookItem: WorkbookEstadisticaItem, indiceClasificadores: IndiceClasificadores): Estadistica {
+  getEstadistica(
+    workbookItem: WorkbookEstadisticaItem,
+    indiceClasificadores: IndiceClasificadores
+  ): Estadistica {
     const out: Estadistica = {
-      ... this.getCamposFichaTecnica(workbookItem.hojaFicha, indiceClasificadores),
-      ... this.getCamposTablaDatos(workbookItem.hojaDatos),
-    }
-    const sheetDataMap = this.getSheetDataMap(workbookItem.hojaDatos)
-    const rangoDatos = decodeCellRange(workbookItem.rangoDatos)
-    const htmlCellsMatrix = this.getHtmlCellsRange(sheetDataMap, rangoDatos)
-    out.datos = this.getCellsMatrix(htmlCellsMatrix, this.getSheet(workbookItem.hojaDatos))
-    out.datosInformacion = TablaDatosHelper.getInformacion(out.datos || [])
-    out.graficos = [GraficoHelper.getGraficoDefecto(out)]
-    return out
+      ...this.getCamposFichaTecnica(
+        workbookItem.hojaFicha,
+        indiceClasificadores
+      ),
+      ...this.getCamposTablaDatos(workbookItem.hojaDatos),
+    };
+    const sheetDataMap = this.getSheetDataMap(workbookItem.hojaDatos);
+    const rangoDatos = decodeCellRange(workbookItem.rangoDatos);
+    const htmlCellsMatrix = this.getHtmlCellsRange(sheetDataMap, rangoDatos);
+    out.datos = this.getCellsMatrix(
+      htmlCellsMatrix,
+      this.getSheet(workbookItem.hojaDatos)
+    );
+    out.datosInformacion = TablaDatosHelper.getInformacion(out.datos || []);
+    out.graficos = [GraficoHelper.getGraficoDefecto(out)];
+    return out;
   }
   // Retorna los campos de la tabla de datos de una hoja de excel
   getCamposTablaDatos(sheetName: string): Estadistica {
@@ -201,23 +222,21 @@ export class EstadisticasWorkbook {
     return data;
   }
   // Se considera como título el primer texto identificado en la hoja de excel
-  getTituloTablaDatos(
-    sheetName: string
-  ): string {
-    let out = ''
-    const sheet = this.getSheet(sheetName)
-    const range = XLSX.utils.decode_range(sheet['!ref'])
+  getTituloTablaDatos(sheetName: string): string {
+    let out = '';
+    const sheet = this.getSheet(sheetName);
+    const range = XLSX.utils.decode_range(sheet['!ref']);
     for (let i = range.s.r; i <= range.e.r; i++) {
       for (let j = range.s.c; j <= range.e.c; j++) {
-        const cellAddress = XLSX.utils.encode_cell({ c: j, r: i })
-        const cell: XLSX.CellObject = sheet[cellAddress]
+        const cellAddress = XLSX.utils.encode_cell({ c: j, r: i });
+        const cell: XLSX.CellObject = sheet[cellAddress];
         if (!cell) return;
         if (cell.t === 's' && cell.v) {
           return cell.v.toString().trim();
         }
       }
     }
-    return out
+    return out;
   }
   // Retorna los datos de la tabla de datos de una hoja de excel
   getTablaDatos(sheetName: string): Cell[][] {
@@ -402,7 +421,11 @@ export class EstadisticasWorkbook {
       out.push(value);
     }
     // Extraer campo de la siguientes celdas
-    for (let rowIndex = cellRefRowIndex + 1; rowIndex < matrix.length; rowIndex++) {
+    for (
+      let rowIndex = cellRefRowIndex + 1;
+      rowIndex < matrix.length;
+      rowIndex++
+    ) {
       const cell = matrix[rowIndex][cellRefColIndex];
       const cellValue = cell.v.toString().trim();
       // La celda contiene un valor y no hace match con otro campo
@@ -444,10 +467,7 @@ export class EstadisticasWorkbook {
         const snakeCaseKey = toSnakeCase(cell.v.toString());
         const matchedKey = Object.keys(FICHA_FIELDS_MAP).find((key) => {
           const camelCaseKey = toSnakeCase(key);
-          const similarity = calculateSimilarity(
-            snakeCaseKey,
-            camelCaseKey
-          );
+          const similarity = calculateSimilarity(snakeCaseKey, camelCaseKey);
           return similarity >= 0.5;
         });
         if (matchedKey) {
@@ -560,10 +580,10 @@ export class EstadisticasWorkbook {
           t: type,
         };
         if (textoFormateado) {
-          dataCell.w = textoFormateado
+          dataCell.w = textoFormateado;
         }
         if (formatoNumero) {
-          dataCell.z = formatoNumero
+          dataCell.z = formatoNumero;
         }
         // Añade colspan y rowspan si son mayores a 1
         if (colSpan > 1) {

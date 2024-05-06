@@ -4,13 +4,8 @@ import { useAppSelector } from '../app/hooks';
 import { selectEstadisticaData } from '../app/AppSlice';
 import { PdfIcon } from './Icons';
 import { apiMap } from './FichaTecnicaMap';
-import jsPDF from 'jspdf';
-import { PDFViewer, PDFDownloadLink } from '@react-pdf/renderer';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import { FichaTecnicaPdf } from './FichaTecnicaPdf';
-import html2canvas from 'html2canvas';
-const logoSinia = 'images/logo_sinia.png',
-  logoMinanSvg = 'images/LogoMinan.svg',
-  logoMinan = 'images/logo_minan2.png';
 
 function FichaTecnica() {
   const [dataIndicator, setDataIndicator] = useState([]);
@@ -96,7 +91,7 @@ function FichaTecnica() {
         </div>
       </div>
       <div className="flex gap-4  mb-4">
-        {/* <PDFDownloadLink
+        <PDFDownloadLink
           document={<FichaTecnicaPdf data={dataIndicator} />}
           fileName="fichaTecnica.pdf"
         >
@@ -107,7 +102,7 @@ function FichaTecnica() {
               <Button icon={<PdfIcon />}>Descargar PDF</Button>
             )
           }
-        </PDFDownloadLink> */}
+        </PDFDownloadLink>
       </div>
     </div>
   );

@@ -1,11 +1,11 @@
 const path = require('path');
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: ['./src-frontpage/index.tsx'],
   plugins: [
     new HtmlWebpackPlugin({
-      template: "src-frontpage/index.html",
+      template: 'src-frontpage/index.html',
     }),
   ],
   module: {
@@ -22,17 +22,18 @@ module.exports = {
       },
       {
         test: /\.(sa|sc|c)ss$/, // styles files
-        use: ["style-loader", "css-loader", "postcss-loader"],
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
       },
       {
         test: /\.(png|woff|woff2|eot|ttf|svg)$/, // to import images and fonts
-        loader: "url-loader",
+        loader: 'url-loader',
         options: { limit: false },
       },
     ],
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.jsx', '.js'],
+    // extensions: ['.ts', '.tsx', '.jsx', '.js'],
+    extensions: ['.mjs', '.js', '.mts', '.ts', '.jsx', '.tsx', '.json'],
   },
   output: {
     filename: 'aesa-frontpage.js',
