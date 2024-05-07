@@ -11,24 +11,24 @@ import {
 import { Grafico } from '../../types/Grafico';
 
 interface TextareaFieldEditorProps {
-  chartIndex: number;
+  chartId: number;
   fieldName: keyof Grafico;
   label: string;
   placeholder?: string;
 }
 
 const TextareaFieldEditor = ({
-  chartIndex,
+  chartId,
   fieldName,
   label,
   placeholder,
 }: TextareaFieldEditorProps) => {
   const dispath = useAppDispatch();
-  let value = useAppSelector(selectGraficoFieldValue(chartIndex, fieldName));
+  let value = useAppSelector(selectGraficoFieldValue(chartId, fieldName));
   const handleChange = (e, data: TextareaOnChangeData) => {
     dispath(
       setGraficoFieldValue({
-        index: chartIndex,
+        graficoId: chartId,
         field: fieldName,
         value: data.value,
       })

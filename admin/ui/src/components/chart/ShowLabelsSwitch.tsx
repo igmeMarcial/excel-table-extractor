@@ -5,17 +5,17 @@ import {
   setGraficoFieldValue,
 } from '../../pages/estadisticas/EstadisticaFormSlice';
 
-const ShowLabelsSwitch = ({ chartIndex }) => {
+const ShowLabelsSwitch = ({ chartId }) => {
   const dispath = useAppDispatch();
   const fieldName = 'mostrarEtiquetas';
-  let checked = useAppSelector(selectGraficoFieldValue(chartIndex, fieldName));
+  let checked = useAppSelector(selectGraficoFieldValue(chartId, fieldName));
   if (checked === undefined) {
     checked = true;
   }
   const handleChange = (e, data: SwitchOnChangeData) => {
     dispath(
       setGraficoFieldValue({
-        index: chartIndex,
+        graficoId: chartId,
         field: fieldName,
         value: data.checked,
       })

@@ -11,13 +11,14 @@ import { FormatoTabla } from '../../types/FormatoTabla';
 import { ValidationErrors } from '../../core/Validators';
 import { ESTADISTICA_FULL_FIELDS_DEF } from './editor/EstadisticaFieldsDef';
 import { Cell } from '../../types/Cell';
+import { ChartDataRanges } from '../../types/ChartDataRanges';
 
 const estadisticaDefaultModel: Estadistica = {
   datos: [],
   datosInformacion: {},
   presentacionTablaFormato: {},
   graficos: [
-    {}
+    { id: 1, series: [], categorias: [] }
   ],
 }
 
@@ -117,30 +118,30 @@ export const estadisticaFormSlice = createSlice({
       state.estadisticaModel = estadisticaDefaultModel;
       state.activeTab = '1'
     },
-    setTipoGrafico: (state, action: PayloadAction<{ index: number, tipoGrafico: TipoGrafico }>) => {
+    setTipoGrafico: (state, action: PayloadAction<{ graficoId: number, tipoGrafico: TipoGrafico }>) => {
       state.estadisticaRawModel.graficos = state.estadisticaRawModel.graficos.map((grafico, index) => {
-        if (index === action.payload.index) {
+        if (grafico.id === action.payload.graficoId) {
           return { ...grafico, tipo: action.payload.tipoGrafico };
         }
         return grafico;
       })
     },
-    setGraficoFieldValue: (state, action: PayloadAction<{ index: number, field: keyof Grafico, value: any }>) => {
+    setGraficoFieldValue: (state, action: PayloadAction<{ graficoId: number, field: keyof Grafico, value: any }>) => {
       const fielName = action.payload.field
       const value = action.payload.value
-      state.estadisticaRawModel.graficos = state.estadisticaRawModel.graficos.map((grafico, index) => {
-        if (index === action.payload.index) {
+      state.estadisticaRawModel.graficos = state.estadisticaRawModel.graficos.map((grafico) => {
+        if (grafico.id === action.payload.graficoId) {
           return { ...grafico, [fielName]: value };
         }
         return grafico;
       })
       state.hasChanges = true;
     },
-    setGraficoSerieColor: (state, action: PayloadAction<{ chartIndex: number, serieIndex: number, color: string }>) => {
+    setGraficoSerieColor: (state, action: PayloadAction<{ graficoId: number, serieIndex: number, color: string }>) => {
       const serieIndex = action.payload.serieIndex;
       const color = action.payload.color;
-      state.estadisticaRawModel.graficos = state.estadisticaRawModel.graficos.map((grafico, index) => {
-        if (index === action.payload.chartIndex) {
+      state.estadisticaRawModel.graficos = state.estadisticaRawModel.graficos.map((grafico) => {
+        if (grafico.id === action.payload.graficoId) {
           return {
             ...grafico,
             series: grafico.series.map((serie, index) => {
@@ -154,6 +155,22 @@ export const estadisticaFormSlice = createSlice({
         return grafico;
       });
       state.hasChanges = true;
+    },
+    setGraficoDataRanges: (state, action: PayloadAction<{ graficoId: number, chartDataRanges: ChartDataRanges }>) => {
+      const payload = action.payload
+      state.estadisticaRawModel.graficos = state.estadisticaRawModel.graficos.map((grafico) => {
+        console.log('check')
+        if (grafico.id === payload.graficoId) {
+          return {
+            ...grafico,
+            ...graficoHelper.getPropiedadesBasicasGrafico(
+              state.estadisticaRawModel.datos,
+              payload.chartDataRanges
+            )
+          }
+        }
+        return grafico
+      })
     },
     setFieldValidationErrors: (state, action: PayloadAction<{ fieldName: string, errors: ValidationErrors }>) => {
       state.validationErrors = {
@@ -208,6 +225,7 @@ export const {
   setTipoGrafico,
   setGraficoFieldValue,
   setGraficoSerieColor,
+  setGraficoDataRanges,
   resetChanges,
   commitChanges,
   setResetDefault,
@@ -225,9 +243,10 @@ export const selectEstadisticaDatos = (state: RootState) => state.estadisticaFor
 export const selectIsCreationMode = (state: RootState) => state.estadisticaForm.isCreationMode;
 export const selectActiveTab = (state: RootState) => state.estadisticaForm.activeTab;
 export const selectPostValues = (state: RootState) => state.estadisticaForm.estadisticaRawModel;
-export const selectGraficos = (state: RootState) => state.estadisticaForm.estadisticaRawModel.graficos;
-export const selectGraficoFieldValue = <K extends keyof Grafico>(index: number, field: K): ((state: RootState) => Grafico[K]) => (state: RootState) => {
-  return state.estadisticaForm.estadisticaRawModel.graficos[index][field]
+export const selectGraficos = (state: RootState): Grafico[] => state.estadisticaForm.estadisticaRawModel.graficos;
+export const selectGraficoFieldValue = <K extends keyof Grafico>(graficoId: number, field: K): ((state: RootState) => Grafico[K]) => (state: RootState) => {
+  const grafico = state.estadisticaForm.estadisticaRawModel.graficos.find((grafico) => grafico.id == graficoId);
+  return grafico?.[field];
 }
 export const selectFormatoTablaFieldValue = <K extends keyof FormatoTabla>(field: K): ((state: RootState) => FormatoTabla[K]) => (state: RootState) => {
   const formato = state.estadisticaForm.estadisticaRawModel.presentacionTablaFormato || {};

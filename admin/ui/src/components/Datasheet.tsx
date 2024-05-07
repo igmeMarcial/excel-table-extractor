@@ -9,6 +9,7 @@ import { getMaxRowLength } from '../utils/array-utils';
 import { numberFormat } from '../utils/numberFormat';
 
 import './Datasheet.scss';
+import { ChartDataRanges } from '../types/ChartDataRanges';
 /**
  * Tipos de rango
  * v: valores
@@ -17,12 +18,6 @@ import './Datasheet.scss';
  * d: datos
  */
 type RangeType = 'v' | 'c' | 's' | 'd';
-
-export interface ChartDataRanges {
-  valuesRange: CellRange;
-  categoriesRange: CellRange;
-  seriesRange: CellRange;
-}
 
 interface DatasheetProps {
   data: Cell[][];
@@ -33,7 +28,6 @@ interface DatasheetProps {
 
 function renderInnerCell(cell: Cell) {
   const { v: value, t: type, p: position, w: textoFormateadoExcel } = cell;
-  console.log('cell', cell);
   if (textoFormateadoExcel) {
     return textoFormateadoExcel;
   }

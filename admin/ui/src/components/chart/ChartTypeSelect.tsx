@@ -17,20 +17,20 @@ const useStyles = makeStyles({
 });
 
 interface ChartTypeSelectProps {
-  chartIndex: number;
+  chartId: number;
 }
 
-const ChartTypeSelect = ({ chartIndex }: ChartTypeSelectProps) => {
+const ChartTypeSelect = ({ chartId: chartId }: ChartTypeSelectProps) => {
   const dispath = useAppDispatch();
   const classes = useStyles();
   const fieldName = 'tipo';
   let tipoGrafico = useAppSelector(
-    selectGraficoFieldValue(chartIndex, fieldName)
+    selectGraficoFieldValue(chartId, fieldName)
   );
   const handleChange = (tipo: TipoGrafico) => {
     dispath(
       setGraficoFieldValue({
-        index: chartIndex,
+        graficoId: chartId,
         field: fieldName,
         value: tipo,
       })

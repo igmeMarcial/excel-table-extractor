@@ -12,14 +12,14 @@ import ConfigSection from '../ConfigSection';
 import SeriesEditor from './SeriesEditor';
 
 interface DataConfigSectionProps {
-  chartIndex: number;
+  chartId: number;
 }
 
-const DataConfigSection = ({ chartIndex }: DataConfigSectionProps) => {
+const DataConfigSection = ({ chartId }: DataConfigSectionProps) => {
   const dispath = useAppDispatch();
   const [selectedSerieIndex, setSelectedSerieIndex] = useState(0);
   const series =
-    useAppSelector(selectGraficoFieldValue(chartIndex, 'series')) || [];
+    useAppSelector(selectGraficoFieldValue(chartId, 'series')) || [];
   const selectedSerieColor =
     series[selectedSerieIndex]?.color || serieColor(selectedSerieIndex);
 
@@ -31,7 +31,7 @@ const DataConfigSection = ({ chartIndex }: DataConfigSectionProps) => {
     console.log('color', color);
     dispath(
       setGraficoSerieColor({
-        chartIndex,
+        graficoId: chartId,
         serieIndex: selectedSerieIndex,
         color,
       })
@@ -41,7 +41,7 @@ const DataConfigSection = ({ chartIndex }: DataConfigSectionProps) => {
 
   return (
     <ConfigSection title="Datos">
-      <SeriesEditor chartIndex={chartIndex} />
+      <SeriesEditor chartId={chartId} />
       <Field label="Serie" orientation="horizontal">
         <Select onChange={onSerieChange} value={selectedSerieIndex.toString()}>
           {series.map((serie) => {

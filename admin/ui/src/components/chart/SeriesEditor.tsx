@@ -2,14 +2,19 @@ import ChartDataConfigWindow from './ChartDataConfigWindow';
 import { DataUsageSettings20Regular } from '@fluentui/react-icons';
 import { Button } from '@fluentui/react-button';
 import { useRef } from 'react';
+import { useAppSelector } from '../../app/hooks';
+import { selectGraficoFieldValue } from '../../pages/estadisticas/EstadisticaFormSlice';
 
 interface GraficoToolbarProps {
-  chartIndex: number;
+  chartId: number;
 }
-const GraficoToolbar = ({ chartIndex }: GraficoToolbarProps) => {
+const GraficoToolbar = ({ chartId }: GraficoToolbarProps) => {
+  let referencias = useAppSelector(
+    selectGraficoFieldValue(chartId, 'referenciasTablaDatos')
+  );
   const seriesConfigWindowRef = useRef(null);
   const onConfigSeriesClick = () => {
-    seriesConfigWindowRef.current.open();
+    seriesConfigWindowRef.current.open(referencias);
   };
   return (
     <div>
@@ -20,10 +25,7 @@ const GraficoToolbar = ({ chartIndex }: GraficoToolbarProps) => {
       >
         Rango de datos
       </Button>
-      <ChartDataConfigWindow
-        ref={seriesConfigWindowRef}
-        chartIndex={chartIndex}
-      />
+      <ChartDataConfigWindow ref={seriesConfigWindowRef} chartId={chartId} />
     </div>
   );
 };

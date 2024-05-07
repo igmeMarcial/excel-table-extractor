@@ -6,10 +6,10 @@ import BlockGrafico from '../../../../public/components/BlockGrafico';
 import { useAppSelector } from '../../../../app/hooks';
 import { selectEstadisticaValues } from '../../EstadisticaFormSlice';
 interface SeccionGraficoProps {
-  index: number;
+  graficoId: number;
   options: Grafico;
 }
-const SeccionGrafico = ({ index, options }: SeccionGraficoProps) => {
+const SeccionGrafico = ({ graficoId, options }: SeccionGraficoProps) => {
   const estadistica = useAppSelector(selectEstadisticaValues);
   return (
     <div className="border-2 border-solid border-emerald-600 rounded">
@@ -25,7 +25,7 @@ const SeccionGrafico = ({ index, options }: SeccionGraficoProps) => {
             </div>
           </div>
         </div>
-        <ChartOptionsEditor chartIndex={index} />
+        <ChartOptionsEditor chartId={graficoId} />
       </div>
     </div>
   );

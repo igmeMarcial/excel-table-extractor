@@ -2,14 +2,14 @@ import ChartConfigSection from './ChartConfigSection';
 import DataConfigSection from './DataConfigSection';
 
 interface ChartOptionsEditorProps {
-  chartIndex: number;
+  chartId: number;
 }
 
-const ChartOptionsEditor = ({ chartIndex }: ChartOptionsEditorProps) => {
+const ChartOptionsEditor = ({ chartId }: ChartOptionsEditorProps) => {
   return (
     <div style={{ width: '260px', borderLeft: '1px solid #e8e8e8' }}>
-      <ChartConfigSection chartIndex={chartIndex} />
-      <DataConfigSection chartIndex={chartIndex} />
+      <ChartConfigSection chartId={chartId} />
+      <DataConfigSection chartId={chartId} />
     </div>
   );
 };

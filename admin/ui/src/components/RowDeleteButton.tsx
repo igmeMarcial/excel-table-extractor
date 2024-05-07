@@ -1,5 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import { Tooltip } from 'antd';
 import { Button, makeStyles } from '@fluentui/react-components';
 import { DeleteRegular } from '@fluentui/react-icons';
@@ -11,10 +9,15 @@ const useStyles = makeStyles({
     },
   },
 });
-
-function RowDeteteButton({ onClick, tooltip }) {
+interface RowDeteteButtonProps {
+  onClick: () => void;
+  tooltip?: string;
+}
+function RowDeteteButton({
+  onClick,
+  tooltip = 'Eliminar',
+}: RowDeteteButtonProps) {
   const styles = useStyles();
-  console.log(tooltip);
   onClick =
     onClick ||
     (() => {
@@ -34,12 +37,4 @@ function RowDeteteButton({ onClick, tooltip }) {
     />
   );
 }
-RowDeteteButton.propTypes = {
-  tooltip: PropTypes.string,
-  onClick: PropTypes.func,
-};
-RowDeteteButton.defaultProps = {
-  tooltip: 'Eliminar',
-  onClick: () => {},
-};
 export default RowDeteteButton;

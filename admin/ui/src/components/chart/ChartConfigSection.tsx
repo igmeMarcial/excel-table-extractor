@@ -11,10 +11,10 @@ import {
 } from '../../utils/estadistica-utils';
 
 interface ChartConfigSectionProps {
-  chartIndex: number;
+  chartId: number;
 }
 
-const ChartConfigSection = ({ chartIndex }: ChartConfigSectionProps) => {
+const ChartConfigSection = ({ chartId }: ChartConfigSectionProps) => {
   const estadistica = useAppSelector(selectEstadisticaValues);
   const placeholderTitulo = determinarTituloTablaDatosDefecto(
     estadistica.nombre,
@@ -28,21 +28,21 @@ const ChartConfigSection = ({ chartIndex }: ChartConfigSectionProps) => {
   );
   return (
     <ConfigSection title="Propiedades">
-      <ChartTypeSelect chartIndex={chartIndex} />
+      <ChartTypeSelect chartId={chartId} />
       <TextareaFieldEditor
         fieldName="titulo"
         label="Título"
-        chartIndex={chartIndex}
+        chartId={chartId}
         placeholder={placeholderTitulo}
       />
       <TextareaFieldEditor
         fieldName="subtitulo"
         label="Subtitulo"
-        chartIndex={chartIndex}
+        chartId={chartId}
         placeholder={placeholderSubtitulo}
       />
-      <ShowLabelsSwitch chartIndex={chartIndex} />
-      <LabelDecimalsEditor chartIndex={chartIndex} />
+      <ShowLabelsSwitch chartId={chartId} />
+      <LabelDecimalsEditor chartId={chartId} />
     </ConfigSection>
   );
 };

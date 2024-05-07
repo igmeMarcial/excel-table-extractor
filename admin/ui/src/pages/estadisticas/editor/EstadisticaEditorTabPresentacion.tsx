@@ -9,7 +9,7 @@ const EstadisticaEditorTabPresentacion = () => {
   return (
     <>
       {graficos.map((grafico, index) => (
-        <SeccionGrafico key={index} index={index} options={grafico} />
+        <SeccionGrafico key={index} graficoId={grafico.id} options={grafico} />
       ))}
       <div className="mt-4">
         <SeccionTabla />

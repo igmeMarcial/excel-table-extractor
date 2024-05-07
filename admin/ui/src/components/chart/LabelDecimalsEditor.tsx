@@ -7,19 +7,19 @@ import {
 } from '../../pages/estadisticas/EstadisticaFormSlice';
 
 interface LabelDecimalsEditorProps {
-  chartIndex: number;
+  chartId: number;
 }
 
-const LabelDecimalsEditor = ({ chartIndex }: LabelDecimalsEditorProps) => {
+const LabelDecimalsEditor = ({ chartId }: LabelDecimalsEditorProps) => {
   const dispath = useAppDispatch();
   const fieldName = 'numeroDecimalesEtiquetas';
 
   let value =
-    useAppSelector(selectGraficoFieldValue(chartIndex, fieldName)) || null;
+    useAppSelector(selectGraficoFieldValue(chartId, fieldName)) || null;
   const handleChange = (e, data: TextareaOnChangeData) => {
     dispath(
       setGraficoFieldValue({
-        index: chartIndex,
+        graficoId: chartId,
         field: fieldName,
         value: data.value,
       })

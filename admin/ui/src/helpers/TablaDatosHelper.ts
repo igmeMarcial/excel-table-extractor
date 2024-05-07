@@ -102,16 +102,17 @@ export class TablaDatosHelper {
       return this.parseNumber(value);
     });
   }
-  getRangeValues(
+  getRangeValues<T>(
     tabla: Cell[][],
     range: CellRange
-  ): Cell['v'][][] {
-    const out: Cell['v'][][] = [];
+  ): T[][] {
+    console.log('getRangeValues')
+    const out: T[][] = [];
     for (let rowIndex = range.start.rowIndex; rowIndex <= range.end.rowIndex; rowIndex++) {
       const row = [];
       for (let colIndex = range.start.colIndex; colIndex <= range.end.colIndex; colIndex++) {
         const cell = tabla[rowIndex][colIndex];
-        row.push(cell.v);
+        row.push(cell.v as T);
       }
       out.push(row);
     }

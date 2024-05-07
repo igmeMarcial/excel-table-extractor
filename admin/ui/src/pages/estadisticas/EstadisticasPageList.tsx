@@ -68,11 +68,13 @@ const EstadisticasPageList = forwardRef((props, ref) => {
             <Button appearance="subtle" icon={<OpenRegular />} />
           </Tooltip>
         </Link>
-        <RowDeteteButton />
+        <RowDeteteButton onClick={() => handleDelete(record)} />
       </div>
     );
   };
-
+  const handleDelete = (record: any) => {
+    // TODO: Implementar
+  };
   // Columnas de la tabla
   const columns: TableProps<ColDataType>['columns'] = [
     {
