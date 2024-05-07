@@ -14,12 +14,13 @@ import WpDynamicField from '../../../components/form/WpDynamicField';
 const EstadisticaEditorTabFicha = () => {
   const dispath = useAppDispatch();
   const values = useAppSelector(selectEstadisticaValues);
+  console.log(values);
   const validationErrors = useAppSelector(selectValidationErrors);
   const { data: clasificadores } = useGetIndiceClasificadoresQuery();
   const indiceClasificadores = new IndiceClasificadores(clasificadores || []);
-  const handleChange = (e) => {
-    const { name: fiendName, value } = e.target;
-    dispath(setEstadisticaFieldValue({ field: fiendName, value }));
+  const handleChange = (value, fieldName) => {
+    console.log(value);
+    dispath(setEstadisticaFieldValue({ field: fieldName, value }));
   };
 
   const handleSelectChange = (e) => {
@@ -56,7 +57,7 @@ const EstadisticaEditorTabFicha = () => {
             <tbody>
               {Object.entries(ESTADISTICA_FICHA_FIELDS_DEF).map(
                 ([fieldName, fieldDef]) => {
-                  if (fieldDef.type === 'select') {
+                  if (fieldDef.controlType === 'select') {
                     return (
                       <WpSelectField
                         key={fieldName}

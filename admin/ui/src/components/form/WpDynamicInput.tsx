@@ -1,12 +1,12 @@
-import { Input, Select, Textarea } from '@fluentui/react-components';
+import { Input, Select, Textarea, Switch } from '@fluentui/react-components';
 import { FieldType } from '../../types/FieldType';
 
 interface WpDynamicInputProps {
   fieldName: string;
-  onChange: (e: any, fieldName: string) => void;
+  onChange: (value: any, fieldName: string, e: any) => void;
   onTouched: (e: any, fieldName: string) => void;
-  value: string;
-  type: FieldType;
+  value: string | boolean;
+  controlType: FieldType;
   options?: any[];
   textField?: string;
   valueField?: string;
@@ -18,7 +18,7 @@ const WpDynamicInput = ({
   onChange,
   onTouched,
   value,
-  type,
+  controlType: type,
   options,
   textField,
   valueField,
@@ -30,8 +30,8 @@ const WpDynamicInput = ({
     return (
       <Input
         name={fieldName}
-        value={value}
-        onChange={(e) => onChange(e, fieldName)}
+        value={value as string}
+        onChange={(e, data) => onChange(data.value, fieldName, e)}
         onBlur={(e) => onTouched(e, fieldName)}
       />
     );
@@ -41,8 +41,8 @@ const WpDynamicInput = ({
     return (
       <Textarea
         name={fieldName}
-        value={value}
-        onChange={(e) => onChange(e, fieldName)}
+        value={value as string}
+        onChange={(e, data) => onChange(data.value, fieldName, e)}
         onBlur={(e) => onTouched(e, fieldName)}
         resize="vertical"
       />
@@ -53,8 +53,8 @@ const WpDynamicInput = ({
     textRenderer = textRenderer || ((option) => option[textField]);
     return (
       <Select
-        onChange={(e) => onChange(e, fieldName)}
-        value={value}
+        onChange={(e, data) => onChange(data.value, fieldName, e)}
+        value={value as string}
         name={fieldName}
         id={fieldName}
         onBlur={(e) => onTouched(e, fieldName)}
@@ -68,12 +68,22 @@ const WpDynamicInput = ({
       </Select>
     );
   }
+  // SWITCH
+  if (type === 'switch') {
+    return (
+      <Switch
+        checked={value as boolean}
+        name={fieldName}
+        onChange={(e, data) => onChange(data.checked, fieldName, e)}
+      />
+    );
+  }
   // DEFAULT
   return (
     <Input
       name={fieldName}
-      value={value}
-      onChange={(e) => onChange(e, fieldName)}
+      value={value as string}
+      onChange={(e, data) => onChange(data.value, fieldName, e)}
       onBlur={(e) => onTouched(e, fieldName)}
     />
   );

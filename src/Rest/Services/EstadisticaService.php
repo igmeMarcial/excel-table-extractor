@@ -93,7 +93,9 @@ class EstadisticaService
                   A.nombre,
                   B.clasificador_id clasificadorId,
                   C.nombre mdeaComponenteNombre,
-                  A.fecha_mod fechaMod
+                  A.fecha_mod fechaMod,
+                  A.activo,
+                  A.archivado
                 FROM {$this->dbMap->estadistica} A
                 INNER JOIN {$this->dbMap->estaClasN1} B ON A.estadistica_id = B.estadistica_id
                 INNER JOIN {$this->dbMap->clasificador} C ON B.clasificador_id = C.clasificador_id";

@@ -5,9 +5,9 @@ import WpField from './WpField';
 interface WpDynamicFieldProps {
   fieldDef: FieldDef;
   fieldName: string;
-  onChange: (e: any, fieldName: string) => void;
+  onChange: (value: any, fieldName: string, e: any) => void;
   onTouched: (e: any, fieldName: string) => void;
-  value: string;
+  value: string | boolean;
   validationErrors: any;
   options?: any[];
   textField?: string;
@@ -37,12 +37,12 @@ const WpDynamicField = ({
       <WpDynamicInput
         fieldName={fieldName}
         value={value}
-        type={fieldDef.type}
+        controlType={fieldDef.controlType}
         options={options}
         textField={textField}
         valueField={valueField}
         textRenderer={textRenderer}
-        onChange={(e) => onChange(e, fieldName)}
+        onChange={onChange}
         onTouched={(e) => onTouched(e, fieldName)}
       />
     </WpField>

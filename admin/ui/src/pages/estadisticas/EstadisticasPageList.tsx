@@ -2,7 +2,11 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Table, TableProps, Tooltip } from 'antd';
 import { Button } from '@fluentui/react-components';
-import { OpenRegular } from '@fluentui/react-icons';
+import {
+  OpenRegular,
+  CheckmarkCircleRegular,
+  CheckmarkCircleWarningRegular,
+} from '@fluentui/react-icons';
 import dayjs from 'dayjs';
 
 import { builNavPathUrl } from '../../utils/url-utils';
@@ -59,6 +63,29 @@ const EstadisticasPageList = forwardRef((props, ref) => {
   const onClickLink = (e: React.MouseEvent<HTMLAnchorElement>) => {
     dispath(setActiveTab('1'));
   };
+  const renderChecks = (_, record) => {
+    console.log(record);
+    return (
+      <div>
+        {record.activo ? (
+          <CheckmarkCircleRegular /> // Si activo es verdadero
+        ) : (
+          <CheckmarkCircleWarningRegular /> // Si activo es falso
+        )}
+      </div>
+    );
+  };
+  const renderArchivedChecks = (_, record) => {
+    return (
+      <div>
+        {record.archivado ? (
+          <CheckmarkCircleRegular /> // Si archivado es verdadero
+        ) : (
+          <CheckmarkCircleWarningRegular /> // Si archivado es falso
+        )}
+      </div>
+    );
+  };
   const renderActions = (_, record) => {
     const newUrl = builNavPathUrl(location, 'indicador-editor', record.id);
     return (
@@ -102,7 +129,7 @@ const EstadisticasPageList = forwardRef((props, ref) => {
     {
       key: 'fechaMod',
       title: 'Última modificación',
-      width: 180,
+      width: 170,
       // width: '14%',
       align: 'right',
       dataIndex: 'fechaMod',
@@ -112,10 +139,20 @@ const EstadisticasPageList = forwardRef((props, ref) => {
     {
       key: 'status',
       align: 'center',
-      width: 100,
+      width: 70,
       // width: '8%',
-      title: 'Estado',
+      title: 'Activo',
       dataIndex: 'status',
+      render: renderChecks,
+    },
+    {
+      key: 'archivado',
+      align: 'center',
+      width: 85,
+      // width: '8%',
+      title: 'Archivado',
+      dataIndex: 'status',
+      render: renderArchivedChecks,
     },
     {
       key: 'actions',

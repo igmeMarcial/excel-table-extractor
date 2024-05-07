@@ -1,144 +1,158 @@
-import { ValidatorFn } from "../../../core/Validators";
-import { Estadistica } from "../../../types/Estadistica";
-import { FieldType } from "../../../types/FieldType";
+import { ValidatorFn } from '../../../core/Validators';
+import { Estadistica } from '../../../types/Estadistica';
+import { FieldType } from '../../../types/FieldType';
 
+type DataType = 'number' | 'string' | 'boolean' | 'url' | 'email';
 export interface FieldDef {
   label: string;
   placeholder?: string;
-  type: FieldType;
+  controlType: FieldType;
   required?: boolean;
-  vtype?: 'url' | 'email';
+  dataType?: DataType;
   customValidators?: ValidatorFn[];
 }
 
 export const ESTADISTICA_FICHA_FIELDS_DEF: {
-  [K in keyof Estadistica]?: FieldDef
+  [K in keyof Estadistica]?: FieldDef;
 } = {
   clasificadorN1Id: {
     label: 'Componente',
-    type: 'select',
+    controlType: 'select',
     required: true,
   },
   clasificadorN2Id: {
     label: 'Sub componente',
-    type: 'select',
+    controlType: 'select',
     required: true,
   },
   clasificadorN3Id: {
     label: 'Tema estadístico',
-    type: 'select',
+    controlType: 'select',
     required: true,
   },
   nombre: {
     label: 'Nombre del indicador o estadística ambiental',
-    type: 'text',
+    controlType: 'text',
     required: true,
   },
   finalidad: {
     label: 'Finalidad',
-    type: 'textarea',
+    controlType: 'textarea',
     required: true,
   },
   descripcion: {
     label: 'Descripción/Definición',
-    type: 'textarea',
+    controlType: 'textarea',
     required: true,
   },
   unidadMedida: {
     label: 'Unidad de medida',
-    type: 'text',
+    controlType: 'text',
     required: true,
   },
   formulaCalculo: {
     label: 'Fórmula de cálculo',
-    type: 'textarea',
+    controlType: 'textarea',
     required: true,
   },
   metodologiaCalculo: {
     label: 'Metodología de cálculo',
-    type: 'textarea',
+    controlType: 'textarea',
     required: true,
   },
   fuente: {
-    label: 'Fuente', type: 'text',
+    label: 'Fuente',
+    controlType: 'text',
   },
   unidadOrganicaGeneradora: {
     label: 'Unidad orgánica generadora',
-    type: 'text',
+    controlType: 'text',
   },
   url: {
-    label: 'URL', type: 'url',
-    vtype: 'url',
+    label: 'URL',
+    controlType: 'text',
+    dataType: 'url',
   },
   periodicidadGeneracion: {
     label: 'Periodicidad de generación',
-    type: 'textarea',
+    controlType: 'textarea',
   },
   periodicidadEntrega: {
     label: 'Periodicidad de entrega/registro',
-    type: 'textarea',
+    controlType: 'textarea',
   },
   periodoSerieTiempo: {
     label: 'Periodo de serie de tiempo',
-    type: 'text',
+    controlType: 'text',
   },
   ambitoGeografico: {
     label: 'Ámbito geográfico',
-    type: 'textarea',
+    controlType: 'textarea',
   },
   limitaciones: {
     label: 'Limitaciones',
-    type: 'textarea',
+    controlType: 'textarea',
     required: true,
   },
   relacionObjetivosNacionales: {
     label: 'Relación con objetivos nacionales',
-    type: 'textarea',
+    controlType: 'textarea',
   },
   relacionIniciativasInternacionales: {
     label: 'Relación con iniciativas internacionales',
-    type: 'textarea',
+    controlType: 'textarea',
   },
   correoElectronico: {
     label: 'Correo electrónico',
-    type: 'email',
+    controlType: 'text',
+    dataType:'email'
   },
   datosContacto: {
     label: 'Datos del contacto',
-    type: 'text',
+    controlType: 'text',
   },
   telefonoCelular: {
     label: 'Teléfono/celular',
-    type: 'text',
+    controlType: 'text',
+  },
+  activo: {
+    label: 'Activo',
+    controlType: 'switch',
+    dataType: 'boolean',
+  },
+  archivado: {
+    label: 'Archivado',
+    controlType: 'switch',
+    dataType: 'boolean',
   },
 };
 
 export const DATOS_FIELDS_DEF: Record<string, FieldDef> = {
   presentacionTablaTitulo: {
     label: 'Título',
-    type: 'text',
+    controlType: 'text',
   },
   presentacionTablaSubtitulo: {
     label: 'Subtítulo',
-    type: 'text',
+    controlType: 'text',
   },
   presentacionTablaNota: {
     label: 'Nota',
-    type: 'textarea',
+    controlType: 'textarea',
   },
   presentacionTablaFuente: {
     label: 'Fuente',
-    type: 'textarea',
+    controlType: 'textarea',
   },
   datos: {
     label: 'Tabla',
-    type: 'table',
+    controlType: 'table',
     required: true,
   },
   presentacionTablaElaboracion: {
     label: 'Elaboración',
-    type: 'textarea',
-  }
+    controlType: 'textarea',
+  },
 };
 
 export const ESTADISTICA_FULL_FIELDS_DEF = {
