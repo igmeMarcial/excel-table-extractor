@@ -16,6 +16,7 @@ interface EstadisticaImportRow extends WorkbookEstadisticaItem {
   key: React.Key;
   number: number;
   isImporting: boolean;
+  isImported: boolean;
   importingError?: string;
   errorDatos?: string;
 }
@@ -30,6 +31,9 @@ const renderRowStatus = (row: EstadisticaImportRow) => {
     return 'Error de importación';
   }
   const messageStack = [];
+  if (row.isImported) {
+    messageStack.push('Importada');
+  }
   if (row.confirmarRangoDatos) {
     messageStack.push('Requiere confirmar rango datos');
   }
@@ -173,16 +177,15 @@ const EstadisticaMultipleImportWindow = forwardRef<
       const graficos = model.graficos || [];
       if (graficos.length > 0 && !graficos[0].referenciasTablaDatos) {
         row.errorDatos = 'No se puede determinar los datos a graficar';
-        updateRow(row);
-        saveNextEstadistica(selectionIndex);
-        return;
       }
       row.isImporting = true;
       row.importingError = null;
       updateRow(row);
       postEstadistica(model)
         .then(() => {
-          removeRow(rowKey);
+          row.isImported = true;
+          row.isImporting = false;
+          updateRow(row);
         })
         .catch((err) => {
           row.isImporting = false;
@@ -209,10 +212,6 @@ const EstadisticaMultipleImportWindow = forwardRef<
         return item;
       })
     );
-  };
-  const removeRow = (rowKey: React.Key) => {
-    setListaEstadisticas((lista) => lista.filter((row) => row.key !== rowKey));
-    setSelectedRowKeys((keys) => keys.filter((key) => key !== rowKey));
   };
   // Obtiene la estadística por su key
   const getEstadisticaModelByKey = (key: React.Key): Estadistica => {

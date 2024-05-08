@@ -76,9 +76,18 @@ export class TablaDatosHelper {
     startIndex?: number,
     endIndex?: number
   ): (number | string)[] {
+    const out = [];
     startIndex = startIndex || 0;
     endIndex = endIndex || tabla.length - 1;
-    return tabla.slice(startIndex, endIndex + 1).map((row) => row[columnIndex].v);
+    const searchSection = tabla.slice(startIndex, endIndex + 1);
+    searchSection.forEach(row => {
+      row.forEach((cell, index) => {
+        if (cell.c === columnIndex) {
+          out.push(cell.v);
+        }
+      });
+    });
+    return out;
   }
 
   getRowNumberValues(
