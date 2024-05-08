@@ -15,6 +15,7 @@ import { Estadistica, FichaTecnicaFields } from '../types/Estadistica';
 import { HtmlCellsMatrix } from '../types/HtmlCellMatrix';
 import { WorkbookEstadisticaItem } from '../types/WorkbookEstadisticaItem';
 import { decodeCellRange } from '../utils/decodeCellRange';
+import { encodeCellRange } from '../utils/encodeCellRange';
 import { calculateSimilarity, toSnakeCase } from '../utils/string-utils';
 import { getSheetHtmlRows } from '../utils/xmls-utils';
 import { IndiceClasificadores } from './IndiceClasificadores';
@@ -46,7 +47,7 @@ export class EstadisticasWorkbook {
     return this.workbook.Sheets[sheetName];
   }
   getSheetDataMap(sheetName: string): HtmlCellsMatrix {
-    const sheet: XLSX.WorkSheet = this.workbook.Sheets[sheetName];
+    const sheet = this.getSheet(sheetName);
     const rows = getSheetHtmlRows(sheet);
     return this.createCellsDataMap(rows);
   }
@@ -70,6 +71,11 @@ export class EstadisticasWorkbook {
           sheetName,
           FICHA_TECNICA_NRO_CAMPO_RANGO_DATOS
         );
+        if (!item.rangoDatos) {
+          const datosSheetName = this.getHojaDatosSheetName(id)
+          item.rangoDatos = this.calcularRangoDatos(datosSheetName)
+          item.confirmarRangoDatos = true;
+        }
         out.set(id, item);
         return;
       }
@@ -90,7 +96,18 @@ export class EstadisticasWorkbook {
     });
     return Array.from(out.values());
   }
-
+  getHojaDatosSheetName(numeroEstadistica: number): string {
+    const out = this.getSheetNames().find((sheetName) => {
+      const matches = DATOS_SHEET_NAME_REGEX.exec(sheetName);
+      return matches && parseInt(matches[1]) === numeroEstadistica;
+    });
+    return out || '';
+  }
+  calcularRangoDatos(sheetName: string) {
+    const sheetDataMap = this.getSheetDataMap(sheetName);
+    const cellRange = this.determinarRangoDatos(sheetDataMap);
+    return encodeCellRange(cellRange);
+  }
   getNombreEstadistica(sheetName: string): string {
     let out = '';
     const sheet = this.getSheet(sheetName);
@@ -283,7 +300,7 @@ export class EstadisticasWorkbook {
   }
 
   getHtmlTablaDatos(rows: HtmlCellsMatrix): HtmlCellsMatrix {
-    const rango = this.getRangoTablaDatos(rows);
+    const rango = this.determinarRangoDatos(rows);
     return this.getHtmlCellsRange(rows, rango);
   }
   getHtmlCellsRange(rows: HtmlCellsMatrix, range: CellRange): HtmlCellsMatrix {
@@ -304,7 +321,7 @@ export class EstadisticasWorkbook {
     }
     return out;
   }
-  getRangoTablaDatos(rows: HtmlCellsMatrix): CellRange {
+  determinarRangoDatos(rows: HtmlCellsMatrix): CellRange {
     //!TODO MEJORAR EL ALGORITMO DE RANGO
     const maxDataColums = this.getMaxDataColums(rows);
     const maxColIndex = rows[0].length - 1;
@@ -343,7 +360,7 @@ export class EstadisticasWorkbook {
     let startColIndex = -1;
     let endColIndex = -1;
 
-    for (let colIndex = 0; colIndex < maxColIndex; colIndex++) {
+    for (let colIndex = 0; colIndex <= maxColIndex; colIndex++) {
       let totalNotEmptyCell = 0;
       const uniqueCells = new Set();
       for (let rowIndex = startRowIndex; rowIndex <= endRowIndex; rowIndex++) {
@@ -555,29 +572,36 @@ export class EstadisticasWorkbook {
       const rowData: Cell[] = [];
       const cellPostion = this.getRowPosition(row, rowIndex);
       row.forEach((td) => {
-        const colSpan = +td?.getAttribute('colspan') || 1;
-        const rowSpan = +td?.getAttribute('rowspan') || 1;
-        let value: string | number = '';
-        const type = (td?.getAttribute('data-t') as 'n' | 's') || 's';
-        let formatoNumero = '';
-        let textoFormateado = '';
-        if (td) {
-          const cellAddress = td.getAttribute('id').replace('sjs-', '');
-          const cell = sheet[cellAddress];
-          formatoNumero = cell?.z || '';
-          textoFormateado = cell?.w || '';
-          value = cell?.v || '';
-        }
-        // Parse value to number if type is number
-        if (type === 'n') {
-          value = +value;
-        }
-        const dataCell: Cell = {
-          v: value,
+        const defaultCell: Cell = {
+          v: '',
           r: rowIndex,
           c: colIndex,
           p: cellPostion,
-          t: type,
+          t: 's',
+        };
+        colIndex++;
+        if (!td) {
+          rowData.push(defaultCell);
+          return;
+        };
+        const colSpan = +td.getAttribute('colspan') || 1;
+        const rowSpan = +td.getAttribute('rowspan') || 1;
+        const encodedCellAddress = td.getAttribute('id').replace('sjs-', '');
+        const cellAddress = XLSX.utils.decode_cell(encodedCellAddress);
+        const cell = sheet[encodedCellAddress];
+        if (!cell) {
+          rowData.push(defaultCell);
+          return;
+        }
+        let formatoNumero = cell.z || '';
+        let textoFormateado = cell.w || '';
+
+        const dataCell: Cell = {
+          v: cell.v || '',
+          r: rowIndex,
+          c: cellAddress.c,
+          p: cellPostion,
+          t: cell.t || 's',
         };
         if (textoFormateado) {
           dataCell.w = textoFormateado;
@@ -593,7 +617,6 @@ export class EstadisticasWorkbook {
           dataCell.rs = rowSpan;
         }
         rowData.push(dataCell);
-        colIndex += colSpan;
       });
       out.push(rowData);
     });
@@ -628,7 +651,7 @@ export class EstadisticasWorkbook {
     });
   }
   getMaxColIndex(rows: NodeListOf<Element>): number {
-    let max = 0;
+    let max = -1;
     rows.forEach((tr) => {
       const tds = tr.querySelectorAll('td');
       const lastTd = tds[tds.length - 1];
@@ -637,9 +660,6 @@ export class EstadisticasWorkbook {
       const { colIndex } = this.cellAddressToCoordinates(cellAddress);
       if (colIndex + colSpan - 1 > max) {
         max = colIndex + colSpan - 1;
-      }
-      if (tds.length > max) {
-        max = tds.length;
       }
     });
     return max;
@@ -654,11 +674,8 @@ export class EstadisticasWorkbook {
     rowIndex: number;
     colIndex: number;
   } {
-    const colLetter = cellAddress.match(/[A-Z]+/g)[0];
-    const rowNumber = cellAddress.match(/[0-9]+/g)[0];
-    const colIndex = XLSX.utils.decode_col(colLetter);
-    const rowIndex = +rowNumber - 1;
-    return { rowIndex, colIndex };
+    const cell = XLSX.utils.decode_cell(cellAddress);
+    return { rowIndex: cell.r, colIndex: cell.c };
   }
   getCellCoordinates(cell: HTMLTableCellElement): {
     rowIndex: number;

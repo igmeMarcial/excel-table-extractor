@@ -12,6 +12,7 @@ import { ValidationErrors } from '../../core/Validators';
 import { ESTADISTICA_FULL_FIELDS_DEF } from './editor/EstadisticaFieldsDef';
 import { Cell } from '../../types/Cell';
 import { ChartDataRanges } from '../../types/ChartDataRanges';
+import { deepAssign } from '../../utils/object-utils';
 
 const estadisticaDefaultModel: Estadistica = {
   datos: [],
@@ -159,7 +160,6 @@ export const estadisticaFormSlice = createSlice({
     setGraficoDataRanges: (state, action: PayloadAction<{ graficoId: number, chartDataRanges: ChartDataRanges }>) => {
       const payload = action.payload
       state.estadisticaRawModel.graficos = state.estadisticaRawModel.graficos.map((grafico) => {
-        console.log('check')
         if (grafico.id === payload.graficoId) {
           return {
             ...grafico,

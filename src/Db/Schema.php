@@ -7,9 +7,6 @@ class Schema
     private static $pluginTablePrefix = 'aesa_';
     private $tables = [
         'clasificador',
-        'esta_clas_n1',
-        'esta_clas_n2',
-        'esta_clas_n3',
     ];
 
     public static function initDatabase()

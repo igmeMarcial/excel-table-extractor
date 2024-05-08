@@ -7,6 +7,7 @@
  * @returns
  */
 
+import { DATO_TABLA_NO_DISPONIBLE, DATO_TABLA_NO_DISPONIBLE_ALT } from "../config/constantes";
 import { capitalizarPrimeraLetra } from "./string-utils"
 
 const RE_TEXTO_ENTRE_PARENTESIS_FINAL = /\(([^(^)]+)\)$/
@@ -58,4 +59,8 @@ export const determinarSubtituloParaGrafico = (subtituloGrafico: string, subtitu
   }
 
   return `(${getUnidadMedidaParaSubtitulo(tituloTablaDatos, unidadMedida)})`
+}
+
+export const esSimboloDeDatoNoDisponible = (valor: string) => {
+  return valor === DATO_TABLA_NO_DISPONIBLE || valor === DATO_TABLA_NO_DISPONIBLE_ALT
 }

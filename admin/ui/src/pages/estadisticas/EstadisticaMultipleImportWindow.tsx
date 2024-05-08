@@ -1,6 +1,10 @@
-import { forwardRef, useImperativeHandle, useState } from 'react';
-import { FluentProvider, webLightTheme } from '@fluentui/react-components';
-import { Modal, Button, Table, TableColumnsType } from 'antd';
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
+import {
+  FluentProvider,
+  Spinner,
+  webLightTheme,
+} from '@fluentui/react-components';
+import { Modal, Button, Table, TableColumnsType, message } from 'antd';
 import { EstadisticasWorkbook } from '../../core/EstadisticasWorkbook';
 import { Estadistica } from '../../types/Estadistica';
 import { useCreateEstadisticaMutation } from '../../app/services/estadistica';
@@ -10,14 +14,47 @@ import { IndiceClasificadores } from '../../core/IndiceClasificadores';
 
 interface EstadisticaImportRow extends WorkbookEstadisticaItem {
   key: React.Key;
+  number: number;
+  isImporting: boolean;
+  importingError?: string;
+  errorDatos?: string;
 }
-
+class ImportState {
+  static isImportStopped = false;
+}
+const renderRowStatus = (row: EstadisticaImportRow) => {
+  if (row.isImporting) {
+    return 'Importando...';
+  }
+  if (row.importingError) {
+    return 'Error de importación';
+  }
+  const messageStack = [];
+  if (row.confirmarRangoDatos) {
+    messageStack.push('Requiere confirmar rango datos');
+  }
+  if (row.errorDatos) {
+    messageStack.push(row.errorDatos);
+  }
+  return (
+    <ul>
+      {messageStack.map((message) => (
+        <li key={message}>{message}</li>
+      ))}
+    </ul>
+  );
+};
 const columns: TableColumnsType<EstadisticaImportRow> = [
   {
     title: 'N°',
     fixed: 'left',
     width: 36,
-    render: (_, record, index) => index + 1,
+    render: (_, record) =>
+      record.isImporting ? (
+        <Spinner size="extra-tiny" title="Importando" />
+      ) : (
+        record.number
+      ),
   },
   {
     title: 'Estadística',
@@ -41,8 +78,8 @@ const columns: TableColumnsType<EstadisticaImportRow> = [
   {
     title: 'Estado',
     fixed: 'right',
-    width: 80,
-    render: (_, record, index) => index + 1,
+    width: 200,
+    render: renderRowStatus,
   },
 ];
 
@@ -67,7 +104,6 @@ const EstadisticaMultipleImportWindow = forwardRef<
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
-  const [isCancelled, setIsCancelled] = useState(false);
   const { data: clasificadores } = useGetIndiceClasificadoresQuery();
   const indiceClasificadores = new IndiceClasificadores(clasificadores || []);
   const [postEstadistica, { isLoading: isSaving }] =
@@ -79,18 +115,20 @@ const EstadisticaMultipleImportWindow = forwardRef<
     setEstadisticasWb(estadisticasWb);
     updateListaEstadisticas(estadisticasWb);
     setIsOpen(true);
+    setIsImporting(false);
+    ImportState.isImportStopped = false;
   };
 
   const close = () => {
-    setIsCancelled(true);
-    setIsOpen(false);
+    if (!isImporting) {
+      setIsOpen(false);
+    }
   };
   useImperativeHandle(ref, () => ({
     open,
     close,
   }));
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
@@ -104,39 +142,91 @@ const EstadisticaMultipleImportWindow = forwardRef<
     // Set keys
     listaEstadisticas.forEach((item, index) => {
       item.key = item.id;
+      item.number = index + 1;
     });
     setListaEstadisticas(listaEstadisticas);
   };
 
   const doStartImport = () => {
-    console.log('doStartImport');
+    ImportState.isImportStopped = false;
     setIsImporting(true);
     saveEstadistica(0);
   };
+  const stopImporting = () => {
+    ImportState.isImportStopped = true;
+    setIsImporting(false);
+  };
   // Guarda la siguiente estadística en la lista
   const saveEstadistica = (selectionIndex: number) => {
-    const key = selectedRowKeys[selectionIndex];
-    if (!key || isCancelled) {
+    if (listaEstadisticas.length === 0) {
+      close();
+    }
+    const rowKey = selectedRowKeys[selectionIndex];
+    if (!rowKey) {
       setIsImporting(false);
       return;
     }
-    const model = getEstadisticaModelByKey(key);
+    const row = getRowByKey(rowKey);
+    const model = getEstadisticaModelByKey(rowKey);
     if (model) {
+      // Si no se pudo determinar el rango de valores
+      const graficos = model.graficos || [];
+      if (graficos.length > 0 && !graficos[0].referenciasTablaDatos) {
+        row.errorDatos = 'No se puede determinar los datos a graficar';
+        updateRow(row);
+        saveNextEstadistica(selectionIndex);
+        return;
+      }
+      row.isImporting = true;
+      row.importingError = null;
+      updateRow(row);
       postEstadistica(model)
         .then(() => {
-          // Guarda la siguiente estadística
-          saveEstadistica(selectionIndex + 1);
+          removeRow(rowKey);
         })
-        .catch(() => {
-          setIsCancelled(true);
+        .catch((err) => {
+          row.isImporting = false;
+          console.log(err);
+          row.importingError = err;
+          updateRow(row);
+        })
+        .finally(() => {
+          if (!ImportState.isImportStopped) {
+            saveEstadistica(selectionIndex + 1);
+          }
         });
     }
+  };
+  const saveNextEstadistica = (lastIndex: number) => {
+    saveEstadistica(lastIndex + 1);
+  };
+  const updateRow = (row: EstadisticaImportRow) => {
+    setListaEstadisticas((lista) =>
+      lista.map((item) => {
+        if (item.key === row.key) {
+          return { ...row };
+        }
+        return item;
+      })
+    );
+  };
+  const removeRow = (rowKey: React.Key) => {
+    setListaEstadisticas((lista) => lista.filter((row) => row.key !== rowKey));
+    setSelectedRowKeys((keys) => keys.filter((key) => key !== rowKey));
   };
   // Obtiene la estadística por su key
   const getEstadisticaModelByKey = (key: React.Key): Estadistica => {
     for (const rowModel of listaEstadisticas) {
       if (rowModel.key === key) {
         return estadisticasWb.getEstadistica(rowModel, indiceClasificadores);
+      }
+    }
+    return null;
+  };
+  const getRowByKey = (key: React.Key): EstadisticaImportRow => {
+    for (const row of listaEstadisticas) {
+      if (row.key === key) {
+        return row;
       }
     }
     return null;
@@ -149,16 +239,21 @@ const EstadisticaMultipleImportWindow = forwardRef<
       width={960}
       onCancel={close}
       footer={[
-        <Button
-          key="submit"
-          type="primary"
-          onClick={doStartImport}
-          disabled={!hasSelection || isImporting}
-          loading={isImporting}
-        >
-          {isImporting ? 'Importando...' : 'Iniciar importación'}
-        </Button>,
-        <Button key="back" onClick={close}>
+        !isImporting ? (
+          <Button
+            key="submit"
+            type="primary"
+            onClick={doStartImport}
+            disabled={!hasSelection}
+          >
+            {ImportState.isImportStopped ? ' Reanudar' : 'Iniciar'} importación
+          </Button>
+        ) : (
+          <Button key="submit" type="primary" onClick={stopImporting} danger>
+            Detener importación
+          </Button>
+        ),
+        <Button key="back" onClick={close} disabled={isImporting}>
           Cancelar
         </Button>,
       ]}

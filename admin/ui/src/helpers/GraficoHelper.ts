@@ -110,7 +110,7 @@ export class GraficoHelper {
   getPropiedadesBasicasGrafico(table: Cell[][], chartDataRanges: ChartDataRanges): GraficoProsBase {
     const { valuesRange, categoriesRange, seriesRange, seriesOrientation } = chartDataRanges
     const categorias = tablaDatosHelper.getColumnValues(table, categoriesRange.start.colIndex, categoriesRange.start.rowIndex, categoriesRange.end.rowIndex) as string[]
-    return {
+    const out = {
       categorias,
       series: this.getSeries(table, valuesRange, chartDataRanges.seriesOrientation),
       referenciasTablaDatos: {
@@ -120,6 +120,7 @@ export class GraficoHelper {
         orientacionSeries: seriesOrientation
       }
     }
+    return out;
   }
   private getGraficoParaDatosConFilaTotales(defaults: Grafico, tabla: Cell[][]): Grafico {
     // Valores: Última fila sin considerar la primera celda

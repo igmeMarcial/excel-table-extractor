@@ -9,7 +9,7 @@ const Chart = ({ options }: ChartProps) => {
   const chartOptions = chartProspMapper.map(options);
   return (
     <div>
-      <ReactECharts {...chartOptions} />
+      <ReactECharts {...chartOptions} notMerge={true} />
       <div style={{ fontSize: '10px' }}>
         <b>Fuente:</b> {options.fuente}
       </div>

@@ -10,6 +10,7 @@ import {
 import { CELL_POSITION_BODY, CELL_POSITION_HEADER, Cell } from '../types/Cell';
 import { numberFormat } from '../utils/numberFormat';
 import { FormatoTabla } from '../types/FormatoTabla';
+import { esSimboloDeDatoNoDisponible } from '../utils/estadistica-utils';
 
 interface DataTableProps {
   data: Cell[][];
@@ -41,7 +42,7 @@ function renderCell(
   format: FormatoTabla,
   indexCount
 ) {
-  const { t: type, p: position } = cell || {};
+  const { t: type, p: position, v: value } = cell || {};
   format = format || {};
   const color = format.color || DT_TABLA_DATOS_PRIMARY_COLOR;
   let cellStyle: React.CSSProperties = {
@@ -63,7 +64,8 @@ function renderCell(
     cellStyle.textAlign = colIndex === 0 ? 'left' : 'center';
   }
   const className =
-    type === 'n' && position === CELL_POSITION_BODY
+    (type === 'n' || esSimboloDeDatoNoDisponible(value.toString())) &&
+    position === CELL_POSITION_BODY
       ? 'text-end whitespace-nowrap' // Aliniación a la derecha para números
       : 'text-start whitespace-nowrap';
   return (

@@ -10,6 +10,7 @@ import { numberFormat } from '../utils/numberFormat';
 
 import './Datasheet.scss';
 import { ChartDataRanges } from '../types/ChartDataRanges';
+import { esSimboloDeDatoNoDisponible } from '../utils/estadistica-utils';
 /**
  * Tipos de rango
  * v: valores
@@ -58,9 +59,13 @@ const getCellCls = (
   dataSelectionRange: CellRange,
   chartDataRanges?: ChartDataRanges
 ) => {
-  const { t: type, p: position } = cell;
+  const { t: type, p: position, v: value } = cell;
   const clsStack = [];
-  if (type === CELL_VALUE_TYPE_NUMBER && position === CELL_POSITION_BODY) {
+  if (
+    (type === CELL_VALUE_TYPE_NUMBER ||
+      esSimboloDeDatoNoDisponible(value.toString())) &&
+    position === CELL_POSITION_BODY
+  ) {
     clsStack.push('data-cell--number');
   }
   // Selected

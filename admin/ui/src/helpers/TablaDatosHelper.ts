@@ -4,6 +4,8 @@ import { Cell } from "../types/Cell";
 import { DatosInformacion } from "../types/DatosInformacion";
 import { CellRange } from "../types/CellRange";
 import { RecomendacionGrafica } from "../types/RecomendacionGrafica";
+import { DATO_TABLA_NO_DISPONIBLE, DATO_TABLA_NO_DISPONIBLE_ALT } from "../config/constantes";
+import { esSimboloDeDatoNoDisponible } from "../utils/estadistica-utils";
 
 export class TablaDatosHelper {
 
@@ -106,7 +108,6 @@ export class TablaDatosHelper {
     tabla: Cell[][],
     range: CellRange
   ): T[][] {
-    console.log('getRangeValues')
     const out: T[][] = [];
     for (let rowIndex = range.start.rowIndex; rowIndex <= range.end.rowIndex; rowIndex++) {
       const row = [];
@@ -154,7 +155,8 @@ export class TablaDatosHelper {
           }
           continue;
         }
-        if (!isNaN(+cell.v)) {
+        // ... Si es un valor numérico o dato no disponible
+        if (cell.t === 'n' || esSimboloDeDatoNoDisponible(cell.v.toString())) {
           valores.push(cell);
         }
       }

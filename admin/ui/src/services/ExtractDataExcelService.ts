@@ -441,7 +441,7 @@ class ExtractDataExcelService {
     let startColIndex = -1;
     let endColIndex = -1;
 
-    for (let colIndex = 0; colIndex < maxColIndex; colIndex++) {
+    for (let colIndex = 0; colIndex <= maxColIndex; colIndex++) {
       let totalNotEmptyCell = 0;
       const uniqueCells = new Set();
       for (let rowIndex = startRowIndex; rowIndex <= endRowIndex; rowIndex++) {
@@ -508,9 +508,6 @@ class ExtractDataExcelService {
       const { colIndex } = this.cellAddressToCoordinates(cellAddress);
       if (colIndex + colSpan - 1 > max) {
         max = colIndex + colSpan - 1;
-      }
-      if (tds.length > max) {
-        max = tds.length;
       }
     });
     return max;

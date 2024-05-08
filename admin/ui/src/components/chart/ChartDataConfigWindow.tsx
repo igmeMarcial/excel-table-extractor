@@ -1,10 +1,8 @@
 import { forwardRef, useImperativeHandle, useState } from 'react';
 import {
   Field,
-  Input,
   FluentProvider,
   webLightTheme,
-  makeStyles,
   RadioGroup,
   Radio,
 } from '@fluentui/react-components';
@@ -20,12 +18,7 @@ import { ChartDataRanges } from '../../types/ChartDataRanges';
 import { Orientation } from '../../types/Orientation';
 import { ReferenciasTablaDatos } from '../../types/ReferenciasTablaDatos';
 import { validateCellRange } from '../../utils/validateCellRange';
-
-const useStyles = makeStyles({
-  rangeInput: {
-    width: '94px',
-  },
-});
+import CellRangeInput from './CellRangeInput';
 
 interface ChartDataConfigWindowProps {
   chartId: number;
@@ -77,7 +70,6 @@ const ChartDataConfigWindow = forwardRef(
       close,
     }));
     const dispath = useAppDispatch();
-    const styles = useStyles();
 
     const data = useAppSelector(selectEstadisticaDatos);
 
@@ -114,39 +106,32 @@ const ChartDataConfigWindow = forwardRef(
         className="bg-gray-400"
         onCancel={close}
         onOk={handleOnConfirm}
+        width={960}
       >
         <FluentProvider theme={webLightTheme}>
           <div className="flex gap-4 my-4">
-            <Field label="Valores">
-              <Input
-                type="text"
-                className={styles.rangeInput}
-                onChange={(e, data) => updateValuesDataRange(data.value)}
-                value={valuesRangeInputValue}
-              />
-            </Field>
-            <Field label="Categorías">
-              <Input
-                type="text"
-                className={styles.rangeInput}
-                onChange={(e, data) => updateCategoriesDataRange(data.value)}
-                value={categoriesRangeInputValue}
-              />
-            </Field>
-            <Field label="Series">
-              <Input
-                type="text"
-                className={styles.rangeInput}
-                onChange={(e, data) => updateSeriesDataRange(data.value)}
-                value={seriesRangeInputValue}
-              />
-            </Field>
-            <Field label="Distribución de datos">
+            <CellRangeInput
+              label="Categorías"
+              value={categoriesRangeInputValue}
+              onChange={updateCategoriesDataRange}
+            />
+            <CellRangeInput
+              label="Series"
+              value={seriesRangeInputValue}
+              onChange={updateSeriesDataRange}
+            />
+            <CellRangeInput
+              label="Valores"
+              value={valuesRangeInputValue}
+              onChange={updateValuesDataRange}
+            />
+            <Field label="Orientación de las series">
               <RadioGroup
                 value={seriesOrientation}
                 onChange={(e, data) =>
                   setSeriesOrientation(data.value as Orientation)
                 }
+                layout="horizontal"
               >
                 <Radio value="horizontal" label="Horizontal" />
                 <Radio value="vertical" label="Vertical" />

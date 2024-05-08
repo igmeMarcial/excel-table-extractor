@@ -36,8 +36,7 @@ export class EchartsPropsMapper {
     return deepAssign({}, ECHATS_DEFALT_PROPS, props)
   }
   private getSeries(): echarts.EChartOption.Series[] {
-    const rawSeries = this.grafico.series || []
-    return rawSeries.map((serie) => {
+    return this.series.map((serie) => {
       const mostrarEtiquetas = !(serie.mostrarEtiquetas === false || this.grafico.mostrarEtiquetas === false)
       const serieProps: any = {
         ...this.getTypeProps(serie),
