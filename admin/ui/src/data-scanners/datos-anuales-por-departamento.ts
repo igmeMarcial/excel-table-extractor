@@ -25,19 +25,13 @@ export const sonDatosAnualesPorDepartamento = (tabla: Cell[][]): boolean => {
   if (firstColumn.some((cell) => cell.t !== 's')) {
     return false
   }
-   
+
   // 3.- Todos los valores de la primera fila, a partir de la segunda columna deben ser números de 4 dígitos que representen un año
   // Año puede tener el formato 2021, '2021' o 2021 x/
   const firstRow = tabla[0].slice(1);
-  const re = /^\d{4}([ ]*\w\/)?$/
+  const re = /^\d{4}( *\w\/)?$/
   if (firstRow.some((cell) => !re.test(cell.v.toString()))) {
-   
     return false;
-  }
-  // 4.- Todos los valores de la tabla deben ser números
-  const dataValues = tabla.slice(1).map((row) => row.slice(1));
-  if (dataValues.some((row) => row.some((cell) => cell.t !== 'n'))) {
-    return false
   }
   return true
 }

@@ -3,8 +3,7 @@ import { Cell } from "../types/Cell";
 import { DatosInformacion } from "../types/DatosInformacion";
 import { CellRange } from "../types/CellRange";
 import { RecomendacionGrafica } from "../types/RecomendacionGrafica";
-import { DATO_TABLA_NO_DISPONIBLE, DATO_TABLA_NO_DISPONIBLE_ALT } from "../config/constantes";
-import { esSimboloDeDatoNoDisponible } from "../utils/estadistica-utils";
+import { celdaConValorEstadistico } from "../utils/estadistica-utils";
 
 export class TablaDatosHelper {
 
@@ -142,9 +141,10 @@ export class TablaDatosHelper {
   }
   /**
    * Algoritmo
-   * El algoritmo para obtener el rango de celdas con valores numéricos es el siguiente:
-   * 1.- Se recorre la tabla y se obtienen los valores numéricos de cada celda y se guardan en un arreglo bidimensional
-   * 2.- Se añaden a la lista unicamente aquellos valores que sean numéricos y no sean celdas combinadas.
+   * El algoritmo para obtener el rango de celdas con valores estadísticos es el siguiente:
+   *
+   * 1.- Se recorre la tabla y se obtienen los valores estadísticos de cada celda y se guardan en un arreglo bidimensional
+   * 2.- Se añaden a la lista unicamente aquellos valores que son considerados valores estadísticos válidos y no sean celdas combinadas.
    * 3.- Por defecto se asigna como inicio del rango los indices de la primera y ultima celda del resultado del paso 1
    * 3.- Hasta el paso 2 funciona para la mayoría de los casos.
    * @param tabla
@@ -153,54 +153,61 @@ export class TablaDatosHelper {
   getValoresRango(tabla: Cell[][]): CellRange {
     console.log('Entrada')
     console.log(tabla)
-    const valoresNumericos: Cell[][] = [];
+    const valoresEstadisticosValidos: Cell[][] = [];
     tabla.forEach((row, rowIndex) => {
+      // La primera fila no se considera
       if (rowIndex === 0) return;
       const valores = [];
-      
+      let colIdex = 0;
       for (const cell of row) {
+        // Celda combinada
         if (cell.rs > 1 || cell.s > 1) {
+          // Si ya existen valores, singifica que se se ha identificado una nueva celda conbinada al final de una fila
+          // por tanto no califica como parte del rango de valores estadísticos.
           if (valores.length > 0) {
             break;
           }
           continue;
         }
-        // ... Si es un valor numérico o dato no disponible
-        // console.log(cell)
-        if (cell.t === 'n' || esSimboloDeDatoNoDisponible(cell.v.toString())) {
-          console.log(cell)
+        // La primera celda de la fila no se considera
+        if (colIdex === 0) {
+          colIdex++;
+          continue;
+        }
+        // Valor estadístico
+        if (celdaConValorEstadistico(cell, false)) {
           valores.push(cell);
         }
+        colIdex++;
       }
       if (valores.length > 0) {
-        valoresNumericos.push(valores);
+        valoresEstadisticosValidos.push(valores);
       }
     });
-    if (valoresNumericos.length === 0) {
+    if (valoresEstadisticosValidos.length === 0) {
       return null;
     }
-    console.log(valoresNumericos)
     // Verificar el rango de valores numéricos no tiene celdas vacias
-    const maxColumns = Math.max(...valoresNumericos.map((row) => row.length));
-    const minColumns = Math.min(...valoresNumericos.map((row) => row.length));
+    const maxColumns = Math.max(...valoresEstadisticosValidos.map((row) => row.length));
+    const minColumns = Math.min(...valoresEstadisticosValidos.map((row) => row.length));
     // Verificar que los valores numéricos sean contiguos
-    if (!this.sonValoresContiguos(valoresNumericos)) {
+    if (!this.sonValoresContiguos(valoresEstadisticosValidos)) {
       return null;
     }
-    // Todo okay
     if (maxColumns !== minColumns) {
       return null;
     }
-    const rowsLn = valoresNumericos.length;
-    const colsLn = valoresNumericos[0].length;
+    // Todo okay
+    const rowsLn = valoresEstadisticosValidos.length;
+    const colsLn = valoresEstadisticosValidos[0].length;
     return {
       start: {
-        colIndex: valoresNumericos[0][0].c,
-        rowIndex: valoresNumericos[0][0].r,
+        colIndex: valoresEstadisticosValidos[0][0].c,
+        rowIndex: valoresEstadisticosValidos[0][0].r,
       },
       end: {
-        colIndex: valoresNumericos[rowsLn - 1][colsLn - 1].c,
-        rowIndex: valoresNumericos[rowsLn - 1][colsLn - 1].r,
+        colIndex: valoresEstadisticosValidos[rowsLn - 1][colsLn - 1].c,
+        rowIndex: valoresEstadisticosValidos[rowsLn - 1][colsLn - 1].r,
       }
     }
 

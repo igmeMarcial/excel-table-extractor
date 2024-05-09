@@ -7,7 +7,9 @@
  * @returns
  */
 
+import * as XLSX from 'xlsx';
 import { DATO_TABLA_NO_DISPONIBLE, DATO_TABLA_NO_DISPONIBLE_ALT } from "../config/constantes";
+import { Cell } from "../types/Cell";
 import { capitalizarPrimeraLetra } from "./string-utils"
 
 const RE_TEXTO_ENTRE_PARENTESIS_FINAL = /\(([^(^)]+)\)$/
@@ -63,4 +65,24 @@ export const determinarSubtituloParaGrafico = (subtituloGrafico: string, subtitu
 
 export const esSimboloDeDatoNoDisponible = (valor: string) => {
   return valor === DATO_TABLA_NO_DISPONIBLE || valor === DATO_TABLA_NO_DISPONIBLE_ALT
+}
+
+export const sonValoresEstadisticosValidos = (tablaValores: Cell[][]): boolean => {
+  return (tablaValores || []).every((fila) => {
+    fila.every((celda) => {
+      return celdaConValorEstadistico(celda)
+    })
+  });
+}
+
+export const celdaConValorEstadistico = (cell: Cell, notificarValorInvalido = true): boolean => {
+  const out = esValorEstadisticoValido(cell.v);
+  if (!out && notificarValorInvalido) {
+    const cellAddress = XLSX.utils.encode_cell({ r: cell.r, c: cell.c });
+    console.error(`Valor estadístico no válido en celda ${cellAddress}: `, cell)
+  }
+  return out;
+}
+export const esValorEstadisticoValido = (valor: any): boolean => {
+  return !isNaN(parseFloat(valor)) || esSimboloDeDatoNoDisponible(valor)
 }

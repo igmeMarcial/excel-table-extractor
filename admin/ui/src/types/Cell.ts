@@ -11,7 +11,7 @@ export interface Cell {
   v: string | number
   r: number
   c: number
-  s?: number
+  s?: number // Colspan
   rs?: number
   p?: CellPosition
   t: CellValueType,

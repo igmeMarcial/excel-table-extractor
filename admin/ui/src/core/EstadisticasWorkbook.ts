@@ -8,7 +8,6 @@ import {
   CellPosition,
   CELL_POSITION_BODY,
   CELL_POSITION_HEADER,
-  CELL_VALUE_TYPE_STRING,
 } from '../types/Cell';
 import { CellRange } from '../types/CellRange';
 import { Estadistica, FichaTecnicaFields } from '../types/Estadistica';
@@ -16,6 +15,7 @@ import { HtmlCellsMatrix } from '../types/HtmlCellMatrix';
 import { WorkbookEstadisticaItem } from '../types/WorkbookEstadisticaItem';
 import { decodeCellRange } from '../utils/decodeCellRange';
 import { encodeCellRange } from '../utils/encodeCellRange';
+import { esValorEstadisticoValido } from '../utils/estadistica-utils';
 import { calculateSimilarity, toSnakeCase } from '../utils/string-utils';
 import { getSheetHtmlRows } from '../utils/xmls-utils';
 import { IndiceClasificadores } from './IndiceClasificadores';
@@ -641,7 +641,8 @@ export class EstadisticasWorkbook {
       return true;
     }
     return row.every((cell) => {
-      return cell?.getAttribute('data-t') === CELL_VALUE_TYPE_STRING;
+      const val = cell?.textContent?.trim();
+      return !esValorEstadisticoValido(val);
     });
   }
   // Función para determinar si una fila es el pie de página de la tabla

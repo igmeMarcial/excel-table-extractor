@@ -7,7 +7,6 @@ import {
   CellPosition,
   CELL_POSITION_BODY,
   CELL_POSITION_HEADER,
-  CELL_VALUE_TYPE_STRING,
   Cell,
 } from '../types/Cell';
 import { EstadisticaDatos } from '../types/EstadisticaDatos';
@@ -15,6 +14,7 @@ import { CellRange } from '../types/CellRange';
 import { getSheetHtmlRows } from '../utils/xmls-utils';
 import { readExcelFile } from '../utils/file-utils';
 import { FichaTecnicaFields } from '../types/Estadistica';
+import { esValorEstadisticoValido } from '../utils/estadistica-utils';
 
 type HtmlCellsMatrix = HTMLTableCellElement[][];
 interface Sheet {
@@ -291,7 +291,8 @@ class ExtractDataExcelService {
       return true;
     }
     return row.every((cell) => {
-      return cell?.getAttribute('data-t') === CELL_VALUE_TYPE_STRING;
+      const val = cell?.textContent?.trim();
+      return !esValorEstadisticoValido(val);
     });
   }
   // Función para determinar si una fila es el pie de página de la tabla
