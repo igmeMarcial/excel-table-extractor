@@ -14,12 +14,10 @@ import WpDynamicField from '../../../components/form/WpDynamicField';
 const EstadisticaEditorTabFicha = () => {
   const dispath = useAppDispatch();
   const values = useAppSelector(selectEstadisticaValues);
-  console.log(values);
   const validationErrors = useAppSelector(selectValidationErrors);
   const { data: clasificadores } = useGetIndiceClasificadoresQuery();
   const indiceClasificadores = new IndiceClasificadores(clasificadores || []);
   const handleChange = (value, fieldName) => {
-    console.log(value);
     dispath(setEstadisticaFieldValue({ field: fieldName, value }));
   };
 

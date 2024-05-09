@@ -215,6 +215,7 @@ export class EstadisticasWorkbook {
     };
     const sheetDataMap = this.getSheetDataMap(workbookItem.hojaDatos);
     const rangoDatos = decodeCellRange(workbookItem.rangoDatos);
+    console.error("Estadistica otro")
     const htmlCellsMatrix = this.getHtmlCellsRange(sheetDataMap, rangoDatos);
     out.datos = this.getCellsMatrix(
       htmlCellsMatrix,
@@ -296,6 +297,7 @@ export class EstadisticasWorkbook {
       });
       out.push(rowData);
     });
+    console.log(out)
     return out;
   }
 

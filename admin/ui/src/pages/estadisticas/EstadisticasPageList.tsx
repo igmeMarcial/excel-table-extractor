@@ -64,7 +64,6 @@ const EstadisticasPageList = forwardRef((props, ref) => {
     dispath(setActiveTab('1'));
   };
   const renderChecks = (_, record) => {
-    console.log(record);
     return (
       <div>
         {record.activo ? (

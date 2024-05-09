@@ -1,5 +1,4 @@
 import { sonDatosAnualesPorDepartamento } from "../data-scanners/datos-anuales-por-departamento";
-import sonDepartamentosTest from "../data-scanners/datos-anuales-por-departamentoTest";
 import { Cell } from "../types/Cell";
 import { DatosInformacion } from "../types/DatosInformacion";
 import { CellRange } from "../types/CellRange";
@@ -21,7 +20,6 @@ export class TablaDatosHelper {
   getInformacion(tabla: Cell[][]): DatosInformacion {
     const out: DatosInformacion = {
       sonDatosAnualesPorDepartamento: sonDatosAnualesPorDepartamento(tabla),
-      sonDepartamentosTest: sonDepartamentosTest(tabla),//borrar
       tieneFilaTotales: this.tieneFilaTotales(tabla),
       tieneCeldasCombinadas: this.tieneCeldasCombinadas(tabla),
       valoresRango: this.getValoresRango(tabla)
@@ -153,10 +151,13 @@ export class TablaDatosHelper {
    * @returns
    */
   getValoresRango(tabla: Cell[][]): CellRange {
+    console.log('Entrada')
+    console.log(tabla)
     const valoresNumericos: Cell[][] = [];
     tabla.forEach((row, rowIndex) => {
       if (rowIndex === 0) return;
       const valores = [];
+      
       for (const cell of row) {
         if (cell.rs > 1 || cell.s > 1) {
           if (valores.length > 0) {
@@ -165,7 +166,9 @@ export class TablaDatosHelper {
           continue;
         }
         // ... Si es un valor numérico o dato no disponible
+        // console.log(cell)
         if (cell.t === 'n' || esSimboloDeDatoNoDisponible(cell.v.toString())) {
+          console.log(cell)
           valores.push(cell);
         }
       }
@@ -176,6 +179,7 @@ export class TablaDatosHelper {
     if (valoresNumericos.length === 0) {
       return null;
     }
+    console.log(valoresNumericos)
     // Verificar el rango de valores numéricos no tiene celdas vacias
     const maxColumns = Math.max(...valoresNumericos.map((row) => row.length));
     const minColumns = Math.min(...valoresNumericos.map((row) => row.length));
