@@ -151,8 +151,6 @@ export class TablaDatosHelper {
    * @returns
    */
   getValoresRango(tabla: Cell[][]): CellRange {
-    console.log('Entrada')
-    console.log(tabla)
     const valoresEstadisticosValidos: Cell[][] = [];
     tabla.forEach((row, rowIndex) => {
       // La primera fila no se considera
@@ -214,17 +212,13 @@ export class TablaDatosHelper {
   }
 
   sonValoresContiguos(valores: Cell[][]): boolean {
-    let out = true;
     const startValueColIndex = valores[0][0].c;
     const startValueRowIndex = valores[0][0].r;
-    valores.forEach((row, rowIndex) => {
-      row.forEach((cell, colIndex) => {
-        if (cell.c !== startValueColIndex + colIndex || cell.r !== startValueRowIndex + rowIndex) {
-          out = false;
-        }
+    return valores.every((row, rowIndex) => {
+      return row.every((cell, colIndex) => {
+        return cell.c === startValueColIndex + colIndex && cell.r === startValueRowIndex + rowIndex;
       });
     });
-    return out;
   }
 }
 

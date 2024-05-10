@@ -79,7 +79,7 @@ export const celdaConValorEstadistico = (cell: Cell, notificarValorInvalido = tr
   const out = esValorEstadisticoValido(cell.v);
   if (!out && notificarValorInvalido) {
     const cellAddress = XLSX.utils.encode_cell({ r: cell.r, c: cell.c });
-    console.error(`Valor estadístico no válido en celda ${cellAddress}: `, cell)
+    console.warn(`Valor estadístico no válido en celda ${cellAddress}: `, cell)
   }
   return out;
 }

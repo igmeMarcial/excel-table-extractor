@@ -18,7 +18,6 @@ import {
 import { Link, useLocation } from 'react-router-dom';
 import { resetPathUrl } from '../../../utils/url-utils';
 import { useSaveEstadisticaMutation } from '../../../app/services/estadistica';
-import EstadisticaImportDialog from './EstadisticaImportDialog';
 import validationsHelper from '../../../helpers/ValidationsHelper';
 import { ESTADISTICA_FULL_FIELDS_DEF } from './EstadisticaFieldsDef';
 import IndicadorEditorHeaderImportButton from './IndicadorEditorHeaderImportButton';
@@ -85,7 +84,6 @@ const IndicadorEditorhHeader = () => {
         </Link>
         <div className="text-2xl md:text-2xl font-bold p-0">Indicador</div>
         <span className="flex-1"></span>
-        <EstadisticaImportDialog />
         <IndicadorEditorHeaderImportButton />
         <Link to={getEstadisticaUlr()} target="_blank">
           <Button

@@ -189,7 +189,7 @@ const EstadisticaMultipleImportWindow = forwardRef<
         })
         .catch((err) => {
           row.isImporting = false;
-          console.log(err);
+          console.error(err);
           row.importingError = err;
           updateRow(row);
         })

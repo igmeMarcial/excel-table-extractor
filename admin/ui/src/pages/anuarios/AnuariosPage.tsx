@@ -1,14 +1,13 @@
-import React, { useRef } from "react";
-import MainLayout from "../../layout/MainLayout";
-import AnuariosPageList from "./AnuariosPageList";
+import React, { useRef } from 'react';
+import MainLayout from '../../layout/MainLayout';
+import AnuariosPageList from './AnuariosPageList';
 
-import AnuariosPageToolbar from "./AnuariosPageToolbar";
+import AnuariosPageToolbar from './AnuariosPageToolbar';
 
 function AnuariosPage() {
   const listRef = useRef(null);
   const handleSearchBoxChange = (value) => {
     listRef.current.filterRecords(value);
-    console.log(value)
   };
   const handleUpload = (data) => {
     listRef.current.addRecord(data);

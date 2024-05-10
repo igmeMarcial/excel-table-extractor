@@ -28,7 +28,6 @@ const DataConfigSection = ({ chartId }: DataConfigSectionProps) => {
   };
 
   const onColorChange = (color) => {
-    console.log('color', color);
     dispath(
       setGraficoSerieColor({
         graficoId: chartId,

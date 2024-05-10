@@ -1,18 +1,17 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, current, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../../app/store';
-import { TipoGrafico } from '../../types/TipoGrafico';
-import { Estadistica, FichaTecnicaFields } from '../../types/Estadistica';
-import { EstadisticaFormState } from '../../types/EstadisticarFormState';
 import validationsHelper from '../../helpers/ValidationsHelper';
 import tablaDatosHelper from '../../helpers/TablaDatosHelper';
 import graficoHelper from '../../helpers/GraficoHelper';
+import { TipoGrafico } from '../../types/TipoGrafico';
+import { Estadistica, FichaTecnicaFields } from '../../types/Estadistica';
+import { EstadisticaFormState } from '../../types/EstadisticarFormState';
 import { Grafico } from '../../types/Grafico';
 import { FormatoTabla } from '../../types/FormatoTabla';
 import { ValidationErrors } from '../../core/Validators';
 import { ESTADISTICA_FULL_FIELDS_DEF } from './editor/EstadisticaFieldsDef';
 import { Cell } from '../../types/Cell';
 import { ChartDataRanges } from '../../types/ChartDataRanges';
-import { deepAssign } from '../../utils/object-utils';
 
 const estadisticaDefaultModel: Estadistica = {
   datos: [],
@@ -52,6 +51,21 @@ export const estadisticaFormSlice = createSlice({
       state.hasChanges = false;
       state.estadisticaRawModel = { ...state.estadisticaModel };
     },
+    resetEstadisticaModel: (state) => {
+      state.estadisticaModel = estadisticaDefaultModel;
+      state.estadisticaRawModel = estadisticaDefaultModel;
+      state.titulo = '';
+      state.isCreationMode = true;
+      state.hasChanges = false;
+    },
+    resetPresentacionChanges: (state) => {
+      const currentEstadisticaRawModel = current(state.estadisticaRawModel);
+      state.estadisticaRawModel.datosInformacion = tablaDatosHelper.getInformacion(currentEstadisticaRawModel.datos);
+      state.estadisticaRawModel.graficos = [graficoHelper.getGraficoDefecto(currentEstadisticaRawModel)];
+      state.validationErrors = getFullValidationErrors(currentEstadisticaRawModel);
+      state.estadisticaRawModel.presentacionTablaFormato = estadisticaDefaultModel.presentacionTablaFormato;
+      state.hasChanges = true;
+    },
     commitChanges: (state) => {
       state.estadisticaModel = { ...state.estadisticaRawModel };
       state.hasChanges = false;
@@ -68,13 +82,6 @@ export const estadisticaFormSlice = createSlice({
       state.estadisticaRawModel = data;
       state.titulo = data.nombre || '';
       state.isCreationMode = !data.id;
-      state.hasChanges = false;
-    },
-    resetEstadisticaModel: (state) => {
-      state.estadisticaModel = estadisticaDefaultModel;
-      state.estadisticaRawModel = estadisticaDefaultModel;
-      state.titulo = '';
-      state.isCreationMode = true;
       state.hasChanges = false;
     },
     validateEstadisticaFields: (state) => {
@@ -112,15 +119,8 @@ export const estadisticaFormSlice = createSlice({
     setActiveTab: (state, action: PayloadAction<string>) => {
       state.activeTab = action.payload
     },
-    setResetDefault: (state) => {
-      state.titulo = '';// Estado inicial de titulo
-      state.estadisticaRawModel = estadisticaDefaultModel; // NAV CUANDO CLICK SE VUELVE A SU ESTADO INCIAL
-      state.isCreationMode = true;
-      state.estadisticaModel = estadisticaDefaultModel;
-      state.activeTab = '1'
-    },
     setTipoGrafico: (state, action: PayloadAction<{ graficoId: number, tipoGrafico: TipoGrafico }>) => {
-      state.estadisticaRawModel.graficos = state.estadisticaRawModel.graficos.map((grafico, index) => {
+      state.estadisticaRawModel.graficos = state.estadisticaRawModel.graficos.map((grafico) => {
         if (grafico.id === action.payload.graficoId) {
           return { ...grafico, tipo: action.payload.tipoGrafico };
         }
@@ -215,7 +215,9 @@ const getFullValidationErrors = (values: Estadistica) => {
 
 export const {
   setEstadisticaModel,
+  resetChanges,
   resetEstadisticaModel,
+  resetPresentacionChanges,
   setEstadisticaFields,
   validateEstadisticaFields,
   validateEstadisticaField,
@@ -226,9 +228,7 @@ export const {
   setGraficoFieldValue,
   setGraficoSerieColor,
   setGraficoDataRanges,
-  resetChanges,
   commitChanges,
-  setResetDefault,
   setFormatoTablaFieldValue,
   // field validation
   setFieldValidationErrors,

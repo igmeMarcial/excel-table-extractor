@@ -50,7 +50,6 @@ const ConfiguracionMain: React.FC<ConfiguracionMainProps> = ({
     });
     setSelectedColors(updatedValues);
   };
-  console.log(selectedColors);
   return (
     <div className="px-12  ">
       <div>

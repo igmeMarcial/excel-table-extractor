@@ -7,15 +7,12 @@ import {
   setEstadisticaDatos,
   setEstadisticaFields,
 } from '../EstadisticaFormSlice';
-import fichaExcelService from '../../../services/ExtractDataExcelService';
-import { WorkBook } from 'xlsx';
 import DataRangeConfirmDialog, {
   DataRangeConfirmDialogRef,
 } from '../../../components/chart/DataRangeConfirmDialog';
 import { CellRange } from '../../../types/CellRange';
 import { useGetIndiceClasificadoresQuery } from '../../../app/services/clasificador';
 import { IndiceClasificadores } from '../../../core/IndiceClasificadores';
-import { Estadistica } from '../../../types/Estadistica';
 import { EstadisticasWorkbook } from '../../../core/EstadisticasWorkbook';
 
 export interface EstadisticaImportWindowProps {}
@@ -33,11 +30,12 @@ const EstadisticaImportWindow = forwardRef<
   const dispath = useAppDispatch();
   const [estadisticasWb, setEstadisticasWb] =
     useState<EstadisticasWorkbook>(null);
-  const isCreationMode = useAppSelector(selectIsCreationMode);
   const [sheetNames, setSheetNames] = useState<string[]>([]);
-  const [camposFichaSheetIndex, setCamposFichaSheetIndex] = useState<number>(1);
-  const [tablaDatosSheetIndex, setTablaDatosSheetIndex] = useState<number>(0);
-  const [workbookFile, setWorkBookFile] = useState<WorkBook>(null);
+  const isCreationMode = useAppSelector(selectIsCreationMode);
+  const [camposFichaSheetName, setCamposFichaSheetName] =
+    useState<string>(null);
+
+  const [tablaDatosSheetName, setTablaDatosSheetName] = useState<string>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [camposFichaChecked, setCamposFichaChecked] = useState(false);
   const [tablaDatosChecked, setTablaDatosChecked] = useState(false);
@@ -48,6 +46,7 @@ const EstadisticaImportWindow = forwardRef<
   const confirmDataRangeDialogRef = useRef<DataRangeConfirmDialogRef>(null);
   const open = ({ estadisticasWb }: EstadisticaImportWindowDataInput) => {
     setEstadisticasWb(estadisticasWb);
+    setSheetNames(estadisticasWb.getSheetNames());
     setIsModalOpen(true);
   };
 
@@ -73,55 +72,19 @@ const EstadisticaImportWindow = forwardRef<
   };
 
   const extractCamposFicha = () => {
-    if (workbookFile) {
-      if (camposFichaChecked) {
-        const fields: Estadistica =
-          fichaExcelService.getEstadisticaFieldsFichaTecnica(
-            workbookFile,
-            camposFichaSheetIndex
-          );
-        // MDEA Clasificadores path
-        const mdeaPathInput = fields.clasificacionMdea || '';
-        const pathRe = /\d+\.\d+\.\d+\s*-\s*\d+/;
-        if (pathRe.test(mdeaPathInput)) {
-          const mdeaFullPath = pathRe.exec(mdeaPathInput)[0];
-          const mdeaPath = mdeaFullPath.split('-')[0].trim();
-          const numerals = mdeaPath.split('.');
-          fields.clasificadorN1Id = indiceClasificadores.getItemIdByNumeral(
-            numerals[0]
-          );
-          fields.clasificadorN2Id = indiceClasificadores.getItemIdByNumeral(
-            `${numerals[0]}.${numerals[1]}`
-          );
-          fields.clasificadorN3Id = indiceClasificadores.getItemIdByNumeral(
-            `${numerals[0]}.${numerals[1]}.${numerals[2]}`
-          );
-        }
-        dispath(setEstadisticaFields(fields));
-      }
+    if (camposFichaChecked) {
+      const camposFichaTecnica = estadisticasWb.getCamposFichaTecnica(
+        camposFichaSheetName,
+        indiceClasificadores
+      );
+      dispath(setEstadisticaFields(camposFichaTecnica));
     }
   };
   const extractTablaDatos = (range: CellRange) => {
-    const sheetDataMap = fichaExcelService.getSheetDataMap(
-      workbookFile,
-      tablaDatosSheetIndex
-    );
-    const newRange = fichaExcelService.getHtmlCellsRange(sheetDataMap, range);
-    const datos = fichaExcelService.getCellsMatrix(
-      newRange,
-      fichaExcelService.getSheetByIndex(workbookFile, tablaDatosSheetIndex)
-    );
-    const data = fichaExcelService.extractDataFromFile(
-      workbookFile,
-      tablaDatosSheetIndex
-    );
-    const estadisticaFields: Estadistica = {
-      presentacionTablaTitulo: data.titulo,
-      presentacionTablaNota: data.nota,
-      presentacionTablaFuente: data.fuente,
-      presentacionTablaElaboracion: data.elaboracion,
-    };
-    dispath(setEstadisticaFields(estadisticaFields));
+    const datos = estadisticasWb.getSheetCellsRange(tablaDatosSheetName, range);
+    const caposTablaDatos =
+      estadisticasWb.getCamposTablaDatos(tablaDatosSheetName);
+    dispath(setEstadisticaFields(caposTablaDatos));
     dispath(setEstadisticaDatos(datos));
   };
   const handleOk = () => {
@@ -144,15 +107,13 @@ const EstadisticaImportWindow = forwardRef<
 
   const showConfirmRangoDatos = () => {
     // Mostrar dialogo confirmar rango de datos
-    const sheetDataMap = fichaExcelService.getSheetDataMap(
-      workbookFile,
-      tablaDatosSheetIndex
-    );
-    const sheetData = fichaExcelService.getCellsMatrix(
+    const sheetDataMap = estadisticasWb.getSheetDataMap(tablaDatosSheetName);
+    const sheetData = estadisticasWb.getCellsMatrix(
       sheetDataMap,
-      fichaExcelService.getSheetByIndex(workbookFile, tablaDatosSheetIndex)
+      tablaDatosSheetName
     );
-    const rangoTablaDatos = fichaExcelService.getRangoTablaDatos(sheetDataMap);
+    const rangoTablaDatos =
+      estadisticasWb.determinarRangoDatos(tablaDatosSheetName);
     confirmDataRangeDialogRef.current.open({
       data: sheetData,
       dataSelectionRange: rangoTablaDatos,
@@ -206,17 +167,17 @@ const EstadisticaImportWindow = forwardRef<
             </Checkbox>
 
             <Select
-              value={tablaDatosSheetIndex}
+              value={tablaDatosSheetName}
               disabled={!tablaDatosChecked}
               style={{ width: '100px' }}
-              options={sheetNames.map((sheet, index) => ({
+              options={sheetNames.map((sheet) => ({
                 label: sheet,
-                value: index,
+                value: sheet,
               }))}
               size="small"
               onChange={(value) => {
-                setTablaDatosSheetIndex(value);
-                setCamposFichaSheetIndex(value + 1);
+                setTablaDatosSheetName(value);
+                setCamposFichaSheetName(value + 1);
               }}
             ></Select>
           </div>
@@ -228,16 +189,16 @@ const EstadisticaImportWindow = forwardRef<
               Campos de ficha técnica, desde la hoja:
             </Checkbox>
             <Select
-              value={camposFichaSheetIndex}
+              value={camposFichaSheetName}
               disabled={!camposFichaChecked}
               style={{ width: '100px' }}
-              options={sheetNames.map((sheet, index) => ({
+              options={sheetNames.map((sheet) => ({
                 label: sheet,
-                value: index,
+                value: sheet,
               }))}
               size="small"
               onChange={(value) => {
-                setCamposFichaSheetIndex(value);
+                setCamposFichaSheetName(value);
               }}
             ></Select>
           </div>

@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { Button } from 'antd';
 import { ArrowImport24Regular } from '@fluentui/react-icons';
 import { WorkBook } from 'xlsx';
-import fichaExcelService from '../services/ExtractDataExcelService';
+import { readExcelFile } from '../utils/file-utils';
 interface GetWorkbookButtonProps {
   text: string;
   loadingText?: string;
@@ -26,8 +26,7 @@ function GetWorkbookButton({
     fileInputRef.current.value = null;
     setLoading(true);
     // Lógica para leer el archivo
-    fichaExcelService
-      .getWorksbook(file)
+    readExcelFile(file)
       .then((workbook) => {
         if (workbook) {
           onWorkbookReady(workbook);
