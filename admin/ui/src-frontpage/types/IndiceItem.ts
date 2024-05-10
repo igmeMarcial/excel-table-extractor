@@ -6,4 +6,5 @@ export interface IndiceItem {
   expanded?: boolean;
   visible?: boolean;
   nivel: number;
+  hasChildren: boolean;
 }

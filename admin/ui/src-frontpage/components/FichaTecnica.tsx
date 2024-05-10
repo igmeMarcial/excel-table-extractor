@@ -57,7 +57,7 @@ function FichaTecnica() {
 
   return (
     <div className="overflow-auto">
-      <div id="downloadArea" className="py-4">
+      <div id="downloadArea">
         <div className="relative my-1">
           {dataIndicator.map((item, rowIndex) => (
             <div className="indicadores" key={`row-${item.id}`}>
@@ -66,7 +66,6 @@ function FichaTecnica() {
                   color: 'rgb(12, 113, 195)',
                   fontSize: '12px',
                   fontWeight: 'bold',
-                  marginTop: item.id === 1 ? '0px' : '10px',
                   fontFamily: 'Arial, sans-serif',
                 }}
               >
@@ -90,7 +89,7 @@ function FichaTecnica() {
           ))}
         </div>
       </div>
-      <div className="flex gap-4  mb-4">
+      <div className="flex gap-4">
         <PDFDownloadLink
           document={<FichaTecnicaPdf data={dataIndicator} />}
           fileName="fichaTecnica.pdf"

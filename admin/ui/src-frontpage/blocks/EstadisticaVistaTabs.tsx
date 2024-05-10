@@ -60,7 +60,7 @@ const EstadisticaVistaTabs = () => {
           );
         })}
       </TabList>
-      <div>
+      <div className="my-4">
         {selectedValue === 'grafico' && <Grafico />}
         {selectedValue === 'datos' && <TablaDatos />}
         {selectedValue === 'ficha' && <FichaTecnica />}

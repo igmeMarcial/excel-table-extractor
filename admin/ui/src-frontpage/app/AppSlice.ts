@@ -110,7 +110,13 @@ export const appSlice = createSlice({
     builder.addMatcher(getIndice.matchFulfilled, (state, action) => {
       const indice = [];
       action.payload.forEach((item: IndiceItem) => {
-        indice.push({ ...item, nivel: item.numeral.split('.').length })
+        indice.push({
+          ...item,
+          nivel: item.numeral.split('.').length,
+          hasChildren: action.payload.some((child: any) => {
+            return child.numeral.startsWith(item.numeral + '.');
+          })
+        })
       })
       state.indiceEstadisticas = indice;
       state.menuNivel2 = getMenuNivel2(indice, state.clasificadorNivel1)

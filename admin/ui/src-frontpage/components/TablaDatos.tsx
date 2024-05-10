@@ -59,11 +59,7 @@ const TablaDatos = () => {
   const numeralNivel1 = +marcoOrdenador?.numeral.split('.')[0];
   return (
     <>
-      <div
-        ref={downloadAreaContainer}
-        className="mt-5"
-        style={{ fontFamily: 'sans-serif' }}
-      >
+      <div ref={downloadAreaContainer} style={{ fontFamily: 'sans-serif' }}>
         <BlockTablaDatos
           estadistica={estadistica}
           contextoVisual={marcoOrdenador.codigo}
@@ -71,7 +67,7 @@ const TablaDatos = () => {
         />
       </div>
       {estadistica.datos && estadistica.datos.length > 0 && (
-        <div className="flex gap-4 mb-4 mt-2">
+        <div className="flex gap-4 mt-2">
           <Button onClick={() => downloadXlsx()} icon={<XlsxIcon />}>
             Descargar XLSX
           </Button>

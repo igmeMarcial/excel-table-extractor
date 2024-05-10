@@ -4,18 +4,31 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectMenuNivel2, toggleMenuNivel2Item } from '../app/AppSlice';
 import { IndiceItem } from '../types/IndiceItem';
-import {
-  QUERY_PARAM_ESTADISTICA_ID,
-  QUERY_PARAM_ESTADISTICA_INDICE_PATH,
-} from '../../src/core/constantes';
-import { useEffect, useState } from 'react';
+import { QUERY_PARAM_ESTADISTICA_ID } from '../../src/core/constantes';
 
 interface MenuItemProps {
   model: IndiceItem;
   onExpandToggleClick: (model: IndiceItem) => void;
 }
-// http://192.168.18.2:3001/?marcoOrdenador=mdea&estadistica=1.1.1.1&eid=2&tab=datos
 
+const ExpandedArrow = ({ model }) => {
+  const style: React.CSSProperties = {
+    width: '20px',
+    height: '20px',
+    right: '0px',
+    position: 'absolute',
+    top: '5px',
+    boxSizing: 'content-box',
+    paddingRight: '12px',
+  };
+  if (!model.hasChildren) {
+    return null;
+  }
+  if (model.expanded) {
+    return <ChevronDown24Filled style={style} />;
+  }
+  return <ChevronUp24Filled style={style} />;
+};
 const MenuItem = ({ model, onExpandToggleClick }: MenuItemProps) => {
   // No visible
   if (!model.visible) {
@@ -32,34 +45,7 @@ const MenuItem = ({ model, onExpandToggleClick }: MenuItemProps) => {
       >
         <span className="absolute left-0 pl-3">{model.numeral}</span>
         <span>{model.nombre}</span>
-
-        {model.expanded ? (
-          <div>
-            <ChevronDown24Filled
-              style={{
-                width: '20px',
-                height: '20px',
-                position: 'absolute',
-                right: '0px',
-                top: '5px',
-                paddingRight: '12px',
-              }}
-            />
-          </div>
-        ) : (
-          <div>
-            <ChevronUp24Filled
-              style={{
-                width: '20px',
-                height: '20px',
-                position: 'absolute',
-                right: '0px',
-                top: '5px',
-                paddingRight: '12px',
-              }}
-            />
-          </div>
-        )}
+        <ExpandedArrow model={model} />
       </div>
     );
   }
