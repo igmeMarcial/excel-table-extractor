@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: '29px',
     border: 'solid black 1px',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   imgMinan: {
@@ -36,10 +36,6 @@ const styles = StyleSheet.create({
     width: '110px',
     height: '40px',
     paddingLeft: '12px',
-  },
-  img: {
-    width: '120px',
-    height: '65px',
   },
   keyText: {
     color: 'rgb(12, 113, 195)',
@@ -72,8 +68,6 @@ export const FichaTecnicaPdf = ({ data }) => {
         <View style={styles.header}>
           <Image style={styles.imgMinan} src={logoMinan} />
           <Image style={styles.imgSinia} src={logosinia} />
-          <Image style={styles.img} src={logoBicentenario} />
-          <Image style={styles.img} src={logoPunche} />
         </View>
         <View style={{ marginBottom: '15px' }}>
           <Text style={styles.title}>

@@ -13,6 +13,9 @@ interface PanelItemProps {
   handleClick: (color: string) => void;
   index: number;
 }
+
+const imgIcon1 = 'images/icon-cambioclimatico.png';
+
 const PanelItem: React.FC<PanelItemProps> = ({
   item,
   colors,
@@ -30,7 +33,10 @@ const PanelItem: React.FC<PanelItemProps> = ({
       style={transformStyles(item)}
       onClick={() => handleClick(colors[item.numeral])}
     >
-      <span className="text-white text-2xl font-bold h-1/3">{index}</span>
+      {/* <span className="text-white text-2xl font-bold h-1/3">{index}</span> */}
+      <div>
+        <img src={imgIcon1} alt="" />
+      </div>
       <h4 className="content-center h-2/3 font-normal text-white text-xm md:text-sm leading-3 sm:leading-5 md:leading-4 p-0 m-0">
         {item.nombre}
       </h4>

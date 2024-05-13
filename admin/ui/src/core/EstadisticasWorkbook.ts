@@ -433,7 +433,7 @@ export class EstadisticasWorkbook {
     const resultMap = {}
     out.forEach((row) => {
       row.forEach((cell, index) => {
-        const snakeCaseKey = toSnakeCase(cell.v.toString())
+        const snakeCaseKey = toSnakeCase((cell.v || '').toString())
         const matchedKey = Object.keys(FICHA_FIELDS_MAP).find((key) => {
           const camelCaseKey = toSnakeCase(key)
           const similarity = calculateSimilarity(snakeCaseKey, camelCaseKey)

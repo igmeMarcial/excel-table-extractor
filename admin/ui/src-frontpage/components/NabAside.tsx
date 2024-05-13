@@ -4,7 +4,10 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectMenuNivel2, toggleMenuNivel2Item } from '../app/AppSlice';
 import { IndiceItem } from '../types/IndiceItem';
-import { QUERY_PARAM_ESTADISTICA_ID } from '../../src/core/constantes';
+import {
+  QUERY_PARAM_ESTADISTICA_ID,
+  QUERY_PARAM_ESTADISTICA_INDICE_PATH,
+} from '../../src/core/constantes';
 
 interface MenuItemProps {
   model: IndiceItem;
@@ -35,10 +38,21 @@ const MenuItem = ({ model, onExpandToggleClick }: MenuItemProps) => {
     return null;
   }
 
+  // Estadistica
+  const location = useLocation();
+  const paramValueNav = getQueryParam(
+    location,
+    QUERY_PARAM_ESTADISTICA_INDICE_PATH
+  );
+  // console.log(model);
+  // console.log(paramValueNav);
   if (!model.estadisticaId) {
     return (
       <div
-        className="min-h-6 cursor-pointer relative pl-16 pr-10  py-1 font-semibold hover:bg-gray-200"
+        style={{
+          color: model.expanded === true ? '#be1a1a' : 'black',
+        }}
+        className="min-h-6 cursor-pointer relative pl-12 pr-10  py-1 font-semibold hover:bg-gray-200"
         onClick={() => {
           onExpandToggleClick(model);
         }}
@@ -49,8 +63,6 @@ const MenuItem = ({ model, onExpandToggleClick }: MenuItemProps) => {
       </div>
     );
   }
-  // Estadistica
-  const location = useLocation();
   let paramValue = getQueryParam(location, QUERY_PARAM_ESTADISTICA_ID) || '1';
   return (
     <Link

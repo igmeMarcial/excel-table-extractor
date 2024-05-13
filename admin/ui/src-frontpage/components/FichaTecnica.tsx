@@ -60,7 +60,10 @@ function FichaTecnica() {
       <div id="downloadArea">
         <div className="relative my-1">
           {dataIndicator.map((item, rowIndex) => (
-            <div className="indicadores" key={`row-${item.id}`}>
+            <div
+              className="indicadores mb-3 break-words"
+              key={`row-${item.id}`}
+            >
               <div
                 style={{
                   color: 'rgb(12, 113, 195)',

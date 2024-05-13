@@ -35,6 +35,7 @@ const NamePanelComponents: React.FC<NamePanelProps> = ({ colors }) => {
   //Use location se repite ojo
   const location = useLocation();
   const navigate = useNavigate();
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const marcoOrdenador = params.get(QUERY_PARAM_MARCO_ORDENADOR);

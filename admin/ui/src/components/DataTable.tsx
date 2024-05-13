@@ -142,6 +142,7 @@ const DataTable = ({ data, format }: DataTableProps) => {
           borderCollapse: 'collapse',
           borderSpacing: '0',
           fontFamily: 'Arial, sans-serif',
+          width: 'auto',
         }}
       >
         <tbody>
