@@ -45,7 +45,7 @@ const EstadisticaVistaTabs = () => {
     navigate(newPath);
   };
   return (
-    <div className="pl-6 pr-6">
+    <div className="pl-6 pr-6 max-w-[80ch]">
       <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
         {items.map((item, index) => {
           return (

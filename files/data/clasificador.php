@@ -97,7 +97,7 @@ return [
     ['marco_ordenador_id' => 1, 'numeral' => '6',     'nombre' => 'Protección, Gestión y Participación/Acción Ambiental'],
 
     ['marco_ordenador_id' => 1, 'numeral' => '6.1',   'nombre' => 'Gastos en Protección Ambiental y Gestión de Recursos Naturales'],
-    ['marco_ordenador_id' => 1, 'numeral' => '6.1.1', 'nombre' => 'Gastos en Protección Ambiental y Gestión de Recursos Naturales'],
+    ['marco_ordenador_id' => 1, 'numeral' => '6.1.1', 'nombre' => 'Gasto público en protección ambiental y en gestión de recursos naturales'],
     ['marco_ordenador_id' => 1, 'numeral' => '6.1.2', 'nombre' => 'Gasto de empresas privadas, instituciónes sin fines de lucro y hogares en protección ambiental y en gestión de recursos naturales'],
 
     ['marco_ordenador_id' => 1, 'numeral' => '6.2',   'nombre' => 'Regulación y Gobernanza Ambiental'],

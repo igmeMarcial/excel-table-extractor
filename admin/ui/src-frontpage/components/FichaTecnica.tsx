@@ -6,9 +6,11 @@ import { PdfIcon } from './Icons';
 import { apiMap } from './FichaTecnicaMap';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { FichaTecnicaPdf } from './FichaTecnicaPdf';
-
+const logosinia =
+  window.AesaInfo.pluginUrl + '/public/assets/images/siniaLogo.png';
 function FichaTecnica() {
   const [dataIndicator, setDataIndicator] = useState([]);
+  const [loadingPdf, setLoadingPdf] = useState(false);
   const data = useAppSelector(selectEstadisticaData);
   useEffect(() => {
     if (data && typeof data === 'object') {
@@ -23,11 +25,15 @@ function FichaTecnica() {
     //Campos que se mostraran en el front
     const newArrNecessary = {
       nombre: data?.nombre,
-      descripcion: data?.descripcion,
       finalidad: data?.finalidad,
-      limitaciones: data?.limitaciones,
+      descripcion: data?.descripcion,
+      unidadMedida: data?.unidadMedida,
+      formulaCalculo: data?.formulaCalculo,
       metodologiaCalculo: data?.metodologiaCalculo,
       fuente: data?.fuente,
+      unidadOrganicaGeneradora: data?.unidadOrganicaGeneradora,
+      ambitoGeografico: data?.ambitoGeografico,
+      limitaciones: data?.limitaciones,
     };
 
     const filteredEntries = Object.entries(newArrNecessary).filter(
@@ -40,7 +46,10 @@ function FichaTecnica() {
     }));
     setDataIndicator(formattedData);
   };
-
+  const handlePdfDownload = () => {
+    setLoadingPdf(true);
+    // Lógica adicional para descargar el PDF
+  };
   const renderValue = (fieldName, value) => {
     const formattedValue = value.replace(/\n/g, '<br>');
     const clickableValue = formattedValue.replace(
@@ -96,9 +105,10 @@ function FichaTecnica() {
         <PDFDownloadLink
           document={<FichaTecnicaPdf data={dataIndicator} />}
           fileName="fichaTecnica.pdf"
+          onClick={handlePdfDownload}
         >
           {({ loading, url, error, blob }) =>
-            loading ? (
+            loadingPdf && loading ? (
               <Button icon={<PdfIcon />}>Cargando...</Button>
             ) : (
               <Button icon={<PdfIcon />}>Descargar PDF</Button>

@@ -3,7 +3,6 @@ import EstadisticaVistaTabs from '../blocks/EstadisticaVistaTabs';
 import EstadisticasNav from '../blocks/EstadisticasNav';
 import { ColorsType } from '../types/Colors';
 import NamePanelComponents from '../components/NamePanelComponents';
-
 export default function NavegadorEstadisticas() {
   //Colores de componentes
   const colors: ColorsType = {

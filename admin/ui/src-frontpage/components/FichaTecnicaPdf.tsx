@@ -7,10 +7,12 @@ import {
   Image,
 } from '@react-pdf/renderer';
 
-const logosinia = 'images/siniaLogo.png',
-  logoMinan = 'images/logo_minam_borde.jpg',
-  logoBicentenario = 'images/imagotipo BICENTENARIO_2024_HORIZONTAL.png',
-  logoPunche = 'images/Logotipo-2024.png';
+const logosinia =
+    window.AesaInfo.pluginUrl + '/public/assets/images/siniaLogo.png',
+  logoMinan =
+    window.AesaInfo.pluginUrl + '/public/assets/images/logo_minam_borde.jpg';
+console.log('================');
+console.log(logoMinan);
 
 const styles = StyleSheet.create({
   page: {
@@ -33,7 +35,7 @@ const styles = StyleSheet.create({
     height: '40px',
   },
   imgSinia: {
-    width: '110px',
+    width: '120px',
     height: '40px',
     paddingLeft: '12px',
   },

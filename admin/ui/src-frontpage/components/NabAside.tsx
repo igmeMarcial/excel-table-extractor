@@ -44,7 +44,7 @@ const MenuItem = ({ model, onExpandToggleClick }: MenuItemProps) => {
     location,
     QUERY_PARAM_ESTADISTICA_INDICE_PATH
   );
-  // console.log(model);
+  console.log(model);
   // console.log(paramValueNav);
   if (!model.estadisticaId) {
     return (
@@ -57,8 +57,10 @@ const MenuItem = ({ model, onExpandToggleClick }: MenuItemProps) => {
           onExpandToggleClick(model);
         }}
       >
-        <span className="absolute left-0 pl-3">{model.numeral}</span>
-        <span>{model.nombre}</span>
+        <span className="absolute left-0 pl-3 text-[13px]">
+          {model.numeral}
+        </span>
+        <span className="text-[13px]">{model.nombre}</span>
         <ExpandedArrow model={model} />
       </div>
     );
