@@ -5,30 +5,18 @@ import {
   TabList,
 } from '@fluentui/react-components';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { newPathUrl } from '../../src/utils/url-utils';
-import { selectMarcoOrdenadorSeleccionado } from '../app/AppSlice';
-import { useAppSelector } from '../app/hooks';
-import {
-  MARCO_ORDENADOR_DEFECTO,
-  QUERY_PARAM_MARCO_ORDENADOR,
-} from '../../src/core/constantes';
-import { useEffect } from 'react';
+import { getQueryParam, newPathUrl } from '../../src/utils/url-utils';
+import { QUERY_PARAM_MARCO_ORDENADOR } from '../../src/core/constantes';
 
 function SubNavbar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const activeItem = useAppSelector(selectMarcoOrdenadorSeleccionado);
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    if (!params.has(QUERY_PARAM_MARCO_ORDENADOR)) {
-      const loadPath = newPathUrl(
-        location,
-        QUERY_PARAM_MARCO_ORDENADOR,
-        MARCO_ORDENADOR_DEFECTO
-      );
-      navigate(loadPath);
-    }
-  }, []);
+  // Extraer el marco ordenador de la url
+  const activeItem = getQueryParam(
+    location,
+    QUERY_PARAM_MARCO_ORDENADOR,
+    'mdea'
+  );
 
   const onTabSelect = (event: SelectTabEvent, data: SelectTabData) => {
     const newPath = newPathUrl(

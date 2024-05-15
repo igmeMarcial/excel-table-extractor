@@ -1,13 +1,8 @@
-import { Select, Space } from 'antd';
+import { Select } from 'antd';
 import { useAppSelector } from '../app/hooks';
-import {
-  selectClasificadoresNivel1,
-  selectIndiceEstadisticas,
-} from '../app/AppSlice';
-import { useEffect, useState } from 'react';
+import { selectIndiceEstadisticas } from '../app/AppSlice';
+import { useState } from 'react';
 
-import { IndiceClasificadores } from '../../src/core/IndiceClasificadores';
-import { Clasificador } from '../../src/types/Clasificador';
 import { IndiceClasificadoresWeb } from '../app/core/IndiceClasificadorView';
 
 const FICHA_SELECT = {

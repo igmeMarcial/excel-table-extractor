@@ -57,10 +57,6 @@ export const appSlice = createSlice({
     setActiveTabName: (state, action: PayloadAction<string>) => {
       state.activeTabName = action.payload
     },
-    setMarcoOrdenadorSeleccionado: (state, action: PayloadAction<string>) => {
-      console.log('setMarcoOrdenadorSeleccionado__Call', action.payload)
-      state.marcoOrdenadorSeleccionado = action.payload
-    },
     setEstadisticaIndicePath: (state, action: PayloadAction<string>) => {
       const path = action.payload
       const pathParts = path.split('.')
@@ -127,7 +123,6 @@ export const appSlice = createSlice({
 export const {
   setActiveNetworkActivity,
   setEstadisticaId,
-  setMarcoOrdenadorSeleccionado,
   setActiveTabName,
   toggleMenuNivel2Item,
   setEstadisticaIndicePath,
