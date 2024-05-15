@@ -17,9 +17,9 @@ const styles = StyleSheet.create({
   page: {
     backgroundColor: '#ffffff',
     paddingTop: '30px',
-    paddingLeft: '40px',
-    paddingRight: '40px',
-    paddingBottom: '40px',
+    paddingLeft: '60px',
+    paddingRight: '60px',
+    paddingBottom: '60px',
   },
   header: {
     display: 'flex',

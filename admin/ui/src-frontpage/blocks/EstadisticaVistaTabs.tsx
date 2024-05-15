@@ -6,14 +6,19 @@ import {
   makeStyles,
 } from '@fluentui/react-components';
 import FichaTecnica from '../components/FichaTecnica';
-import TablaDatos from '../components/TablaDatos';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { newPathUrl } from '../../src/utils/url-utils';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { selectActiveTabName, setActiveTabName } from '../app/AppSlice';
+import {
+  selectActiveTabName,
+  selectEstadisticaMarcoOrdenador,
+  setActiveTabName,
+} from '../app/AppSlice';
 import { Estadistica } from '../types/Estadistica';
 import BlockGrafico from '../../src/public/components/BlockGrafico';
 import { BlockGraficoEstadisticaDatos } from '../../src/types/BlockGraficoEstadisticaDatos';
+import BlockTabla from '../../src/public/components/BlockTabla';
+import { BlockFichaTecnica } from '../../src/public/components/BlockFichaTecnica';
 
 const items = [
   { text: 'Gráfico', value: 'grafico' },
@@ -39,8 +44,9 @@ interface EstadisticaVistaTabsProps {
 const EstadisticaVistaTabs = ({ estadistica }: EstadisticaVistaTabsProps) => {
   const classes = useStyles();
   const selectedValue = useAppSelector(selectActiveTabName);
+  const marcoOrdenador =
+    useAppSelector(selectEstadisticaMarcoOrdenador) || null;
   const distpath = useAppDispatch();
-
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -49,6 +55,7 @@ const EstadisticaVistaTabs = ({ estadistica }: EstadisticaVistaTabsProps) => {
     const newPath = newPathUrl(location, 'tab', String(data.value));
     navigate(newPath);
   };
+  const numeralNivel1 = +marcoOrdenador?.numeral.split('.')[0];
   return (
     <div className="pl-6 pr-6 max-w-[80ch]">
       <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
@@ -72,8 +79,16 @@ const EstadisticaVistaTabs = ({ estadistica }: EstadisticaVistaTabsProps) => {
             grafico={estadistica.graficos[0]}
           />
         )}
-        {selectedValue === 'datos' && <TablaDatos />}
-        {selectedValue === 'ficha' && <FichaTecnica />}
+        {selectedValue === 'datos' && (
+          <BlockTabla
+            estadistica={estadistica}
+            contextoVisual={marcoOrdenador.codigo}
+            numeralNivel1={numeralNivel1}
+          />
+        )}
+        {selectedValue === 'ficha' && (
+          <BlockFichaTecnica estadistica={estadistica} />
+        )}
       </div>
     </div>
   );

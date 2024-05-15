@@ -1,4 +1,6 @@
+import { useRef } from 'react';
 import DataTable from '../../components/DataTable';
+import { Button } from '@fluentui/react-components';
 import { BlockTablaEstadisticaDatos } from '../../types/BlockTablaEstadisticaDatos';
 import { CodigoMarcoOrdenador } from '../../types/CodigoMarcoOrdenador';
 import { getContextoVisualColor } from '../../utils/color-utils';
@@ -6,6 +8,8 @@ import {
   determinarTituloTablaDatosDefecto,
   removerTextoEntreParentesisDelFinal,
 } from '../../utils/estadistica-utils';
+import { downloadCsv, downloadXlsx } from '../../utils/file-utils';
+import { CsvIcon, XlsxIcon } from '../../../src-frontpage/components/Icons';
 
 interface BlockTablaProps {
   contextoVisual: CodigoMarcoOrdenador;
@@ -54,6 +58,7 @@ function BlockTabla({
 }: Readonly<BlockTablaProps>) {
   const color = getContextoVisualColor(contextoVisual, numeralNivel1);
   const format = { ...estadistica.presentacionTablaFormato, color };
+  const downloadAreaContainer = useRef(null);
   const titulo =
     removerTextoEntreParentesisDelFinal(estadistica.presentacionTablaTitulo) ||
     determinarTituloTablaDatosDefecto(
@@ -65,30 +70,47 @@ function BlockTabla({
   );
   return (
     <>
-      <div
-        style={{
-          fontSize: TITULO_FONT_SIZE,
-          marginBottom: '12px',
-          lineHeight: 1,
-        }}
-      >
+      <div ref={downloadAreaContainer} style={{ fontFamily: 'sans-serif' }}>
         <div
           style={{
-            fontWeight: 'bold',
-            marginTop: '4px',
-            marginBottom: '4px',
+            fontSize: TITULO_FONT_SIZE,
+            marginBottom: '12px',
+            lineHeight: 1,
           }}
         >
-          {titulo}
+          <div
+            style={{
+              fontWeight: 'bold',
+              marginTop: '4px',
+              marginBottom: '4px',
+            }}
+          >
+            {titulo}
+          </div>
+          {subtitulo && <div>({subtitulo})</div>}
         </div>
-        {subtitulo && <div>({subtitulo})</div>}
+        <DataTable data={estadistica.datos} format={format} />
+        <div style={{ fontSize: FOOTER_FONT_SIZE, marginTop: '8px' }}>
+          {renderNota(estadistica.presentacionTablaNota)}
+          {renderFuente(estadistica.presentacionTablaFuente)}
+          {renderElaboracion(estadistica.presentacionTablaElaboracion)}
+        </div>
       </div>
-      <DataTable data={estadistica.datos} format={format} />
-      <div style={{ fontSize: FOOTER_FONT_SIZE, marginTop: '8px' }}>
-        {renderNota(estadistica.presentacionTablaNota)}
-        {renderFuente(estadistica.presentacionTablaFuente)}
-        {renderElaboracion(estadistica.presentacionTablaElaboracion)}
-      </div>
+      {estadistica.datos && estadistica.datos.length > 0 && (
+        <div className="flex gap-4 mt-4">
+          <Button
+            onClick={() =>
+              downloadXlsx(downloadAreaContainer.current, 'descarga.xlsx')
+            }
+            icon={<XlsxIcon />}
+          >
+            Descargar XLSX
+          </Button>
+          <Button onClick={() => downloadCsv(estadistica)} icon={<CsvIcon />}>
+            Descargar CSV
+          </Button>
+        </div>
+      )}
     </>
   );
 }

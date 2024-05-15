@@ -44,7 +44,7 @@ const MenuItem = ({ model, onExpandToggleClick }: MenuItemProps) => {
     location,
     QUERY_PARAM_ESTADISTICA_INDICE_PATH
   );
-  console.log(model);
+  // console.log(model);
   // console.log(paramValueNav);
   if (!model.estadisticaId) {
     return (

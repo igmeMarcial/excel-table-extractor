@@ -6,12 +6,12 @@ import { PdfIcon } from './Icons';
 import { apiMap } from './FichaTecnicaMap';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { FichaTecnicaPdf } from './FichaTecnicaPdf';
-const logosinia =
-  window.AesaInfo.pluginUrl + '/public/assets/images/siniaLogo.png';
+
 function FichaTecnica() {
   const [dataIndicator, setDataIndicator] = useState([]);
   const [loadingPdf, setLoadingPdf] = useState(false);
   const data = useAppSelector(selectEstadisticaData);
+
   useEffect(() => {
     if (data && typeof data === 'object') {
       convertObjectToArr();
