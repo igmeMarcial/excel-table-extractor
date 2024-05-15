@@ -1,16 +1,16 @@
 import DataTable from '../../components/DataTable';
+import { BlockTablaEstadisticaDatos } from '../../types/BlockTablaEstadisticaDatos';
 import { CodigoMarcoOrdenador } from '../../types/CodigoMarcoOrdenador';
-import { Estadistica } from '../../types/Estadistica';
 import { getContextoVisualColor } from '../../utils/color-utils';
 import {
   determinarTituloTablaDatosDefecto,
   removerTextoEntreParentesisDelFinal,
 } from '../../utils/estadistica-utils';
 
-interface BlockTablaDatosProps {
+interface BlockTablaProps {
   contextoVisual: CodigoMarcoOrdenador;
   numeralNivel1: number;
-  estadistica: Estadistica;
+  estadistica: BlockTablaEstadisticaDatos;
 }
 // Tokens
 const TITULO_FONT_SIZE = '12px';
@@ -47,11 +47,11 @@ const renderFuente = (text: string) => {
   return renderFootField('Fuente', text);
 };
 
-function BlockTablaDatos({
+function BlockTabla({
   estadistica,
   contextoVisual,
   numeralNivel1,
-}: Readonly<BlockTablaDatosProps>) {
+}: Readonly<BlockTablaProps>) {
   const color = getContextoVisualColor(contextoVisual, numeralNivel1);
   const format = { ...estadistica.presentacionTablaFormato, color };
   const titulo =
@@ -93,4 +93,4 @@ function BlockTablaDatos({
   );
 }
 
-export default BlockTablaDatos;
+export default BlockTabla;

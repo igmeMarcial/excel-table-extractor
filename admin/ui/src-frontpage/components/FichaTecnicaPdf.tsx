@@ -6,13 +6,12 @@ import {
   StyleSheet,
   Image,
 } from '@react-pdf/renderer';
+import { TITULO_ANUARIO } from '../../src/config/constantes';
 
 const logosinia =
     window.AesaInfo.pluginUrl + '/public/assets/images/siniaLogo.png',
-  logoMinan =
+  logoMinam =
     window.AesaInfo.pluginUrl + '/public/assets/images/logo_minam_borde.jpg';
-console.log('================');
-console.log(logoMinan);
 
 const styles = StyleSheet.create({
   page: {
@@ -30,7 +29,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  imgMinan: {
+  imgMinam: {
     width: '187px',
     height: '40px',
   },
@@ -68,13 +67,11 @@ export const FichaTecnicaPdf = ({ data }) => {
     <Document>
       <Page style={styles.page} size="A4" orientation="portrait">
         <View style={styles.header}>
-          <Image style={styles.imgMinan} src={logoMinan} />
+          <Image style={styles.imgMinam} src={logoMinam} />
           <Image style={styles.imgSinia} src={logosinia} />
         </View>
         <View style={{ marginBottom: '15px' }}>
-          <Text style={styles.title}>
-            Anuario Estadístico del Sector Ambiente 2023 - MINAN.
-          </Text>
+          <Text style={styles.title}>{TITULO_ANUARIO}</Text>
         </View>
         <View style={{ marginBottom: '15px' }}>
           <Text style={styles.subTitle}>

@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction, isAnyOf } from '@reduxjs/toolkit'
 import { getEstadistica, getIndice } from './services/estadistica'
 import type { RootState } from './store'
-import { Estadistica } from '../../src/types/Estadistica'
 import { IndiceItem } from '../types/IndiceItem'
 import { EstadisticaMarcoOrdenador } from '../../src/types/EstadisticaMarcoOrdenador'
+import { Estadistica } from '../types/Estadistica'
 
 interface AppState {
   activeNetworkActivity: boolean
@@ -23,7 +23,7 @@ const initialState: AppState = {
   estadisticaId: 1,
   activeTabName: 'grafico',
   marcoOrdenadorSeleccionado: 'mdea',
-  estadisticaModel: {},
+  estadisticaModel: null,
   indiceEstadisticas: [],
   estadisticaIndicePath: '1.1.1.1',
   clasificadorNivel1: '1',

@@ -2,7 +2,8 @@ import BlockEditorHeader from '../../../../components/BlockEditorHeader';
 import TableOptionsEditor from '../../../../components/table/TableOptionsEditor';
 import { selectEstadisticaValues } from '../../EstadisticaFormSlice';
 import { useAppSelector } from '../../../../app/hooks';
-import BlockTablaDatos from '../../../../public/components/BlockTablaDatos';
+import BlockTabla from '../../../../public/components/BlockTabla';
+import { BlockTablaEstadisticaDatos } from '../../../../types/BlockTablaEstadisticaDatos';
 
 const SeccionTabla = () => {
   const estadistica = useAppSelector(selectEstadisticaValues);
@@ -13,8 +14,8 @@ const SeccionTabla = () => {
         <div className="flex-1 overflow-hidden bg-gray-50">
           <div className="m-2 border border-solid border-gray-300 bg-white">
             <div>
-              <BlockTablaDatos
-                estadistica={estadistica}
+              <BlockTabla
+                estadistica={estadistica as BlockTablaEstadisticaDatos}
                 contextoVisual="mdea"
                 numeralNivel1={1}
               />

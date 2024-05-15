@@ -6,12 +6,14 @@ import {
   makeStyles,
 } from '@fluentui/react-components';
 import FichaTecnica from '../components/FichaTecnica';
-import Grafico from '../components/Grafico';
 import TablaDatos from '../components/TablaDatos';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { newPathUrl } from '../../src/utils/url-utils';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectActiveTabName, setActiveTabName } from '../app/AppSlice';
+import { Estadistica } from '../types/Estadistica';
+import BlockGrafico from '../../src/public/components/BlockGrafico';
+import { BlockGraficoEstadisticaDatos } from '../../src/types/BlockGraficoEstadisticaDatos';
 
 const items = [
   { text: 'Gráfico', value: 'grafico' },
@@ -31,7 +33,10 @@ const useStyles = makeStyles({
   },
 });
 
-const EstadisticaVistaTabs = () => {
+interface EstadisticaVistaTabsProps {
+  estadistica: Estadistica;
+}
+const EstadisticaVistaTabs = ({ estadistica }: EstadisticaVistaTabsProps) => {
   const classes = useStyles();
   const selectedValue = useAppSelector(selectActiveTabName);
   const distpath = useAppDispatch();
@@ -61,7 +66,12 @@ const EstadisticaVistaTabs = () => {
         })}
       </TabList>
       <div className="my-4">
-        {selectedValue === 'grafico' && <Grafico />}
+        {selectedValue === 'grafico' && (
+          <BlockGrafico
+            estadistica={estadistica as BlockGraficoEstadisticaDatos}
+            grafico={estadistica.graficos[0]}
+          />
+        )}
         {selectedValue === 'datos' && <TablaDatos />}
         {selectedValue === 'ficha' && <FichaTecnica />}
       </div>

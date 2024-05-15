@@ -1,5 +1,5 @@
 import Chart from '../../components/chart/Chart';
-import { Estadistica } from '../../types/Estadistica';
+import { BlockGraficoEstadisticaDatos } from '../../types/BlockGraficoEstadisticaDatos';
 import { Grafico } from '../../types/Grafico';
 import {
   determinarSubtituloParaGrafico,
@@ -9,7 +9,7 @@ import {
 import { deepAssign } from '../../utils/object-utils';
 
 interface BlockGraficoProps {
-  estadistica: Estadistica;
+  estadistica: BlockGraficoEstadisticaDatos;
   grafico: Grafico;
 }
 

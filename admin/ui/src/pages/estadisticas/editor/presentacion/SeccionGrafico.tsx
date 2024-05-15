@@ -5,6 +5,7 @@ import { Grafico } from '../../../../types/Grafico';
 import BlockGrafico from '../../../../public/components/BlockGrafico';
 import { useAppSelector } from '../../../../app/hooks';
 import { selectEstadisticaValues } from '../../EstadisticaFormSlice';
+import { BlockGraficoEstadisticaDatos } from '../../../../types/BlockGraficoEstadisticaDatos';
 interface SeccionGraficoProps {
   graficoId: number;
   options: Grafico;
@@ -19,7 +20,7 @@ const SeccionGrafico = ({ graficoId, options }: SeccionGraficoProps) => {
           <div className="m-2 border border-solid border-gray-300 bg-white">
             <div>
               <BlockGrafico
-                estadistica={estadistica}
+                estadistica={estadistica as BlockGraficoEstadisticaDatos}
                 grafico={options}
               ></BlockGrafico>
             </div>

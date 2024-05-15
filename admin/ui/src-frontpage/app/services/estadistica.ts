@@ -1,9 +1,10 @@
 import { api } from './api'
 import { ApiResponse } from '../../../src/types/ApiResponse'
+import { Estadistica } from '../../types/Estadistica'
 
 export const estadisticaApi = api.injectEndpoints({
   endpoints: (build) => ({
-    getEstadistica: build.query<any, number>({
+    getEstadistica: build.query<Estadistica, number>({
       query: (id) => `estadisticas/${id}`,
       providesTags: (_result, _err, id) => [{ type: 'Estadistica', id }],
       transformResponse: (response: ApiResponse) => response.data,

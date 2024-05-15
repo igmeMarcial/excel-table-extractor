@@ -6,7 +6,8 @@ import {
   selectEstadisticaMarcoOrdenador,
 } from '../app/AppSlice';
 import { useRef } from 'react';
-import BlockTablaDatos from '../../src/public/components/BlockTablaDatos';
+import BlockTabla from '../../src/public/components/BlockTabla';
+import { BlockTablaEstadisticaDatos } from '../../src/types/BlockTablaEstadisticaDatos';
 
 const TablaDatos = () => {
   const estadistica = useAppSelector(selectEstadisticaData) || null;
@@ -60,8 +61,8 @@ const TablaDatos = () => {
   return (
     <>
       <div ref={downloadAreaContainer} style={{ fontFamily: 'sans-serif' }}>
-        <BlockTablaDatos
-          estadistica={estadistica}
+        <BlockTabla
+          estadistica={estadistica as BlockTablaEstadisticaDatos}
           contextoVisual={marcoOrdenador.codigo}
           numeralNivel1={numeralNivel1}
         />
