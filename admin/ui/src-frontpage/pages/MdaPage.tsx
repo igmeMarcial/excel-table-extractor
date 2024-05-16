@@ -1,12 +1,12 @@
 import NabAside from '../components/NabAside';
 import EstadisticaVistaTabs from '../blocks/EstadisticaVistaTabs';
-import EstadisticasNav from '../blocks/EstadisticasNav';
 import { ColorsType } from '../types/Colors';
 import NamePanelComponents from '../components/NamePanelComponents';
 import { useGetEstadisticaQuery } from '../app/services/estadistica';
 import { getQueryParam } from '../../src/utils/url-utils';
 import { useLocation } from 'react-router-dom';
 import { QUERY_PARAM_ESTADISTICA_ID } from '../../src/core/constantes';
+import MarcoOrdenadorNav from '../components/MarcoOrdenadorNav';
 export default function MdaPage() {
   const location = useLocation();
   // Extraer el id de la estadistica de la url
@@ -25,7 +25,7 @@ export default function MdaPage() {
   if (isLoading) return <div>Cargando...</div>;
   return (
     <>
-      <EstadisticasNav />
+      <MarcoOrdenadorNav />
       <NamePanelComponents colors={colors} />
       <div className="flex sm:flex-col-reverse md:flex-row">
         <div style={{ width: '300px' }} className="bg-gray-100">

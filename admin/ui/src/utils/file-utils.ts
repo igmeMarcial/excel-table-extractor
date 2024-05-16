@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx';
 import { BlockTablaEstadisticaDatos } from '../types/BlockTablaEstadisticaDatos';
-import { apiMap } from '../../src-frontpage/components/FichaTecnicaMap';
+import { apiMap } from './FichaTecnicaMap';
 import { FichaTecnicaFields } from '../types/Estadistica';
 
 export const readExcelFile = (file: File): Promise<XLSX.WorkBook> => {

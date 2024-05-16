@@ -9,7 +9,7 @@ import {
   removerTextoEntreParentesisDelFinal,
 } from '../../utils/estadistica-utils';
 import { downloadCsv, downloadXlsx } from '../../utils/file-utils';
-import { CsvIcon, XlsxIcon } from '../../../src-frontpage/components/Icons';
+import { CsvIcon, XlsxIcon } from '../../utils/Icons';
 
 interface BlockTablaProps {
   contextoVisual: CodigoMarcoOrdenador;

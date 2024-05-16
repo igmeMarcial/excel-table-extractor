@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { getQueryParam, newPathUrl } from '../../src/utils/url-utils';
 import { QUERY_PARAM_MARCO_ORDENADOR } from '../../src/core/constantes';
 
-function SubNavbar() {
+function MarcoOrdenadorNav() {
   const navigate = useNavigate();
   const location = useLocation();
   // Extraer el marco ordenador de la url
@@ -50,4 +50,4 @@ function SubNavbar() {
   );
 }
 
-export default SubNavbar;
+export default MarcoOrdenadorNav;

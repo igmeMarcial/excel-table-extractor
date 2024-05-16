@@ -4,7 +4,7 @@ import { fichaTecnicaFormatted } from '../../utils/file-utils';
 import { BlockTablaEstadisticaDatos } from '../../types/BlockTablaEstadisticaDatos';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { FichaTecnicaPdf } from '../../../src-frontpage/components/FichaTecnicaPdf';
-import { PdfIcon } from '../../../src-frontpage/components/Icons';
+import { PdfIcon } from '../../utils/Icons';
 interface BlockFichaTecnicaProps {
   estadistica: BlockTablaEstadisticaDatos;
 }

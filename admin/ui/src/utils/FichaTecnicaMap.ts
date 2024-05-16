@@ -1,4 +1,4 @@
-import { Estadistica } from "../../src/types/Estadistica";
+import { Estadistica } from "../types/Estadistica";
 
 export const apiMap: {
   [K in keyof Estadistica]?: any;
