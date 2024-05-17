@@ -22,6 +22,10 @@ export default function EstadisticaPageLoader({
     console.log(error);
     return <div>Error</div>;
   }
+  if (!estadistica) {
+    // Manejar el error 404 cuando la estadística no es encontrada
+    return <div>error pagina no 404</div>;
+  }
   // TODO: Add error handling
   return <View estadistica={estadistica}></View>;
 }

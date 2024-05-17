@@ -20,10 +20,10 @@ const pathRoot = window.AesaInfo.pluginUrl;
 const imgPath = {
   1: pathRoot + '/public/assets/images/mdea/C01.svg',
   2: pathRoot + '/public/assets/images/mdea/C02.svg',
-  3: pathRoot + '/public/assets/images/mdea/C05.svg',
+  3: pathRoot + '/public/assets/images/mdea/C03.svg',
   4: pathRoot + '/public/assets/images/mdea/C04.svg',
-  5: pathRoot + '/public/assets/images/mdea/C06.svg',
-  6: pathRoot + '/public/assets/images/mdea/C03.svg',
+  5: pathRoot + '/public/assets/images/mdea/C05.svg',
+  6: pathRoot + '/public/assets/images/mdea/C06.svg',
 };
 
 const PanelItem: React.FC<PanelItemProps> = ({
