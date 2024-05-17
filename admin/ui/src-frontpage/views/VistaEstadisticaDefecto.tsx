@@ -1,8 +1,8 @@
 import NabAside from '../components/NabAside';
 import EstadisticaVistaTabs from '../blocks/EstadisticaVistaTabs';
-import NamePanelComponents from '../components/NamePanelComponents';
 import MarcoOrdenadorNav from '../components/MarcoOrdenadorNav';
 import { Estadistica } from '../types/Estadistica';
+import PrimaryNavMdea from '../components/PrimaryNavMdea';
 interface VistaEstadisticaDefectoProps {
   estadistica: Estadistica;
 }
@@ -12,7 +12,7 @@ export default function VistaEstadisticaDefecto({
   return (
     <>
       <MarcoOrdenadorNav />
-      <NamePanelComponents />
+      <PrimaryNavMdea />
       <div className="flex sm:flex-col-reverse md:flex-row">
         <div style={{ width: '300px' }} className="bg-gray-100">
           <NabAside />

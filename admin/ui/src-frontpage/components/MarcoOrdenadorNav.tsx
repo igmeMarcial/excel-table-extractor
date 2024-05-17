@@ -24,6 +24,7 @@ function MarcoOrdenadorNav() {
       QUERY_PARAM_MARCO_ORDENADOR,
       String(data.value)
     );
+    console.log(newPath);
     navigate(newPath);
   };
   const items = [

@@ -10,6 +10,7 @@ import { useGetIndiceQuery } from './app/services/estadistica';
 import NavegadorEstadisticasAlt2 from './secctions/NavegadorEstadisticasAlt2';
 import MdaPage from './pages/MdaPage';
 import OdsPage from './pages/OdsPage';
+import OcdePage from './pages/OcdePage';
 
 function App() {
   const dispath = useAppDispatch();
@@ -22,9 +23,12 @@ function App() {
   // Load indice
   useGetIndiceQuery(1);
   return (
-    <ParamRoutes param="view">
+    <ParamRoutes param="marcoOrdenador">
       <ParamRoute default element={<MdaPage />} />
+      <ParamRoute value="mdea" element={<MdaPage />} />
       <ParamRoute value="ods" element={<OdsPage />} />
+      <ParamRoute value="ocde" element={<OcdePage />} />
+      <ParamRoute value="pna" element={<MdaPage />} />
       <ParamRoute value="vista2" element={<NavegadorEstadisticasAlt2 />} />
     </ParamRoutes>
   );

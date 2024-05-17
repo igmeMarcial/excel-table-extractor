@@ -2,11 +2,12 @@ import React, { useMemo } from 'react';
 import { IndiceItem } from '../types/IndiceItem';
 import { Link, useLocation } from 'react-router-dom';
 import { ColorsType } from '../types/Colors';
-import { newPathUrl } from '../../src/utils/url-utils';
+import { getQueryParam, newPathUrl } from '../../src/utils/url-utils';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { selectComponenteIndicePath, setColorComponent } from '../app/AppSlice';
+import { selectClasificadoresNivel1, setColorComponent } from '../app/AppSlice';
 import chroma from 'chroma-js';
 import { COLORES_MDEA } from '../../src/config/colors';
+import { QUERY_PARAM_ESTADISTICA_INDICE_PATH } from '../../src/core/constantes';
 interface PanelItemProps {
   item: IndiceItem;
   colors: ColorsType;
@@ -52,9 +53,16 @@ const PanelItem: React.FC<PanelItemProps> = ({
   );
 };
 
-function PrimaryNavMdea({ items }) {
+function PrimaryNavMdea() {
   const colors = COLORES_MDEA;
-  const numItemActivo = useAppSelector(selectComponenteIndicePath);
+  const clasificadoresN1 = useAppSelector(selectClasificadoresNivel1);
+  const location = useLocation();
+  const activeItem = getQueryParam(
+    location,
+    QUERY_PARAM_ESTADISTICA_INDICE_PATH,
+    '1.1.1.1'
+  );
+  const numItemActivo = activeItem.split('.')[0];
   const distpath = useAppDispatch();
   const handleClick = (color: string) => {
     distpath(setColorComponent(color));
@@ -88,7 +96,7 @@ function PrimaryNavMdea({ items }) {
   }, [numItemActivo, colors]);
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-5 mb-5">
-      {items.map((item: IndiceItem, index) => (
+      {clasificadoresN1.map((item: IndiceItem, index) => (
         <PanelItem
           key={item.numeral}
           item={item}
