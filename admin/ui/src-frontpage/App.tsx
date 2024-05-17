@@ -9,6 +9,7 @@ import { QUERY_PARAM_ESTADISTICA_INDICE_PATH } from '../src/core/constantes';
 import { useGetIndiceQuery } from './app/services/estadistica';
 import NavegadorEstadisticasAlt2 from './secctions/NavegadorEstadisticasAlt2';
 import MdaPage from './pages/MdaPage';
+import OdsPage from './pages/OdsPage';
 
 function App() {
   const dispath = useAppDispatch();
@@ -23,6 +24,7 @@ function App() {
   return (
     <ParamRoutes param="view">
       <ParamRoute default element={<MdaPage />} />
+      <ParamRoute value="ods" element={<OdsPage />} />
       <ParamRoute value="vista2" element={<NavegadorEstadisticasAlt2 />} />
     </ParamRoutes>
   );

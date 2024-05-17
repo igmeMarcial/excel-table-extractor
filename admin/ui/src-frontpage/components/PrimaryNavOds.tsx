@@ -1,4 +1,5 @@
 import React from 'react';
+import { OBJETIVOS_ODS } from '../../src/config/colors';
 
 const Item = ({ item }) => {
   return (
@@ -30,7 +31,8 @@ const Item = ({ item }) => {
   );
 };
 
-function PrimaryNavOds({ items }) {
+function PrimaryNavOds() {
+  const items = OBJETIVOS_ODS;
   const mitad1 = items.slice(0, Math.ceil(items.length / 2));
   const mitad2 = items.slice(Math.ceil(items.length / 2));
   return (

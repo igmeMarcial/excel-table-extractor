@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { ColorsType } from '../types/Colors';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../app/hooks';
 
@@ -24,11 +23,9 @@ import {
   OBJETIVOS_ODS,
 } from '../../src/config/colors';
 
-interface NamePanelProps {
-  colors: ColorsType; // Tipo definido para los colores
-}
+interface NamePanelProps {}
 
-const NamePanelComponents: React.FC<NamePanelProps> = ({ colors }) => {
+const NamePanelComponents: React.FC<NamePanelProps> = () => {
   const clasificadoresN1 = useAppSelector(selectClasificadoresNivel1);
   const activeItem = useAppSelector(selectMarcoOrdenadorSeleccionado);
 
@@ -51,10 +48,8 @@ const NamePanelComponents: React.FC<NamePanelProps> = ({ colors }) => {
 
   return (
     <>
-      {activeItem === 'mdea' && (
-        <PrimaryNavMdea items={clasificadoresN1} colors={colors} />
-      )}
-      {activeItem === 'ods' && <PrimaryNavOds items={OBJETIVOS_ODS} />}
+      {activeItem === 'mdea' && <PrimaryNavMdea items={clasificadoresN1} />}
+      {activeItem === 'ods' && <PrimaryNavOds />}
       {activeItem === 'ocde' && <PrimaryNavOcde items={OBJETIVOS_OCDE} />}
       {activeItem === 'pna' && <PrimaryNavPna items={LINIAMIENTOS_POLITICA} />}
     </>

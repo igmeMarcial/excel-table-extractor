@@ -5,7 +5,7 @@ const baseQuery = fetchBaseQuery({
   baseUrl: window.AesaInfo.apiUrl,
 })
 
-const baseQueryWithRetry = retry(baseQuery, { maxRetries: 3 })
+const baseQueryWithRetry = retry(baseQuery, { maxRetries: 0 })
 
 /**
  * Create a base API to inject endpoints into elsewhere.

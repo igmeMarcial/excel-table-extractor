@@ -6,6 +6,7 @@ import { newPathUrl } from '../../src/utils/url-utils';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectComponenteIndicePath, setColorComponent } from '../app/AppSlice';
 import chroma from 'chroma-js';
+import { COLORES_MDEA } from '../../src/config/colors';
 interface PanelItemProps {
   item: IndiceItem;
   colors: ColorsType;
@@ -51,7 +52,8 @@ const PanelItem: React.FC<PanelItemProps> = ({
   );
 };
 
-function PrimaryNavMdea({ items, colors }) {
+function PrimaryNavMdea({ items }) {
+  const colors = COLORES_MDEA;
   const numItemActivo = useAppSelector(selectComponenteIndicePath);
   const distpath = useAppDispatch();
   const handleClick = (color: string) => {

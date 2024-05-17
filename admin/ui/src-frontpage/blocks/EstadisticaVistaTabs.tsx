@@ -5,7 +5,6 @@ import {
   SelectTabData,
   makeStyles,
 } from '@fluentui/react-components';
-import FichaTecnica from '../components/FichaTecnica';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { newPathUrl } from '../../src/utils/url-utils';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
