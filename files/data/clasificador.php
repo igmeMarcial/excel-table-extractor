@@ -55,7 +55,7 @@ return [
     ['marco_ordenador_id' => 1, 'numeral' => '5.2',   'nombre' => 'Asuntos Socioambientales'],
     ['marco_ordenador_id' => 1, 'numeral' => '5.2.1', 'nombre' => 'Asuntos Socioambientales'],
 
-    ['marco_ordenador_id' => 1, 'numeral' => '6',     'nombre' => 'Protección, Gestión y Participación Ambiental'],
+    ['marco_ordenador_id' => 1, 'numeral' => '6',     'nombre' => 'Protección, Gestión y Conciencia Ambiental'],
 
     ['marco_ordenador_id' => 1, 'numeral' => '6.1',   'nombre' => 'Protección y Gastos Ambientales'],
     ['marco_ordenador_id' => 1, 'numeral' => '6.1.1', 'nombre' => 'Gastos de Protección Ambiental'],

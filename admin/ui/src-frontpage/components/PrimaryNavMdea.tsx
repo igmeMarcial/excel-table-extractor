@@ -40,7 +40,7 @@ const PanelItem: React.FC<PanelItemProps> = ({
         <img className="w-[52px]" src={`${imgBasePath}/C0${index}.svg`} />
       </div>
       <h4 className="content-center h-2/3 font-normal text-white text-xm md:text-sm leading-3 sm:leading-5 md:leading-4 p-0 m-0">
-        {item.nombre}
+        {index} {item.nombre}
       </h4>
     </Link>
   );
