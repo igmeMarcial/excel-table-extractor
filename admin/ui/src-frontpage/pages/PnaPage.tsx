@@ -1,7 +1,7 @@
-import VistaEstadisticaOds from '../views/VistaEstadisticaOds';
+import VistaEstadisticaPna from '../views/VistaEstadisticaPna';
 import EstadisticaPageLoader from './EstadisticaPageLoader';
 export default function PnaPage() {
   return (
-    <EstadisticaPageLoader view={VistaEstadisticaOds}></EstadisticaPageLoader>
+    <EstadisticaPageLoader view={VistaEstadisticaPna}></EstadisticaPageLoader>
   );
 }

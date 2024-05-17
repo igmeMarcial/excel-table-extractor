@@ -24,7 +24,7 @@ export const BlockFichaTecnica: React.FC<BlockFichaTecnicaProps> = ({
 }) => {
   const dataFormatted = fichaTecnicaFormatted(estadistica);
   return (
-    <div className="overflow-auto">
+    <div className="overflow-auto max-w-[80ch]">
       <div id="downloadArea">
         <div className="relative my-1">
           {dataFormatted.map((item, rowIndex) => (

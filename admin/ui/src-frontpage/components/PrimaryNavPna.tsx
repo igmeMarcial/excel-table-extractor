@@ -1,6 +1,8 @@
 import React from 'react';
+import { LINIAMIENTOS_POLITICA } from '../../src/config/colors';
 
-function PrimaryNavPna({ items }) {
+function PrimaryNavPna() {
+  const items = LINIAMIENTOS_POLITICA;
   return (
     <div className="flex justify-between flex-wrap mt-5 mb-5">
       {items.map((item, index) => (

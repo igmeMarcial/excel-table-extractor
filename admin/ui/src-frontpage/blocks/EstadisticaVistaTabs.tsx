@@ -56,7 +56,7 @@ const EstadisticaVistaTabs = ({ estadistica }: EstadisticaVistaTabsProps) => {
   };
   const numeralNivel1 = +marcoOrdenador?.numeral.split('.')[0];
   return (
-    <div className="pl-6 pr-6 max-w-[80ch]">
+    <div className="pl-6 pr-6">
       <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
         {items.map((item, index) => {
           return (

@@ -1,16 +1,16 @@
 import { Estadistica } from '../types/Estadistica';
-import PrimaryNavOds from '../components/PrimaryNavOds';
 import MarcoOrdenadorNav from '../components/MarcoOrdenadorNav';
-interface VistaEstadisticaOdsProps {
+import PrimaryNavOcde from '../components/PrimaryNavOcde';
+interface VistaEstadisticaOcdeProps {
   estadistica: Estadistica;
 }
-export default function VistaEstadisticaOds({
+export default function VistaEstadisticaOcde({
   estadistica,
-}: Readonly<VistaEstadisticaOdsProps>) {
+}: Readonly<VistaEstadisticaOcdeProps>) {
   return (
     <>
       <MarcoOrdenadorNav />
-      <PrimaryNavOds />
+      <PrimaryNavOcde />
     </>
   );
 }

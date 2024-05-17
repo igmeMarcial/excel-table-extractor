@@ -1,6 +1,7 @@
-import React from 'react';
+import { OBJETIVOS_OCDE } from '../../src/config/colors';
 
-function PrimaryNavOcde({ items }) {
+function PrimaryNavOcde() {
+  const items = OBJETIVOS_OCDE;
   const mitad1 = items.slice(0, Math.ceil(items.length / 2));
   const mitad2 = items.slice(Math.ceil(items.length / 2));
   return (

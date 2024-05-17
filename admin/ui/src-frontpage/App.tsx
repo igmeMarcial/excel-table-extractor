@@ -11,6 +11,7 @@ import NavegadorEstadisticasAlt2 from './secctions/NavegadorEstadisticasAlt2';
 import MdaPage from './pages/MdaPage';
 import OdsPage from './pages/OdsPage';
 import OcdePage from './pages/OcdePage';
+import PnaPage from './pages/PnaPage';
 
 function App() {
   const dispath = useAppDispatch();
@@ -28,7 +29,7 @@ function App() {
       <ParamRoute value="mdea" element={<MdaPage />} />
       <ParamRoute value="ods" element={<OdsPage />} />
       <ParamRoute value="ocde" element={<OcdePage />} />
-      <ParamRoute value="pna" element={<MdaPage />} />
+      <ParamRoute value="pna" element={<PnaPage />} />
       <ParamRoute value="vista2" element={<NavegadorEstadisticasAlt2 />} />
     </ParamRoutes>
   );
