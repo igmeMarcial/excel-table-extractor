@@ -10,7 +10,11 @@ export default function EstadisticaPageLoader({
 }: Readonly<EstadisticaPageLoaderProps>) {
   const location = useLocation();
   // Extraer el id de la estadistica de la url
-  const urlEstadisticaId = +getQueryParam(location, QUERY_PARAM_ESTADISTICA_ID);
+  const urlEstadisticaId = +getQueryParam(
+    location,
+    QUERY_PARAM_ESTADISTICA_ID,
+    '1'
+  );
   const {
     data: estadistica,
     isLoading,
