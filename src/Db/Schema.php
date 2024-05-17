@@ -95,7 +95,7 @@ CREATE TABLE {$tablePrefix}estadistica (
   nombre                    VARCHAR(1000) NOT NULL,
   finalidad                      VARCHAR(1000),
   descripcion                    TEXT,
-  unidad_medida                  VARCHAR(50),
+  unidad_medida                  VARCHAR(255),
   formula_calculo                TEXT,
   metodologia_calculo            TEXT,
   fuente                         VARCHAR(1000),

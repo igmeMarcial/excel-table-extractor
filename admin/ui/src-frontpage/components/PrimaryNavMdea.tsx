@@ -17,14 +17,7 @@ interface PanelItemProps {
 }
 
 const pathRoot = window.AesaInfo.pluginUrl;
-const imgPath = {
-  1: pathRoot + '/public/assets/images/mdea/C01.svg',
-  2: pathRoot + '/public/assets/images/mdea/C02.svg',
-  3: pathRoot + '/public/assets/images/mdea/C03.svg',
-  4: pathRoot + '/public/assets/images/mdea/C04.svg',
-  5: pathRoot + '/public/assets/images/mdea/C05.svg',
-  6: pathRoot + '/public/assets/images/mdea/C06.svg',
-};
+const imgBasePath = pathRoot + '/public/assets/images/mdea';
 
 const PanelItem: React.FC<PanelItemProps> = ({
   item,
@@ -44,7 +37,7 @@ const PanelItem: React.FC<PanelItemProps> = ({
       onClick={() => handleClick(colors[item.numeral])}
     >
       <div>
-        <img className="w-[52px]" src={imgPath[index]} alt="" />
+        <img className="w-[52px]" src={`${imgBasePath}/C0${index}.svg`} />
       </div>
       <h4 className="content-center h-2/3 font-normal text-white text-xm md:text-sm leading-3 sm:leading-5 md:leading-4 p-0 m-0">
         {item.nombre}

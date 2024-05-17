@@ -91,6 +91,8 @@ class EstadisticaService
         $sql = "SELECT
                   A.estadistica_id id,
                   A.nombre,
+                  A.unidad_medida unidadMedida,
+                  A.periodo_serie_tiempo periodoSerieTiempo,
                   B.clasificador_id clasificadorId,
                   C.nombre mdeaComponenteNombre,
                   A.fecha_mod fechaMod,

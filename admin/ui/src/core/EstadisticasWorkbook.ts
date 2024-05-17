@@ -198,7 +198,26 @@ export class EstadisticasWorkbook {
         `${numerals[0]}.${numerals[1]}.${numerals[2]}`
       )
     }
-    return fields
+    return this.sanitizeFichaTecnicaFields(fields)
+  }
+  private sanitizeFichaTecnicaFields(fields: Estadistica): Estadistica {
+    const out = { ...fields }
+    // Nombre de la estadística
+    if (out.nombre) {
+      out.nombre = out.nombre.trim().replace(/\n/g, ' ')
+    }
+    // Unidad de medida
+    if (out.unidadMedida) {
+      // Eliminar saltos de línea y espacios antes del paréntesis de inicio del simbolo de la unidad de medida
+      // Formtato: "Unidad de medida(símbolo)"
+      out.unidadMedida = out.unidadMedida.trim().replace(/\n/g, ' ').replace(/ \(/, '(')
+    }
+    // Periodo de serie de tiempo
+    if (out.periodoSerieTiempo) {
+      // Eliminar espacios en blanco y saltos de línea
+      out.periodoSerieTiempo = out.periodoSerieTiempo.trim().replace(/\s+/g, '')
+    }
+    return out
   }
   getEstadistica(
     workbookItem: WorkbookEstadisticaItem,

@@ -49,7 +49,7 @@ function EstadisticasPageToolbar() {
         </MenuTrigger>
         <MenuPopover>
           <MenuList>
-            <MenuItem>Item a</MenuItem>
+            <MenuItem>...</MenuItem>
           </MenuList>
         </MenuPopover>
       </Menu>

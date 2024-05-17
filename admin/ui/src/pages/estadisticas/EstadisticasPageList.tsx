@@ -108,28 +108,36 @@ const EstadisticasPageList = forwardRef((props, ref) => {
       title: 'N°',
       fixed: 'left',
       width: 36,
-      // width: '4%',
       render: (_, record, index) => index + 1,
     },
     {
       key: 'mdeaComponenteNombre',
       title: 'Componente',
       width: 240,
-      // width: '19%',
       dataIndex: 'mdeaComponenteNombre',
     },
     {
       key: 'nombre',
       title: 'Indicador',
       dataIndex: 'nombre',
-
-      // width: '47%',
+      width: 360,
+    },
+    {
+      key: 'unidadMedida',
+      title: 'Unidad de medida',
+      dataIndex: 'unidadMedida',
+      width: 260,
+    },
+    {
+      key: 'periodoSerieTiempo',
+      title: 'Período de serie de tiempo',
+      dataIndex: 'periodoSerieTiempo',
+      width: 220,
     },
     {
       key: 'fechaMod',
       title: 'Última modificación',
       width: 170,
-      // width: '14%',
       align: 'right',
       dataIndex: 'fechaMod',
       render: renderFechaMod,
@@ -139,7 +147,6 @@ const EstadisticasPageList = forwardRef((props, ref) => {
       key: 'status',
       align: 'center',
       width: 70,
-      // width: '8%',
       title: 'Activo',
       dataIndex: 'status',
       render: renderChecks,
@@ -148,7 +155,6 @@ const EstadisticasPageList = forwardRef((props, ref) => {
       key: 'archivado',
       align: 'center',
       width: 85,
-      // width: '8%',
       title: 'Archivado',
       dataIndex: 'status',
       render: renderArchivedChecks,
@@ -157,7 +163,6 @@ const EstadisticasPageList = forwardRef((props, ref) => {
       key: 'actions',
       title: 'Acciones',
       width: 80,
-      // width: '8%',
       align: 'right',
       fixed: 'right',
       render: renderActions,
@@ -170,9 +175,12 @@ const EstadisticasPageList = forwardRef((props, ref) => {
       columns={columns}
       loading={loading}
       size="small"
+      pagination={{
+        pageSize: 500,
+      }}
       bordered
       rowKey={(record) => record.id}
-      scroll={{ y: 380 }}
+      scroll={{ y: 460 }}
     />
   );
 });
