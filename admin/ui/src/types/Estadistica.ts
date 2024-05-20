@@ -30,9 +30,12 @@ export interface FichaTecnicaFields {
   datosContacto?: string
   telefonoCelular?: string
   clasificacionMdea?: string
+  clasificacionOds?: string
+  clasificacionOcde?: string
+  clasificacionPna?: string
   //Estados
-  activo?:boolean
-  archivado?:boolean
+  activo?: boolean
+  archivado?: boolean
 }
 
 export interface Estadistica extends EstadisticaBaseFields, FichaTecnicaFields {
@@ -47,5 +50,5 @@ export interface Estadistica extends EstadisticaBaseFields, FichaTecnicaFields {
   presentacionTablaElaboracion?: string
   presentacionTablaFormato?: FormatoTabla
 
-  
+
 }

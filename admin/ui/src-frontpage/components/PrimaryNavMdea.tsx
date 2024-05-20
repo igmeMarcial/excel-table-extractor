@@ -3,8 +3,8 @@ import { IndiceItem } from '../types/IndiceItem';
 import { Link, useLocation } from 'react-router-dom';
 import { ColorsType } from '../types/Colors';
 import { getQueryParam, newPathUrl } from '../../src/utils/url-utils';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { selectClasificadoresNivel1, setColorComponent } from '../app/AppSlice';
+import { useAppSelector } from '../app/hooks';
+import { selectClasificadoresNivel1 } from '../app/AppSlice';
 import chroma from 'chroma-js';
 import { COLORES_MDEA } from '../../src/config/colors';
 import { QUERY_PARAM_ESTADISTICA_INDICE_PATH } from '../../src/core/constantes';
@@ -12,7 +12,6 @@ interface PanelItemProps {
   item: IndiceItem;
   colors: ColorsType;
   transformStyles: (item: IndiceItem) => React.CSSProperties;
-  handleClick: (color: string) => void;
   index: number;
 }
 
@@ -23,7 +22,6 @@ const PanelItem: React.FC<PanelItemProps> = ({
   item,
   colors,
   transformStyles,
-  handleClick,
   index,
 }) => {
   const location = useLocation();
@@ -34,7 +32,6 @@ const PanelItem: React.FC<PanelItemProps> = ({
       to={newPathUrl(location, 'estadistica', item.numeral + '.1.1.1')}
       className={`p-2 rounded-lg mb-2 md:mb-4 min-h-16 flex justify-center text-center items-center cursor-pointer no-underline hover:bg-black flex flex-col`}
       style={transformStyles(item)}
-      onClick={() => handleClick(colors[item.numeral])}
     >
       <div>
         <img className="w-[52px]" src={`${imgBasePath}/C0${index}.svg`} />
@@ -56,10 +53,6 @@ function PrimaryNavMdea() {
     '1.1.1.1'
   );
   const numItemActivo = activeItem.split('.')[0];
-  const distpath = useAppDispatch();
-  const handleClick = (color: string) => {
-    distpath(setColorComponent(color));
-  };
 
   const transformStyles = useMemo(() => {
     const calculateStyles = (item: IndiceItem) => {
@@ -95,7 +88,6 @@ function PrimaryNavMdea() {
           item={item}
           colors={colors}
           transformStyles={transformStyles}
-          handleClick={handleClick}
           index={index + 1}
         />
       ))}

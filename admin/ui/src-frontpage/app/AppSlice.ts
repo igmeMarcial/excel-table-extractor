@@ -15,7 +15,6 @@ interface AppState {
   clasificadorNivel1?: string,
   marcoOrdenadorSeleccionado: string,
   menuNivel2: IndiceItem[],
-  colorComponent: string,
 }
 
 const initialState: AppState = {
@@ -28,7 +27,6 @@ const initialState: AppState = {
   estadisticaIndicePath: '1.1.1.1',
   clasificadorNivel1: '1',
   menuNivel2: [],
-  colorComponent: '#575757'
 };
 const getMenuNivel2 = (indice: IndiceItem[], clasificadorNivel1: string) => {
   return indice.map((item) => {
@@ -65,9 +63,6 @@ export const appSlice = createSlice({
         state.clasificadorNivel1 = pathParts[0]
         state.menuNivel2 = getMenuNivel2(state.indiceEstadisticas, state.clasificadorNivel1)
       }
-    },
-    setColorComponent: (state, action: PayloadAction<string>) => {
-      state.colorComponent = action.payload;
     },
     toggleMenuNivel2Item: (state, action: PayloadAction<IndiceItem>) => {
       const { numeral, expanded, nivel } = action.payload;
@@ -126,7 +121,6 @@ export const {
   setActiveTabName,
   toggleMenuNivel2Item,
   setEstadisticaIndicePath,
-  setColorComponent
 } = appSlice.actions
 
 export const selectActiveNetworkActivity = (state: RootState) => state.app.activeNetworkActivity
@@ -167,6 +161,5 @@ export const selectTemaEstadisticoIndicePath = (state: RootState) => {
 export const selectEstadisticaIndicePath = (state: RootState) => {
   return state.app.estadisticaIndicePath
 }
-export const selectColorComponent = (state: RootState) => state.app.colorComponent
 
 export default appSlice.reducer

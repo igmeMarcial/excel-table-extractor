@@ -1,10 +1,10 @@
 export const COLORES_MDEA = {
   '1': '#4cd4f3',
-  '2': '#fe903a',
-  '3': '#fd4d5e',
-  '4': '#0183ad',
-  '5': '#3c9326',
-  '6': '#feb739',
+  '2': '#f79043',
+  '3': '#b22222',
+  '4': '#345A91',
+  '5': '#619335',
+  '6': '#f2CA50',
 };
 
 export const COLORES_ODS = {
@@ -67,7 +67,7 @@ export const OBJETIVOS_ODS = [
     numero: 18,
     titulo: 'Objetivos de desarrollo sostenible',
     color: '#f5f5f5',
-    urlImg:'https://www.un.org/sustainabledevelopment/es/wp-content/uploads/sites/3/2015/09/S_SDG_Icons-01-18.jpg'
+    urlImg: 'https://www.un.org/sustainabledevelopment/es/wp-content/uploads/sites/3/2015/09/S_SDG_Icons-01-18.jpg'
   },
 ];
 export const OBJETIVOS_OCDE = [
