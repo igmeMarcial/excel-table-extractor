@@ -115,6 +115,18 @@ export const ESTADISTICA_FICHA_FIELDS_DEF: {
     label: 'Teléfono/celular',
     controlType: 'text',
   },
+  clasificacionOds:{
+    label:'Clasificación ODS',
+    controlType:'text'
+  },
+  clasificacionOcde:{
+    label:'Clasificación OCDE',
+    controlType:'text'
+  },
+  clasificacionPna:{
+    label:'Clasificación PNA',
+    controlType:'text',
+  },
   activo: {
     label: 'Activo',
     controlType: 'switch',

@@ -122,6 +122,18 @@ class Estadistica extends BaseModel
             'type' => DataTypes::STRING,
             'column' => 'telefono_celular',
         ],
+        'clasificacionOds' => [
+            'type' => DataTypes::STRING,
+            'column' => 'clasificacion_ods',
+        ],
+        'clasificacionOcde' => [
+            'type' => DataTypes::STRING,
+            'column' => 'clasificacion_ocde',
+        ],
+        'clasificacionPna' => [
+            'type' => DataTypes::STRING,
+            'column' => 'clasificacion_pna',
+        ],
         'datos' => [
             'type' => DataTypes::ARRAY,
         ],

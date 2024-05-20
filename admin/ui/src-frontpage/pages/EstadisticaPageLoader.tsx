@@ -2,6 +2,7 @@ import { useGetEstadisticaQuery } from '../app/services/estadistica';
 import { getQueryParam } from '../../src/utils/url-utils';
 import { useLocation } from 'react-router-dom';
 import { QUERY_PARAM_ESTADISTICA_ID } from '../../src/core/constantes';
+import Status500Page from './Status500Page';
 interface EstadisticaPageLoaderProps {
   view: any;
 }
@@ -24,7 +25,7 @@ export default function EstadisticaPageLoader({
   if (isLoading) return <div>Cargando...</div>;
   if (isError) {
     console.log(error);
-    return <div>Error</div>;
+    return <Status500Page />;
   }
   if (!estadistica) {
     // Manejar el error 404 cuando la estadística no es encontrada

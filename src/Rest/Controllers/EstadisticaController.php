@@ -28,6 +28,10 @@ class EstadisticaController
         try {
             $data = $request->get_body();
             $data = json_decode($data, true);
+
+            // // Log the incoming data to check if all fields are present
+            // error_log('Incoming data: ' . print_r($data, true));
+
             $estadistica = new Estadistica($data);
             $id = $this->estadisticaService->registrarEstadistica($estadistica);
             $newRecord = $this->estadisticaService->getEstadistica($id);
