@@ -54,7 +54,7 @@ const PanelItem: React.FC<PanelItemProps> = ({
           borderBottomColor: `${colors[item.numeral]}`,
           visibility: numItemActivo === item.numeral ? 'visible' : 'hidden',
           opacity: numItemActivo === item.numeral ? '1' : '0',
-          transition: 'opacity 0.3s, visibility 0.3s',
+          transition: 'opacity 0.1s ease, visibility 0.1s ease',
         }}
         className={`arrow-up`}
       ></div>
@@ -86,21 +86,27 @@ function PrimaryNavMdea() {
     return calculateStyles;
   }, [numItemActivo, colors]);
   return (
-    <div
-      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-5 "
-      style={{ borderBottom: `4px solid ${colors[numItemActivo]}` }}
-    >
-      {clasificadoresN1.map((item: IndiceItem, index) => (
-        <PanelItem
-          key={item.numeral}
-          item={item}
-          colors={colors}
-          transformStyles={transformStyles}
-          index={index + 1}
-          numItemActivo={numItemActivo}
-        />
-      ))}
-    </div>
+    <>
+      <div
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-5 "
+        // style={{ borderBottom: `4px solid ${colors[numItemActivo]}` }}
+      >
+        {clasificadoresN1.map((item: IndiceItem, index) => (
+          <PanelItem
+            key={item.numeral}
+            item={item}
+            colors={colors}
+            transformStyles={transformStyles}
+            index={index + 1}
+            numItemActivo={numItemActivo}
+          />
+        ))}
+      </div>
+      <div
+        className="h-[4px] w-full rounded-[4px]"
+        style={{ backgroundColor: `${colors[numItemActivo]}` }}
+      ></div>
+    </>
   );
 }
 
