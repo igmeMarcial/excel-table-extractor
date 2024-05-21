@@ -4,11 +4,9 @@ namespace Aesa\Rest;
 
 use Aesa\Core\RestRouter;
 
-use Aesa\Rest\Controllers\PlantillaController;
 use Aesa\Rest\Controllers\DevController;
 use Aesa\Rest\Controllers\EstadisticaController;
-use Aesa\Rest\Controllers\MdeaController;
-use Aesa\Rest\Controllers\AnuarioController;
+use Aesa\Rest\Controllers\IndiceController;
 
 class Routes
 {
@@ -36,33 +34,14 @@ class Routes
         $this->router->get('/estadisticas/(?P<id>[\d]+)',     EstadisticaController::class . ':obtenerEstadistica');
         $this->router->put('/estadisticas/(?P<id>[\d]+)',     EstadisticaController::class . ':actualizarEstadistica');
         $this->router->delete('/estadisticas/(?P<id>[\d]+)',  EstadisticaController::class . ':eliminarEstadistica');
-        $this->router->get('/plantillas',                     PlantillaController::class . ':listar');
-        $this->router->get('/plantillas',                     PlantillaController::class . ':listar');
-        $this->router->get(
-            '/plantillas/(?P<hash>[\w]+):descargar',
-            PlantillaController::class . ':descargarArchivo'
-        );
-        $this->router->post('/plantillas',                    PlantillaController::class . ':guardarArchivo');
-        $this->router->delete('/plantillas/(?P<hash>[\w]+)',  PlantillaController::class . ':eliminarArchivo');
-        $this->router->get('/anuarios',                       AnuarioController::class . ':listar');
-        $this->router->get(
-            '/anuarios/(?P<hash>[\w]+):descargar',
-            AnuarioController::class . ':descargarArchivo'
-        );
         $this->router->get(
             '/admin/marcos-ordenadores/mdea/indice-clasificadores',
-            MdeaController::class . ':onGetIndiceClasificadores'
+            IndiceController::class . ':onGetIndiceClasificadores'
         );
-        $this->router->post('/anuarios',                      AnuarioController::class . ':guardarArchivo');
-        $this->router->post('/anuarios:generar-version-base', AnuarioController::class . ':generarAnuario');
-        $this->router->delete('/anuarios/(?P<hash>[\w]+)',    AnuarioController::class . ':eliminarArchivo');
         $this->router->get(
             '/website/marcos-ordenadores/mdea/indice-estadisticas',
-            MdeaController::class . ':onGetIndiceEstadisticas'
+            IndiceController::class . ':onGetIndiceEstadisticas'
         );
         $this->router->get('/dev/reset-database',             DevController::class . ':resetDatabase');
     }
 }
-
-
-//  wep.com/api/{v2}/{contexto}/{collection}/{id_recurso}

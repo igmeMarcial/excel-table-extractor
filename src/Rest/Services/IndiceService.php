@@ -4,7 +4,7 @@ namespace Aesa\Rest\Services;
 
 use Aesa\Db\DbMap;
 
-class MdeaService
+class IndiceService
 {
     private DbMap $dbMap;
     private \wpdb $wpdb;

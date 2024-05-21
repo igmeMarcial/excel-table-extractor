@@ -51,11 +51,20 @@ class Schema
         $fullTableName = $tablePrefix . $tableName;
         $currentUserId = get_current_user_id();
         $data = $this->getInitialTableData($tableName);
-        foreach ($data as $row) {
+        foreach ($data['data'] as $values) {
+            $row = $this->getAsArrayObject($data['fields'], $values);
             $row['usuario_reg_id'] = $currentUserId;
             $row['usuario_mod_id'] = $currentUserId;
             $wpdb->insert($fullTableName, $row);
         }
+    }
+    private function getAsArrayObject($fields, $values)
+    {
+        $out = [];
+        foreach ($fields as $index =>  $field) {
+            $out[$field] = $values[$index];
+        }
+        return $out;
     }
     private function getInitialTableData($tableName)
     {
@@ -94,7 +103,7 @@ CREATE TABLE {$tablePrefix}clasificador (
     numeral             VARCHAR(11) NOT NULL COMMENT 'Máx 99.99.99.99(11 caracteres)',
     nombre              VARCHAR(255) NOT NULL,
     PRIMARY KEY    (clasificador_id),
-    FOREIGN KEY    (marco_ordenador_id)   REFERENCES {$tablePrefix}marco_ordenador(estadistica_id),
+    FOREIGN KEY    (marco_ordenador_id)   REFERENCES {$tablePrefix}marco_ordenador(marco_ordenador_id)
 ) $charset;
 CREATE TABLE {$tablePrefix}estadistica (
   estadistica_id            INT(11) NOT NULL AUTO_INCREMENT,

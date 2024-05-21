@@ -2,19 +2,19 @@
 
 namespace Aesa\Rest\Controllers;
 
-use Aesa\Rest\Services\MdeaService;
+use Aesa\Rest\Services\IndiceService;
 
-class MdeaController
+class IndiceController
 {
-    private MdeaService $mdeaService;
-    public function __construct(MdeaService $mdeaService)
+    private IndiceService $indiceService;
+    public function __construct(IndiceService $indiceService)
     {
-        $this->mdeaService = $mdeaService;
+        $this->indiceService = $indiceService;
     }
 
     public function onGetIndiceEstadisticas()
     {
-        $indice = $this->mdeaService->getIndiceEstadisticas();
+        $indice = $this->indiceService->getIndiceEstadisticas();
         // Return the array of objects
         return [
             'data' => $indice,
@@ -22,7 +22,7 @@ class MdeaController
     }
     public function onGetIndiceClasificadores()
     {
-        $indice = $this->mdeaService->getIndiceClasificadores();
+        $indice = $this->indiceService->getIndiceClasificadores();
         // Return the array of objects
         return [
             'data' => $indice,
