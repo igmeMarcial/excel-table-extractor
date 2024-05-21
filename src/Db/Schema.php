@@ -74,118 +74,31 @@ class Schema
         }
         return require_once $fileName;
     }
-    private function getDbCreationSql()
+    private function getCreateTableSql($tableName): string
     {
         global $wpdb;
-        $tablePrefix = self::getTablePrefix();
-        $charset = $wpdb->get_charset_collate();
-
-        return "
-CREATE TABLE {$tablePrefix}marco_ordenador (
-    marco_ordenador_id  INT(11) NOT NULL AUTO_INCREMENT,
-    usuario_reg_id      INT(11) NOT NULL,
-    usuario_mod_id      INT(11) NOT NULL,
-    fecha_reg           DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    fecha_mod           DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    activo              TINYINT(1) NOT NULL DEFAULT 1,
-    sigla               VARCHAR(50) NOT NULL,
-    nombre              VARCHAR(100) NOT NULL,
-    PRIMARY KEY    (marco_ordenador_id)
-) $charset;
-CREATE TABLE {$tablePrefix}clasificador (
-    clasificador_id     INT(11) NOT NULL AUTO_INCREMENT,
-    usuario_reg_id      INT(11) NOT NULL,
-    usuario_mod_id      INT(11) NOT NULL,
-    fecha_reg           DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    fecha_mod           DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    activo              TINYINT(1) NOT NULL DEFAULT 1,
-    marco_ordenador_id  INT(11) NOT NULL,
-    numeral             VARCHAR(11) NOT NULL COMMENT 'Máx 99.99.99.99(11 caracteres)',
-    nombre              VARCHAR(255) NOT NULL,
-    PRIMARY KEY    (clasificador_id),
-    FOREIGN KEY    (marco_ordenador_id)   REFERENCES {$tablePrefix}marco_ordenador(marco_ordenador_id)
-) $charset;
-CREATE TABLE {$tablePrefix}estadistica (
-  estadistica_id            INT(11) NOT NULL AUTO_INCREMENT,
-  usuario_reg_id            INT(11) NOT NULL,
-  usuario_mod_id            INT(11) NOT NULL,
-  fecha_reg                 DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-  fecha_mod                 DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-  activo                    TINYINT(1) NOT NULL DEFAULT 1,
-  archivado                 TINYINT(1) NOT NULL DEFAULT 0,
-  eliminado                 TINYINT(1) NOT NULL DEFAULT 0,
-  nombre                    VARCHAR(1000) NOT NULL,
-  finalidad                      VARCHAR(1000),
-  descripcion                    TEXT,
-  unidad_medida                  VARCHAR(255),
-  formula_calculo                TEXT,
-  metodologia_calculo            TEXT,
-  fuente                         VARCHAR(1000),
-  unidad_organica_generadora     VARCHAR(1000),
-  url                            VARCHAR(1000),
-  periodicidad_generacion        VARCHAR(1000),
-  periodicidad_entrega           VARCHAR(1000),
-  periodo_serie_tiempo           CHAR(20),
-  ambito_geografico              VARCHAR(1000),
-  limitaciones                   VARCHAR(1000),
-  relacion_objetivos_nacionales  VARCHAR(1000),
-  relacion_iniciativas_internacionales  VARCHAR(1000),
-  correo_electronico             VARCHAR(255),
-  datos_contacto                 VARCHAR(1000),
-  telefono_celular               VARCHAR(255),
-  clasificacion_ods              VARCHAR(11),
-  clasificacion_ocde             VARCHAR(11),
-  clasificacion_pna              VARCHAR(11),
-  datos                          TEXT,
-  pres_tabla_titulo              VARCHAR(500),
-  pres_tabla_subtitulo           VARCHAR(255),
-  pres_tabla_nota                TEXT,
-  pres_tabla_fuente              VARCHAR(1000),
-  pres_tabla_elaboracion         VARCHAR(1000),
-  pres_tabla_formato             TEXT,
-  datos_informacion              TEXT,
-  graficos                       TEXT,
-  PRIMARY KEY    (estadistica_id)
-) $charset;
-CREATE TABLE {$tablePrefix}esta_clas_n1 (
-  esta_clas_n1_id    INT(11) NOT NULL AUTO_INCREMENT,
-  usuario_reg_id     INT(11) NOT NULL,
-  usuario_mod_id     INT(11) NOT NULL,
-  fecha_reg          DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-  fecha_mod          DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-  activo             TINYINT(1) NOT NULL DEFAULT 1,
-  estadistica_id     INT(11) NOT NULL,
-  clasificador_id    INT(11) NOT NULL,
-  PRIMARY KEY    (esta_clas_n1_id),
-  FOREIGN KEY    (estadistica_id)   REFERENCES {$tablePrefix}estadistica(estadistica_id),
-  FOREIGN KEY    (clasificador_id)  REFERENCES {$tablePrefix}clasificador(clasificador_id)
-) $charset;
-CREATE TABLE {$tablePrefix}esta_clas_n2 (
-  esta_clas_n2_id    INT(11) NOT NULL AUTO_INCREMENT,
-  usuario_reg_id     INT(11) NOT NULL,
-  usuario_mod_id     INT(11) NOT NULL,
-  fecha_reg          DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-  fecha_mod          DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-  activo             TINYINT(1) NOT NULL DEFAULT 1,
-  estadistica_id     INT(11) NOT NULL,
-  clasificador_id    INT(11) NOT NULL,
-  PRIMARY KEY    (esta_clas_n2_id),
-  FOREIGN KEY    (estadistica_id)   REFERENCES {$tablePrefix}estadistica(estadistica_id),
-  FOREIGN KEY    (clasificador_id)  REFERENCES {$tablePrefix}clasificador(clasificador_id)
-) $charset;
-CREATE TABLE {$tablePrefix}esta_clas_n3 (
-  esta_clas_n3_id    INT(11) NOT NULL AUTO_INCREMENT,
-  usuario_reg_id     INT(11) NOT NULL,
-  usuario_mod_id     INT(11) NOT NULL,
-  fecha_reg          DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-  fecha_mod          DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-  activo             TINYINT(1) NOT NULL DEFAULT 1,
-  estadistica_id     INT(11) NOT NULL,
-  clasificador_id    INT(11) NOT NULL,
-  PRIMARY KEY    (esta_clas_n3_id),
-  FOREIGN KEY    (estadistica_id)   REFERENCES {$tablePrefix}estadistica(estadistica_id),
-  FOREIGN KEY    (clasificador_id)  REFERENCES {$tablePrefix}clasificador(clasificador_id)
-) $charset;";
+        $fileName = AESA_PLUGIN_DIR . '/files/sql/' . $tableName . '.sql.php';
+        if (!file_exists($fileName)) {
+            return null;
+        }
+        $tpl = require_once $fileName;
+        // Remplazar prefijo
+        $out = str_replace('{tablePrefix}', self::getTablePrefix(), $tpl);
+        // Remplazar charset
+        $out = str_replace('{charset}', $wpdb->get_charset_collate(), $out);
+        return $out;
+    }
+    private function getDbCreationSql()
+    {
+        $sqlStack = [
+            $this->getCreateTableSql('marco_ordenador'),
+            $this->getCreateTableSql('clasificador'),
+            $this->getCreateTableSql('estadistica'),
+            $this->getCreateTableSql('esta_clas_n1'),
+            $this->getCreateTableSql('esta_clas_n2'),
+            $this->getCreateTableSql('esta_clas_n3'),
+        ];
+        return implode("\n", $sqlStack);
     }
 
     private function getDbDropSql()

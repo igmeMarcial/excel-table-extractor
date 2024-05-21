@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { getQueryParam } from '../src/utils/url-utils';
 import { setEstadisticaIndicePath } from './app/AppSlice';
 import { QUERY_PARAM_ESTADISTICA_INDICE_PATH } from '../src/core/constantes';
-import { useGetIndiceQuery } from './app/services/estadistica';
+import { useGetIndiceMdeaQuery } from './app/services/estadistica';
 import NavegadorEstadisticasAlt2 from './secctions/NavegadorEstadisticasAlt2';
 import MdaPage from './pages/MdaPage';
 import OdsPage from './pages/OdsPage';
@@ -22,7 +22,7 @@ function App() {
     dispath(setEstadisticaIndicePath(indice));
   }
   // Load indice
-  useGetIndiceQuery(1);
+  useGetIndiceMdeaQuery(1);
   return (
     <ParamRoutes param="marcoOrdenador">
       <ParamRoute default element={<MdaPage />} />

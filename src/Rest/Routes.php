@@ -39,10 +39,11 @@ class Routes
         $this->router->get( '/admin/marcos-ordenadores/ods/indice-clasificadores',  IndiceController::class . ':handleGetIndiceOds');
         $this->router->get( '/admin/marcos-ordenadores/ocde/indice-clasificadores', IndiceController::class . ':handleGetIndiceOcde');
         $this->router->get( '/admin/marcos-ordenadores/pna/indice-clasificadores',  IndiceController::class . ':handleGetIndicePna');
-        $this->router->get(
-            '/website/marcos-ordenadores/mdea/indice-estadisticas',
-            IndiceController::class . ':onGetIndiceEstadisticas'
-        );
+        // Indices estadisticas
+        $this->router->get('/website/marcos-ordenadores/mdea/indice-estadisticas',  IndiceController::class . ':handleGetIndiceEstadisticasMdea');
+        $this->router->get('/website/marcos-ordenadores/ods/indice-estadisticas',   IndiceController::class . ':handleGetIndiceEstadisticasOds');
+        $this->router->get('/website/marcos-ordenadores/ocde/indice-estadisticas',  IndiceController::class . ':handleGetIndiceEstadisticasOcde');
+        $this->router->get('/website/marcos-ordenadores/pna/indice-estadisticas',   IndiceController::class . ':handleGetIndiceEstadisticasPna');
         $this->router->get('/dev/reset-database',             DevController::class . ':resetDatabase');
     }
 }

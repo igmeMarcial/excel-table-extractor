@@ -16,34 +16,30 @@ class IndiceService
         $this->dbMap = $dbMap;
     }
 
-    public function getIndiceEstadisticas()
+    public function getIndiceEstadisticasMdea()
     {
         $clasificadores = $this->getListaClasificadores(Constantes::MARCO_ORDENADOR_MDEA_ID);
         $estadisticas = $this->getListaEstadisticas();
-        $out = [];
-        foreach ($clasificadores as $clasificador) {
-            $item = [
-                'numeral'        => $clasificador['numeral'],
-                'nombre'         => $clasificador['nombre'],
-            ];
-            $clasificaorEstadisticas = array_filter($estadisticas, function ($estadistica) use ($clasificador) {
-                return $estadistica['clasificadorId'] === $clasificador['clasificadorId'];
-            });
-            $clasificaorEstadisticas = array_map(function ($estadistica, $index) use ($clasificador) {
-                return [
-                    'numeral'        => $clasificador['numeral'] . '.' . ($index + 1),
-                    'nombre'         => $estadistica['nombre'],
-                    'estadisticaId'  => (int) $estadistica['estadisticaId'],
-                    'clasificadorId' => (int) $estadistica['clasificadorId'],
-                ];
-            }, $clasificaorEstadisticas, array_keys(array_values($clasificaorEstadisticas)));
-            array_push($out, $item);
-            // Añadir estadisticas
-            array_push($out, ...$clasificaorEstadisticas);
-        }
-        return $out;
+        return $this->formatIndiceEstadisticas($clasificadores, $estadisticas);
     }
-
+    public function getIndiceEstadisticasOds()
+    {
+        $clasificadores = $this->getListaClasificadores(Constantes::MARCO_ORDENADOR_ODS_ID);
+        $estadisticas = $this->getListaEstadisticas();
+        return $this->formatIndiceEstadisticas($clasificadores, $estadisticas);
+    }
+    public function getIndiceEstadisticasOcde()
+    {
+        $clasificadores = $this->getListaClasificadores(Constantes::MARCO_ORDENADOR_OCDE_ID);
+        $estadisticas = $this->getListaEstadisticas();
+        return $this->formatIndiceEstadisticas($clasificadores, $estadisticas);
+    }
+    public function getIndiceEstadisticasPna()
+    {
+        $clasificadores = $this->getListaClasificadores(Constantes::MARCO_ORDENADOR_PNA_ID);
+        $estadisticas = $this->getListaEstadisticas();
+        return $this->formatIndiceEstadisticas($clasificadores, $estadisticas);
+    }
     public function getIndiceMdea()
     {
         $clasificadores = $this->getListaClasificadores(Constantes::MARCO_ORDENADOR_MDEA_ID);
@@ -87,6 +83,31 @@ class IndiceService
                 'nombre'  => $record['nombre'],
             ];
         }, $records);
+    }
+    private function formatIndiceEstadisticas($clasificadores, $estadisticas)
+    {
+        $out = [];
+        foreach ($clasificadores as $clasificador) {
+            $item = [
+                'numeral'        => $clasificador['numeral'],
+                'nombre'         => $clasificador['nombre'],
+            ];
+            $clasificaorEstadisticas = array_filter($estadisticas, function ($estadistica) use ($clasificador) {
+                return $estadistica['clasificadorId'] === $clasificador['clasificadorId'];
+            });
+            $clasificaorEstadisticas = array_map(function ($estadistica, $index) use ($clasificador) {
+                return [
+                    'numeral'        => $clasificador['numeral'] . '.' . ($index + 1),
+                    'nombre'         => $estadistica['nombre'],
+                    'estadisticaId'  => (int) $estadistica['estadisticaId'],
+                    'clasificadorId' => (int) $estadistica['clasificadorId'],
+                ];
+            }, $clasificaorEstadisticas, array_keys(array_values($clasificaorEstadisticas)));
+            array_push($out, $item);
+            // Añadir estadisticas
+            array_push($out, ...$clasificaorEstadisticas);
+        }
+        return $out;
     }
     private function getListaClasificadores(int $marcoOrdenadorId)
     {

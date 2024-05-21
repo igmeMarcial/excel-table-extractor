@@ -12,9 +12,25 @@ class IndiceController
         $this->indiceService = $indiceService;
     }
 
-    public function onGetIndiceEstadisticas()
+    public function handleGetIndiceEstadisticasMdea()
     {
-        $indice = $this->indiceService->getIndiceEstadisticas();
+        $indice = $this->indiceService->getIndiceEstadisticasMdea();
+        return $this->formatResponseData($indice);
+    }
+    public function handleGetIndiceEstadisticasOds()
+    {
+        $indice = $this->indiceService->getIndiceEstadisticasOds();
+        return $this->formatResponseData($indice);
+    }
+    public function handleGetIndiceEstadisticasOcde()
+    {
+        $indice = $this->indiceService->getIndiceEstadisticasOcde();
+        return $this->formatResponseData($indice);
+    }
+
+    public function handleGetIndiceEstadisticasPna()
+    {
+        $indice = $this->indiceService->getIndiceEstadisticasPna();
         return $this->formatResponseData($indice);
     }
     public function handleGetIndiceMdea()
