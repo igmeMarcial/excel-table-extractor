@@ -79,5 +79,12 @@ return [
         [3, '1.5',  'Para 2030, fomentar la resiliencia de los pobres y las personas que se encuentran en situaciones vulnerables y reducir su exposición y vulnerabilidad a los fenómenos extremos relacionados con el clima y a otros desastres económicos, sociales y ambientales.'],
         [3, '1.a',  'Garantizar una movilización importante de recursos procedentes de diversas fuentes, incluso mediante la mejora de la cooperación para el desarrollo, a fin de proporcionar medios suficientes y previsibles para los países en desarrollo, en particular los países menos adelantados, para poner en práctica programas y políticas encaminados a poner fin a la pobreza en todas sus dimensiones.'],
         [3, '1.b',  'Crear marcos normativos sólidos en el ámbito nacional, regional e internacional, sobre la base de estrategias de desarrollo en favor de los pobres que tengan en cuenta las cuestiones de género, a fin de apoyar la inversión acelerada en medidas para erradicar la pobreza.'],
+
+        [4, '1',    'Agricultura'],
+        [4, '1.2',  'Agricultura sostenible'],
+
+        [5, 'OP.01',       'Mejorar la conservación de las especies y de la diversidad genética'],
+        [5, 'LN.01.01',    'Garantizar la conservación de especies y diversidad genética al interior de las Áreas Naturales Protegidas (ANP) y otras modalidades de conservación'],
+        [5, 'SS.01.01.01', 'Vigilancia y control continuo en las ANP'],
     ],
 ];

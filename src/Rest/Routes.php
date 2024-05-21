@@ -34,10 +34,11 @@ class Routes
         $this->router->get('/estadisticas/(?P<id>[\d]+)',     EstadisticaController::class . ':obtenerEstadistica');
         $this->router->put('/estadisticas/(?P<id>[\d]+)',     EstadisticaController::class . ':actualizarEstadistica');
         $this->router->delete('/estadisticas/(?P<id>[\d]+)',  EstadisticaController::class . ':eliminarEstadistica');
-        $this->router->get(
-            '/admin/marcos-ordenadores/mdea/indice-clasificadores',
-            IndiceController::class . ':onGetIndiceClasificadores'
-        );
+        // Indices
+        $this->router->get('/admin/marcos-ordenadores/mdea/indice-clasificadores',  IndiceController::class . ':handleGetIndiceMdea');
+        $this->router->get( '/admin/marcos-ordenadores/ods/indice-clasificadores',  IndiceController::class . ':handleGetIndiceOds');
+        $this->router->get( '/admin/marcos-ordenadores/ocde/indice-clasificadores', IndiceController::class . ':handleGetIndiceOcde');
+        $this->router->get( '/admin/marcos-ordenadores/pna/indice-clasificadores',  IndiceController::class . ':handleGetIndicePna');
         $this->router->get(
             '/website/marcos-ordenadores/mdea/indice-estadisticas',
             IndiceController::class . ':onGetIndiceEstadisticas'

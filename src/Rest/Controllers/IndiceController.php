@@ -15,17 +15,33 @@ class IndiceController
     public function onGetIndiceEstadisticas()
     {
         $indice = $this->indiceService->getIndiceEstadisticas();
-        // Return the array of objects
-        return [
-            'data' => $indice,
-        ];
+        return $this->formatResponseData($indice);
     }
-    public function onGetIndiceClasificadores()
+    public function handleGetIndiceMdea()
     {
-        $indice = $this->indiceService->getIndiceClasificadores();
-        // Return the array of objects
+        $indice = $this->indiceService->getIndiceMdea();
+        return $this->formatResponseData($indice);
+    }
+
+    public function handleGetIndiceOds()
+    {
+        $indice = $this->indiceService->getIndiceOds();
+        return $this->formatResponseData($indice);
+    }
+    public function handleGetIndiceOcde()
+    {
+        $indice = $this->indiceService->getIndiceOcde();
+        return $this->formatResponseData($indice);
+    }
+    public function handleGetIndicePna()
+    {
+        $indice = $this->indiceService->getIndicePna();
+        return $this->formatResponseData($indice);
+    }
+    private function formatResponseData($data)
+    {
         return [
-            'data' => $indice,
+            'data' => $data
         ];
     }
 }

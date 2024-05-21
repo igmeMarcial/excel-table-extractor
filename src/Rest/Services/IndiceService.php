@@ -2,6 +2,7 @@
 
 namespace Aesa\Rest\Services;
 
+use Aesa\Core\Constantes;
 use Aesa\Db\DbMap;
 
 class IndiceService
@@ -17,7 +18,7 @@ class IndiceService
 
     public function getIndiceEstadisticas()
     {
-        $clasificadores = $this->getListaClasificadores();
+        $clasificadores = $this->getListaClasificadores(Constantes::MARCO_ORDENADOR_MDEA_ID);
         $estadisticas = $this->getListaEstadisticas();
         $out = [];
         foreach ($clasificadores as $clasificador) {
@@ -42,17 +43,31 @@ class IndiceService
         }
         return $out;
     }
-    public function getIndiceClasificadores()
+
+    public function getIndiceMdea()
     {
-        $clasificadores = $this->getListaClasificadores();
-        return array_map(function ($clasificador) {
-            return [
-                'id'      => (int) $clasificador['clasificadorId'],
-                'numeral' => $clasificador['numeral'],
-                'nombre'  => $clasificador['nombre'],
-            ];
-        }, $clasificadores);
+        $clasificadores = $this->getListaClasificadores(Constantes::MARCO_ORDENADOR_MDEA_ID);
+        return $this->formatIndice($clasificadores);
     }
+
+    public function getIndiceOds()
+    {
+        $clasificadores = $this->getListaClasificadores(Constantes::MARCO_ORDENADOR_ODS_ID);
+        return $this->formatIndice($clasificadores);
+    }
+
+    public function getIndiceOcde()
+    {
+        $clasificadores = $this->getListaClasificadores(Constantes::MARCO_ORDENADOR_OCDE_ID);
+        return $this->formatIndice($clasificadores);
+    }
+
+    public function getIndicePna()
+    {
+        $clasificadores = $this->getListaClasificadores(Constantes::MARCO_ORDENADOR_PNA_ID);
+        return $this->formatIndice($clasificadores);
+    }
+
     private function getListaEstadisticas()
     {
         $query = "SELECT
@@ -62,13 +77,25 @@ class IndiceService
                   FROM {$this->dbMap->estadistica} A INNER JOIN {$this->dbMap->estaClasN3} B ON A.estadistica_id = B.estadistica_id";
         return $this->wpdb->get_results($query, ARRAY_A);
     }
-    private function getListaClasificadores()
+
+    private function formatIndice($records)
+    {
+        return array_map(function ($record) {
+            return [
+                'id'      => (int) $record['clasificadorId'],
+                'numeral' => $record['numeral'],
+                'nombre'  => $record['nombre'],
+            ];
+        }, $records);
+    }
+    private function getListaClasificadores(int $marcoOrdenadorId)
     {
         $query = "SELECT
                     clasificador_id clasificadorId,
                     numeral,
                     nombre
-                  FROM {$this->dbMap->clasificador}";
+                  FROM {$this->dbMap->clasificador}
+                  WHERE marco_ordenador_id = $marcoOrdenadorId";
         return $this->wpdb->get_results($query, ARRAY_A);
     }
 }

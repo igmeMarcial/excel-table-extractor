@@ -197,6 +197,7 @@ DROP TABLE IF EXISTS {$tablePrefix}esta_clas_n2;
 DROP TABLE IF EXISTS {$tablePrefix}esta_clas_n3;
 DROP TABLE IF EXISTS {$tablePrefix}clasificador;
 DROP TABLE IF EXISTS {$tablePrefix}estadistica;
+DROP TABLE IF EXISTS {$tablePrefix}marco_ordenador;
 ";
     }
     public static function getTablePrefix()
