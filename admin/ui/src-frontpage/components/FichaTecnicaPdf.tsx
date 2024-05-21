@@ -9,7 +9,8 @@ import {
 import { TITULO_ANUARIO } from '../../src/config/constantes';
 
 const logosinia =
-    window.AesaInfo.pluginUrl + '/public/assets/images/siniaLogo.png',
+    window.AesaInfo.pluginUrl +
+    '/public/assets/images/sinia/logo-sinia-var3.png',
   logoMinam =
     window.AesaInfo.pluginUrl + '/public/assets/images/logo_minam_borde.jpg';
 
