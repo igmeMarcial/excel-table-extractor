@@ -1,13 +1,19 @@
-import { useGetEstadisticaQuery } from '../app/services/estadistica';
+import {
+  useGetEstadisticaQuery,
+  useGetIndiceEstadisticasQuery,
+} from '../app/services/estadistica';
 import { getQueryParam } from '../../src/utils/url-utils';
 import { useLocation } from 'react-router-dom';
 import { QUERY_PARAM_ESTADISTICA_ID } from '../../src/core/constantes';
 import Status500Page from './Status500Page';
+import { CodigoMarcoOrdenador } from '../../src/types/CodigoMarcoOrdenador';
 interface EstadisticaPageLoaderProps {
   view: any;
+  marcoOdenador: CodigoMarcoOrdenador;
 }
 export default function EstadisticaPageLoader({
   view: View,
+  marcoOdenador,
 }: Readonly<EstadisticaPageLoaderProps>) {
   const location = useLocation();
   // Extraer el id de la estadistica de la url
@@ -16,21 +22,43 @@ export default function EstadisticaPageLoader({
     QUERY_PARAM_ESTADISTICA_ID,
     '1'
   );
+  // Cargar estadística
   const {
     data: estadistica,
-    isLoading,
-    isError,
-    error,
+    isLoading: isLoadingEstadistica,
+    isError: isErrorEstadistica,
+    error: errorEstadistica,
   } = useGetEstadisticaQuery(urlEstadisticaId);
-  if (isLoading) return <div>Cargando...</div>;
-  if (isError) {
-    console.log(error);
+  // Cargar indice de estadísticas
+  const {
+    data: indiceEstadisticas,
+    isLoading: isLoadingIndice,
+    isError: isErrorIndice,
+    error: errorIndice,
+  } = useGetIndiceEstadisticasQuery(marcoOdenador);
+
+  // Cargando
+  if (isLoadingEstadistica || isLoadingIndice) {
+    return <div>Cargando...</div>;
+  }
+  //
+  if (isErrorEstadistica || isErrorIndice) {
+    console.log('Error estadistica', errorEstadistica);
+    console.log('Error indice', errorIndice);
     return <Status500Page />;
   }
-  if (!estadistica) {
-    // Manejar el error 404 cuando la estadística no es encontrada
-    return <div>error pagina no 404</div>;
+
+  if (estadistica && indiceEstadisticas) {
+    return (
+      <View
+        estadistica={estadistica}
+        indiceEstadisticas={indiceEstadisticas}
+      ></View>
+    );
   }
-  // TODO: Add error handling
-  return <View estadistica={estadistica}></View>;
+  if (!estadistica) {
+    return <div>Estadistica no encotrado</div>;
+  }
+  // Default
+  return <div>Indice estadistico no encontrado</div>;
 }

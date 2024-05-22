@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, isAnyOf } from '@reduxjs/toolkit'
-import { getEstadistica, getIndiceMdea } from './services/estadistica'
+import { getEstadistica, getIndiceEstadisticas } from './services/estadistica'
 import type { RootState } from './store'
 import { IndiceItem } from '../types/IndiceItem'
 import { EstadisticaMarcoOrdenador } from '../../src/types/EstadisticaMarcoOrdenador'
@@ -98,7 +98,7 @@ export const appSlice = createSlice({
     builder.addMatcher(getEstadistica.matchFulfilled, (state, action) => {
       state.estadisticaModel = action.payload
     })
-    builder.addMatcher(getIndiceMdea.matchFulfilled, (state, action) => {
+    builder.addMatcher(getIndiceEstadisticas.matchFulfilled, (state, action) => {
       const indice = [];
       action.payload.forEach((item: IndiceItem) => {
         indice.push({

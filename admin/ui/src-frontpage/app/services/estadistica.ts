@@ -1,6 +1,7 @@
 import { api } from './api'
 import { ApiResponse } from '../../../src/types/ApiResponse'
 import { Estadistica } from '../../types/Estadistica'
+import { CodigoMarcoOrdenador } from '../../../src/types/CodigoMarcoOrdenador'
 
 export const estadisticaApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -9,32 +10,17 @@ export const estadisticaApi = api.injectEndpoints({
       providesTags: (_result, _err, id) => [{ type: 'Estadistica', id }],
       transformResponse: (response: ApiResponse) => response.data,
     }),
-    getIndiceMdea: build.query<any, number>({
-      query: () => `/website/marcos-ordenadores/mdea/indice-estadisticas`,
-      transformResponse: (response: ApiResponse) => response.data,
-    }),
-    getIndiceOds: build.query<any, number>({
-      query: () => `/website/marcos-ordenadores/ods/indice-estadisticas`,
-      transformResponse: (response: ApiResponse) => response.data,
-    }),
-    getIndiceOcde: build.query<any, number>({
-      query: () => `/website/marcos-ordenadores/ocde/indice-estadisticas`,
-      transformResponse: (response: ApiResponse) => response.data,
-    }),
-    getIndicePna: build.query<any, number>({
-      query: () => `/website/marcos-ordenadores/pna/indice-estadisticas`,
+    getIndiceEstadisticas: build.query<any, CodigoMarcoOrdenador>({
+      query: (marcoOdenador: CodigoMarcoOrdenador) => `/website/marcos-ordenadores/${marcoOdenador}/indice-estadisticas`,
       transformResponse: (response: ApiResponse) => response.data,
     }),
   }),
 })
 export const {
   useGetEstadisticaQuery,
-  useGetIndiceMdeaQuery,
-  useGetIndiceOdsQuery,
-  useGetIndiceOcdeQuery,
-  useGetIndicePnaQuery,
+  useGetIndiceEstadisticasQuery,
 } = estadisticaApi
 
 export const {
-  endpoints: { getEstadistica, getIndiceMdea },
+  endpoints: { getEstadistica, getIndiceEstadisticas },
 } = estadisticaApi

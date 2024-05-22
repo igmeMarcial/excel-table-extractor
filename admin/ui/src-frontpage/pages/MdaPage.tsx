@@ -4,6 +4,7 @@ export default function MdaPage() {
   return (
     <EstadisticaPageLoader
       view={VistaEstadisticaDefecto}
+      marcoOdenador="mdea"
     ></EstadisticaPageLoader>
   );
 }

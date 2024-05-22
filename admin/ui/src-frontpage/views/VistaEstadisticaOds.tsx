@@ -5,10 +5,13 @@ import { Estadistica } from '../types/Estadistica';
 import { TEXTO_ODS } from '../../src/config/textos';
 interface VistaEstadisticaOdsProps {
   estadistica: Estadistica;
+  indiceEstadisticas: any[];
 }
 export default function VistaEstadisticaOds({
   estadistica,
+  indiceEstadisticas,
 }: Readonly<VistaEstadisticaOdsProps>) {
+  console.log(indiceEstadisticas);
   return (
     <>
       <MarcoOrdenadorNav />
