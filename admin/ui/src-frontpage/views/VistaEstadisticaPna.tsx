@@ -1,14 +1,12 @@
 import MarcoOrdenadorNav from '../components/MarcoOrdenadorNav';
 import PrimaryNavPna from '../components/PrimaryNavPna';
 import PageTitle from '../components/PageTitle';
-import { Estadistica } from '../types/Estadistica';
 import { TEXTO_PNA } from '../../src/config/textos';
-interface VistaEstadisticaPnaProps {
-  estadistica: Estadistica;
-}
+import { VistaEstadisticaProps } from '../types/VistaEstadisticaProps';
+
 export default function VistaEstadisticaPna({
   estadistica,
-}: Readonly<VistaEstadisticaPnaProps>) {
+}: Readonly<VistaEstadisticaProps>) {
   return (
     <>
       <MarcoOrdenadorNav />

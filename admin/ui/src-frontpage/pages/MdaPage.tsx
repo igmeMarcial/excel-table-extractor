@@ -1,9 +1,9 @@
-import VistaEstadisticaDefecto from '../views/VistaEstadisticaDefecto';
+import VistaEstadisticaMdea from '../views/VistaEstadisticaMdea';
 import EstadisticaPageLoader from './EstadisticaPageLoader';
 export default function MdaPage() {
   return (
     <EstadisticaPageLoader
-      view={VistaEstadisticaDefecto}
+      view={VistaEstadisticaMdea}
       marcoOdenador="mdea"
     ></EstadisticaPageLoader>
   );

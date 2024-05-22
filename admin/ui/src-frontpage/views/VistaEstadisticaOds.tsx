@@ -4,7 +4,7 @@ import PageTitle from '../components/PageTitle';
 import { Estadistica } from '../types/Estadistica';
 import { TEXTO_ODS } from '../../src/config/textos';
 import EstadisticaVistaTabs from '../blocks/EstadisticaVistaTabs';
-interface VistaEstadisticaOdsProps {
+export interface VistaEstadisticaOdsProps {
   estadistica: Estadistica;
   indiceEstadisticas: any[];
 }

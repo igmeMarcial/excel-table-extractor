@@ -1,14 +1,12 @@
 import MarcoOrdenadorNav from '../components/MarcoOrdenadorNav';
 import PrimaryNavOcde from '../components/PrimaryNavOcde';
 import PageTitle from '../components/PageTitle';
-import { Estadistica } from '../types/Estadistica';
 import { TEXTO_OCDE } from '../../src/config/textos';
-interface VistaEstadisticaOcdeProps {
-  estadistica: Estadistica;
-}
+import { VistaEstadisticaProps } from '../types/VistaEstadisticaProps';
+
 export default function VistaEstadisticaOcde({
   estadistica,
-}: Readonly<VistaEstadisticaOcdeProps>) {
+}: Readonly<VistaEstadisticaProps>) {
   return (
     <>
       <MarcoOrdenadorNav />

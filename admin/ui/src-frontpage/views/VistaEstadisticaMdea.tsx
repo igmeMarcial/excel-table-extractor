@@ -1,21 +1,20 @@
-import NabAside from '../components/NabAside';
 import EstadisticaVistaTabs from '../blocks/EstadisticaVistaTabs';
 import MarcoOrdenadorNav from '../components/MarcoOrdenadorNav';
-import { Estadistica } from '../types/Estadistica';
 import PrimaryNavMdea from '../components/PrimaryNavMdea';
-interface VistaEstadisticaDefectoProps {
-  estadistica: Estadistica;
-}
-export default function VistaEstadisticaDefecto({
+import { VistaEstadisticaProps } from '../types/VistaEstadisticaProps';
+import SideNavMdea from '../components/SideNavMdea';
+
+export default function VistaEstadisticaMdea({
   estadistica,
-}: Readonly<VistaEstadisticaDefectoProps>) {
+  indiceEstadisticas,
+}: Readonly<VistaEstadisticaProps>) {
   return (
     <>
       <MarcoOrdenadorNav />
       <PrimaryNavMdea />
       <div className="flex sm:flex-col-reverse md:flex-row">
         <div style={{ width: '300px' }} className="bg-gray-100">
-          <NabAside />
+          <SideNavMdea indiceEstadisticas={indiceEstadisticas} />
         </div>
         <div className="flex-1 overflow-hidden ">
           <EstadisticaVistaTabs estadistica={estadistica} />
