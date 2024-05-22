@@ -2,13 +2,11 @@ import { createSlice, PayloadAction, isAnyOf } from '@reduxjs/toolkit'
 import { getEstadistica, getIndiceEstadisticas } from './services/estadistica'
 import type { RootState } from './store'
 import { IndiceItem } from '../types/IndiceItem'
-import { EstadisticaMarcoOrdenador } from '../../src/types/EstadisticaMarcoOrdenador'
 import { Estadistica } from '../types/Estadistica'
 
 interface AppState {
   activeNetworkActivity: boolean
   estadisticaId?: number
-  activeTabName?: string
   estadisticaModel: Estadistica
   indiceEstadisticas: IndiceItem[]
   estadisticaIndicePath?: string
@@ -20,7 +18,6 @@ interface AppState {
 const initialState: AppState = {
   activeNetworkActivity: false,
   estadisticaId: 1,
-  activeTabName: 'grafico',
   marcoOrdenadorSeleccionado: 'mdea',
   estadisticaModel: null,
   indiceEstadisticas: [],
@@ -51,9 +48,6 @@ export const appSlice = createSlice({
     },
     setEstadisticaId: (state, action: PayloadAction<number>) => {
       state.estadisticaId = action.payload
-    },
-    setActiveTabName: (state, action: PayloadAction<string>) => {
-      state.activeTabName = action.payload
     },
     setEstadisticaIndicePath: (state, action: PayloadAction<string>) => {
       const path = action.payload
@@ -118,7 +112,6 @@ export const appSlice = createSlice({
 export const {
   setActiveNetworkActivity,
   setEstadisticaId,
-  setActiveTabName,
   toggleMenuNivel2Item,
   setEstadisticaIndicePath,
 } = appSlice.actions
@@ -126,10 +119,8 @@ export const {
 export const selectActiveNetworkActivity = (state: RootState) => state.app.activeNetworkActivity
 export const selectCurrentEstadisticaId = (state: RootState) => state.app.currentEstadisticaId
 export const selectIdEstadisitico = (state: RootState) => state.app.idEstadistica
-export const selectActiveTabName = (state: RootState) => state.app.activeTabName
 export const selectEstadisticaData = (state: RootState): Estadistica => state.app.estadisticaModel
 export const selectEstadisticaDatos = (state: RootState) => state.app.estadisticaModel.datos
-export const selectEstadisticaMarcoOrdenador = (state: RootState): EstadisticaMarcoOrdenador => state.app.estadisticaModel.marcoOrdenador
 export const selectEstadisticaGraficos = (state: RootState) => state.app.estadisticaModel.graficos || []
 export const selectIndiceEstadisticas = (state: RootState) => state.app.indiceEstadisticas
 export const selectClaficadorNivel1Activo = (state: RootState) => state.app.clasificadorNivel1

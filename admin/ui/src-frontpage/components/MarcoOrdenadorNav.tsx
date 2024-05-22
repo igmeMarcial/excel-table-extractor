@@ -5,18 +5,15 @@ import {
   TabList,
 } from '@fluentui/react-components';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getQueryParam, newPathUrl } from '../../src/utils/url-utils';
+import { newPathUrl } from '../../src/utils/url-utils';
 import { QUERY_PARAM_MARCO_ORDENADOR } from '../../src/core/constantes';
+import { useMarcoOrdenadorParam } from '../../src/hooks/url-hooks';
 
 function MarcoOrdenadorNav() {
   const navigate = useNavigate();
   const location = useLocation();
   // Extraer el marco ordenador de la url
-  const activeItem = getQueryParam(
-    location,
-    QUERY_PARAM_MARCO_ORDENADOR,
-    'mdea'
-  );
+  const activeItem = useMarcoOrdenadorParam();
 
   const onTabSelect = (event: SelectTabEvent, data: SelectTabData) => {
     const newPath = newPathUrl(
@@ -24,7 +21,6 @@ function MarcoOrdenadorNav() {
       QUERY_PARAM_MARCO_ORDENADOR,
       String(data.value)
     );
-    console.log(newPath);
     navigate(newPath);
   };
   const items = [

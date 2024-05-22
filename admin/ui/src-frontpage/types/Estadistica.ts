@@ -1,5 +1,4 @@
 import { Cell } from '../../src/types/Cell';
-import { EstadisticaDatos } from '../../src/types/EstadisticaDatos';
 import { EstadisticaMarcoOrdenador } from '../../src/types/EstadisticaMarcoOrdenador';
 import { FormatoTabla } from '../../src/types/FormatoTabla';
 import { Grafico } from '../../src/types/Grafico';
@@ -21,11 +20,11 @@ export interface Estadistica {
   fichaDivulgacion?: FichaDibulgacion
   graficos?: Grafico[]
   datos: Cell[][]
-  periodoSerieTiempo: string;
-  presentacionTablaTitulo: string;
-  presentacionTablaSubtitulo: string;
-  presentacionTablaFuente: string;
-  presentacionTablaNota: string;
-  presentacionTablaElaboracion: string;
+  periodoSerieTiempo: string
+  presentacionTablaTitulo: string
+  presentacionTablaSubtitulo: string
+  presentacionTablaFuente: string
+  presentacionTablaNota: string
+  presentacionTablaElaboracion: string
   presentacionTablaFormato: FormatoTabla
 }

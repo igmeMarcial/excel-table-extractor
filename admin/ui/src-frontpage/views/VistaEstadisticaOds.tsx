@@ -3,6 +3,7 @@ import MarcoOrdenadorNav from '../components/MarcoOrdenadorNav';
 import PageTitle from '../components/PageTitle';
 import { Estadistica } from '../types/Estadistica';
 import { TEXTO_ODS } from '../../src/config/textos';
+import EstadisticaVistaTabs from '../blocks/EstadisticaVistaTabs';
 interface VistaEstadisticaOdsProps {
   estadistica: Estadistica;
   indiceEstadisticas: any[];
@@ -17,6 +18,7 @@ export default function VistaEstadisticaOds({
       <MarcoOrdenadorNav />
       <PageTitle title={'Estadísticas relacionadas con los ' + TEXTO_ODS} />
       <PrimaryNavOds />
+      <EstadisticaVistaTabs estadistica={estadistica} />
     </>
   );
 }
