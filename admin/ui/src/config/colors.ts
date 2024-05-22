@@ -22,54 +22,26 @@ export const COLORES_PNA = {
 
 
 export const OBJETIVOS_ODS = [
-  { numero: 1, titulo: 'Fin de la pobreza', color: '#EB1C2D' },
-  { numero: 2, titulo: 'Hambre cero', color: '#D3A029' },
-  { numero: 3, titulo: 'Salud y bienestar', color: '#279B48' },
-  { numero: 4, titulo: 'Educación de calidad', color: '#C31F33' },
-  { numero: 5, titulo: 'Igualdad de género', color: '#EF402B' },
-  { numero: 6, titulo: 'Agua limpia y saneamiento', color: '#00AED9' },
-  {
-    numero: 7,
-    titulo: 'Energía asequible y no contaminante',
-    color: '#FDB713',
-  },
-  {
-    numero: 8,
-    titulo: 'Trabajo decente y crecimiento económico',
-    color: '#8F1838',
-  },
-  {
-    numero: 9,
-    titulo: 'Industria, innovación e infraestructura',
-    color: '#F36D25',
-  },
-  { numero: 10, titulo: 'Reducción de las desigualdades', color: '#E11484' },
-  {
-    numero: 11,
-    titulo: 'Ciudades y comunidades sostenibles',
-    color: '#F99D26',
-  },
-  { numero: 12, titulo: 'Producción y consumo responsables', color: '#CF8D2A' },
-  { numero: 13, titulo: 'Acción por el clima', color: '#48773E' },
-  { numero: 14, titulo: 'Vida submarina', color: '#007DBC' },
-  { numero: 15, titulo: 'Vida de ecosistemas terrestres', color: '#5DBB46' },
-  {
-    numero: 16,
-    titulo: 'Paz, justicia e instituciones sólidas',
-    color: '#02558B',
-  },
-  {
-    numero: 17,
-    titulo: 'Alianzas para lograr los objetivos',
-    color: '#19486a',
-  },
-  {
-    numero: 18,
-    titulo: 'Objetivos de desarrollo sostenible',
-    color: '#f5f5f5',
-    urlImg: 'https://www.un.org/sustainabledevelopment/es/wp-content/uploads/sites/3/2015/09/S_SDG_Icons-01-18.jpg'
-  },
+  { numero: 1, color: '#EB1C2D', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods1.svg` },
+  { numero: 2, color: '#D3A029', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods2.svg` },
+  { numero: 3, color: '#279B48', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods3.svg` },
+  { numero: 4, color: '#C31F33', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods4.svg` },
+  { numero: 5, color: '#EF402B', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods5.svg` },
+  { numero: 6, color: '#00AED9', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods6.svg` },
+  { numero: 7, color: '#FDB713', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods7.svg` },
+  { numero: 8, color: '#8F1838', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods8.svg` },
+  { numero: 9, color: '#F36D25', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods9.svg` },
+  { numero: 10, color: '#E11484', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods10.svg` },
+  { numero: 11, color: '#F99D26', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods11.svg` },
+  { numero: 12, color: '#CF8D2A', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods12.svg` },
+  { numero: 13, color: '#48773E', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods13.svg` },
+  { numero: 14, color: '#007DBC', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods14.svg` },
+  { numero: 15, color: '#5DBB46', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods15.svg` },
+  { numero: 16, color: '#02558B', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods16.svg` },
+  { numero: 17, color: '#19486a', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods17.svg` },
+  { numero: 18, color: '#f5f5f5', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods18.svg`, urlImg: 'https://www.un.org/sustainabledevelopment/es/wp-content/uploads/sites/3/2015/09/S_SDG_Icons-01-18.jpg' }
 ];
+
 export const OBJETIVOS_OCDE = [
   {
     titulo: 'Agricultura',
