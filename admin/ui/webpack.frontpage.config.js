@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: ['./src-frontpage/index.tsx'],
+  devtool: 'source-map', // Añadir sourcemaps para debug
   plugins: [
     new HtmlWebpackPlugin({
       template: 'src-frontpage/index.html',
@@ -17,6 +18,10 @@ module.exports = {
           loader: 'ts-loader',
           options: {
             configFile: 'tsconfig.frontpage.json',
+            transpileOnly: true, // Acelera la compilación habilitando la transpilación solo
+            compilerOptions: {
+              sourceMap: true, // Generar sourcemaps
+            },
           },
         },
       },
@@ -38,6 +43,7 @@ module.exports = {
   output: {
     filename: 'aesa-frontpage.js',
     path: path.resolve(__dirname, 'public', 'frontpage'),
+    sourceMapFilename: '[file].map', // Definir nombres de archivo para sourcemaps
   },
   devServer: {
     port: 3001, // you can change the port
