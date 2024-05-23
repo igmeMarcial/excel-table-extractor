@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { IndiceItem } from '../types/IndiceItem';
 import { Link, useLocation } from 'react-router-dom';
-import { ColorsType } from '../types/Colors';
 import { getQueryParam, newPathUrl } from '../../src/utils/url-utils';
 import { useAppSelector } from '../app/hooks';
 import { selectClasificadoresNivel1 } from '../app/AppSlice';
@@ -9,27 +8,24 @@ import chroma from 'chroma-js';
 import { COLORES_MDEA } from '../../src/config/colors';
 import { QUERY_PARAM_ESTADISTICA_INDICE_PATH } from '../../src/core/constantes';
 import './mdea.scss';
-interface PanelItemProps {
+interface NavItemProps {
   item: IndiceItem;
-  colors: ColorsType;
   transformStyles: (item: IndiceItem) => React.CSSProperties;
   index: number;
-
   numItemActivo: string;
 }
 
 const pathRoot = window.AesaInfo.pluginUrl;
 const imgBasePath = pathRoot + '/public/assets/images/mdea';
 
-const PanelItem: React.FC<PanelItemProps> = ({
+const NavItem = ({
   item,
-  colors,
   transformStyles,
   index,
   numItemActivo,
-}) => {
+}: NavItemProps) => {
   const location = useLocation();
-
+  const colors = COLORES_MDEA;
   return (
     <div className="">
       <Link
@@ -84,18 +80,14 @@ function PrimaryNavMdea() {
     };
 
     return calculateStyles;
-  }, [numItemActivo, colors]);
+  }, [numItemActivo]);
   return (
     <>
-      <div
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-5 "
-        // style={{ borderBottom: `4px solid ${colors[numItemActivo]}` }}
-      >
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-5">
         {clasificadoresN1.map((item: IndiceItem, index) => (
-          <PanelItem
+          <NavItem
             key={item.numeral}
             item={item}
-            colors={colors}
             transformStyles={transformStyles}
             index={index + 1}
             numItemActivo={numItemActivo}

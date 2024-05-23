@@ -8,6 +8,7 @@ import { QUERY_PARAM_ESTADISTICA_ID } from '../../src/core/constantes';
 import Status500Page from './Status500Page';
 import { CodigoMarcoOrdenador } from '../../src/types/CodigoMarcoOrdenador';
 import { VistaEstadisticaProps } from '../types/VistaEstadisticaProps';
+import { IndiceEstadisticas } from '../../src/core/IndiceEstadisticas';
 interface EstadisticaPageLoaderProps {
   view: React.ComponentType<VistaEstadisticaProps>;
   marcoOdenador: CodigoMarcoOrdenador;
@@ -53,7 +54,7 @@ export default function EstadisticaPageLoader({
     return (
       <View
         estadistica={estadistica}
-        indiceEstadisticas={indiceEstadisticas}
+        indiceEstadisticas={new IndiceEstadisticas(indiceEstadisticas)}
       ></View>
     );
   }

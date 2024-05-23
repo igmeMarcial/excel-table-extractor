@@ -8,6 +8,7 @@ import {
   QUERY_PARAM_ESTADISTICA_ID,
   QUERY_PARAM_ESTADISTICA_INDICE_PATH,
 } from '../../src/core/constantes';
+import { IndiceEstadisticas } from '../../src/core/IndiceEstadisticas';
 
 interface MenuItemProps {
   model: IndiceItem;
@@ -34,9 +35,9 @@ const ExpandedArrow = ({ model }) => {
 };
 const MenuItem = ({ model, onExpandToggleClick }: MenuItemProps) => {
   // No visible
-  if (!model.visible) {
+/*   if (!model.visible) {
     return null;
-  }
+  } */
 
   // Estadistica
   const location = useLocation();
@@ -81,7 +82,9 @@ interface SideNavMdeaProps {
 }
 function SideNavMdea({ indiceEstadisticas }: SideNavMdeaProps) {
   const dispath = useAppDispatch();
+  const indice = new IndiceEstadisticas(indiceEstadisticas);
   const menuNivel2 = useAppSelector(selectMenuNivel2);
+  const menuLevel2x = indice.getItemsNivel2();
   const toggleMenu = (model) => {
     dispath(toggleMenuNivel2Item(model));
   };

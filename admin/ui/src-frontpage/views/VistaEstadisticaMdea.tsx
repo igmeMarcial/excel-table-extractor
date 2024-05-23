@@ -14,7 +14,7 @@ export default function VistaEstadisticaMdea({
       <PrimaryNavMdea />
       <div className="flex sm:flex-col-reverse md:flex-row">
         <div style={{ width: '300px' }} className="bg-gray-100">
-          <SideNavMdea indiceEstadisticas={indiceEstadisticas} />
+          <SideNavMdea indiceEstadisticas={indiceEstadisticas.getItems()} />
         </div>
         <div className="flex-1 overflow-hidden ">
           <EstadisticaVistaTabs estadistica={estadistica} />

@@ -12,7 +12,12 @@ export const estadisticaApi = api.injectEndpoints({
     }),
     getIndiceEstadisticas: build.query<any, CodigoMarcoOrdenador>({
       query: (marcoOdenador: CodigoMarcoOrdenador) => `/website/marcos-ordenadores/${marcoOdenador}/indice-estadisticas`,
-      transformResponse: (response: ApiResponse) => response.data,
+      transformResponse: (response: ApiResponse) => {
+        return response.data.map(item => {
+          item.nivel = item.numeral.split('.').length
+          return item
+        })
+      },
     }),
   }),
 })

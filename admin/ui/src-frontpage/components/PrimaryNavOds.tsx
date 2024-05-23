@@ -14,14 +14,14 @@ function PrimaryNavOds({ indiceEstadisticas }) {
       return false;
     }
   };
+  const intemsNivel1 = indiceEstadisticas.getItemsNivel1();
   return (
     <div className="faq-container">
-      {indiceEstadisticas.map((ods, index) => (
+      {intemsNivel1.map((ods, index) => (
         <SideNavOds
           key={ods.numeral}
           title={ods.nombre}
-          color="
-#E5243B"
+          color="#E5243B"
           img={icono}
           number={index + 1}
         >

@@ -1,17 +1,21 @@
-import React, { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent } from 'react';
 import SearchBox from '../../components/SearchBox';
 import UploadFileButton from '../../components/UploadFileButton';
 import AnuarioRestService from '../../services/AnuarioRestService';
 
 interface AnuariosPageToolbarProps {
   onSearchBoxChange?: (event: ChangeEvent<HTMLInputElement>) => void;
-  onFileUploaded?: (fileInfo: { name: string; size: number; modified: number }) => void;
+  onFileUploaded?: (fileInfo: {
+    name: string;
+    size: number;
+    modified: number;
+  }) => void;
 }
 
-const AnuariosPageToolbar: React.FC<AnuariosPageToolbarProps> = ({
+const AnuariosPageToolbar = ({
   onSearchBoxChange = () => {},
   onFileUploaded = () => {},
-}) => {
+}: AnuariosPageToolbarProps) => {
   const [fileUploading, setFileUploading] = useState(false);
 
   const handlerSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
