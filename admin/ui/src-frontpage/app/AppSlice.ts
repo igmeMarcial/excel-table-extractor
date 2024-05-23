@@ -26,9 +26,7 @@ export const appSlice = createSlice({
       state.activeNetworkActivity = action.payload
     },
     setEstadisticaIndicePath: (state, action: PayloadAction<string>) => {
-      const path = action.payload
-      const pathParts = path.split('.')
-      state.estadisticaIndicePath = path
+      state.estadisticaIndicePath = action.payload
     },
   },
   extraReducers: (builder) => {

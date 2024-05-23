@@ -1,13 +1,12 @@
 import { useRef, useState } from 'react';
 import { ChevronDown24Filled } from '@fluentui/react-icons';
 import './mdea.scss';
-import { IndiceItem } from '../types/IndiceItem';
 import { IndiceEstadisticas } from '../../src/core/IndiceEstadisticas';
 import { OBJETIVOS_ODS } from '../../src/config/colors';
 
 let urlIcon = window.AesaInfo.pluginUrl + '/public/assets/images/ods/';
 interface SideNavMdeaProps {
-  indiceEstadisticas: { items: IndiceItem[] };
+  indiceEstadisticas: IndiceEstadisticas;
 }
 const AsideItem = ({ title, color, number, img, children }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -71,28 +70,20 @@ const AsideItem = ({ title, color, number, img, children }) => {
 };
 
 export const SideNavOds = ({ indiceEstadisticas }: SideNavMdeaProps) => {
-  const indice = new IndiceEstadisticas(indiceEstadisticas.items);
-  const itemsNivel1 = indice.getItemsNivel1();
+  const itemsNivel1 = indiceEstadisticas.getItemsNivel1();
   const ods = OBJETIVOS_ODS;
-  const itemsNive2 = indice.getItemsNivel2();
 
-  const filterNivel = (arr: IndiceItem[], numeral: string) => {
-    return arr.filter((item) => {
-      const regexp = new RegExp(`^${numeral}\\.`);
-      return regexp.test(item.numeral);
-    });
-  };
   return (
     <div className="faq-container">
-      {itemsNivel1.map((item, index) => (
+      {itemsNivel1.map((item) => (
         <AsideItem
           key={item.numeral}
-          title={ods[index].nombre}
-          color={ods[index].color}
-          img={`${urlIcon}ods${index + 1}.svg`}
-          number={index + 1}
+          title={ods[item.numeral].nombre}
+          color={ods[item.numeral].color}
+          img={`${urlIcon}ods${item.numeral}.svg`}
+          number={item.numeral}
         >
-          {filterNivel(itemsNive2, item.numeral).map((filteredItem, index) => (
+          {indiceEstadisticas.getDirectChildren(item).map((filteredItem) => (
             <div className="mb-[20px] " key={filteredItem.numeral}>
               <span className="font-bold mr-2">{filteredItem.numeral}</span>
               <p className="inline">{filteredItem.nombre}</p>
