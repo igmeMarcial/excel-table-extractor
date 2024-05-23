@@ -7,7 +7,6 @@ import { selectEstadisticaDatos } from '../../EstadisticaFormSlice';
 
 const PresentationSeriesConfiguration: React.FC = () => {
   const [colors, setColors] = useState(getChartColors);
-  // const data = useAppSelector(selectEstadisticaData);
   const data = useAppSelector(selectEstadisticaDatos).tabla; //Test
 
   let number = 1;

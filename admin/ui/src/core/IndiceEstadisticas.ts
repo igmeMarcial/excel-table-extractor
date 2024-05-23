@@ -23,4 +23,20 @@ export class IndiceEstadisticas {
   getItemsFromNivel(nivel: number): IndiceItem[] {
     return this.items.filter(item => item.nivel === nivel)
   }
+
+  getItemsForSideNav(items: IndiceItem[], clasificadorNivel1: string): IndiceItem[] {
+    return items.map((item) => {
+      let newItem = { ...item };
+      newItem.expanded = false;
+      if (
+        newItem.nivel === 2 &&
+        newItem.numeral.split('.')[0] === clasificadorNivel1
+      ) {
+        newItem.visible = true;
+      } else {
+        newItem.visible = false;
+      }
+      return newItem;
+    })
+  }
 }

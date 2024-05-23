@@ -1,5 +1,10 @@
 import { useLocation } from "react-router-dom";
-import { MARCO_ORDENADOR_DEFECTO, QUERY_PARAM_ESTADISTICA_DATA_TAB, QUERY_PARAM_MARCO_ORDENADOR } from "../core/constantes";
+import {
+  MARCO_ORDENADOR_DEFECTO,
+  QUERY_PARAM_ESTADISTICA_DATA_TAB,
+  QUERY_PARAM_MARCO_ORDENADOR,
+  QUERY_PARAM_SELECTED_INDICE_ITEM_NIVEL_1,
+} from "../core/constantes";
 import { getQueryParam } from "../utils/url-utils";
 
 // Devuelve el marco ordenador la la url
@@ -12,4 +17,9 @@ export const useMarcoOrdenadorParam = () => {
 export const useEstadisticaDataViewParam = () => {
   const location = useLocation();
   return getQueryParam(location, QUERY_PARAM_ESTADISTICA_DATA_TAB, 'grafico');
+}
+
+export const useIndiceItemNivel1Seleccionado = () => {
+  const location = useLocation();
+  return getQueryParam(location, QUERY_PARAM_SELECTED_INDICE_ITEM_NIVEL_1, '1');
 }

@@ -11,10 +11,10 @@ export default function VistaEstadisticaMdea({
   return (
     <>
       <MarcoOrdenadorNav />
-      <PrimaryNavMdea />
+      <PrimaryNavMdea items={indiceEstadisticas.getItemsNivel1()} />
       <div className="flex sm:flex-col-reverse md:flex-row">
         <div style={{ width: '300px' }} className="bg-gray-100">
-          <SideNavMdea indiceEstadisticas={indiceEstadisticas.getItems()} />
+          <SideNavMdea indiceEstadisticas={indiceEstadisticas} />
         </div>
         <div className="flex-1 overflow-hidden ">
           <EstadisticaVistaTabs estadistica={estadistica} />

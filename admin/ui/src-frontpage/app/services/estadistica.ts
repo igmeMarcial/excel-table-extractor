@@ -14,7 +14,10 @@ export const estadisticaApi = api.injectEndpoints({
       query: (marcoOdenador: CodigoMarcoOrdenador) => `/website/marcos-ordenadores/${marcoOdenador}/indice-estadisticas`,
       transformResponse: (response: ApiResponse) => {
         return response.data.map(item => {
-          item.nivel = item.numeral.split('.').length
+          item.nivel = item.numeral.split('.').length,
+            item.hasChildren = response.data.some((child) => {
+              return child.numeral.startsWith(item.numeral + '.');
+            })
           return item
         })
       },

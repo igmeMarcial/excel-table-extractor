@@ -1,14 +1,11 @@
 import { ChevronUp24Filled, ChevronDown24Filled } from '@fluentui/react-icons';
 import { getQueryParam, newPathUrl } from '../../src/utils/url-utils';
 import { Link, useLocation } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { selectMenuNivel2, toggleMenuNivel2Item } from '../app/AppSlice';
 import { IndiceItem } from '../types/IndiceItem';
-import {
-  QUERY_PARAM_ESTADISTICA_ID,
-  QUERY_PARAM_ESTADISTICA_INDICE_PATH,
-} from '../../src/core/constantes';
+import { QUERY_PARAM_ESTADISTICA_ID } from '../../src/core/constantes';
 import { IndiceEstadisticas } from '../../src/core/IndiceEstadisticas';
+import { useIndiceItemNivel1Seleccionado } from '../../src/hooks/url-hooks';
+import { useEffect, useState } from 'react';
 
 interface MenuItemProps {
   model: IndiceItem;
@@ -29,22 +26,18 @@ const ExpandedArrow = ({ model }) => {
     return null;
   }
   if (model.expanded) {
-    return <ChevronDown24Filled style={style} />;
+    return <ChevronUp24Filled style={style} />;
   }
-  return <ChevronUp24Filled style={style} />;
+  return <ChevronDown24Filled style={style} />;
 };
 const MenuItem = ({ model, onExpandToggleClick }: MenuItemProps) => {
   // No visible
-/*   if (!model.visible) {
+  if (!model.visible) {
     return null;
-  } */
+  }
 
   // Estadistica
   const location = useLocation();
-  const paramValueNav = getQueryParam(
-    location,
-    QUERY_PARAM_ESTADISTICA_INDICE_PATH
-  );
   if (!model.estadisticaId) {
     return (
       <div
@@ -78,20 +71,42 @@ const MenuItem = ({ model, onExpandToggleClick }: MenuItemProps) => {
   );
 };
 interface SideNavMdeaProps {
-  indiceEstadisticas: IndiceItem[];
+  indiceEstadisticas: IndiceEstadisticas;
 }
 function SideNavMdea({ indiceEstadisticas }: SideNavMdeaProps) {
-  const dispath = useAppDispatch();
-  const indice = new IndiceEstadisticas(indiceEstadisticas);
-  const menuNivel2 = useAppSelector(selectMenuNivel2);
-  const menuLevel2x = indice.getItemsNivel2();
+  const nivel1 = useIndiceItemNivel1Seleccionado();
+  const [menuItems, setMenuItems] = useState(
+    indiceEstadisticas.getItemsForSideNav(indiceEstadisticas.getItems(), nivel1)
+  );
+
   const toggleMenu = (model) => {
-    dispath(toggleMenuNivel2Item(model));
+    const { numeral, expanded, nivel } = model;
+    const doExpand = !expanded;
+    const newindice = menuItems.map((item) => {
+      //Invertir toggle expander
+      if (item.numeral === numeral) {
+        item.expanded = !item.expanded;
+      }
+      //Hijos directos e indirectos
+      if (item.nivel > nivel && item.numeral.startsWith(numeral)) {
+        if (item.nivel === nivel + 1) {
+          item.visible = doExpand;
+        }
+        if (item.nivel > nivel + 1 && !doExpand) {
+          item.visible = false;
+        }
+      }
+      return item;
+    });
+    setMenuItems(newindice);
   };
+  useEffect(() => {
+    setMenuItems(indiceEstadisticas.getItemsForSideNav(menuItems, nivel1));
+  }, [nivel1]);
   return (
     <div className="py-3 border-x-0 border-b-0 ">
       <div className="flex flex-col pl-0 my-0">
-        {menuNivel2.map((item, index) => (
+        {menuItems.map((item, index) => (
           <MenuItem key={index} model={item} onExpandToggleClick={toggleMenu} />
         ))}
       </div>

@@ -1,5 +1,6 @@
 export const QUERY_PARAM_ESTADISTICA_ID = 'eid'
 export const QUERY_PARAM_ESTADISTICA_INDICE_PATH = 'estadistica'
+export const QUERY_PARAM_SELECTED_INDICE_ITEM_NIVEL_1 = 'n1'
 export const QUERY_PARAM_MARCO_ORDENADOR = 'marcoOrdenador'
 export const QUERY_PARAM_ESTADISTICA_DATA_TAB = 'tab'
 export const MARCO_ORDENADOR_DEFECTO = 'mdea'
