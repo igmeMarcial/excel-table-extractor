@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { newPathUrl } from '../../src/utils/url-utils';
 import { COLORES_MDEA } from '../../src/config/colors';
 import { QUERY_PARAM_SELECTED_INDICE_ITEM_NIVEL_1 } from '../../src/core/constantes';
-import './mdea.scss';
 import { useIndiceItemNivel1Seleccionado } from '../../src/hooks/url-hooks';
 interface NavItemProps {
   numeral: string;
@@ -46,8 +45,13 @@ const NavItem = ({ numeral, nombre, active }: NavItemProps) => {
           borderBottomColor: `${colors[numeral]}`,
           visibility: active === numeral ? 'visible' : 'hidden',
           opacity: active === numeral ? '1' : '0',
+          width: '0',
+          height: '0',
+          borderLeft: '8px solid transparent',
+          borderRight: '8px solid transparent',
+          borderBottom: `8px solid ${colors[numeral]}`,
+          margin: '0 auto',
         }}
-        className={`arrow-up`}
       ></div>
     </div>
   );

@@ -6,12 +6,13 @@ import { VistaEstadisticaProps } from '../types/VistaEstadisticaProps';
 
 export default function VistaEstadisticaOcde({
   estadistica,
+  indiceEstadisticas,
 }: Readonly<VistaEstadisticaProps>) {
   return (
     <>
       <MarcoOrdenadorNav />
       <PageTitle title={'Estadísticas relacionadas con la ' + TEXTO_OCDE} />
-      <PrimaryNavOcde />
+      <PrimaryNavOcde indiceEstadisticas={indiceEstadisticas} />
     </>
   );
 }

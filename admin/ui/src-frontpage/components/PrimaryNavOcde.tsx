@@ -1,40 +1,38 @@
 import { OBJETIVOS_OCDE } from '../../src/config/colors';
+import { IndiceEstadisticas } from '../../src/core/IndiceEstadisticas';
+import Accordion from './Accordion';
 
-function PrimaryNavOcde() {
-  const items = OBJETIVOS_OCDE;
-  const mitad1 = items.slice(0, Math.ceil(items.length / 2));
-  const mitad2 = items.slice(Math.ceil(items.length / 2));
+interface SideNavMdeaProps {
+  indiceEstadisticas: IndiceEstadisticas;
+}
+
+function PrimaryNavOcde({ indiceEstadisticas }: SideNavMdeaProps) {
+  const itemsNivel1 = indiceEstadisticas.getItemsNivel1();
+
   return (
-    <>
-      <div className="flex justify-between flex-wrap mt-5 mb-2">
-        {mitad1.map((item, index) => (
-          <div
-            key={item.color}
-            className={` min-h-16 p-2 rounded-lg text-center text-white content-center`}
-            style={{
-              backgroundColor: item.color,
-              width: 'calc(16.6666667% - ( 0.83333333333333 * 30px ))',
-            }}
-          >
-            {item?.titulo}
-          </div>
-        ))}
-      </div>
-      <div className="flex justify-between flex-wrap mt-2 mb-5">
-        {mitad2.map((item, index) => (
-          <div
-            key={item.color}
-            className={` min-h-16 p-2 rounded-lg text-center text-white content-center`}
-            style={{
-              backgroundColor: item.color,
-              width: 'calc(16.6666667% - ( 0.83333333333333 * 30px ) )',
-            }}
-          >
-            {item?.titulo}
-          </div>
-        ))}
-      </div>
-    </>
+    <div className="faq-container">
+      {itemsNivel1.map((item) => (
+        <Accordion
+          key={item.numeral}
+          title={item.nombre}
+          numero={item.numeral}
+          color="#004b78"
+        >
+          {indiceEstadisticas.getDirectChildren(item).map((filteredItem) => (
+            <Accordion
+              key={filteredItem.numeral}
+              title={filteredItem.nombre}
+              numero={filteredItem.numeral}
+              color="#7098b1"
+            >
+              <div className="py-2 px-4">Estaditica 1</div>
+              <div className="py-2 px-4">Estaditica 2</div>
+              <div className="py-2 px-4">Estaditica 3</div>
+            </Accordion>
+          ))}
+        </Accordion>
+      ))}
+    </div>
   );
 }
 

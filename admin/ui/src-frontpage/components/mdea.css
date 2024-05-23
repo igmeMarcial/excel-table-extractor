@@ -1,16 +1,6 @@
-.arrow-up {
-  width: 0; 
-  height: 0; 
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-bottom: 8px solid ;
-  margin: 0 auto;
-}
-.border-down{
-    border-bottom: 4px solid #000;
-}
 
 
+/*
 .faq-container {
   margin: 0 0;
   display: flex;
@@ -31,24 +21,26 @@ details {
   transition: all 0.3s ease-in-out;
   
 }
-
-details:hover {
+*/
+.accordion-item:hover {
   background-color: #e41931;
 }
 
-details:hover svg {
+.accordion-item:hover svg {
   stroke: white;
 }
 
-details[open] {
+
+
+.accordion-item[open] {
   background-color: #e41931;
 }
 
-details[open] .faq-title {
+.accordion-item[open] .faq-title {
   color: white;
 }
 
-summary {
+.accordion-item summary {
   user-select: none;
   cursor: pointer;
   font-weight: 600;
@@ -59,24 +51,24 @@ summary {
 }
 
 
-summary svg {
+.accordion-item summary svg {
   stroke: white;
 }
 
-details[open] summary .icon {
+.accordion-item[open] summary .expand-icon {
   stroke: white;
-  transform: rotate(-90deg);
+  transform: rotate(-180deg);
 }
 
-summary:hover .faq-title {
+.accordion-item summary:hover .faq-title {
   color: white;
 }
 
-summary::-webkit-details-marker {
+.accordion-item summary::-webkit-details-marker {
   display: none;
 }
 
-summary:focus {
+.accordion-item summary:focus {
   outline: none;
 }
 
