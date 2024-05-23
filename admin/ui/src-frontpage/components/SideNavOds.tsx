@@ -1,8 +1,15 @@
-import React, { useRef, useState } from 'react';
-import { IosArrowRtl24Filled, ChevronDownFilled } from '@fluentui/react-icons';
+import { useRef, useState } from 'react';
+import { ChevronDown24Filled } from '@fluentui/react-icons';
 import './mdea.scss';
+import { IndiceItem } from '../types/IndiceItem';
+import { IndiceEstadisticas } from '../../src/core/IndiceEstadisticas';
+import { OBJETIVOS_ODS } from '../../src/config/colors';
 
-export const SideNavOds = ({ title, color, number, img, children }) => {
+let urlIcon = window.AesaInfo.pluginUrl + '/public/assets/images/ods/';
+interface SideNavMdeaProps {
+  indiceEstadisticas: { items: IndiceItem[] };
+}
+const AsideItem = ({ title, color, number, img, children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const contentRef = useRef(null);
@@ -43,15 +50,57 @@ export const SideNavOds = ({ title, color, number, img, children }) => {
     >
       <summary onClick={handleToggle} ref={summaryRef}>
         <div className="text-3xl text-white mr-3">{number}</div>
-        <span className="faq-title">{title}</span>
+        <span className="faq-title whitespace-pre-line">{title}</span>
         <div>
-          <img src={img} style={{ width: '100px', height: '40px' }} />
+          <img
+            alt={title}
+            src={img}
+            style={{ width: '100px', height: '40px', objectFit: 'contain' }}
+          />
         </div>
         <div>
-          <IosArrowRtl24Filled style={{ color: 'white' }} />
+          <ChevronDown24Filled
+            className="icon expand-icon"
+            style={{ color: 'white' }}
+          />
         </div>
       </summary>
       <div className="faq-content">{children}</div>
     </details>
+  );
+};
+
+export const SideNavOds = ({ indiceEstadisticas }: SideNavMdeaProps) => {
+  const indice = new IndiceEstadisticas(indiceEstadisticas.items);
+  const itemsNivel1 = indice.getItemsNivel1();
+  const ods = OBJETIVOS_ODS;
+  const itemsNive2 = indice.getItemsNivel2();
+
+  const filterNivel = (arr: IndiceItem[], numeral: string) => {
+    return arr.filter((item) => {
+      const regexp = new RegExp(`^${numeral}\\.`);
+      return regexp.test(item.numeral);
+    });
+  };
+  return (
+    <div className="faq-container">
+      {itemsNivel1.map((item, index) => (
+        <AsideItem
+          key={item.numeral}
+          title={ods[index].nombre}
+          color={ods[index].color}
+          img={`${urlIcon}ods${index + 1}.svg`}
+          number={index + 1}
+        >
+          {filterNivel(itemsNive2, item.numeral).map((filteredItem, index) => (
+            <div className="mb-[20px] " key={filteredItem.numeral}>
+              <span className="font-bold mr-2">{filteredItem.numeral}</span>
+              <p className="inline">{filteredItem.nombre}</p>
+              <br />
+            </div>
+          ))}
+        </AsideItem>
+      ))}
+    </div>
   );
 };

@@ -22,24 +22,23 @@ export const COLORES_PNA = {
 
 
 export const OBJETIVOS_ODS = [
-  { numero: 1, color:  '#EB1C2D', nombre: 'FIN\nDE LA POBREZA', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods1.svg` },
-  { numero: 2, color:  '#D3A029', nombre: 'HAMBRE\nCERO',       imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods2.svg` },
-  { numero: 3, color:  '#279B48', nombre: 'OBJETIVO X', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods3.svg` },
-  { numero: 4, color:  '#C31F33', nombre: 'OBJETIVO X', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods4.svg` },
-  { numero: 5, color:  '#EF402B', nombre: 'OBJETIVO X', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods5.svg` },
-  { numero: 6, color:  '#00AED9', nombre: 'OBJETIVO X', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods6.svg` },
-  { numero: 7, color:  '#FDB713', nombre: 'OBJETIVO X', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods7.svg` },
-  { numero: 8, color:  '#8F1838', nombre: 'OBJETIVO X', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods8.svg` },
-  { numero: 9, color:  '#F36D25', nombre: 'OBJETIVO X', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods9.svg` },
-  { numero: 10, color: '#E11484', nombre: 'OBJETIVO X', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods10.svg` },
-  { numero: 11, color: '#F99D26', nombre: 'OBJETIVO X', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods11.svg` },
-  { numero: 12, color: '#CF8D2A', nombre: 'OBJETIVO X', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods12.svg` },
-  { numero: 13, color: '#48773E', nombre: 'OBJETIVO X', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods13.svg` },
-  { numero: 14, color: '#007DBC', nombre: 'OBJETIVO X', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods14.svg` },
-  { numero: 15, color: '#5DBB46', nombre: 'OBJETIVO X', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods15.svg` },
-  { numero: 16, color: '#02558B', nombre: 'OBJETIVO X', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods16.svg` },
-  { numero: 17, color: '#19486a', nombre: 'OBJETIVO X', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods17.svg` },
-  { numero: 18, color: '#f5f5f5', nombre: 'OBJETIVO X', imgUrl: `${window.AesaInfo.pluginUrl}/public/assets/images/ods/ods18.svg`, urlImg: 'https://www.un.org/sustainabledevelopment/es/wp-content/uploads/sites/3/2015/09/S_SDG_Icons-01-18.jpg' }
+   { numero: 1, color: '#EB1C2D', nombre: 'FIN\nDE LA POBREZA' },
+  { numero: 2, color: '#D3A029', nombre: 'HAMBRE\nCERO' },
+  { numero: 3, color: '#279B48', nombre: 'SALUD\nY BIENESTAR' },
+  { numero: 4, color: '#C31F33', nombre: 'EDUCACIÓN\nDE CALIDAD' },
+  { numero: 5, color: '#EF402B', nombre: 'IGUALDAD\nDE GÉNERO' },
+  { numero: 6, color: '#00AED9', nombre: 'AGUA LIMPIA\nY SANEAMIENTO' },
+  { numero: 7, color: '#FDB713', nombre: 'ENERGÍA ASEQUIBLE\nY NO CONTAMINANTE' },
+  { numero: 8, color: '#8F1838', nombre: 'TRABAJO DECENTE\nY CRECIMIENTO ECONÓMICO' },
+  { numero: 9, color: '#F36D25', nombre: 'INDUSTRIA, INNOVACIÓN\nE INFRAESTRUCTURA' },
+  { numero: 10, color: '#E11484', nombre: 'REDUCCIÓN\nDE LAS DESIGUALDADES' },
+  { numero: 11, color: '#F99D26', nombre: 'CIUDADES Y COMUNIDADES\nSOSTENIBLES' },
+  { numero: 12, color: '#CF8D2A', nombre: 'PRODUCCIÓN Y CONSUMO\nRESPONSABLES' },
+  { numero: 13, color: '#48773E', nombre: 'ACCIÓN\nPOR EL CLIMA' },
+  { numero: 14, color: '#007DBC', nombre: 'VIDA\nSUBMARINA' },
+  { numero: 15, color: '#5DBB46', nombre: 'VIDA DE\nECOSISTEMAS TERRESTRES' },
+  { numero: 16, color: '#02558B', nombre: 'PAZ, JUSTICIA E\nINSTITUCIONES SÓLIDAS' },
+  { numero: 17, color: '#19486a', nombre: 'ALIANZAS PARA LOGRAR\nLOS OBJETIVOS' },
 ];
 
 export const OBJETIVOS_OCDE = [
