@@ -23,8 +23,8 @@ class WpFilters
         }
         $instance = self::getInstance();
         // Permite subir archivos SVG
-        add_filter('wp_check_filetype_and_ext', [$instance, 'allowSvgUploadFilter'], 10, 4);
         add_filter('upload_mimes', [$instance, 'addSvgMime']);
+        add_filter('wp_check_filetype_and_ext', [$instance, 'allowSvgUploadFilter'], 10, 5);
 
         self::$filtersAdded = true;
     }
@@ -32,7 +32,7 @@ class WpFilters
     public function allowSvgUploadFilter($data, $file, $filename, $mimes, $real_mime)
     {
         $filetype = wp_check_filetype($filename, $mimes);
-        if ($filetype['ext'] == 'xml' && $real_mime == 'text/xml') {
+        if ($filetype['ext'] == 'svg') {
             return [
                 'ext' => $filetype['ext'],
                 'type' => $filetype['type'],
