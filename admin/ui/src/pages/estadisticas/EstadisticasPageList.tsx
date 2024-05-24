@@ -3,9 +3,10 @@ import { Link, useLocation } from 'react-router-dom';
 import { Table, TableProps, Tooltip } from 'antd';
 import { Button } from '@fluentui/react-components';
 import {
-  OpenRegular,
   CheckmarkCircleRegular,
   CheckmarkCircleWarningRegular,
+  EditFilled,
+  EarthFilled,
 } from '@fluentui/react-icons';
 import dayjs from 'dayjs';
 
@@ -14,6 +15,7 @@ import RowDeteteButton from '../../components/RowDeleteButton';
 import EstadisticaService from '../../services/EstadisticaService';
 import { useAppDispatch } from '../../app/hooks';
 import { setActiveTab } from './EstadisticaFormSlice';
+import { getEstadisticaPublicUrl } from '../../utils/estadistica-utils';
 interface ColDataType {
   key: string;
   name: string;
@@ -28,8 +30,16 @@ const EstadisticasPageList = forwardRef((props, ref) => {
   const dispath = useAppDispatch();
   // Metodo para filtrar la tabla desde el toolbar
   const filterRecords = (text) => {
-    const filteredData = fullData.filter((item) => {
-      return item.name.toLowerCase().includes(text.toLowerCase());
+    const filteredData = fullData.filter((model) => {
+      // Convert text to lower case for case-insensitive comparison
+      const lowerText = text.toLowerCase();
+
+      // Extract all string values from the model
+      const values = Object.values(model).filter(
+        (value) => typeof value === 'string'
+      ) as string[];
+      // Check if any of the values include the search text
+      return values.some((value) => value.toLowerCase().includes(lowerText));
     });
     setData(filteredData);
   };
@@ -89,9 +99,14 @@ const EstadisticasPageList = forwardRef((props, ref) => {
     const newUrl = builNavPathUrl(location, 'indicador-editor', record.id);
     return (
       <div className="flex">
+        <Link to={getEstadisticaPublicUrl(record.id)} target="_blank">
+          <Tooltip title="Ir a vista pública">
+            <Button appearance="subtle" icon={<EarthFilled />}></Button>
+          </Tooltip>
+        </Link>
         <Link to={newUrl} onClick={onClickLink}>
-          <Tooltip title="Ir al indicador">
-            <Button appearance="subtle" icon={<OpenRegular />} />
+          <Tooltip title="Editar">
+            <Button appearance="subtle" icon={<EditFilled />} />
           </Tooltip>
         </Link>
         <RowDeteteButton onClick={() => handleDelete(record)} />
@@ -135,6 +150,30 @@ const EstadisticasPageList = forwardRef((props, ref) => {
       width: 220,
     },
     {
+      key: 'clasificacionMdea',
+      title: 'MDEA',
+      dataIndex: 'clasificacionMdea',
+      width: 60,
+    },
+    {
+      key: 'clasificacionOds',
+      title: 'ODS',
+      dataIndex: 'clasificacionOds',
+      width: 60,
+    },
+    {
+      key: 'clasificacionOcde',
+      title: 'OCDE',
+      dataIndex: 'clasificacionOcde',
+      width: 60,
+    },
+    {
+      key: 'clasificacionPna',
+      title: 'PNA',
+      dataIndex: 'clasificacionPna',
+      width: 100,
+    },
+    {
       key: 'fechaMod',
       title: 'Última modificación',
       width: 170,
@@ -162,8 +201,7 @@ const EstadisticasPageList = forwardRef((props, ref) => {
     {
       key: 'actions',
       title: 'Acciones',
-      width: 80,
-      align: 'right',
+      width: 120,
       fixed: 'right',
       render: renderActions,
     },

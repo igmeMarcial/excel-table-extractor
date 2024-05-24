@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { SearchOutlined, CloseOutlined } from '@ant-design/icons';
 import { Input } from 'antd';

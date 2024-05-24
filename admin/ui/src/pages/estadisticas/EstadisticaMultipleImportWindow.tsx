@@ -28,7 +28,7 @@ const renderRowStatus = (row: EstadisticaImportRow) => {
     return 'Importando...';
   }
   if (row.importingError) {
-    return 'Error de importación';
+    return 'Error de importación: ' + row.importingError;
   }
   const messageStack = [];
   if (row.isImported) {
@@ -182,9 +182,13 @@ const EstadisticaMultipleImportWindow = forwardRef<
       row.importingError = null;
       updateRow(row);
       postEstadistica(model)
-        .then(() => {
-          row.isImported = true;
+        .then((response: any) => {
           row.isImporting = false;
+          if (response.error) {
+            console.error(response.error);
+            row.importingError = response.error.data.message;
+          }
+          row.isImported = !response.error;
           updateRow(row);
         })
         .catch((err) => {

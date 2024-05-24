@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { ChevronDown24Filled } from '@fluentui/react-icons';
 import './mdea.css';
 import { IndiceEstadisticas } from '../../src/core/IndiceEstadisticas';
 import { OBJETIVOS_ODS } from '../../src/config/colors';
 import Accordion from './Accordion';
+import { Link, useLocation } from 'react-router-dom';
+import { newPathUrl } from '../../src/utils/url-utils';
 
 let urlIcon = window.AesaInfo.pluginUrl + '/public/assets/images/ods/';
 interface SideNavMdeaProps {
@@ -11,11 +13,17 @@ interface SideNavMdeaProps {
 }
 
 const ItemEstadistica = ({ item, textColor = '#fff' }) => {
+  const location = useLocation();
   return (
     <ul className="list-disc list-inside pl-8 my-2">
-      <li style={{ color: textColor }} className="text-[14px] leading-5">
-        {item}
-      </li>
+      <Link
+        to={newPathUrl(location, 'eid', item.estadisticaId)}
+        className="no-underline"
+      >
+        <li style={{ color: textColor }} className="text-[14px] leading-5">
+          {item.nombre}
+        </li>
+      </Link>
     </ul>
   );
 };
@@ -116,7 +124,7 @@ export const SideNavOds = ({ indiceEstadisticas }: SideNavMdeaProps) => {
                 .map((estaditica) => (
                   <ItemEstadistica
                     key={estaditica.estadisticaId}
-                    item={estaditica.nombre}
+                    item={estaditica}
                     textColor="#000"
                   />
                 ))}

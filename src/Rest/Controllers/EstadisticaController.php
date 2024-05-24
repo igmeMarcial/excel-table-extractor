@@ -4,6 +4,7 @@ namespace Aesa\Rest\Controllers;
 
 use Aesa\Model\Estadistica;
 use \WP_REST_Request;
+use \WP_REST_Response;
 use Aesa\Rest\Services\EstadisticaService;
 
 class EstadisticaController
@@ -40,11 +41,9 @@ class EstadisticaController
                 'status' => 'OK'
             ];
         } catch (\Throwable $th) {
-            return [
-                'data' => $th->getMessage(),
-                'detail' => $th->getTrace(),
-                'status' => 'ERROR'
-            ];
+            return new WP_REST_Response([
+                'message' => $th->getMessage(),
+            ], 500);
         }
     }
     public function actualizarEstadistica(WP_REST_Request $request)

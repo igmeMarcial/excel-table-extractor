@@ -26,6 +26,10 @@ export const removerTextoEntreParentesisDelFinal = (unidadMedida: string, capita
   return out
 };
 
+export const getEstadisticaPublicUrl = (id: number) => {
+  return id ? window.AesaInfo.estadisticasUrl + '?eid=' + id : '';
+}
+
 export const getTextoEntreParentesisDelFinal = (unidadMedida: string) => {
   unidadMedida = unidadMedida || ''
   // Buscar simbolo entre paréntesis

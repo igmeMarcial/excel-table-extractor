@@ -1,6 +1,5 @@
 import {
   Button,
-  Input,
   Menu,
   MenuButton,
   MenuItem,
@@ -9,22 +8,29 @@ import {
   MenuTrigger,
   Tooltip,
 } from '@fluentui/react-components';
-import { MoreVerticalRegular } from '@fluentui/react-icons';
-
-import { Add24Filled, Search24Regular } from '@fluentui/react-icons';
+import { MoreVerticalRegular, Add24Filled } from '@fluentui/react-icons';
 import { Link, useLocation } from 'react-router-dom';
 import EstadisticasPageToolbarImportButton from './EstadisticasPageToolbarImportButton';
+import SearchBox from '../../components/SearchBox';
 import { builNavPathUrl } from '../../utils/url-utils';
+import { ChangeEvent } from 'react';
 
-function EstadisticasPageToolbar() {
+interface EstadisticasPageToolbarProps {
+  onSearchBoxChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+}
+
+function EstadisticasPageToolbar({
+  onSearchBoxChange,
+}: Readonly<EstadisticasPageToolbarProps>) {
   const location = useLocation();
+  const handlerSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (onSearchBoxChange) {
+      onSearchBoxChange(event);
+    }
+  };
   return (
     <div className="flex px-10 pt-6 pb-4 gap-2">
-      <Input
-        contentBefore={<Search24Regular />}
-        placeholder="Buscar.."
-        type="search"
-      />
+      <SearchBox onChange={handlerSearchChange} />
       <span className="flex-1"></span>
       <EstadisticasPageToolbarImportButton />
       <Link to={builNavPathUrl(location, 'indicador-editor')}>
