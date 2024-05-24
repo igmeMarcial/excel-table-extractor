@@ -3,7 +3,7 @@
 namespace Aesa;
 
 use Aesa\Rest\Routes;
-
+use Aesa\Core\WpFilters;
 
 class Plugin
 {
@@ -60,5 +60,7 @@ class Plugin
         $this->publicPagePage->init();
         $this->apiRoutes->init();
         self::$initialized = true;
+        // Add filters
+        WpFilters::addFilters();
     }
 }
