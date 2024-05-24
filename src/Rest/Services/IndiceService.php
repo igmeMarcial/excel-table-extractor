@@ -19,25 +19,25 @@ class IndiceService
     public function getIndiceEstadisticasMdea()
     {
         $clasificadores = $this->getListaClasificadores(Constantes::MARCO_ORDENADOR_MDEA_ID);
-        $estadisticas = $this->getListaEstadisticas();
+        $estadisticas = $this->getListaEstadisticas($this->dbMap->estaClasN3);
         return $this->formatIndiceEstadisticas($clasificadores, $estadisticas);
     }
     public function getIndiceEstadisticasOds()
     {
         $clasificadores = $this->getListaClasificadores(Constantes::MARCO_ORDENADOR_ODS_ID);
-        $estadisticas = $this->getListaEstadisticas();
+        $estadisticas = $this->getListaEstadisticas($this->dbMap->estaClasN2);
         return $this->formatIndiceEstadisticas($clasificadores, $estadisticas);
     }
     public function getIndiceEstadisticasOcde()
     {
         $clasificadores = $this->getListaClasificadores(Constantes::MARCO_ORDENADOR_OCDE_ID);
-        $estadisticas = $this->getListaEstadisticas();
+        $estadisticas = $this->getListaEstadisticas($this->dbMap->estaClasN2);
         return $this->formatIndiceEstadisticas($clasificadores, $estadisticas);
     }
     public function getIndiceEstadisticasPna()
     {
         $clasificadores = $this->getListaClasificadores(Constantes::MARCO_ORDENADOR_PNA_ID);
-        $estadisticas = $this->getListaEstadisticas();
+        $estadisticas = $this->getListaEstadisticas($this->dbMap->estaClasN3);
         return $this->formatIndiceEstadisticas($clasificadores, $estadisticas);
     }
     public function getIndiceMdea()
@@ -64,13 +64,13 @@ class IndiceService
         return $this->formatIndice($clasificadores);
     }
 
-    private function getListaEstadisticas()
+    private function getListaEstadisticas(string $clasificationTable)
     {
         $query = "SELECT
                     A.estadistica_id estadisticaId,
                     B.clasificador_id clasificadorId,
                     nombre
-                  FROM {$this->dbMap->estadistica} A INNER JOIN {$this->dbMap->estaClasN3} B ON A.estadistica_id = B.estadistica_id";
+                  FROM {$this->dbMap->estadistica} A INNER JOIN {$clasificationTable} B ON A.estadistica_id = B.estadistica_id";
         return $this->wpdb->get_results($query, ARRAY_A);
     }
 

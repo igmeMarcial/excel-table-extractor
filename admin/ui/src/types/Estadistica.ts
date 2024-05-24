@@ -9,6 +9,7 @@ export interface EstadisticaBaseFields {
   clasificadorN2Id?: number
   clasificadorN3Id?: number
 }
+
 export interface FichaTecnicaFields {
   nombre?: string
   finalidad?: string
@@ -49,6 +50,4 @@ export interface Estadistica extends EstadisticaBaseFields, FichaTecnicaFields {
   presentacionTablaFuente?: string
   presentacionTablaElaboracion?: string
   presentacionTablaFormato?: FormatoTabla
-
-
 }

@@ -118,7 +118,7 @@ const EstadisticasPageList = forwardRef((props, ref) => {
     },
     {
       key: 'nombre',
-      title: 'Indicador',
+      title: 'Estadística',
       dataIndex: 'nombre',
       width: 360,
     },

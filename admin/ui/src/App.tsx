@@ -1,4 +1,4 @@
-import IndicadoresPage from './pages/estadisticas/EstadisticasPage';
+import EstadisticasPage from './pages/estadisticas/EstadisticasPage';
 import AnuariosPage from './pages/anuarios/AnuariosPage';
 import ParamRoutes from './ParamRoutes';
 import ParamRoute from './ParamRoute';
@@ -11,8 +11,8 @@ import ConfiguracionPage from './pages/configuracion/ConfiguracionPage';
 function App() {
   return (
     <ParamRoutes param="view">
-      <ParamRoute default element={<IndicadoresPage />} />
-      <ParamRoute value="indicadores" element={<IndicadoresPage />} />
+      <ParamRoute default element={<EstadisticasPage />} />
+      <ParamRoute value="indicadores" element={<EstadisticasPage />} />
       <ParamRoute value="anuarios" element={<AnuariosPage />} />
       <ParamRoute value="configuracion" element={<ConfiguracionPage />} />
       <ParamRoute value="dev" element={<Dev />} />

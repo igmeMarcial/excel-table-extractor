@@ -122,6 +122,10 @@ class Estadistica extends BaseModel
             'type' => DataTypes::STRING,
             'column' => 'telefono_celular',
         ],
+        'clasificacionMdea' => [
+            'type' => DataTypes::STRING,
+            'column' => 'clasificacion_mdea',
+        ],
         'clasificacionOds' => [
             'type' => DataTypes::STRING,
             'column' => 'clasificacion_ods',
@@ -172,6 +176,10 @@ class Estadistica extends BaseModel
             'type' => DataTypes::STRING,
             'column' => 'pres_tabla_elaboracion',
         ],
+        'mdeaComponenteNombre' => [
+            'type' => DataTypes::STRING,
+            'persist' => false,
+        ],
     ];
 
     // Getters
@@ -188,5 +196,25 @@ class Estadistica extends BaseModel
     public function getClasificadorN3Id(): int
     {
         return $this->getFieldValue('clasificadorN3Id');
+    }
+
+    public function getClasificacionMdea(): string
+    {
+        return $this->getFieldValue('clasificacionMdea');
+    }
+
+    public function getClasificacionOds(): ?string
+    {
+        return $this->getFieldValue('clasificacionOds');
+    }
+
+    public function getClasificacionOcde(): ?string
+    {
+        return $this->getFieldValue('clasificacionOcde');
+    }
+
+    public function getClasificacionPna(): ?string
+    {
+        return $this->getFieldValue('clasificacionPna');
     }
 }

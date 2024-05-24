@@ -53,6 +53,7 @@ export const {
   useCreateEstadisticaMutation,
   useDeleteEstadisticaMutation,
   useGetEstadisticaQuery,
+  useLazyGetEstadisticaQuery,
   useUpdateEstadisticaMutation,
 } = estadisticaApi
 

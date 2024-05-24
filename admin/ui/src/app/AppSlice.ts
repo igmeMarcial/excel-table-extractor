@@ -1,16 +1,13 @@
 import { createSlice, PayloadAction, isAnyOf } from '@reduxjs/toolkit'
-import { getIndiceClasificadores } from './services/clasificador';
 import { getEstadistica } from './services/estadistica';
 import type { RootState } from './store';
 
 interface AppState {
   activeNetworkActivity: boolean;
-  currentEstadisticaId?: number;
 }
 
 const initialState: AppState = {
   activeNetworkActivity: false,
-  currentEstadisticaId: 1,
 };
 
 export const appSlice = createSlice({
@@ -20,9 +17,6 @@ export const appSlice = createSlice({
     setActiveNetworkActivity: (state, action: PayloadAction<boolean>) => {
       state.activeNetworkActivity = action.payload;
     },
-    setCurrentEstadisticaId: (state, action: PayloadAction<number>) => {
-      state.currentEstadisticaId = action.payload;
-    }
   },
   extraReducers: (builder) => {
     builder
@@ -37,10 +31,8 @@ export const appSlice = createSlice({
 
 export const {
   setActiveNetworkActivity,
-  setCurrentEstadisticaId,
 } = appSlice.actions;
 
 export const selectActiveNetworkActivity = (state: RootState) => state.app.activeNetworkActivity;
-export const selectCurrentEstadisticaId = (state: RootState) => state.app.currentEstadisticaId;
 
 export default appSlice.reducer;

@@ -16,7 +16,7 @@ import { WorkbookEstadisticaItem } from '../types/WorkbookEstadisticaItem'
 import { decodeCellRange } from '../utils/decodeCellRange'
 import { encodeCellRange } from '../utils/encodeCellRange'
 import { esValorEstadisticoValido } from '../utils/estadistica-utils'
-import { calculateSimilarity, toSnakeCase } from '../utils/string-utils'
+import { calculateSimilarity, removeSpaces, toSnakeCase } from '../utils/string-utils'
 import { getSheetHtmlRows } from '../utils/xmls-utils'
 import { IndiceClasificadores } from './IndiceClasificadores'
 
@@ -41,6 +41,35 @@ export class EstadisticasWorkbook {
   // The sheet names
   getSheetNames(): string[] {
     return this.workbook.SheetNames || []
+  }
+
+  // Lista de nombres de hojas de fichas técnicas
+  getSheetNamesFichas(): string[] {
+    return this.filterSheetNames(FICHA_SHEET_NAME_REGEX)
+  }
+
+  // Lista de nombres de hojas de datos
+  getSheetNamesDatos(): string[] {
+    return this.filterSheetNames(DATOS_SHEET_NAME_REGEX)
+  }
+
+  getFichaSheetNameFor(sheetNameDatos: string) {
+    const matchs = DATOS_SHEET_NAME_REGEX.exec(sheetNameDatos)
+    if (matchs) {
+      const id = parseInt(matchs[1])
+      return this.getFichaSheetName(id)
+    }
+    return null
+  }
+
+  private filterSheetNames(regex: RegExp): string[] {
+    const out = []
+    this.getSheetNames().forEach((sheetName) => {
+      if (regex.test(sheetName)) {
+        out.push(sheetName)
+      }
+    })
+    return out
   }
 
   getSheet(sheetName: string): XLSX.WorkSheet {
@@ -98,12 +127,21 @@ export class EstadisticasWorkbook {
     })
     return Array.from(out.values())
   }
+
   getHojaDatosSheetName(numeroEstadistica: number): string {
+    return this.getEstadisticaSheetName(numeroEstadistica, DATOS_SHEET_NAME_REGEX)
+  }
+
+  getFichaSheetName(numeroEstadistica: number) {
+    return this.getEstadisticaSheetName(numeroEstadistica, FICHA_SHEET_NAME_REGEX)
+  }
+
+  private getEstadisticaSheetName(numeroEstadistica: number, regex: RegExp): string {
     const out = this.getSheetNames().find((sheetName) => {
-      const matches = DATOS_SHEET_NAME_REGEX.exec(sheetName)
+      const matches = regex.exec(sheetName)
       return matches && parseInt(matches[1]) === numeroEstadistica
     })
-    return out || ''
+    return out || null;
   }
 
   getNombreEstadistica(sheetName: string): string {
@@ -178,11 +216,7 @@ export class EstadisticasWorkbook {
     sheetName: string,
     clasificadores: IndiceClasificadores
   ): FichaTecnicaFields {
-    const sheet = this.getSheet(sheetName)
-    const htmlRows = getSheetHtmlRows(sheet)
-    const cellMap = this.createCellsDataMap(htmlRows)
-    const matrix = this.getCellsMatrix(cellMap, sheetName)
-    const fields: Estadistica = this.filterValueFichaTecnica(matrix)
+    const fields: Estadistica = this.getSheetFichaFields(sheetName)
     // MDEA Clasificadores path
     const mdeaPathInput = fields.clasificacionMdea || ''
     const pathRe = /\d+\.\d+\.\d+\s*-\s*\d+/
@@ -215,7 +249,23 @@ export class EstadisticasWorkbook {
     // Periodo de serie de tiempo
     if (out.periodoSerieTiempo) {
       // Eliminar espacios en blanco y saltos de línea
-      out.periodoSerieTiempo = out.periodoSerieTiempo.trim().replace(/\s+/g, '')
+      out.periodoSerieTiempo = removeSpaces(out.periodoSerieTiempo)
+    }
+    // Clasificación MDEA
+    if (out.clasificacionMdea) {
+      out.clasificacionMdea = removeSpaces(out.clasificacionMdea)
+    }
+    // Clasificación ODS
+    if (out.clasificacionOds) {
+      out.clasificacionOds = removeSpaces(out.clasificacionOds)
+    }
+    // Clasificación OCDE
+    if (out.clasificacionOcde) {
+      out.clasificacionOcde = removeSpaces(out.clasificacionOcde)
+    }
+    // Clasificación PNA
+    if (out.clasificacionPna) {
+      out.clasificacionPna = removeSpaces(out.clasificacionPna)
     }
     return out
   }
@@ -448,37 +498,46 @@ export class EstadisticasWorkbook {
     })
     return matchedCell
   }
-  filterValueFichaTecnica(out) {
+  private getSheetFichaFields(sheetName: string) {
+    const sheet = this.getSheet(sheetName)
+    const htmlRows = getSheetHtmlRows(sheet)
+    const cellMap = this.createCellsDataMap(htmlRows)
+    const rows = this.getCellsMatrix(cellMap, sheetName)
+
+    const inicioFichaColIndex = this.getInicioFichaTecnicaColumnIndex(sheetName);
+    if (inicioFichaColIndex === -1) {
+      return {};
+    }
+
+    const nombreCampoColIndex = inicioFichaColIndex + 1;
     const resultMap = {}
-    out.forEach((row) => {
-      row.forEach((cell, index) => {
-        const snakeCaseKey = toSnakeCase((cell.v || '').toString())
-        const matchedKey = Object.keys(FICHA_FIELDS_MAP).find((key) => {
-          const camelCaseKey = toSnakeCase(key)
-          const similarity = calculateSimilarity(snakeCaseKey, camelCaseKey)
-          return similarity >= 0.5
-        })
-        if (matchedKey) {
-          const nextIndex = index + 1
-          if (nextIndex < row.length) {
-            const nextCell = row[nextIndex]
-            const newValue = nextCell.v
-            const resultMapKey = FICHA_FIELDS_MAP[matchedKey]
-            if (!resultMap.hasOwnProperty(resultMapKey)) {
-              // Si no existe, inicializarla con el nuevo valor
-              resultMap[resultMapKey] = `${newValue}`
-            } else {
-              // Si existe, concatenar el nuevo valor al valor existente
-              resultMap[resultMapKey] += `\n${newValue}`
-            }
+    rows.forEach((row) => {
+      const cell = row[nombreCampoColIndex];
+      const snakeCaseKey = toSnakeCase((cell.v || '').toString())
+      const matchedKey = Object.keys(FICHA_FIELDS_MAP).find((fieldKey) => {
+        const similarity = calculateSimilarity(snakeCaseKey, fieldKey)
+        return similarity >= 0.9
+      })
+      if (matchedKey) {
+        const nextIndex = nombreCampoColIndex + 1
+        if (nextIndex < row.length) {
+          const nextCell = row[nextIndex]
+          const newValue = nextCell.v
+          const resultMapKey = FICHA_FIELDS_MAP[matchedKey]
+          if (!resultMap.hasOwnProperty(resultMapKey)) {
+            // Si no existe, inicializarla con el nuevo valor
+            resultMap[resultMapKey] = `${newValue}`
           } else {
-            const resultMapKey = FICHA_FIELDS_MAP[matchedKey]
-            if (!resultMap.hasOwnProperty(resultMapKey)) {
-              resultMap[resultMapKey] = ''
-            }
+            // Si existe, concatenar el nuevo valor al valor existente
+            resultMap[resultMapKey] += `\n${newValue}`
+          }
+        } else {
+          const resultMapKey = FICHA_FIELDS_MAP[matchedKey]
+          if (!resultMap.hasOwnProperty(resultMapKey)) {
+            resultMap[resultMapKey] = ''
           }
         }
-      })
+      }
     })
     return resultMap
   }

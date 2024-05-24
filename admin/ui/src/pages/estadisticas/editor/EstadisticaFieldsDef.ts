@@ -105,7 +105,7 @@ export const ESTADISTICA_FICHA_FIELDS_DEF: {
   correoElectronico: {
     label: 'Correo electrónico',
     controlType: 'text',
-    dataType:'email'
+    dataType: 'email'
   },
   datosContacto: {
     label: 'Datos del contacto',
@@ -115,17 +115,22 @@ export const ESTADISTICA_FICHA_FIELDS_DEF: {
     label: 'Teléfono/celular',
     controlType: 'text',
   },
-  clasificacionOds:{
-    label:'Clasificación ODS',
-    controlType:'text'
+  clasificacionMdea: {
+    label: 'Clasificación MDEA',
+    controlType: 'text',
+    required: true,
   },
-  clasificacionOcde:{
-    label:'Clasificación OCDE',
-    controlType:'text'
+  clasificacionOds: {
+    label: 'Clasificación ODS',
+    controlType: 'text'
   },
-  clasificacionPna:{
-    label:'Clasificación PNA',
-    controlType:'text',
+  clasificacionOcde: {
+    label: 'Clasificación OCDE',
+    controlType: 'text',
+  },
+  clasificacionPna: {
+    label: 'Clasificación PNA',
+    controlType: 'text',
   },
   activo: {
     label: 'Activo',

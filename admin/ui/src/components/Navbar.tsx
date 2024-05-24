@@ -3,9 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 
 const items = [
   { text: 'Estadisticas', path: 'indicadores' },
-  //{ text: 'Anuarios', path: 'anuarios' },
   { text: 'Configuracion', path: 'configuracion' },
-  { text: '*Dev', path: 'dev' },
 ];
 
 const useStyles = makeStyles({

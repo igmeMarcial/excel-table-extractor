@@ -72,6 +72,7 @@ return [
         [2, '6.3.2', 'Educación y Participación Ambiental'],
 
         // ODS
+        // Datos obtenidos de https://www.un.org/sustainabledevelopment/es/
         [3, '1',  'Objetivo 1: Poner fin a la pobreza en todas sus formas en todo el mundo'],
         [3, '1.1',  'Para 2030, erradicar la pobreza extrema para todas las personas en el mundo, actualmente medida por un ingreso por persona inferior a 1,25 dólares al día.'],
         [3, '1.2',  'Para 2030, reducir al menos a la mitad la proporción de hombres, mujeres y niños y niñas de todas las edades que viven en la pobreza en todas sus dimensiones con arreglo a las definiciones nacionales.'],
@@ -277,6 +278,7 @@ return [
         [3, '17.19', 'De aquí a 2030, aprovechar las iniciativas existentes para elaborar indicadores que permitan medir los progresos en materia de desarrollo sostenible y complementen el producto interno bruto, y apoyar la creación de capacidad estadística en los países en desarrollo'],
 
         // OCDE
+        // Datos obtenidos de  https://www.oecd.org/espanol/estadisticas/
         [4, '1', 'Agricultura'],
         [4, '1.1', 'Agricultura sostenible'],
         [4, '1.2', 'La producción agrícola'],
@@ -358,6 +360,7 @@ return [
         [4, '12.4', 'Ganancias y salarios'],
 
         // PNA
+        // Datos obtenidos de  https://cdn.www.gob.pe/uploads/document/file/4666703/Reporte%20PNA%20al%202030.pdf
         [5, 'OP.01', 'Mejorar la conservación de las especies y de la diversidad genética'],
         [5, 'LN.01.01', 'Garantizar la conservación de especies y diversidad genética al interior de las Áreas Naturales Protegidas (ANP) y otras modalidades de conservación'],
         [5, 'SS.01.01.01', 'Vigilancia y control continuo en las ANP'],

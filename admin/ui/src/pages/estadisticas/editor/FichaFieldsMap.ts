@@ -4,7 +4,9 @@ export const FICHA_FIELDS_MAP: Record<string, string> = {
   descripcion_definicion: "descripcion",
   unidad_de_medida: "unidadMedida",
   formula_calculo: "formulaCalculo",
+  formula_de_calculo: "formulaCalculo",
   metodologia_calculo: "metodologiaCalculo",
+  metodologia_de_calculo: "metodologiaCalculo",
   fuente: "fuente",
   unidad_organica_generadora: "unidadOrganicaGeneradora",
   url: "url",
@@ -12,6 +14,7 @@ export const FICHA_FIELDS_MAP: Record<string, string> = {
   periodicidad_de_entrega_registro_de_la_informacion_por_la_entidad: "periodicidadEntrega",
   periodo_serie_tiempo: "periodoSerieTiempo",
   periodo_de_serie_tiempo: "periodoSerieTiempo",
+  periodo_de_serie_de_tiempo: "periodoSerieTiempo",
   ambito_geografico: "ambitoGeografico",
   limitaciones: "limitaciones",
   relacion_con_objetivos_de_politica: "relacionObjetivosNacionales",
@@ -21,6 +24,9 @@ export const FICHA_FIELDS_MAP: Record<string, string> = {
   datos_del_contacto: "datosContacto",
   telefono_celular: "telefonoCelular",
   clasificacion_mdea: "clasificacionMdea",
+  clasificacion_ods: "clasificacionOds",
+  clasificacion_ocde: "clasificacionOcde",
+  clasificacion_pna: "clasificacionPna",
 };
 
 export const ESTADISTICA_DATOS: Record<string, string> = {

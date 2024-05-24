@@ -30,7 +30,6 @@ const EstadisticaImportWindow = forwardRef<
   const dispath = useAppDispatch();
   const [estadisticasWb, setEstadisticasWb] =
     useState<EstadisticasWorkbook>(null);
-  const [sheetNames, setSheetNames] = useState<string[]>([]);
   const isCreationMode = useAppSelector(selectIsCreationMode);
   const [camposFichaSheetName, setCamposFichaSheetName] =
     useState<string>(null);
@@ -38,16 +37,21 @@ const EstadisticaImportWindow = forwardRef<
   const [tablaDatosSheetName, setTablaDatosSheetName] = useState<string>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [camposFichaChecked, setCamposFichaChecked] = useState(false);
-  const [tablaDatosChecked, setTablaDatosChecked] = useState(false);
+  const [tablaDatosChecked, setTablaDatosChecked] = useState(true);
   const { data: clasificadores } = useGetIndiceClasificadoresQuery();
   const indiceClasificadores = new IndiceClasificadores(clasificadores || []);
   const importButtonTitle = isCreationMode ? 'Importar' : 'Actualizar datos';
   const importModalTitle = importButtonTitle;
   const confirmDataRangeDialogRef = useRef<DataRangeConfirmDialogRef>(null);
   const open = ({ estadisticasWb }: EstadisticaImportWindowDataInput) => {
-    setEstadisticasWb(estadisticasWb);
-    setSheetNames(estadisticasWb.getSheetNames());
+    setInnitialState(estadisticasWb);
     setIsModalOpen(true);
+  };
+
+  const setInnitialState = (estadisticasWb: EstadisticasWorkbook) => {
+    setEstadisticasWb(estadisticasWb);
+    setCamposFichaChecked(isCreationMode);
+    setTablaDatosChecked(true);
   };
 
   const close = () => {
@@ -170,14 +174,16 @@ const EstadisticaImportWindow = forwardRef<
               value={tablaDatosSheetName}
               disabled={!tablaDatosChecked}
               style={{ width: '100px' }}
-              options={sheetNames.map((sheet) => ({
+              options={estadisticasWb?.getSheetNamesDatos().map((sheet) => ({
                 label: sheet,
                 value: sheet,
               }))}
               size="small"
               onChange={(value) => {
                 setTablaDatosSheetName(value);
-                setCamposFichaSheetName(value + 1);
+                const fichaSheetName =
+                  estadisticasWb.getFichaSheetNameFor(value);
+                setCamposFichaSheetName(fichaSheetName);
               }}
             ></Select>
           </div>
@@ -192,7 +198,7 @@ const EstadisticaImportWindow = forwardRef<
               value={camposFichaSheetName}
               disabled={!camposFichaChecked}
               style={{ width: '100px' }}
-              options={sheetNames.map((sheet) => ({
+              options={estadisticasWb?.getSheetNamesFichas().map((sheet) => ({
                 label: sheet,
                 value: sheet,
               }))}

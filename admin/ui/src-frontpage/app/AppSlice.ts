@@ -50,7 +50,6 @@ export const {
 } = appSlice.actions
 
 export const selectActiveNetworkActivity = (state: RootState) => state.app.activeNetworkActivity
-export const selectCurrentEstadisticaId = (state: RootState) => state.app.currentEstadisticaId
 export const selectEstadisticaDatos = (state: RootState) => state.app.estadisticaModel.datos
 export const selectIndiceEstadisticas = (state: RootState) => state.app.indiceEstadisticas
 

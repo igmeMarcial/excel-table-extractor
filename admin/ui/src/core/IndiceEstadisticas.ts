@@ -19,12 +19,19 @@ export class IndiceEstadisticas {
   getItemsNivel3(): IndiceItem[] {
     return this.getItemsFromNivel(3)
   }
+
+  getPrimeraEstadistica(): IndiceItem {
+    console.log('No implementado')
+    return null
+  }
+
   getDirectChildren(parentItem: IndiceItem): IndiceItem[] {
     return this.items.filter((item) => {
       const regexp = new RegExp(`^${parentItem.numeral}\\.`);
       return regexp.test(item.numeral) && item.nivel === parentItem.nivel + 1;
     });
   }
+
   getItemsFromNivel(nivel: number): IndiceItem[] {
     return this.items.filter(item => item.nivel === nivel)
   }

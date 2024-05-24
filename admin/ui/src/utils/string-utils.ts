@@ -10,7 +10,11 @@ export const capitalizarPrimeraLetra = (texto: string): string => {
 
 export const removeAccents = (string) => {
   return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-};
+}
+
+export const removeSpaces = (str: string) => {
+  return str.replace(/\s+/g, '')
+}
 
 export const toSnakeCase = (string) => {
   return removeAccents(string)
