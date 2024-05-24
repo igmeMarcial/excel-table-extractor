@@ -12,8 +12,14 @@ export default function VistaEstadisticaOds({
     <>
       <MarcoOrdenadorNav />
       <PageTitle title={'Estadísticas relacionadas con los ' + TEXTO_ODS} />
-      <SideNavOds indiceEstadisticas={indiceEstadisticas} />
-      <EstadisticaVistaTabs estadistica={estadistica} />
+      <div className="flex sm:flex-col-reverse md:flex-row">
+        <div style={{ width: '350px' }} className="bg-gray-100">
+          <SideNavOds indiceEstadisticas={indiceEstadisticas} />
+        </div>
+        <div className="flex-1 overflow-hidden ">
+          <EstadisticaVistaTabs estadistica={estadistica} />
+        </div>
+      </div>
     </>
   );
 }

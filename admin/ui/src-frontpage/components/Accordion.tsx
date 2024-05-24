@@ -82,10 +82,16 @@ const Accordion = ({
       <summary onClick={handleToggle} ref={summaryRef} className="">
         <div className="flex justify-between items-center">
           <div className="item-content">
-            <span className="font-bold mr-2" style={{ color: colorText }}>
+            <span
+              className="font-bold mr-2 text-[13px]"
+              style={{ color: colorText }}
+            >
               {numero}
             </span>
-            <p className="inline text-white" style={{ color: colorText }}>
+            <p
+              className="inline text-white text-[13px]"
+              style={{ color: colorText }}
+            >
               {title}
             </p>
           </div>

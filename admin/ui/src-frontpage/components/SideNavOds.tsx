@@ -13,7 +13,9 @@ interface SideNavMdeaProps {
 const ItemEstadistica = ({ item, textColor = '#fff' }) => {
   return (
     <ul className="list-disc list-inside pl-8 my-2">
-      <li style={{ color: textColor }}>{item}</li>
+      <li style={{ color: textColor }} className="text-[14px] leading-5">
+        {item}
+      </li>
     </ul>
   );
 };
