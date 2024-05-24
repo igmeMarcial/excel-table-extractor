@@ -26,7 +26,7 @@ const NavItem = ({ numeral, nombre, active }: NavItemProps) => {
       <Link
         key={numeral}
         to={linkTo}
-        className={`p-2 rounded-lg mb-1 min-h-16 max-h-[100px] h-full justify-center text-center items-center cursor-pointer no-underline flex flex-col`}
+        className={`p-2 rounded-lg mb-1 min-h-16 max-h-[100px] md:h-full justify-center text-center items-center cursor-pointer no-underline flex flex-col`}
         style={{ backgroundColor: colors[numeral] }}
       >
         <div>
@@ -36,7 +36,7 @@ const NavItem = ({ numeral, nombre, active }: NavItemProps) => {
             src={`${imgBasePath}/C0${numeral}.svg`}
           />
         </div>
-        <h4 className="content-center h-2/3 font-normal text-white text-xm md:text-sm leading-3 sm:leading-5 md:leading-4 p-0 m-0">
+        <h4 className="hidden md:block content-center h-2/3 font-normal text-white text-xm md:text-sm leading-3 sm:leading-5 md:leading-4 p-0 m-0">
           {numeral} {nombre}
         </h4>
       </Link>
@@ -66,7 +66,7 @@ function PrimaryNavMdea({ items }: PrimaryNavMdeaProps) {
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-5">
+      <div className="grid grid-cols-6 gap-4 mt-5">
         {items.map((item: IndiceItem) => (
           <NavItem
             key={item.numeral}
@@ -77,9 +77,13 @@ function PrimaryNavMdea({ items }: PrimaryNavMdeaProps) {
         ))}
       </div>
       <div
-        className="h-[4px] w-full rounded-[4px]"
+        className={`h-[30px] w-full md:rounded-[4px] md:h-[4px] flex items-center justify-center rounded-none`}
         style={{ backgroundColor: `${colors[activeItem]}` }}
-      ></div>
+      >
+        <div className="md:hidden text-center text-white ">
+          {items[parseInt(activeItem) - 1]?.nombre}
+        </div>
+      </div>
     </>
   );
 }

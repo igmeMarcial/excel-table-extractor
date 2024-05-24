@@ -39,7 +39,7 @@
 .item-details summary {
   user-select: none;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 400;
   display: flex;
   list-style: none;
   padding: 1rem;
@@ -48,11 +48,6 @@
 
 .item-details summary svg {
   stroke: var(--white);
-}
-
-.item-details[open] summary svg {
-  stroke: var(--primary-blue);
-  transform: rotate(-180deg);
 }
 
 .item-details summary:hover .faq-title {
@@ -75,7 +70,7 @@
 
 .item-details .faq-content {
   color: var(--white);
-  padding: 0.2rem 0rem 1rem 0rem;
+  padding: 0.2rem 0rem 0.2rem 0rem;
   font-weight: 300;
   line-height: 1.5;
 }

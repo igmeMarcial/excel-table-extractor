@@ -16,14 +16,14 @@ function PrimaryNavOcde({ indiceEstadisticas }: SideNavMdeaProps) {
           key={item.numeral}
           title={item.nombre}
           numero={item.numeral}
-          color="#004b78"
+          colorBg="#004b78"
         >
           {indiceEstadisticas.getDirectChildren(item).map((filteredItem) => (
             <Accordion
               key={filteredItem.numeral}
               title={filteredItem.nombre}
               numero={filteredItem.numeral}
-              color="#7098b1"
+              colorBg="#7098b1"
             >
               <div className="py-2 px-4">Estaditica 1</div>
               <div className="py-2 px-4">Estaditica 2</div>

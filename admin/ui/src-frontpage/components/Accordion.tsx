@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { ChevronDown24Filled } from '@fluentui/react-icons';
 import './accordion.scss';
-const Accordion = ({ title, numero, color, children }) => {
+const Accordion = ({
+  title,
+  numero,
+  colorBg,
+  colorText = '#fff',
+  children,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const contentRef = useRef(null);
@@ -70,18 +76,27 @@ const Accordion = ({ title, numero, color, children }) => {
     <details
       className="item-details"
       open={isOpen}
-      style={{ overflow: 'hidden', backgroundColor: color }}
+      style={{ overflow: 'hidden', backgroundColor: colorBg }}
       ref={contentRef}
     >
       <summary onClick={handleToggle} ref={summaryRef} className="">
         <div className="flex justify-between items-center">
           <div className="item-content">
-            <span className="font-bold mr-2 text-white">{numero}</span>
-            <p className="inline text-white">{title}</p>
+            <span className="font-bold mr-2" style={{ color: colorText }}>
+              {numero}
+            </span>
+            <p className="inline text-white" style={{ color: colorText }}>
+              {title}
+            </p>
           </div>
           <ChevronDown24Filled
             className={`icon expand-icon ${isOpen ? 'open' : ''}`}
-            style={{ color: 'white' }}
+            style={{
+              color: colorText,
+              transform: isOpen ? 'rotate(-180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.2s ease-out',
+              stroke: colorText,
+            }}
           />
         </div>
       </summary>

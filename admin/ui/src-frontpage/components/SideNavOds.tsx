@@ -10,40 +10,11 @@ interface SideNavMdeaProps {
   indiceEstadisticas: IndiceEstadisticas;
 }
 
-const AsideItemEstadistica = ({ numeral, nombre, color, children }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const contentRef = useRef(null);
-  const summaryRef = useRef(null);
-
-  const handleToggle = (e) => {
-    e.preventDefault();
-    if (!isAnimating) {
-      setIsOpen(!isOpen);
-    }
-  };
-
+const ItemEstadistica = ({ item, textColor = '#fff' }) => {
   return (
-    <details
-      className="accordion"
-      open={isOpen}
-      style={{ overflow: 'hidden', backgroundColor: color }}
-      ref={contentRef}
-    >
-      <summary onClick={handleToggle} ref={summaryRef} className="py-0">
-        <div className="mb-[20px] ">
-          <span className="font-bold mr-2 ">{numeral}</span>
-          <p className="inline font-normal">{nombre}</p>
-        </div>
-        <div>
-          <ChevronDown24Filled
-            className="icon expand-icon"
-            style={{ color: 'white' }}
-          />
-        </div>
-      </summary>
-      <div className="faq-content">{children}</div>
-    </details>
+    <ul className="list-disc list-inside pl-8 my-2">
+      <li style={{ color: textColor }}>{item}</li>
+    </ul>
   );
 };
 
@@ -87,7 +58,7 @@ const AsideItem = ({ title, color, number, img, children }) => {
       style={{ overflow: 'hidden', backgroundColor: color }}
     >
       <summary onClick={handleToggle} ref={summaryRef}>
-        <div className="text-white text-[40px]   mr-3">{number}</div>
+        <div className="text-white text-[40px] mr-3">{number}</div>
         <span className="faq-title  whitespace-pre-line">{title}</span>
         <div>
           <img
@@ -106,7 +77,12 @@ const AsideItem = ({ title, color, number, img, children }) => {
           />
         </div>
       </summary>
-      <div className="faq-content p-0">{children}</div>
+      <div
+        className={`faq-content p-0 border-2 border-solid`}
+        style={{ borderColor: color }}
+      >
+        {children}
+      </div>
     </details>
   );
 };
@@ -130,11 +106,18 @@ export const SideNavOds = ({ indiceEstadisticas }: SideNavMdeaProps) => {
               key={filteredItem.numeral}
               title={filteredItem.nombre}
               numero={filteredItem.numeral}
-              color={ods[item.numeral].color}
+              colorBg={'#fff'}
+              colorText="#000"
             >
-              <div className="py-2 px-4">Estaditica 1</div>
-              <div className="py-2 px-4">Estaditica 2</div>
-              <div className="py-2 px-4">Estaditica 3</div>
+              {indiceEstadisticas
+                .getDirectChildren(filteredItem)
+                .map((estaditica) => (
+                  <ItemEstadistica
+                    key={estaditica.estadisticaId}
+                    item={estaditica.nombre}
+                    textColor="#000"
+                  />
+                ))}
             </Accordion>
           ))}
         </AsideItem>
