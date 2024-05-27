@@ -25,12 +25,9 @@ function MarcoOrdenadorNav() {
   };
   const items = [
     { text: 'MDEA', path: 'mdea' },
+    { text: 'PNA', path: 'pna' },
     { text: 'ODS', path: 'ods' },
     { text: 'OCDE', path: 'ocde' },
-    {
-      text: 'Política Nacional del Ambiente',
-      path: 'pna',
-    },
   ];
   return (
     <div className="bg-gray-200">

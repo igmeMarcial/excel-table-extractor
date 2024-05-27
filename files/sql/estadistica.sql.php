@@ -24,7 +24,7 @@ return "CREATE TABLE {tablePrefix}estadistica (
     ambito_geografico              VARCHAR(1000),
     limitaciones                   VARCHAR(1000),
     relacion_objetivos_nacionales  VARCHAR(1000),
-    relacion_iniciativas_internacionales  VARCHAR(1000),
+    relacion_iniciativas_internacionales  TEXT,
     correo_electronico             VARCHAR(255),
     datos_contacto                 VARCHAR(1000),
     telefono_celular               VARCHAR(255),

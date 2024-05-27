@@ -53,7 +53,7 @@ class EstadisticaService
             ['estadistica_id' => $id]
         );
     }
-    // TODO: corregir mdeaComponenteNombre no está listando el nombre del componente sino del clasificador
+
     public function getListaEstadisticas()
     {
         $marcoOrdenadorId = Constantes::MARCO_ORDENADOR_MDEA_ID;
@@ -66,13 +66,13 @@ class EstadisticaService
                   A.clasificacion_ods clasificacionOds,
                   A.clasificacion_ocde clasificacionOcde,
                   A.clasificacion_pna clasificacionPna,
-                  B.clasificador_id clasificadorId,
+                  B.clasificador_n1_id clasificadorId,
                   C.nombre mdeaComponenteNombre,
                   A.fecha_mod fechaMod,
                   A.activo,
                   A.archivado
                 FROM {$this->dbMap->estadistica} A
-                INNER JOIN {$this->dbMap->estaClasN1} B ON A.estadistica_id = B.estadistica_id
+                INNER JOIN {$this->dbMap->estaClas} B ON A.estadistica_id = B.estadistica_id
                 INNER JOIN {$this->dbMap->clasificador} C ON B.clasificador_id = C.clasificador_id AND C.marco_ordenador_id = $marcoOrdenadorId";
 
         // Ejecutar la consulta test
@@ -85,15 +85,13 @@ class EstadisticaService
         $model = new Estadistica([]);
         $columns = $model->getSqlColumnNamesString('A');
         $sql = "SELECT $columns,
-                       B.clasificador_id clasificadorN1Id,
-                       C.clasificador_id clasificadorN2Id,
-                       D.clasificador_id clasificadorN3Id,
-                       E.numeral
+                       B.clasificador_n1_id clasificadorN1Id,
+                       B.clasificador_n2_id clasificadorN2Id,
+                       B.clasificador_n3_id clasificadorN3Id,
+                       C.numeral
                 FROM {$this->dbMap->estadistica} A
-                INNER JOIN {$this->dbMap->estaClasN1} B ON A.estadistica_id = B.estadistica_id
-                INNER JOIN {$this->dbMap->estaClasN2} C ON A.estadistica_id = C.estadistica_id
-                INNER JOIN {$this->dbMap->estaClasN3} D ON A.estadistica_id = D.estadistica_id
-                INNER JOIN {$this->dbMap->clasificador} E ON D.clasificador_id = E.clasificador_id
+                INNER JOIN {$this->dbMap->estaClas} B ON A.estadistica_id = B.estadistica_id
+                INNER JOIN {$this->dbMap->clasificador} C ON B.clasificador_n3_id = C.clasificador_id
         WHERE A.estadistica_id = $id";
         $data = $this->wpdb->get_row($sql, ARRAY_A);
         if (!$data) {
@@ -125,9 +123,10 @@ class EstadisticaService
         }
         $numeralParts = explode('.', $numeralPath);
         $partsStack = [];
+        $clasificadores = [];
+        $ultimoClasificadorId = 0;
         foreach ($numeralParts as $index => $part) {
             $partsStack[] = $part;
-            $clasificadorTable = $this->getClasificadorTableName($index + 1);
             $numeral = implode(".", $partsStack);
             if ($marcoOrdenadorId === Constantes::MARCO_ORDENADOR_PNA_ID) {
                 $numeral = $this->getCodigoClasificadorPna($index + 1, $numeral);
@@ -136,10 +135,15 @@ class EstadisticaService
             if (!$clasificadorId) {
                 throw new \Exception("Clasficador no entrado para el númeral  $fullNumeralPath en el marco ordenador de ID: $marcoOrdenadorId");
             }
-            $success = $this->insertClasificador($clasificadorTable, $estadisticaId, $clasificadorId);
-            if (!$success) {
-                throw new \Exception("No se pudo registrar la relación con el clasificador de ID: $clasificadorId");
-            }
+            $clasificadores["clasificador_n" . ($index + 1) . "_id"] = $clasificadorId;
+            $ultimoClasificadorId = $clasificadorId;
+        }
+        if ($ultimoClasificadorId) {
+            $clasificadores['clasificador_id'] = $ultimoClasificadorId;
+        }
+        $success = $this->insertClasificador($estadisticaId, $clasificadores);
+        if (!$success) {
+            throw new \Exception("No se pudo registrar la relación con los clasificadores");
         }
     }
     private function getCodigoClasificadorPna(int $nivel, string $numeralBase)
@@ -155,28 +159,12 @@ class EstadisticaService
                 throw new \Exception("No existe un prfijo de código de clasificador PNA para el nivel: $nivel");
         }
     }
-    private function getClasificadorTableName($nivel)
-    {
-        switch ($nivel) {
-            case 1:
-                return $this->dbMap->estaClasN1;
-            case 2:
-                return $this->dbMap->estaClasN2;
-            case 3:
-                return $this->dbMap->estaClasN3;
-            default:
-                throw new \Exception("No existe tabla clasificador para el nivel: $nivel");
-        }
-    }
 
-    private function insertClasificador($table, $estadisticaId, $clasificadorId)
+    private function insertClasificador(int $estadisticaId, array $clasificadores)
     {
-        return $this->wpdb->insert(
-            $table,
-            ['estadistica_id' => $estadisticaId, 'clasificador_id' => $clasificadorId]
-        );
+        $data = ['estadistica_id' => $estadisticaId, ...$clasificadores];
+        return $this->wpdb->insert($this->dbMap->estaClas, $data);
     }
-
     private function getClasisificadorId(int $marcoOrdenadorId, $numeral)
     {
         $sql = "SELECT clasificador_id FROM {$this->dbMap->clasificador}

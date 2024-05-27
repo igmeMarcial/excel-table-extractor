@@ -94,9 +94,7 @@ class Schema
             $this->getCreateTableSql('marco_ordenador'),
             $this->getCreateTableSql('clasificador'),
             $this->getCreateTableSql('estadistica'),
-            $this->getCreateTableSql('esta_clas_n1'),
-            $this->getCreateTableSql('esta_clas_n2'),
-            $this->getCreateTableSql('esta_clas_n3'),
+            $this->getCreateTableSql('esta_clas'),
         ];
         return implode("\n", $sqlStack);
     }
@@ -105,6 +103,7 @@ class Schema
     {
         $tablePrefix = self::getTablePrefix();
         return "
+DROP TABLE IF EXISTS {$tablePrefix}esta_clas;
 DROP TABLE IF EXISTS {$tablePrefix}esta_clas_n1;
 DROP TABLE IF EXISTS {$tablePrefix}esta_clas_n2;
 DROP TABLE IF EXISTS {$tablePrefix}esta_clas_n3;

@@ -20,8 +20,8 @@ import { calculateSimilarity, removeSpaces, toSnakeCase } from '../utils/string-
 import { getSheetHtmlRows } from '../utils/xmls-utils'
 import { IndiceClasificadores } from './IndiceClasificadores'
 
-const FICHA_SHEET_NAME_REGEX = /^FT(\d{1,4})$/
-const DATOS_SHEET_NAME_REGEX = /^C(\d{1,4})$/
+const FICHA_SHEET_NAME_REGEX = /^FT(\d{1,4})$/i
+const DATOS_SHEET_NAME_REGEX = /^C(\d{1,4})$/i
 /**
  * Modelo de datos para basado en el formato de Excel para el recojo de datos estadísticos por extadistica,
  * que incluye campos de ficha técnica y datos estadísticos.

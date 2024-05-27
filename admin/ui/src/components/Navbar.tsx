@@ -45,7 +45,7 @@ export default function Navbar() {
             to={getNewUrl(item.path)}
             key={item.path}
             className={
-              `no-underline block px-2 ${classes.item}  ` +
+              `no-underline block px-2 ${classes.item} ` +
               (currentTab === item.path ? classes.active : '')
             }
           >
