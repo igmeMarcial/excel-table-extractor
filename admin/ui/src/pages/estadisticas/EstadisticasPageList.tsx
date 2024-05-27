@@ -3,8 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { Table, TableProps, Tooltip } from 'antd';
 import { Button } from '@fluentui/react-components';
 import {
-  CheckmarkCircleRegular,
-  CheckmarkCircleWarningRegular,
+  CheckmarkCircleFilled,
+  CircleRegular,
   EditFilled,
   EarthFilled,
 } from '@fluentui/react-icons';
@@ -77,9 +77,9 @@ const EstadisticasPageList = forwardRef((props, ref) => {
     return (
       <div>
         {record.activo ? (
-          <CheckmarkCircleRegular /> // Si activo es verdadero
+          <CheckmarkCircleFilled /> // Si activo es verdadero
         ) : (
-          <CheckmarkCircleWarningRegular /> // Si activo es falso
+          <CircleRegular /> // Si activo es falso
         )}
       </div>
     );
@@ -88,9 +88,9 @@ const EstadisticasPageList = forwardRef((props, ref) => {
     return (
       <div>
         {record.archivado ? (
-          <CheckmarkCircleRegular /> // Si archivado es verdadero
+          <CheckmarkCircleFilled /> // Si archivado es verdadero
         ) : (
-          <CheckmarkCircleWarningRegular /> // Si archivado es falso
+          <CircleRegular /> // Si archivado es falso
         )}
       </div>
     );

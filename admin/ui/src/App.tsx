@@ -7,6 +7,7 @@ import Dev from './pages/dev/Dev';
 
 import EstadisticaEditorPage from './pages/estadisticas/editor/EstadisticaEditorPage';
 import ConfiguracionPage from './pages/configuracion/ConfiguracionPage';
+import { Mo } from './pages/clasificador/Mo';
 
 function App() {
   return (
@@ -16,7 +17,11 @@ function App() {
       <ParamRoute value="anuarios" element={<AnuariosPage />} />
       <ParamRoute value="configuracion" element={<ConfiguracionPage />} />
       <ParamRoute value="dev" element={<Dev />} />
-      <ParamRoute value="indicador-editor" element={<EstadisticaEditorPage />} />
+      <ParamRoute value="mo" element={<Mo />} />
+      <ParamRoute
+        value="indicador-editor"
+        element={<EstadisticaEditorPage />}
+      />
     </ParamRoutes>
   );
 }

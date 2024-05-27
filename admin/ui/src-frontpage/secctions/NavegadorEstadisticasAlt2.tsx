@@ -13,17 +13,6 @@ export default function NavegadorEstadisticasAlt2() {
   // Extraer el id de la estadistica de la url
   const urlEstadisticaId = +getQueryParam(location, QUERY_PARAM_ESTADISTICA_ID);
   const { data: estadistica } = useGetEstadisticaQuery(urlEstadisticaId);
-  //Colores de componentes
-  //Colores de componentes
-  const colors: ColorsType = {
-    '1': '#4cd4f3',
-    '2': '#fe903a',
-    '3': '#fd4d5e',
-    '4': '#0183ad',
-    '5': '#3c9326',
-    '6': '#feb739',
-  };
-
   return (
     <>
       <MarcoOrdenadorNav />
