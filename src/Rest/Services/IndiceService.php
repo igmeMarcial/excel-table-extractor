@@ -4,6 +4,7 @@ namespace Aesa\Rest\Services;
 
 use Aesa\Core\Constantes;
 use Aesa\Db\DbMap;
+use Clasificador;
 
 class IndiceService
 {
@@ -118,5 +119,19 @@ class IndiceService
                   FROM {$this->dbMap->clasificador}
                   WHERE marco_ordenador_id = $marcoOrdenadorId";
         return $this->wpdb->get_results($query, ARRAY_A);
+    }
+    public function actualizarIndice(array $data, int $id){
+       $model  = new Clasificador($data);
+       $model->setId($id);
+       $this->wpdb->update($this->dbMap->clasificador, $model->getDataForDbQuery(),["clasificador_id"=> $id]);
+
+    }
+      public function crearIndice(array $data)
+    {
+        $model = new Clasificador($data);
+        $this->wpdb->insert(
+            $this->dbMap->clasificador,
+            $model->getDataForDbQuery()
+        );
     }
 }

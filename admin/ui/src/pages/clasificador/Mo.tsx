@@ -1,23 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import MainLayout from '../../layout/MainLayout';
 import { Select, useId, Button } from '@fluentui/react-components';
 import { Table, TableProps, Tooltip } from 'antd';
-import {
-  CheckmarkCircleFilled,
-  CircleRegular,
-  EditFilled,
-  EarthFilled,
-} from '@fluentui/react-icons';
-import ClasificadorService from '../../services/ClasificadorService';
-import { CodigoMarcoOrdenador } from '../../types/CodigoMarcoOrdenador';
-import {
-  useGetIndiceClasificadoresAllQuery,
-  useGetIndiceClasificadoresQuery,
-} from '../../app/services/clasificador';
+import { EditFilled } from '@fluentui/react-icons';
+import { useGetIndiceClasificadoresAllQuery } from '../../app/services/clasificador';
 import { builNavPathUrl } from '../../utils/url-utils';
 import { Link, useLocation } from 'react-router-dom';
-import { getEstadisticaPublicUrl } from '../../utils/estadistica-utils';
+
 import RowDeteteButton from '../../components/RowDeleteButton';
+import { MarcoOrdenadorModal } from './MarcoOrdenadorModal';
 
 interface Clasificador {
   id: number;
@@ -27,8 +18,8 @@ interface Clasificador {
 }
 export const Mo = () => {
   const selectId = useId();
-  const location = useLocation();
   const [marcoOrdenador, setMarcoOrdenador] = useState<string>('mdea');
+  const modalWindowRef = useRef(null);
   const {
     data: clasificadores,
     refetch,
@@ -39,15 +30,20 @@ export const Mo = () => {
     refetch();
   }, [marcoOrdenador]);
 
-  const renderActions = (_, record) => {
-    const newUrl = builNavPathUrl(location, 'indicador-editor', record.id);
+  const handleEdit = (record: Clasificador) => {
+    modalWindowRef.current?.open({ record });
+  };
+  const renderActions = (_, record: Clasificador) => {
     return (
       <div className="flex">
-        <Link to={newUrl}>
-          <Tooltip title="Editar">
-            <Button appearance="subtle" icon={<EditFilled />} />
-          </Tooltip>
-        </Link>
+        <Tooltip title="Editar">
+          <Button
+            onClick={() => handleEdit(record)}
+            appearance="subtle"
+            icon={<EditFilled />}
+          />
+        </Tooltip>
+
         <RowDeteteButton onClick={() => handleDelete(record)} />
       </div>
     );
@@ -67,14 +63,14 @@ export const Mo = () => {
     {
       key: 'nivel',
       title: 'Nivel',
-      width: 140,
+      width: 80,
       dataIndex: 'nivel',
     },
     {
       key: 'numeral',
       title: 'Numeral',
       dataIndex: 'numeral',
-      width: 160,
+      width: 80,
     },
     {
       key: 'nombre',
@@ -119,6 +115,7 @@ export const Mo = () => {
           scroll={{ y: 460 }}
         />
       </div>
+      <MarcoOrdenadorModal ref={modalWindowRef} />
     </MainLayout>
   );
 };

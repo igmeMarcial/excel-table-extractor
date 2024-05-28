@@ -1,7 +1,7 @@
 <?php
 
 namespace Aesa\Rest\Controllers;
-
+use \WP_REST_Request;
 use Aesa\Rest\Services\IndiceService;
 
 class IndiceController
@@ -59,5 +59,46 @@ class IndiceController
         return [
             'data' => $data
         ];
+    }
+    public function actualizarIndice(WP_REST_Request $request){
+        try {   
+             $id = $request->get_param('id');
+            $data = $request->get_body();
+            $data = json_decode($data, true);
+
+             // Obtener la URL de la solicitud
+        $url = $request->get_route();
+
+        // Imprimir la URL en la consola de depuración
+        error_log("URL de la solicitud: $url");
+        error_log("controlador indices");
+            $this->indiceService->actualizarIndice($data, $id);
+            return [
+                'data' => $data,
+                'status' => 'OK'
+            ];
+    }catch (\Throwable $th) {
+            return [
+                'data' => $th->getMessage(),
+                'status' => 'ERROR'
+            ];
+        }
+    }
+     public function registrarIndice(WP_REST_Request $request)
+    {
+        try {
+            $data = $request->get_body();
+            $data = json_decode($data, true);
+            $this->indiceService->crearIndice($data);
+            return [
+                'data' => $data,
+                'status' => 'OK'
+            ];
+        } catch (\Throwable $th) {
+            return [
+                'data' => $th->getMessage(),
+                'status' => 'ERROR'
+            ];
+        }
     }
 }
