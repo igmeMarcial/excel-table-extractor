@@ -1,7 +1,10 @@
-import { Clasificador } from '../../types/Clasificador'
+import { Clasificador, ClasificadorMarcoOrdenador } from '../../types/Clasificador'
 import { CodigoMarcoOrdenador } from '../../types/CodigoMarcoOrdenador'
 import { ListResponse } from '../../types/ListResponse'
+import { ObjectResponse } from '../../types/ObjectResponse'
 import { api } from './api'
+
+
 
 export const clasificadorApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -26,13 +29,21 @@ export const clasificadorApi = api.injectEndpoints({
                 return item;
             });
       }
-    })
+    }),
+    //getIndice
+     getIndice: build.query<ClasificadorMarcoOrdenador, number>({
+      query: (id) => `admin/marcos-ordenadores/indice-clasificadores/${id}`,
+      providesTags: (_result, _err, id) => [{ type: 'Estadistica', id }],
+      transformResponse: (response: ObjectResponse<ClasificadorMarcoOrdenador>) => response.data,
+    }),
+
   }),
 })
 
 export const {
   useGetIndiceClasificadoresQuery,
-  useGetIndiceClasificadoresAllQuery 
+  useGetIndiceClasificadoresAllQuery,
+  useGetIndiceQuery
 } = clasificadorApi
 export const {
   endpoints: { getIndiceClasificadores },

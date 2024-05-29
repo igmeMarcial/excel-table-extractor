@@ -3,12 +3,14 @@ import MainLayout from '../../layout/MainLayout';
 import { Select, useId, Button } from '@fluentui/react-components';
 import { Table, TableProps, Tooltip } from 'antd';
 import { EditFilled } from '@fluentui/react-icons';
-import { useGetIndiceClasificadoresAllQuery } from '../../app/services/clasificador';
-import { builNavPathUrl } from '../../utils/url-utils';
-import { Link, useLocation } from 'react-router-dom';
+import {
+  useGetIndiceClasificadoresAllQuery,
+  useGetIndiceQuery,
+} from '../../app/services/clasificador';
 
 import RowDeteteButton from '../../components/RowDeleteButton';
 import { MarcoOrdenadorModal } from './MarcoOrdenadorModal';
+import ClasificadorService from '../../services/ClasificadorService';
 
 interface Clasificador {
   id: number;
@@ -30,8 +32,15 @@ export const Mo = () => {
     refetch();
   }, [marcoOrdenador]);
 
-  const handleEdit = (record: Clasificador) => {
-    modalWindowRef.current?.open({ record });
+  const handleEdit = async (record: Clasificador) => {
+    try {
+      const indice = await ClasificadorService.getIndice(record.id);
+      console.log('Índice cargado:', indice);
+      // Realiza acciones adicionales con el índice cargado
+    } catch (error) {
+      console.error('Error al cargar el índice', error);
+    }
+    // modalWindowRef.current?.open({ record });
   };
   const renderActions = (_, record: Clasificador) => {
     return (

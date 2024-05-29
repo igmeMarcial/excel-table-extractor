@@ -39,6 +39,8 @@ class Routes
         $this->router->get( '/admin/marcos-ordenadores/ods/indice-clasificadores',  IndiceController::class . ':handleGetIndiceOds');
         $this->router->get( '/admin/marcos-ordenadores/ocde/indice-clasificadores', IndiceController::class . ':handleGetIndiceOcde');
         $this->router->get( '/admin/marcos-ordenadores/pna/indice-clasificadores',  IndiceController::class . ':handleGetIndicePna');
+        //Indice en general
+        $this->router->get('/admin/marcos-ordenadores/indice-clasificadores/(?P<id>[\d]+)', IndiceController::class . ':obtenerIndice');
         $this->router->put('/admin/marcos-ordenadores/indice-clasificadores/(?P<id>[\d]+)', IndiceController::class . ':actualizarIndice');
         $this->router->post('/admin/marcos-ordenadores/indice-clasificadores', IndiceController::class . ':registrarIndice');
         // Indices estadisticas

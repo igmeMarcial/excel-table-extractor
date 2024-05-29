@@ -1,6 +1,8 @@
 <?php
+
+namespace Aesa\Model;
 use Aesa\Core\DataTypes;
-use Aesa\Model\BaseModel;
+
 class Clasificador extends BaseModel{
     protected $fields = [
     'id' => [

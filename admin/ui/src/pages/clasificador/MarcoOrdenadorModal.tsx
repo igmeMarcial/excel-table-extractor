@@ -2,6 +2,7 @@ import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { Button, Modal } from 'antd';
 import WpDynamicField from '../../components/form/WpDynamicField';
 import { FieldDef } from '../estadisticas/editor/EstadisticaFieldsDef';
+import ClasificadorService from '../../services/ClasificadorService';
 
 export interface MarcoOrdenadorWindowRef {
   open: (data) => void;
@@ -36,13 +37,19 @@ export const MarcoOrdenadorModal = forwardRef<MarcoOrdenadorWindowRef>(
       numeral: '',
     });
     const open = ({ record }) => {
-      setDataForm(record);
+      const newDataForm = { ...record };
+      newDataForm.nivel = newDataForm.nivel.toString();
+      setDataForm(newDataForm);
       setIsModalOpen(true);
     };
 
-    const handleOk = () => {
+    const handleOk = async () => {
       setIsModalOpen(false);
-      console.log(dataForm);
+      try {
+        await ClasificadorService.update(dataForm.id, dataForm);
+      } catch (error) {
+        console.error('Update Error:', error);
+      }
     };
 
     const close = () => {

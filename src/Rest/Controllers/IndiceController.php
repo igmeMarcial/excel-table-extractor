@@ -60,6 +60,16 @@ class IndiceController
             'data' => $data
         ];
     }
+     public function obtenerIndice(WP_REST_Request $request)
+    {
+        $id = $request->get_param('id');
+        $result = $this->indiceService->getIndice($id);
+       
+        // Return the array of objects
+        return [
+            'data' => $result,
+        ];
+    }
     public function actualizarIndice(WP_REST_Request $request){
         try {   
              $id = $request->get_param('id');

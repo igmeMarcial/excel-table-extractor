@@ -3,9 +3,9 @@
 namespace Aesa\Rest\Services;
 
 use Aesa\Core\Constantes;
+use Aesa\Core\DataParser;
 use Aesa\Db\DbMap;
-use Clasificador;
-
+use Aesa\Model\Clasificador;
 class IndiceService
 {
     private DbMap $dbMap;
@@ -119,6 +119,39 @@ class IndiceService
                   FROM {$this->dbMap->clasificador}
                   WHERE marco_ordenador_id = $marcoOrdenadorId";
         return $this->wpdb->get_results($query, ARRAY_A);
+    }
+
+     public function getIndice($id)
+    {
+        $model = new Clasificador([]);
+        $sql ="SELECT 
+            A.clasificador_id,
+            A.usuario_reg_id,
+            A.usuario_mod_id,
+            A.fecha_reg,
+            A.fecha_mod,
+            A.activo,
+            A.marco_ordenador_id,
+            A.nivel,
+            A.numeral,
+            A.nombre,
+            B.sigla as marco_ordenador_sigla,
+            B.nombre as marco_ordenador_nombre
+        FROM {$this->dbMap->clasificador} A
+        INNER JOIN {$this->dbMap->marco_ordenador} B 
+        ON A.marco_ordenador_id = B.marco_ordenador_id
+        WHERE A.clasificador_id = $id";
+
+        $data = $this->wpdb->get_row($sql, ARRAY_A);
+        if (!$data) {
+            throw new \Exception("No se encontró el registro con id $id");
+        }
+        // Añadi datos de marco ordenador
+        $data['marcoOrdenador'] = json_encode([
+            'codigo'  => 'MDEA',
+            'numeral' => $data['numeral'],
+        ]);
+        return DataParser::parseQueryResult($data, $model->getFieldsDef());
     }
     public function actualizarIndice(array $data, int $id){
        $model  = new Clasificador($data);

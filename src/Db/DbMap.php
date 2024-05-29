@@ -9,6 +9,7 @@ class DbMap
     public string $estadistica;
     public string $estaClas;
 
+    public string $marco_ordenador;
     /**
      * DbMap constructor.
      * @param string $prefix Prefix for tables
@@ -29,5 +30,6 @@ class DbMap
         $this->clasificador = $this->prefix . 'clasificador';
         $this->estadistica  = $this->prefix . 'estadistica';
         $this->estaClas     = $this->prefix . 'esta_clas';
+         $this->marco_ordenador     = $this->prefix . 'marco_ordenador';
     }
 }
