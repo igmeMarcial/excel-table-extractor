@@ -7,6 +7,8 @@ use Aesa\Core\RestRouter;
 use Aesa\Rest\Controllers\DevController;
 use Aesa\Rest\Controllers\EstadisticaController;
 use Aesa\Rest\Controllers\IndiceController;
+use Aesa\Rest\Controllers\MarcoOdenadorController;
+use Aesa\Rest\Controllers\ClasificadorController;
 
 class Routes
 {
@@ -43,6 +45,11 @@ class Routes
         $this->router->get('/admin/marcos-ordenadores/indice-clasificadores/(?P<id>[\d]+)', IndiceController::class . ':obtenerIndice');
         $this->router->put('/admin/marcos-ordenadores/indice-clasificadores/(?P<id>[\d]+)', IndiceController::class . ':actualizarIndice');
         $this->router->post('/admin/marcos-ordenadores/indice-clasificadores', IndiceController::class . ':registrarIndice');
+        // Marcos ordenadores
+        $this->router->get('/admin/marcos-ordenadores',  MarcoOdenadorController::class . ':listarMarcosOrdenadores');
+        // Clasificadores
+        $this->router->get('/admin/marcos-ordenadores/(?P<marco_ordenador_id>[\d]+)/clasificadores', ClasificadorController::class . ':listarClasificadoresByMarcoOrdenadorId');
+
         // Indices estadisticas
         $this->router->get('/website/marcos-ordenadores/mdea/indice-estadisticas',  IndiceController::class . ':handleGetIndiceEstadisticasMdea');
         $this->router->get('/website/marcos-ordenadores/ods/indice-estadisticas',   IndiceController::class . ':handleGetIndiceEstadisticasOds');

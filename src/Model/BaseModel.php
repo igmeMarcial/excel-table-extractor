@@ -14,9 +14,11 @@ abstract class BaseModel
     protected $fields = [];
     private $data = [];
 
-    public function __construct(array $data)
+    public function __construct(array $data = null)
     {
-        $this->setData($data);
+        if ($data) {
+            $this->setData($data);
+        }
     }
     public function getFieldsDef(): array
     {

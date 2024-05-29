@@ -3,6 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 
 const items = [
   { text: 'Estadisticas', path: 'indicadores' },
+  { text: 'Clasificadores', path: 'clasificadores' },
   { text: 'Configuracion', path: 'configuracion' },
 ];
 

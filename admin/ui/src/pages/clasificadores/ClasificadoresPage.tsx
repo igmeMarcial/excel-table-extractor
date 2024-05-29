@@ -3,13 +3,10 @@ import MainLayout from '../../layout/MainLayout';
 import { Select, useId, Button } from '@fluentui/react-components';
 import { Table, TableProps, Tooltip } from 'antd';
 import { EditFilled } from '@fluentui/react-icons';
-import {
-  useGetIndiceClasificadoresAllQuery,
-  useGetIndiceQuery,
-} from '../../app/services/clasificador';
+import { useGetIndiceClasificadoresAllQuery } from '../../app/services/clasificador';
 
 import RowDeteteButton from '../../components/RowDeleteButton';
-import { MarcoOrdenadorModal } from './MarcoOrdenadorModal';
+import ClasificadorEditorModal from './ClasificadorEditorModal';
 import ClasificadorService from '../../services/ClasificadorService';
 
 interface Clasificador {
@@ -18,7 +15,7 @@ interface Clasificador {
   numeral: string;
   nombre: string;
 }
-export const Mo = () => {
+const ClasificadoresPage = () => {
   const selectId = useId();
   const [marcoOrdenador, setMarcoOrdenador] = useState<string>('mdea');
   const modalWindowRef = useRef(null);
@@ -124,7 +121,9 @@ export const Mo = () => {
           scroll={{ y: 460 }}
         />
       </div>
-      <MarcoOrdenadorModal ref={modalWindowRef} />
+      <ClasificadorEditorModal ref={modalWindowRef} />
     </MainLayout>
   );
 };
+
+export default ClasificadoresPage;
