@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import MainLayout from '../../layout/MainLayout';
-import { Select, useId, Button } from '@fluentui/react-components';
+import { Button } from '@fluentui/react-components';
 import { Table, TableProps, Tooltip } from 'antd';
 import { EditFilled } from '@fluentui/react-icons';
-import { useGetIndiceClasificadoresAllQuery } from '../../app/services/clasificador';
 
 import RowDeteteButton from '../../components/RowDeleteButton';
 import ClasificadorEditorModal from './ClasificadorEditorModal';
-import ClasificadorService from '../../services/ClasificadorService';
+import MarcoOrdenadorSelect from './MarcoOrdenadorSelect';
+import { useGetClasificadoresByMarcoOrdenadorIdQuery } from '../../app/services/marco-ordenador';
 
 interface Clasificador {
   id: number;
@@ -16,27 +16,14 @@ interface Clasificador {
   nombre: string;
 }
 const ClasificadoresPage = () => {
-  const selectId = useId();
-  const [marcoOrdenador, setMarcoOrdenador] = useState<string>('mdea');
+  const [marcoOrdenador, setMarcoOrdenador] = useState<number>(-1);
   const modalWindowRef = useRef(null);
-  const {
-    data: clasificadores,
-    refetch,
-    isLoading,
-  } = useGetIndiceClasificadoresAllQuery(marcoOrdenador);
-
-  useEffect(() => {
-    refetch();
-  }, [marcoOrdenador]);
+  const { data: clasificadores, isFetching } =
+    useGetClasificadoresByMarcoOrdenadorIdQuery(marcoOrdenador, {
+      skip: marcoOrdenador === -1,
+    });
 
   const handleEdit = async (record: Clasificador) => {
-    try {
-      const indice = await ClasificadorService.getIndice(record.id);
-      console.log('Índice cargado:', indice);
-      // Realiza acciones adicionales con el índice cargado
-    } catch (error) {
-      console.error('Error al cargar el índice', error);
-    }
     modalWindowRef.current?.open({ record });
   };
   const renderActions = (_, record: Clasificador) => {
@@ -94,28 +81,16 @@ const ClasificadoresPage = () => {
   return (
     <MainLayout>
       <div className="w-[300px] my-6 px-[2.5rem]">
-        <label htmlFor={selectId}>Marco Ordenador</label>
-        <Select
-          defaultValue="Mdea"
-          id={selectId}
-          onChange={(e) => setMarcoOrdenador(e.target.value)}
-        >
-          <option value="mdea">Mdea</option>
-          <option value="pna">Pna</option>
-          <option value="ods">Ods</option>
-          <option value="ocde">Ocde</option>
-        </Select>
+        <MarcoOrdenadorSelect onChange={setMarcoOrdenador} />
       </div>
       <div>
         <Table
           className="mx-10"
           dataSource={clasificadores}
           columns={columns}
-          loading={isLoading}
+          loading={isFetching}
           size="small"
-          pagination={{
-            pageSize: 500,
-          }}
+          pagination={false}
           bordered
           rowKey={(record) => record.id}
           scroll={{ y: 460 }}

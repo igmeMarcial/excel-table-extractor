@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Table, TableProps, Tooltip } from 'antd';
 import { Button } from '@fluentui/react-components';
@@ -12,10 +12,11 @@ import dayjs from 'dayjs';
 
 import { builNavPathUrl } from '../../utils/url-utils';
 import RowDeteteButton from '../../components/RowDeleteButton';
-import EstadisticaService from '../../services/EstadisticaService';
 import { useAppDispatch } from '../../app/hooks';
 import { setActiveTab } from './EstadisticaFormSlice';
 import { getEstadisticaPublicUrl } from '../../utils/estadistica-utils';
+import { useGetEstadisticasQuery } from '../../app/services/estadistica';
+import { Estadistica } from '../../types/Estadistica';
 interface ColDataType {
   key: string;
   name: string;
@@ -23,16 +24,34 @@ interface ColDataType {
 }
 
 const EstadisticasPageList = forwardRef((props, ref) => {
+  const { data = [], isLoading } = useGetEstadisticasQuery();
+  const [filterText, setFilterText] = useState('');
   const location = useLocation();
-  const [fullData, setFullData] = useState([]);
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
   const dispath = useAppDispatch();
   // Metodo para filtrar la tabla desde el toolbar
   const filterRecords = (text) => {
-    const filteredData = fullData.filter((model) => {
+    setFilterText(text);
+  };
+
+  // Expose the custom method to tthe parent component
+  useImperativeHandle(ref, () => ({
+    filterRecords,
+  }));
+
+  const renderFechaMod = (value, record) => {
+    return dayjs(value).format('DD/MM/YYYY hh:mm A');
+  };
+
+  const onClickLink = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    dispath(setActiveTab('1'));
+  };
+  const getRenderData = (filterText: string) => {
+    if (!filterText) {
+      return data;
+    }
+    return data.filter((model) => {
       // Convert text to lower case for case-insensitive comparison
-      const lowerText = text.toLowerCase();
+      const lowerText = filterText.toLowerCase();
 
       // Extract all string values from the model
       const values = Object.values(model).filter(
@@ -41,37 +60,6 @@ const EstadisticasPageList = forwardRef((props, ref) => {
       // Check if any of the values include the search text
       return values.some((value) => value.toLowerCase().includes(lowerText));
     });
-    setData(filteredData);
-  };
-  // Agregar registro a la tabla
-  const addRecord = (record) => {
-    setData([record, ...data]);
-  };
-  // Expose the custom method to tthe parent component
-  useImperativeHandle(ref, () => ({
-    filterRecords,
-    addRecord,
-  }));
-
-  useEffect(() => {
-    // Obtener lista de plantillas
-    EstadisticaService.list()
-      .then((data) => {
-        setData(data);
-        setFullData(data);
-        setLoading(false);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
-
-  const renderFechaMod = (value, record) => {
-    return dayjs(value).format('DD/MM/YYYY hh:mm A');
-  };
-
-  const onClickLink = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    dispath(setActiveTab('1'));
   };
   const renderChecks = (_, record) => {
     return (
@@ -117,7 +105,7 @@ const EstadisticasPageList = forwardRef((props, ref) => {
     // TODO: Implementar
   };
   // Columnas de la tabla
-  const columns: TableProps<ColDataType>['columns'] = [
+  const columns: TableProps<Estadistica>['columns'] = [
     {
       key: 'number',
       title: 'N°',
@@ -180,7 +168,7 @@ const EstadisticasPageList = forwardRef((props, ref) => {
       align: 'right',
       dataIndex: 'fechaMod',
       render: renderFechaMod,
-      sorter: (a, b) => a.modified - b.modified,
+      sorter: (a, b) => (a.fechaMod as any) - (b.fechaMod as any),
     },
     {
       key: 'status',
@@ -209,13 +197,11 @@ const EstadisticasPageList = forwardRef((props, ref) => {
   return (
     <Table
       className="mx-10"
-      dataSource={data}
+      dataSource={getRenderData(filterText)}
       columns={columns}
-      loading={loading}
+      loading={isLoading}
       size="small"
-      pagination={{
-        pageSize: 500,
-      }}
+      pagination={false}
       bordered
       rowKey={(record) => record.id}
       scroll={{ y: 460 }}

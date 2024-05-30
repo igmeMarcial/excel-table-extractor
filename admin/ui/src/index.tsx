@@ -37,7 +37,7 @@ if (!rootElement) {
 }
 const root = createRoot(rootElement);
 root.render(
-  <FluentProvider theme={webLightTheme} className="shadow rounded-b pb-0">
+  <FluentProvider theme={webLightTheme} className="shadow rounded-b pb-8">
     <ConfigProvider locale={esES} theme={antdThemeConfig}>
       <BrowserRouter>
         <ReduxStoreProvider store={store}>

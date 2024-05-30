@@ -50,4 +50,5 @@ export interface Estadistica extends EstadisticaBaseFields, FichaTecnicaFields {
   presentacionTablaFuente?: string
   presentacionTablaElaboracion?: string
   presentacionTablaFormato?: FormatoTabla
+  fechaMod?: string
 }

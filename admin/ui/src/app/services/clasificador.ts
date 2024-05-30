@@ -1,13 +1,45 @@
-import { Clasificador, ClasificadorMarcoOrdenador } from '../../types/Clasificador'
-import { CodigoMarcoOrdenador } from '../../types/CodigoMarcoOrdenador'
+import { Clasificador } from '../../types/Clasificador'
 import { ListResponse } from '../../types/ListResponse'
-import { ObjectResponse } from '../../types/ObjectResponse'
 import { api } from './api'
 
-
+const ENPOINTS_BASE_URL = 'admin/clasificadores';
 
 export const clasificadorApi = api.injectEndpoints({
   endpoints: (build) => ({
+    // Registrar
+    createClasificador: build.mutation<Clasificador, Partial<Clasificador>>({
+      query(body) {
+        return {
+          url: ENPOINTS_BASE_URL,
+          method: 'POST',
+          body,
+        }
+      },
+      invalidatesTags: [{ type: 'Clasificador', id: 'LIST' }],
+    }),
+    // Actualizar
+    updateClasificador: build.mutation<Clasificador, Partial<Clasificador>>({
+      query(data) {
+        const { id, ...body } = data
+        return {
+          url: `${ENPOINTS_BASE_URL}/${id}`,
+          method: 'PUT',
+          body,
+        }
+      },
+      invalidatesTags: (post) => [{ type: 'Clasificador', id: post?.id }],
+    }),
+    // Eliminar
+    deleteClasificador: build.mutation<{ success: boolean; id: number }, number>({
+      query(id) {
+        return {
+          url: `${ENPOINTS_BASE_URL}/${id}`,
+          method: 'DELETE',
+        }
+      },
+      invalidatesTags: (post) => [{ type: 'Clasificador', id: post?.id }],
+    }),
+    // TODO: Mover a marco-ordenador service
     getIndiceClasificadores: build.query<Clasificador[], void>({
       query: () => `admin/marcos-ordenadores/mdea/indice-clasificadores`,
       transformResponse: (response: ListResponse<Clasificador>) => {
@@ -17,33 +49,21 @@ export const clasificadorApi = api.injectEndpoints({
         })
       },
     }),
-    //add methods
-    getIndiceClasificadoresAll:build.query<Clasificador[],string>({
-      query:(marcoOrdenador:CodigoMarcoOrdenador)=>`admin/marcos-ordenadores/${marcoOrdenador}/indice-clasificadores`,
-      transformResponse:(response:ListResponse<Clasificador>)=>{
-         return response.data.map((item: any) => {
-                item.nivel = item.numeral.split('.').length;
-                item.hasChildren = response.data.some((child: any) => {
-                return child.numeral.startsWith(item.numeral + '.');
-                });
-                return item;
-            });
-      }
-    }),
-    //getIndice
-     getIndice: build.query<ClasificadorMarcoOrdenador, number>({
-      query: (id) => `admin/marcos-ordenadores/indice-clasificadores/${id}`,
-      providesTags: (_result, _err, id) => [{ type: 'Estadistica', id }],
-      transformResponse: (response: ObjectResponse<ClasificadorMarcoOrdenador>) => response.data,
-    }),
-
   }),
 })
-
+// Add/Update
+export const useSaveClasificadorMutation = (creating: boolean) => {
+  if (creating) {
+    return useCreateClasificadorMutation()
+  } else {
+    return useUpdateClasificadorMutation()
+  }
+}
 export const {
   useGetIndiceClasificadoresQuery,
-  useGetIndiceClasificadoresAllQuery,
-  useGetIndiceQuery
+  useCreateClasificadorMutation,
+  useUpdateClasificadorMutation,
+  useDeleteClasificadorMutation,
 } = clasificadorApi
 export const {
   endpoints: { getIndiceClasificadores },

@@ -1,8 +1,9 @@
-import React, { forwardRef, useImperativeHandle, useState } from 'react';
-import { Button, Modal } from 'antd';
+import { forwardRef, useImperativeHandle, useState } from 'react';
+import { Modal } from 'antd';
 import WpDynamicField from '../../components/form/WpDynamicField';
 import { FieldDef } from '../estadisticas/editor/EstadisticaFieldsDef';
-import ClasificadorService from '../../services/ClasificadorService';
+import { useSaveClasificadorMutation } from '../../app/services/clasificador';
+import { Clasificador } from '../../types/Clasificador';
 
 export interface MarcoOrdenadorWindowRef {
   open: (data) => void;
@@ -29,10 +30,12 @@ export const MARCO_ORDENADOR_FIELDS_DEF: Record<string, FieldDef> = {
 
 const ClasificadorEditorModal = forwardRef<MarcoOrdenadorWindowRef>(
   (props, ref) => {
+    const [isCreationMode, setIsCreationMode] = useState(true);
+    const [saveClasificador, { isLoading: isSaving }] =
+      useSaveClasificadorMutation(isCreationMode);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [dataForm, setDataForm] = useState({
-      id: null,
-      nivel: '',
+    const [dataForm, setDataForm] = useState<Partial<Clasificador>>({
+      nivel: 1,
       nombre: '',
       numeral: '',
     });
@@ -41,12 +44,13 @@ const ClasificadorEditorModal = forwardRef<MarcoOrdenadorWindowRef>(
       newDataForm.nivel = newDataForm.nivel.toString();
       setDataForm(newDataForm);
       setIsModalOpen(true);
+      setIsCreationMode(!record.id);
     };
 
     const handleOk = async () => {
       setIsModalOpen(false);
       try {
-        await ClasificadorService.update(dataForm.id, dataForm);
+        await saveClasificador(dataForm);
       } catch (error) {
         console.error('Update Error:', error);
       }

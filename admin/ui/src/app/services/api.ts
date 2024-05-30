@@ -1,10 +1,5 @@
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
 
-export interface ApiResponse<T> {
-  data: T
-  total?: number
-}
-
 // Create our baseQuery instance
 const baseQuery = fetchBaseQuery({
   baseUrl: window.AesaInfo.apiUrl,
@@ -35,7 +30,7 @@ export const api = createApi({
    * Tag types must be defined in the original API definition
    * for any tags that would be provided by injected endpoints
    */
-  tagTypes: ['Estadistica'],
+  tagTypes: ['Estadistica', 'MarcoOrdenador', 'Clasificador'],
   /**
    * This api has endpoints injected in adjacent files,
    * which is why no endpoints are shown below.

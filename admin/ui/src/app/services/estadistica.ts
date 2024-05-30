@@ -1,9 +1,23 @@
 import { Estadistica } from '../../types/Estadistica'
+import { ListResponse } from '../../types/ListResponse'
 import { ObjectResponse } from '../../types/ObjectResponse'
 import { api } from './api'
 
 export const estadisticaApi = api.injectEndpoints({
   endpoints: (build) => ({
+    getEstadisticas: build.query<Estadistica[], void>({
+      query: () => ({ url: 'estadisticas' }),
+      /**
+       * Notar que el tag 'Estadistica' está definido primero en api.ts:tagTypes
+       *
+       * Ver: https://redux-toolkit.js.org/rtk-query/api/createApi#providestags
+       */
+      providesTags: (result = []) => [
+        ...result.map(({ id }) => ({ type: 'Estadistica' as const, id })),
+        { type: 'Estadistica' as const, id: 'LIST' },
+      ],
+      transformResponse: (response: ListResponse<Estadistica>) => response.data
+    }),
     createEstadistica: build.mutation<Estadistica, Partial<Estadistica>>({
       query(body) {
         return {
@@ -50,6 +64,7 @@ export const useSaveEstadisticaMutation = (creating: boolean) => {
   }
 }
 export const {
+  useGetEstadisticasQuery,
   useCreateEstadisticaMutation,
   useDeleteEstadisticaMutation,
   useGetEstadisticaQuery,

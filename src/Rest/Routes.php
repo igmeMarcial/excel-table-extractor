@@ -37,18 +37,17 @@ class Routes
         $this->router->put('/estadisticas/(?P<id>[\d]+)',     EstadisticaController::class . ':actualizarEstadistica');
         $this->router->delete('/estadisticas/(?P<id>[\d]+)',  EstadisticaController::class . ':eliminarEstadistica');
         // Indices
-        $this->router->get('/admin/marcos-ordenadores/mdea/indice-clasificadores',  IndiceController::class . ':handleGetIndiceMdea');
-        $this->router->get( '/admin/marcos-ordenadores/ods/indice-clasificadores',  IndiceController::class . ':handleGetIndiceOds');
-        $this->router->get( '/admin/marcos-ordenadores/ocde/indice-clasificadores', IndiceController::class . ':handleGetIndiceOcde');
-        $this->router->get( '/admin/marcos-ordenadores/pna/indice-clasificadores',  IndiceController::class . ':handleGetIndicePna');
-        //Indice en general
-        $this->router->get('/admin/marcos-ordenadores/indice-clasificadores/(?P<id>[\d]+)', IndiceController::class . ':obtenerIndice');
-        $this->router->put('/admin/marcos-ordenadores/indice-clasificadores/(?P<id>[\d]+)', IndiceController::class . ':actualizarIndice');
-        $this->router->post('/admin/marcos-ordenadores/indice-clasificadores', IndiceController::class . ':registrarIndice');
+        $this->router->get('/admin/marcos-ordenadores/mdea/indice-clasificadores', IndiceController::class . ':handleGetIndiceMdea');
+        $this->router->get('/admin/marcos-ordenadores/ods/indice-clasificadores',  IndiceController::class . ':handleGetIndiceOds');
+        $this->router->get('/admin/marcos-ordenadores/ocde/indice-clasificadores', IndiceController::class . ':handleGetIndiceOcde');
+        $this->router->get('/admin/marcos-ordenadores/pna/indice-clasificadores',  IndiceController::class . ':handleGetIndicePna');
+
         // Marcos ordenadores
         $this->router->get('/admin/marcos-ordenadores',  MarcoOdenadorController::class . ':listarMarcosOrdenadores');
-        // Clasificadores
         $this->router->get('/admin/marcos-ordenadores/(?P<marco_ordenador_id>[\d]+)/clasificadores', ClasificadorController::class . ':listarClasificadoresByMarcoOrdenadorId');
+        // Clasificadores
+        $this->router->post('/admin/clasificadores',              ClasificadorController::class . ':handleCreateClasificador');
+        $this->router->put('/admin/clasificadores/(?P<id>[\d]+)', ClasificadorController::class . ':handleUpdateClasificador');
 
         // Indices estadisticas
         $this->router->get('/website/marcos-ordenadores/mdea/indice-estadisticas',  IndiceController::class . ':handleGetIndiceEstadisticasMdea');
