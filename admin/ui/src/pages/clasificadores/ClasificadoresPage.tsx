@@ -2,12 +2,13 @@ import { useRef, useState } from 'react';
 import MainLayout from '../../layout/MainLayout';
 import { Button } from '@fluentui/react-components';
 import { Table, TableProps, Tooltip } from 'antd';
-import { EditFilled } from '@fluentui/react-icons';
+import { EditFilled, Add24Filled } from '@fluentui/react-icons';
 
 import RowDeteteButton from '../../components/RowDeleteButton';
 import ClasificadorEditorModal from './ClasificadorEditorModal';
 import MarcoOrdenadorSelect from './MarcoOrdenadorSelect';
 import { useGetClasificadoresByMarcoOrdenadorIdQuery } from '../../app/services/marco-ordenador';
+import { useDeleteClasificadorMutation } from '../../app/services/clasificador';
 
 interface Clasificador {
   id: number;
@@ -22,7 +23,7 @@ const ClasificadoresPage = () => {
     useGetClasificadoresByMarcoOrdenadorIdQuery(marcoOrdenador, {
       skip: marcoOrdenador === -1,
     });
-
+    const [deleteClasificador, { isLoading: isDeleting }] = useDeleteClasificadorMutation();
   const handleEdit = async (record: Clasificador) => {
     modalWindowRef.current?.open({ record });
   };
@@ -41,10 +42,18 @@ const ClasificadoresPage = () => {
       </div>
     );
   };
-  const handleDelete = (record: any) => {
-    // TODO: Implementar
+  const handleDelete = async (record: any) => {
+    if(record.id){
+      try{
+        await deleteClasificador(record.id);
+      }catch(error){
+        console.error(error);
+      }
+    }
   };
-
+  const handleRegister = () => {
+    modalWindowRef.current?.open({});
+  };
   const columns: TableProps<Clasificador>['columns'] = [
     {
       key: 'number',
@@ -56,7 +65,7 @@ const ClasificadoresPage = () => {
     {
       key: 'nivel',
       title: 'Nivel',
-      width: 80,
+      width: 50,
       dataIndex: 'nivel',
     },
     {
@@ -80,9 +89,22 @@ const ClasificadoresPage = () => {
   ];
   return (
     <MainLayout>
-      <div className="w-[300px] my-6 px-[2.5rem]">
-        <MarcoOrdenadorSelect onChange={setMarcoOrdenador} />
+      <div className="flex px-10 pt-4 pb-6 gap-2">
+        <div className="w-[300px]  px-[2.5rem]">
+          <MarcoOrdenadorSelect onChange={setMarcoOrdenador} />
+        </div>
+        <div className="flex items-end">
+          <Button
+            style={{ color: '#2271B1' }}
+            appearance="subtle"
+            icon={<Add24Filled />}
+            onClick={handleRegister}
+          >
+            Registrar
+          </Button>
+        </div>
       </div>
+
       <div>
         <Table
           className="mx-10"

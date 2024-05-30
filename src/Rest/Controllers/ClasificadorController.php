@@ -68,4 +68,20 @@ class ClasificadorController
             ];
         }
     }
+    public function handleDeleteClasificador(WP_REST_Request $request)
+    {
+        try {
+            $id = $request->get_param('id');
+            $this->service->eliminarClasificador($id);
+            return [
+                'data' => $id,
+                'status' => 'OK'
+            ];
+        } catch (\Throwable $th) {
+            return [
+                'data' => $th->getMessage(),
+                'status' => 'ERROR'
+            ];
+        }
+    }
 }

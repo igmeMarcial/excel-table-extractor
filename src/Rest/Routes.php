@@ -48,7 +48,7 @@ class Routes
         // Clasificadores
         $this->router->post('/admin/clasificadores',              ClasificadorController::class . ':handleCreateClasificador');
         $this->router->put('/admin/clasificadores/(?P<id>[\d]+)', ClasificadorController::class . ':handleUpdateClasificador');
-
+        $this->router->delete('/admin/clasificadores/(?P<id>[\d]+)', ClasificadorController::class . ':handleDeleteClasificador');
         // Indices estadisticas
         $this->router->get('/website/marcos-ordenadores/mdea/indice-estadisticas',  IndiceController::class . ':handleGetIndiceEstadisticasMdea');
         $this->router->get('/website/marcos-ordenadores/ods/indice-estadisticas',   IndiceController::class . ':handleGetIndiceEstadisticasOds');

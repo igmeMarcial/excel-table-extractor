@@ -28,7 +28,7 @@ class ClasificadorService
                     fecha_mod fechaMod,
                     activo
                   FROM {$this->dbMap->clasificador}
-                  WHERE marco_ordenador_id = $marcoOrdenadorId";
+                  WHERE marco_ordenador_id = $marcoOrdenadorId AND eliminado = 0";
         // Ejecutar la consulta
         $results =  $this->wpdb->get_results($query, ARRAY_A);
         $model = new Clasificador();
@@ -47,5 +47,9 @@ class ClasificadorService
             $this->dbMap->clasificador,
             $model->getDataForDbQuery()
         );
+    }
+    public function eliminarClasificador(int $id)
+    {
+        $this->wpdb->update($this->dbMap->clasificador, ['eliminado' => true], ['clasificador_id' => $id]);
     }
 }

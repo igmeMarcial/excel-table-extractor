@@ -2,8 +2,8 @@
 
 return "CREATE TABLE {tablePrefix}clasificador (
     clasificador_id     INT(11) NOT NULL AUTO_INCREMENT,
-    usuario_reg_id      INT(11) NOT NULL,
-    usuario_mod_id      INT(11) NOT NULL,
+    usuario_reg_id      INT(11) NOT NULL DEFAULT 0,
+    usuario_mod_id      INT(11) NOT NULL DEFAULT 0,
     fecha_reg           DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     fecha_mod           DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     activo              TINYINT(1) NOT NULL DEFAULT 1,

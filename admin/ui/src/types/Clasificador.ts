@@ -3,6 +3,8 @@ export interface Clasificador {
   numeral: string
   nombre: string
   nivel: number
+  activo: boolean;
+  marcoOrdenadorId: number;
 }
 
 export interface ClasificadorMarcoOrdenador {
