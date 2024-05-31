@@ -41,7 +41,7 @@ function MarcoOrdenadorNav() {
             key={item.path}
             onClick={() => onTabSelect(item.path)}
             className={`flex cursor-pointer outline-none items-center justify-center  py-1   transition-all duration-300 border-[#dadce0] border-[1px] border-solid rounded-[20px] hover:bg-[#e5edff] ${
-              activeItem === item.path ? 'border-gray-400' : ''
+              activeItem === item.path ? 'bg-[#e5edff]' : ''
             }`}
           >
             <span className="h-[30px] w-[30px] flex justify-center mx-[6px]">
