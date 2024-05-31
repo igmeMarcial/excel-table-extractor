@@ -3,9 +3,7 @@
 namespace Aesa\Rest\Services;
 
 use Aesa\Core\Constantes;
-use Aesa\Core\DataParser;
 use Aesa\Db\DbMap;
-use Aesa\Model\Clasificador;
 
 class IndiceService
 {
@@ -26,7 +24,7 @@ class IndiceService
     }
     public function getIndiceEstadisticasOds()
     {
-        $clasificadores = $this->getListaClasificadores(Constantes::MARCO_ORDENADOR_ODS_ID);
+        $clasificadores = $this->getListaClasificadoresConEstadisticas(Constantes::MARCO_ORDENADOR_ODS_ID);
         $estadisticas = $this->getListaEstadisticas();
         return $this->formatIndiceEstadisticas($clasificadores, $estadisticas);
     }
@@ -111,6 +109,7 @@ class IndiceService
         }
         return $out;
     }
+
     private function getListaClasificadores(int $marcoOrdenadorId)
     {
         $query = "SELECT
@@ -119,6 +118,21 @@ class IndiceService
                     nombre
                   FROM {$this->dbMap->clasificador}
                   WHERE marco_ordenador_id = $marcoOrdenadorId";
+        return $this->wpdb->get_results($query, ARRAY_A);
+    }
+
+    private function getListaClasificadoresConEstadisticas(int $marcoOrdenadorId)
+    {
+        $query = "SELECT
+                    clasificador_id clasificadorId,
+                    numeral,
+                    nombre
+                  FROM {$this->dbMap->clasificador}
+                  WHERE marco_ordenador_id = $marcoOrdenadorId AND (
+                            clasificador_id IN(SELECT clasificador_n1_id FROM {$this->dbMap->estaClas}) OR
+                            clasificador_id IN(SELECT clasificador_n2_id FROM {$this->dbMap->estaClas}) OR
+                            clasificador_id IN(SELECT clasificador_n3_id FROM {$this->dbMap->estaClas})
+                        )";
         return $this->wpdb->get_results($query, ARRAY_A);
     }
 }
