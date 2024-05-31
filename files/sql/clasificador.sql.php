@@ -7,6 +7,8 @@ return "CREATE TABLE {tablePrefix}clasificador (
     fecha_reg           DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     fecha_mod           DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     activo              TINYINT(1) NOT NULL DEFAULT 1,
+    vigente             TINYINT(1) NOT NULL DEFAULT 1,
+    eliminado           TINYINT(1) NOT NULL DEFAULT 0,
     marco_ordenador_id  INT(11) NOT NULL,
     nivel               TINYINT(1) NOT NULL,
     numeral             VARCHAR(11) NOT NULL COMMENT 'Máx 99.99.99.99(11 caracteres)',

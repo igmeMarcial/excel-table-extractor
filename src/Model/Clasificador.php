@@ -29,7 +29,15 @@ class Clasificador extends BaseModel
         ],
         'activo' => [
             'type' => DataTypes::BOOLEAN,
-            'column' => 'activo',
+            'default' => true,
+        ],
+        'vigente' => [
+            'type' => DataTypes::BOOLEAN,
+            'default' => true,
+        ],
+        'eliminado' => [
+            'type' => DataTypes::BOOLEAN,
+            'default' => false,
         ],
         'marcoOrdenadorId' => [
             'type' => DataTypes::INTEGER,

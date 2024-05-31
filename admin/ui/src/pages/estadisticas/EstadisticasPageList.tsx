@@ -75,10 +75,10 @@ const EstadisticasPageList = forwardRef((props, ref) => {
   const renderArchivedChecks = (_, record) => {
     return (
       <div>
-        {record.archivado ? (
-          <CheckmarkCircleFilled /> // Si archivado es verdadero
+        {record.vigente ? (
+          <CheckmarkCircleFilled /> 
         ) : (
-          <CircleRegular /> // Si archivado es falso
+          <CircleRegular /> 
         )}
       </div>
     );
@@ -179,10 +179,10 @@ const EstadisticasPageList = forwardRef((props, ref) => {
       render: renderChecks,
     },
     {
-      key: 'archivado',
+      key: 'vigente',
       align: 'center',
       width: 85,
-      title: 'Archivado',
+      title: 'Vigente',
       dataIndex: 'status',
       render: renderArchivedChecks,
     },

@@ -36,7 +36,7 @@ export interface FichaTecnicaFields {
   clasificacionPna?: string
   //Estados
   activo?: boolean
-  archivado?: boolean
+  vigente?: boolean
 }
 
 export interface Estadistica extends EstadisticaBaseFields, FichaTecnicaFields {

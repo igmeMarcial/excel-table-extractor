@@ -43,9 +43,9 @@ class Estadistica extends BaseModel
             'type' => DataTypes::BOOLEAN,
             'default' => true,
         ],
-        'archivado' => [
+        'vigente' => [
             'type' => DataTypes::BOOLEAN,
-            'default' => false,
+            'default' => true,
         ],
         'eliminado' => [
             'type' => DataTypes::BOOLEAN,

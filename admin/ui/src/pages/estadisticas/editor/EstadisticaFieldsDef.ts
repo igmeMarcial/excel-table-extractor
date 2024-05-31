@@ -137,8 +137,8 @@ export const ESTADISTICA_FICHA_FIELDS_DEF: {
     controlType: 'switch',
     dataType: 'boolean',
   },
-  archivado: {
-    label: 'Archivado',
+  vigente: {
+    label: 'Vigente',
     controlType: 'switch',
     dataType: 'boolean',
   },

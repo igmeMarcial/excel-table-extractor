@@ -7,7 +7,7 @@ return "CREATE TABLE {tablePrefix}estadistica (
     fecha_reg                 DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     fecha_mod                 DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     activo                    TINYINT(1) NOT NULL DEFAULT 1,
-    archivado                 TINYINT(1) NOT NULL DEFAULT 0,
+    vigente                   TINYINT(1) NOT NULL DEFAULT 1,
     eliminado                 TINYINT(1) NOT NULL DEFAULT 0,
     nombre                    VARCHAR(1000) NOT NULL,
     finalidad                      VARCHAR(1000),

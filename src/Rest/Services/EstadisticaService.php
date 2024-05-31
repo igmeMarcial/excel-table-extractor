@@ -70,7 +70,7 @@ class EstadisticaService
                   C.nombre mdeaComponenteNombre,
                   A.fecha_mod fechaMod,
                   A.activo,
-                  A.archivado
+                  A.vigente
                 FROM {$this->dbMap->estadistica} A
                 INNER JOIN {$this->dbMap->estaClas} B ON A.estadistica_id = B.estadistica_id
                 INNER JOIN {$this->dbMap->clasificador} C ON B.clasificador_id = C.clasificador_id AND C.marco_ordenador_id = $marcoOrdenadorId";
