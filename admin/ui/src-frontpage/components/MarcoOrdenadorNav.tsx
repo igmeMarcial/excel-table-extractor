@@ -4,11 +4,13 @@ import { QUERY_PARAM_MARCO_ORDENADOR } from '../../src/core/constantes';
 import { useMarcoOrdenadorParam } from '../../src/hooks/url-hooks';
 
 //ejemplo ruta
+
+const pathRoot = window.AesaInfo.pluginUrl;
 const pathUrlImg = {
-  mdea: 'https://w7.pngwing.com/pngs/279/212/png-transparent-oecd-d-8-organization-for-economic-cooperation-economy-nuclear-energy-agency-economic-miscellaneous-globe-logo.png',
-  pna: 'https://www.iberdrola.com/wcorp/gc/prod/es_ES/estaticos/ods-general/images/ODS-circle.png',
-  ods: 'https://yt3.googleusercontent.com/PBTOeLM2oEdRKr8kjKUbdWpuEvQIWCLkoGY0q0EY94_KzItNA3mY9-o_XxnDm2UpF1kSpGA2=s900-c-k-c0x00ffffff-no-rj',
-  ocde: 'https://yt3.googleusercontent.com/PBTOeLM2oEdRKr8kjKUbdWpuEvQIWCLkoGY0q0EY94_KzItNA3mY9-o_XxnDm2UpF1kSpGA2=s900-c-k-c0x00ffffff-no-rj',
+  mdea:pathRoot + '/public/assets/images/mdea.jpeg',
+  pna:pathRoot + '/public/assets/images/pna.jpg',
+  ods:pathRoot + '/public/assets/images/ods.png',
+  ocde:pathRoot + '/public/assets/images/ocde.png',
 };
 
 function MarcoOrdenadorNav() {
@@ -33,13 +35,13 @@ function MarcoOrdenadorNav() {
   ];
   return (
     <div className="bg-gray-200">
-      <div className="mb-4 flex gap-[6px] p-2 bg-white   ">
+      <div className="mb-4 flex gap-[6px] p-2 bg-white   justify-center">
         {items.map((item) => (
           <div
             key={item.path}
             onClick={() => onTabSelect(item.path)}
-            className={`flex cursor-pointer outline-none items-center justify-center  py-1   transition-all duration-300 border-[#dadce0] border-[1px] border-solid rounded-[20px] ${
-              activeItem === item.path ? 'bg-blue-600 text-white' : ''
+            className={`flex cursor-pointer outline-none items-center justify-center  py-1   transition-all duration-300 border-[#dadce0] border-[1px] border-solid rounded-[20px] hover:bg-[#e5edff] ${
+              activeItem === item.path ? 'border-gray-400' : ''
             }`}
           >
             <span className="h-[30px] w-[30px] flex justify-center mx-[6px]">
