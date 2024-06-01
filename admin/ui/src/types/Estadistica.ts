@@ -34,9 +34,6 @@ export interface FichaTecnicaFields {
   clasificacionOds?: string
   clasificacionOcde?: string
   clasificacionPna?: string
-  //Estados
-  activo?: boolean
-  vigente?: boolean
 }
 
 export interface Estadistica extends EstadisticaBaseFields, FichaTecnicaFields {
@@ -51,4 +48,7 @@ export interface Estadistica extends EstadisticaBaseFields, FichaTecnicaFields {
   presentacionTablaElaboracion?: string
   presentacionTablaFormato?: FormatoTabla
   fechaMod?: string
+  //Estados
+  activo?: boolean
+  vigente?: boolean
 }

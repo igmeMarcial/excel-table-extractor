@@ -7,10 +7,10 @@ import { useMarcoOrdenadorParam } from '../../src/hooks/url-hooks';
 
 const pathRoot = window.AesaInfo.pluginUrl;
 const pathUrlImg = {
-  mdea:pathRoot + '/public/assets/images/mdea.jpeg',
-  pna:pathRoot + '/public/assets/images/pna.jpg',
-  ods:pathRoot + '/public/assets/images/ods.png',
-  ocde:pathRoot + '/public/assets/images/ocde.png',
+  mdea: pathRoot + '/public/assets/images/mdea.jpeg',
+  pna: pathRoot + '/public/assets/images/pna.jpg',
+  ods: pathRoot + '/public/assets/images/ods.png',
+  ocde: pathRoot + '/public/assets/images/ocde.png',
 };
 
 function MarcoOrdenadorNav() {
@@ -35,12 +35,12 @@ function MarcoOrdenadorNav() {
   ];
   return (
     <div className="bg-gray-200">
-      <div className="mb-4 flex gap-[6px] p-2 bg-white   justify-center">
+      <div className="mb-4 flex gap-8 p-2 bg-white justify-center">
         {items.map((item) => (
           <div
             key={item.path}
             onClick={() => onTabSelect(item.path)}
-            className={`flex cursor-pointer outline-none items-center justify-center  py-1   transition-all duration-300 border-[#dadce0] border-[1px] border-solid rounded-[20px] hover:bg-[#e5edff] ${
+            className={`flex cursor-pointer outline-none items-center justify-center py-1 transition-all duration-300 border-[#dadce0] border-[1px] border-solid rounded-[20px] hover:bg-[#e5edff] ${
               activeItem === item.path ? 'bg-[#e5edff]' : ''
             }`}
           >

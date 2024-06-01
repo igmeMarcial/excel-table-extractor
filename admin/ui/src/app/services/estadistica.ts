@@ -26,7 +26,6 @@ export const estadisticaApi = api.injectEndpoints({
           body,
         }
       },
-      invalidatesTags: ['Estadistica'],
     }),
     getEstadistica: build.query<Estadistica, number>({
       query: (id) => `estadisticas/${id}`,

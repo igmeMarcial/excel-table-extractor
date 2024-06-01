@@ -6,13 +6,6 @@ import {
   StyleSheet,
   Image,
 } from '@react-pdf/renderer';
-import { TITULO_ANUARIO } from '../../src/config/constantes';
-
-const logosinia =
-    window.AesaInfo.pluginUrl +
-    '/public/assets/images/sinia/logo-sinia-var3.png',
-  logoMinam =
-    window.AesaInfo.pluginUrl + '/public/assets/images/logo_minam_borde.jpg';
 
 const styles = StyleSheet.create({
   page: {
@@ -35,7 +28,7 @@ const styles = StyleSheet.create({
     height: '40px',
   },
   imgSinia: {
-    width: '120px',
+    width: '227px',
     height: '40px',
     paddingLeft: '12px',
   },
@@ -46,8 +39,7 @@ const styles = StyleSheet.create({
     marginBottom: '3px',
   },
   infoText: {
-    fontSize: '9px',
-    textAlign: 'justify',
+    fontSize: '10px',
     fontWeight: 'normal',
   },
   section: {
@@ -56,28 +48,35 @@ const styles = StyleSheet.create({
   title: {
     fontSize: '14px',
     fontWeight: 'black',
+    textAlign: 'center',
   },
   subTitle: {
     fontSize: '11px',
     fontWeight: 'bold',
   },
 });
-
+const getImageUrl = (imgRelativePath: string) => {
+  if (window.AesaInfo.devMode) {
+    return imgRelativePath;
+  }
+  return window.AesaInfo.pluginUrl + '/public/assets/' + imgRelativePath;
+};
 export const FichaTecnicaPdf = ({ data }) => {
   return (
     <Document>
       <Page style={styles.page} size="A4" orientation="portrait">
         <View style={styles.header}>
-          <Image style={styles.imgMinam} src={logoMinam} />
-          <Image style={styles.imgSinia} src={logosinia} />
+          <Image
+            style={styles.imgMinam}
+            src={getImageUrl('images/pdf-ficha-tecnica/logo-minam.png')}
+          />
+          <Image
+            style={styles.imgSinia}
+            src={getImageUrl('images/pdf-ficha-tecnica/logo-sinia.png')}
+          />
         </View>
         <View style={{ marginBottom: '15px' }}>
-          <Text style={styles.title}>{TITULO_ANUARIO}</Text>
-        </View>
-        <View style={{ marginBottom: '15px' }}>
-          <Text style={styles.subTitle}>
-            Ficha de Divulgación de Estadística Ambiental.
-          </Text>
+          <Text style={styles.title}>Ficha técnica del indicador</Text>
         </View>
         {data.map((item) => (
           <View style={styles.section} key={item.key}>

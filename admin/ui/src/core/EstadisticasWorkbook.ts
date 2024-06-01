@@ -2,7 +2,7 @@ import * as XLSX from 'xlsx'
 import { FICHA_TECNICA_NRO_CAMPO_RANGO_DATOS } from '../config/constantes'
 import GraficoHelper from '../helpers/GraficoHelper'
 import TablaDatosHelper from '../helpers/TablaDatosHelper'
-import { FICHA_FIELDS_MAP } from '../pages/estadisticas/editor/FichaFieldsMap'
+import { FICHA_FIELDS_MAP } from '../config/ficha-fields-map'
 import {
   Cell,
   CellPosition,
@@ -16,7 +16,7 @@ import { WorkbookEstadisticaItem } from '../types/WorkbookEstadisticaItem'
 import { decodeCellRange } from '../utils/decodeCellRange'
 import { encodeCellRange } from '../utils/encodeCellRange'
 import { esValorEstadisticoValido } from '../utils/estadistica-utils'
-import { calculateSimilarity, removeSpaces, toSnakeCase } from '../utils/string-utils'
+import { removeSpaces, toSnakeCase } from '../utils/string-utils'
 import { getSheetHtmlRows } from '../utils/xmls-utils'
 import { IndiceClasificadores } from './IndiceClasificadores'
 
@@ -196,6 +196,13 @@ export class EstadisticasWorkbook {
     }
     return out
   }
+
+  /**
+   * Determina el índice de la columna donde inicia la ficha técnica de una hoja de excel
+   * Busca la celda que contenga el valor 1
+   * @param sheetName Nombre de la hoja de excel
+   * @returns Índice de la columna donde inicia la ficha técnica o -1 si no se encuentra
+   */
   getInicioFichaTecnicaColumnIndex(sheetName: string): number {
     const sheet = this.getSheet(sheetName)
     const range = XLSX.utils.decode_range(sheet['!ref'])
@@ -204,6 +211,7 @@ export class EstadisticasWorkbook {
         const cellref = XLSX.utils.encode_cell({ c: j, r: i })
         const cell = sheet[cellref]
         const cellValue = (cell?.v || '').toString().trim()
+        // Si la celda contiene el valor 1, entonces se ha encontrado la columna de inicio de la ficha técnica
         if (cellValue === '1') {
           return j
         }
@@ -211,28 +219,35 @@ export class EstadisticasWorkbook {
     }
     return -1
   }
+
   // Retorna los campos de la ficha técnica de una hoja de excel
   getCamposFichaTecnica(
     sheetName: string,
     clasificadores: IndiceClasificadores
   ): FichaTecnicaFields {
-    const fields: Estadistica = this.getSheetFichaFields(sheetName)
+    let fields: FichaTecnicaFields = this.getSheetFichaFields(sheetName);
+    fields = this.setIdsClasificadoresMdea(fields, clasificadores);
+    return this.sanitizeFichaTecnicaFields(fields)
+  }
+
+  private setIdsClasificadoresMdea(data: Partial<Estadistica>,
+    clasificadores: IndiceClasificadores): Partial<Estadistica> {
     // MDEA Clasificadores path
-    const mdeaPathInput = fields.clasificacionMdea || ''
+    const mdeaPathInput = data.clasificacionMdea || ''
     const pathRe = /\d+\.\d+\.\d+\s*-\s*\d+/
     if (pathRe.test(mdeaPathInput)) {
       const mdeaFullPath = pathRe.exec(mdeaPathInput)[0]
       const mdeaPath = mdeaFullPath.split('-')[0].trim()
       const numerals = mdeaPath.split('.')
-      fields.clasificadorN1Id = clasificadores.getItemIdByNumeral(numerals[0])
-      fields.clasificadorN2Id = clasificadores.getItemIdByNumeral(
+      data.clasificadorN1Id = clasificadores.getItemIdByNumeral(numerals[0])
+      data.clasificadorN2Id = clasificadores.getItemIdByNumeral(
         `${numerals[0]}.${numerals[1]}`
       )
-      fields.clasificadorN3Id = clasificadores.getItemIdByNumeral(
+      data.clasificadorN3Id = clasificadores.getItemIdByNumeral(
         `${numerals[0]}.${numerals[1]}.${numerals[2]}`
       )
     }
-    return this.sanitizeFichaTecnicaFields(fields)
+    return data
   }
   private sanitizeFichaTecnicaFields(fields: Estadistica): Estadistica {
     const out = { ...fields }
@@ -265,7 +280,10 @@ export class EstadisticasWorkbook {
     }
     // Clasificación PNA
     if (out.clasificacionPna) {
-      out.clasificacionPna = removeSpaces(out.clasificacionPna)
+      // Eliminiar espacios al inicio y al final
+      let result = out.clasificacionPna.trim();
+      // Remplazar espacios imtermedios por puntos
+      out.clasificacionPna = removeSpaces(result, '.')
     }
     return out
   }
@@ -498,48 +516,44 @@ export class EstadisticasWorkbook {
     })
     return matchedCell
   }
-  private getSheetFichaFields(sheetName: string) {
+  /**
+   * TODO: Optimzar el agoritmo, eliminando la función calculateSimilarity
+   */
+  private getSheetFichaFields(sheetName: string): { [key in keyof FichaTecnicaFields]: string } {
     const sheet = this.getSheet(sheetName)
     const htmlRows = getSheetHtmlRows(sheet)
     const cellMap = this.createCellsDataMap(htmlRows)
     const rows = this.getCellsMatrix(cellMap, sheetName)
 
     const inicioFichaColIndex = this.getInicioFichaTecnicaColumnIndex(sheetName);
+    const out = {}
     if (inicioFichaColIndex === -1) {
-      return {};
+      return out;
     }
 
     const nombreCampoColIndex = inicioFichaColIndex + 1;
-    const resultMap = {}
     rows.forEach((row) => {
-      const cell = row[nombreCampoColIndex];
-      const snakeCaseKey = toSnakeCase((cell.v || '').toString())
-      const matchedKey = Object.keys(FICHA_FIELDS_MAP).find((fieldKey) => {
-        const similarity = calculateSimilarity(snakeCaseKey, fieldKey)
-        return similarity >= 0.9
-      })
-      if (matchedKey) {
+      const cell = row[nombreCampoColIndex]
+      const sheetFieldName = toSnakeCase((cell.v || '').toString())
+      const estadisticaFieldName = FICHA_FIELDS_MAP[sheetFieldName];
+      if (estadisticaFieldName) {
         const nextIndex = nombreCampoColIndex + 1
         if (nextIndex < row.length) {
           const nextCell = row[nextIndex]
           const newValue = nextCell.v
-          const resultMapKey = FICHA_FIELDS_MAP[matchedKey]
-          if (!resultMap.hasOwnProperty(resultMapKey)) {
+          if (!out.hasOwnProperty(estadisticaFieldName)) {
             // Si no existe, inicializarla con el nuevo valor
-            resultMap[resultMapKey] = `${newValue}`
+            out[estadisticaFieldName] = `${newValue}`
           } else {
             // Si existe, concatenar el nuevo valor al valor existente
-            resultMap[resultMapKey] += `\n${newValue}`
+            out[estadisticaFieldName] += `\n${newValue}`
           }
-        } else {
-          const resultMapKey = FICHA_FIELDS_MAP[matchedKey]
-          if (!resultMap.hasOwnProperty(resultMapKey)) {
-            resultMap[resultMapKey] = ''
-          }
+        } else if (!out.hasOwnProperty(estadisticaFieldName)) {
+          out[estadisticaFieldName] = ''
         }
       }
     })
-    return resultMap
+    return out
   }
   /**
    *

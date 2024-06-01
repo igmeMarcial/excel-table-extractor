@@ -1,10 +1,10 @@
 import { Button, Spinner } from '@fluentui/react-components';
-import { useLazyResetDatabaseQuery } from '../../app/services/devops';
+import { useResetDatabaseMutation } from '../../app/services/devops';
 function DbOps() {
   const [
     resetDatabase,
-    { data: resetResponse, isFetching: isResetingDatabase },
-  ] = useLazyResetDatabaseQuery();
+    { data: resetResponse, isLoading: isResetingDatabase },
+  ] = useResetDatabaseMutation();
   const buttonIcon = isResetingDatabase ? <Spinner size="tiny" /> : null;
   return (
     <div className="flex py-2 gap-2 items-center">

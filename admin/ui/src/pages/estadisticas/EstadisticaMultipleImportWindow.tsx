@@ -4,13 +4,15 @@ import {
   Spinner,
   webLightTheme,
 } from '@fluentui/react-components';
-import { Modal, Button, Table, TableColumnsType, message } from 'antd';
+import { Modal, Button, Table, TableColumnsType } from 'antd';
 import { EstadisticasWorkbook } from '../../core/EstadisticasWorkbook';
 import { Estadistica } from '../../types/Estadistica';
 import { useCreateEstadisticaMutation } from '../../app/services/estadistica';
 import { WorkbookEstadisticaItem } from '../../types/WorkbookEstadisticaItem';
 import { useGetIndiceClasificadoresQuery } from '../../app/services/clasificador';
 import { IndiceClasificadores } from '../../core/IndiceClasificadores';
+import { useDispatch } from 'react-redux';
+import { api } from '../../app/services/api';
 
 interface EstadisticaImportRow extends WorkbookEstadisticaItem {
   key: React.Key;
@@ -105,13 +107,15 @@ const EstadisticaMultipleImportWindow = forwardRef<
   const [listaEstadisticas, setListaEstadisticas] = useState<
     EstadisticaImportRow[]
   >([]);
+  const dispatch = useDispatch();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [totalImported, setTotalImported] = useState<number>(0);
+  const [lastProcessedIndex, setLastProcessedIndex] = useState<number>(-1);
   const [isOpen, setIsOpen] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const { data: clasificadores } = useGetIndiceClasificadoresQuery();
   const indiceClasificadores = new IndiceClasificadores(clasificadores || []);
-  const [postEstadistica, { isLoading: isSaving }] =
-    useCreateEstadisticaMutation();
+  const [postEstadistica] = useCreateEstadisticaMutation();
 
   const open = ({
     estadisticasWb,
@@ -120,6 +124,8 @@ const EstadisticaMultipleImportWindow = forwardRef<
     updateListaEstadisticas(estadisticasWb);
     setIsOpen(true);
     setIsImporting(false);
+    setTotalImported(0);
+    setLastProcessedIndex(-1);
     ImportState.isImportStopped = false;
   };
 
@@ -154,12 +160,17 @@ const EstadisticaMultipleImportWindow = forwardRef<
   const doStartImport = () => {
     ImportState.isImportStopped = false;
     setIsImporting(true);
-    saveEstadistica(0);
+    saveEstadistica(lastProcessedIndex + 1);
   };
   const stopImporting = () => {
     ImportState.isImportStopped = true;
     setIsImporting(false);
   };
+  const finalizeImporting = () => {
+    dispatch(api.util.invalidateTags([{ type: 'Estadistica', id: 'LIST' }]));
+    close();
+  };
+
   // Guarda la siguiente estadística en la lista
   const saveEstadistica = (selectionIndex: number) => {
     if (listaEstadisticas.length === 0) {
@@ -189,6 +200,9 @@ const EstadisticaMultipleImportWindow = forwardRef<
             row.importingError = response.error.data.message;
           }
           row.isImported = !response.error;
+          if (row.isImported) {
+            setTotalImported((total) => total + 1);
+          }
           updateRow(row);
         })
         .catch((err) => {
@@ -198,15 +212,14 @@ const EstadisticaMultipleImportWindow = forwardRef<
           updateRow(row);
         })
         .finally(() => {
+          setLastProcessedIndex((state) => selectionIndex);
           if (!ImportState.isImportStopped) {
             saveEstadistica(selectionIndex + 1);
           }
         });
     }
   };
-  const saveNextEstadistica = (lastIndex: number) => {
-    saveEstadistica(lastIndex + 1);
-  };
+
   const updateRow = (row: EstadisticaImportRow) => {
     setListaEstadisticas((lista) =>
       lista.map((item) => {
@@ -234,6 +247,52 @@ const EstadisticaMultipleImportWindow = forwardRef<
     }
     return null;
   };
+  const getButtons = () => {
+    const out = [];
+    // Si no hay una importación en curso
+    if (!isImporting) {
+      out.push(
+        <Button
+          key="import"
+          type="primary"
+          onClick={doStartImport}
+          disabled={!hasSelection}
+        >
+          {ImportState.isImportStopped ? ' Reanudar' : 'Iniciar'} importación
+        </Button>
+      );
+    }
+    // Si hay una importación en curso
+    if (isImporting) {
+      out.push(
+        <Button key="stop" type="primary" onClick={stopImporting} danger>
+          Detener importación
+        </Button>
+      );
+    }
+    // Si aún no se procesado ninguna estadística
+    if (lastProcessedIndex === -1) {
+      out.push(
+        <Button key="back" onClick={close} disabled={isImporting}>
+          Cancelar
+        </Button>
+      );
+    }
+    // Si se ha procesado almenos una estadística
+    if (lastProcessedIndex > -1) {
+      out.push(
+        <Button
+          key="finalize"
+          type="default"
+          onClick={finalizeImporting}
+          disabled={isImporting}
+        >
+          Finalizar
+        </Button>
+      );
+    }
+    return out;
+  };
   return (
     <Modal
       title="Importar estadísticas"
@@ -241,25 +300,7 @@ const EstadisticaMultipleImportWindow = forwardRef<
       className="h-screen"
       width={960}
       onCancel={close}
-      footer={[
-        !isImporting ? (
-          <Button
-            key="submit"
-            type="primary"
-            onClick={doStartImport}
-            disabled={!hasSelection}
-          >
-            {ImportState.isImportStopped ? ' Reanudar' : 'Iniciar'} importación
-          </Button>
-        ) : (
-          <Button key="submit" type="primary" onClick={stopImporting} danger>
-            Detener importación
-          </Button>
-        ),
-        <Button key="back" onClick={close} disabled={isImporting}>
-          Cancelar
-        </Button>,
-      ]}
+      footer={getButtons()}
       styles={{ footer: { display: 'flex' } }}
     >
       <FluentProvider theme={webLightTheme}>
