@@ -66,7 +66,7 @@ function PrimaryNavMdea({ items }: PrimaryNavMdeaProps) {
 
   return (
     <>
-      <div className="grid grid-cols-6 gap-4 mt-5">
+      <div className="grid grid-cols-6  gap-2 md:gap-4 mt-5">
         {items.map((item: IndiceItem) => (
           <NavItem
             key={item.numeral}

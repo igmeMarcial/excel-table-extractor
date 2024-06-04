@@ -4,7 +4,7 @@ import PageTitle from '../components/PageTitle';
 import { TEXTO_PNA } from '../../src/config/textos';
 import { VistaEstadisticaProps } from '../types/VistaEstadisticaProps';
 import PageDescription from '../components/PageDescription';
-
+const imgPath = window.AesaInfo.pluginUrl + '/public/assets/images/mdea-banner.png';
 export default function VistaEstadisticaPna({
   estadistica,
 }: Readonly<VistaEstadisticaProps>) {
@@ -16,6 +16,7 @@ export default function VistaEstadisticaPna({
       <PageDescription
         text={descripcion}
         title={'Estadísticas relacionadas con los ' + TEXTO_PNA}
+        img={imgPath}
       />
     </>
   );

@@ -1,4 +1,4 @@
-import { ChevronUp24Filled, ChevronDown24Filled } from '@fluentui/react-icons';
+import { ChevronUp24Filled, ChevronDown24Filled,CaretRight24Regular,CaretDown24Filled   } from '@fluentui/react-icons';
 import { getQueryParam, newPathUrl } from '../../src/utils/url-utils';
 import { Link, useLocation } from 'react-router-dom';
 import { IndiceItem } from '../types/IndiceItem';
@@ -14,27 +14,42 @@ interface MenuItemProps {
 
 const ExpandedArrow = ({ model }) => {
   const style: React.CSSProperties = {
-    width: '20px',
-    height: '20px',
-    right: '0px',
-    position: 'absolute',
-    top: '5px',
+    width: '15px',
+    height: '15px',
+    right: '-5px',
+position:'absolute',
+    top: '3px',
     boxSizing: 'content-box',
-    paddingRight: '12px',
+    paddingRight: '5px',
   };
   if (!model.hasChildren) {
     return null;
   }
   if (model.expanded) {
-    return <ChevronUp24Filled style={style} />;
+    return <CaretRight24Regular style={style} />;
   }
-  return <ChevronDown24Filled style={style} />;
+  return <CaretDown24Filled style={style} />;
 };
 const MenuItem = ({ model, onExpandToggleClick }: MenuItemProps) => {
   // No visible
+  const getPaddingLeft = (nivel: number) => {
+    switch (nivel) {
+      case 1:
+        return '10px';
+      case 2:
+        return '20px';
+      case 3:
+        return '38px';
+      default:
+        return '10px';
+    }
+  };
+  console.log(model)
   if (!model.visible) {
     return null;
   }
+
+
 
   // Estadistica
   const location = useLocation();
@@ -42,18 +57,16 @@ const MenuItem = ({ model, onExpandToggleClick }: MenuItemProps) => {
     return (
       <div
         style={{
-          color: model.expanded === true ? '#be1a1a' : 'black',
+          color: model.expanded === true ? 'rgb(52, 90, 145)' : 'black',
+          paddingLeft:getPaddingLeft(model?.nivel)
         }}
-        className="min-h-6 cursor-pointer relative pl-12 pr-10  py-1 font-semibold hover:bg-gray-200"
+        className="min-h-6 cursor-pointer   pr-10  py-1 font-semibold hover:bg-gray-200 flex"
         onClick={() => {
           onExpandToggleClick(model);
         }}
       >
-        <span className="absolute left-0 pl-3 text-[13px]">
-          {model.numeral}
-        </span>
+       <span className='inline-block relative'><ExpandedArrow model={model}/></span>
         <span className="text-[13px]">{model.nombre}</span>
-        <ExpandedArrow model={model} />
       </div>
     );
   }

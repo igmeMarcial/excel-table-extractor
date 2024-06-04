@@ -35,7 +35,7 @@ function MarcoOrdenadorNav() {
   ];
   return (
     <div className="bg-gray-200">
-      <div className="mb-4 flex gap-8 p-2 bg-white justify-center">
+      <div className="mb-4 flex gap-2 md:gap-8 p-2 bg-white justify-center">
         {items.map((item) => (
           <div
             key={item.path}

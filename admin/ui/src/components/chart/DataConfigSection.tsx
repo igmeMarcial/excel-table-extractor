@@ -25,6 +25,7 @@ const DataConfigSection = ({ chartId }: DataConfigSectionProps) => {
 
   const onSerieChange = (e, data: SelectOnChangeData) => {
     setSelectedSerieIndex(+data.value);
+    console.log(+data.value)
   };
 
   const onColorChange = (color) => {

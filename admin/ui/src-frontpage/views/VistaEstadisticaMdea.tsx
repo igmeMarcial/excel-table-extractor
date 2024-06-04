@@ -6,6 +6,7 @@ import SideNavMdea from '../components/SideNavMdea';
 import PageDescription from '../components/PageDescription';
 import { TEXTO_MDEA } from '../../src/config/textos';
 
+const imgPath = window.AesaInfo.pluginUrl + '/public/assets/images/mdea-banner.png';
 export default function VistaEstadisticaMdea({
   estadistica,
   indiceEstadisticas,
@@ -18,6 +19,7 @@ export default function VistaEstadisticaMdea({
       <PageDescription
         text={descripcion}
         title={'Estadísticas relacionadas con el ' + TEXTO_MDEA}
+        img={imgPath}
       />
       <PrimaryNavMdea items={indiceEstadisticas.getItemsNivel1()} />
       <div className="flex sm:flex-col-reverse md:flex-row">

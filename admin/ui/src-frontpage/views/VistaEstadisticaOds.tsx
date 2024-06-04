@@ -5,6 +5,8 @@ import EstadisticaVistaTabs from '../blocks/EstadisticaVistaTabs';
 import { VistaEstadisticaProps } from '../types/VistaEstadisticaProps';
 import { SideNavOds } from '../components/SideNavOds';
 import PageDescription from '../components/PageDescription';
+const imgPath = window.AesaInfo.pluginUrl + '/public/assets/images/ods-banner.jpg';
+
 export default function VistaEstadisticaOds({
   estadistica,
   indiceEstadisticas,
@@ -17,6 +19,7 @@ export default function VistaEstadisticaOds({
       <PageDescription
         text={descripcion}
         title={'Estadísticas relacionadas con los ' + TEXTO_ODS}
+        img={imgPath}
       />
       <div className="flex sm:flex-col-reverse md:flex-row">
         <div style={{ width: '350px' }} className="bg-gray-100">
