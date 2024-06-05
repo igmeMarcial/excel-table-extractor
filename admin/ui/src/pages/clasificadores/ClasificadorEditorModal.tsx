@@ -18,7 +18,7 @@ export interface MarcoOrdenadorWindowRef {
 export const CLASIFICADORES_FIELDS_DEF: Record<string, FieldDef> = {
   nivel: {
     label: 'Nivel',
-    controlType: 'text',
+    controlType: 'number',
     required: true,
   },
   numeral: {
@@ -36,6 +36,20 @@ export const CLASIFICADORES_FIELDS_DEF: Record<string, FieldDef> = {
     controlType: 'switch',
     dataType: 'boolean',
   },
+  vigente: {
+    label: 'Vigente',
+    controlType: 'switch',
+    dataType: 'boolean',
+  },
+};
+
+const initialDataForm = {
+  nivel: 0,
+  nombre: '',
+  numeral: '',
+  activo: true,
+  vigente: true,
+  marcoOrdenadorId: 1, // por defecto es 1
 };
 
 const ClasificadorEditorModal = forwardRef<MarcoOrdenadorWindowRef>(
@@ -44,38 +58,48 @@ const ClasificadorEditorModal = forwardRef<MarcoOrdenadorWindowRef>(
     const [saveClasificador, { isLoading: isSaving }] =
       useSaveClasificadorMutation(isCreationMode);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const validationErrors = useAppSelector(selectValidationErrors);
     const { data = [], isLoading } = useGetMarcosOrdenadoresQuery();
-    const [dataForm, setDataForm] = useState<Partial<Clasificador>>({
-      nivel: 0,
-      nombre: '',
-      numeral: '',
-      activo: false,
-      marcoOrdenadorId: 0,
-    });
+    const [dataForm, setDataForm] =
+      useState<Partial<Clasificador>>(initialDataForm);
+    const [errors, setErrors] = useState({});
     const open = ({ record = {} }: { record?: Partial<Clasificador> } = {}) => {
-      setDataForm(record);
-      setIsModalOpen(true);
-
+      console.log(record);
       setIsCreationMode(!record.id);
-      if (!record.id) {
-        setDataForm({ ...record, marcoOrdenadorId: data[1]?.id || 0 });
+      if (record.id) {
+        setDataForm(record);
       }
+      setIsModalOpen(true);
     };
 
+    const validateForm = () => {
+      const newErrors = {};
+      for (const field in CLASIFICADORES_FIELDS_DEF) {
+        if (CLASIFICADORES_FIELDS_DEF[field].required && !dataForm[field]) {
+          newErrors[field] = true; // Indicar que el campo está vacío
+        }
+      }
+      setErrors(newErrors);
+      return Object.keys(newErrors).length === 0;
+    };
     const handleOk = async () => {
+      if (!validateForm()) {
+        return;
+      }
+
       setIsModalOpen(false);
-      console.log(dataForm);
-      console.log(isCreationMode);
+      console.log('PEPEPE');
       try {
         await saveClasificador(dataForm);
       } catch (error) {
         console.error('Update Error:', error);
       }
+      setDataForm(initialDataForm);
     };
 
     const close = () => {
       setIsModalOpen(false);
+      setDataForm(initialDataForm);
+      setErrors({});
     };
     useImperativeHandle(ref, () => ({
       open,
@@ -83,12 +107,22 @@ const ClasificadorEditorModal = forwardRef<MarcoOrdenadorWindowRef>(
     }));
     const handleChange = (value, fieldName) => {
       setDataForm({ ...dataForm, [fieldName]: value });
+
+      if (errors[fieldName]) {
+        const newErrors = { ...errors };
+        delete newErrors[fieldName];
+        setErrors(newErrors);
+      }
     };
     const handleSelectChange = (e) => {
       const { name: fiendName, value } = e.target;
       setDataForm({ ...dataForm, [fiendName]: +value });
     };
-    const handleTouched = (e) => {};
+    const handleTouched = (e, fieldName) => {
+      if (!dataForm[fieldName]) {
+        setErrors({ ...errors, [fieldName]: true });
+      }
+    };
     return (
       <Modal
         title="Editar Clasificador"
@@ -116,14 +150,16 @@ const ClasificadorEditorModal = forwardRef<MarcoOrdenadorWindowRef>(
                     `${option.numeral} ${option.nombre}`
                   }
                   value={String(dataForm['marcoOrdenadorId'])}
-                  validationErrors={{ required: true }}
+                  validationErrors={{ required: false }}
                 />
                 {Object.entries(CLASIFICADORES_FIELDS_DEF).map(
                   ([fieldName, fieldDef]) => (
                     <WpDynamicField
                       fieldDef={fieldDef}
                       fieldName={fieldName}
-                      validationErrors={{ required: true }}
+                      validationErrors={
+                        errors[fieldName] ? { required: true } : {}
+                      }
                       value={dataForm[fieldName]}
                       onChange={handleChange}
                       onTouched={handleTouched}

@@ -1,1 +1,1 @@
-export type FieldType = 'select' | 'text'| 'textarea' | 'table' | 'switch';
+export type FieldType = 'select' | 'text'| 'textarea' | 'table' | 'switch'|'number';

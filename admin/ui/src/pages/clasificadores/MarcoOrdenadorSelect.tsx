@@ -14,13 +14,14 @@ const MarcoOrdenadorSelect = ({ onChange }: MarcoOrdenadorSelectProps) => {
     onChange(e.target.value);
   };
   return (
-    <Field label="Marco Ordenador">
+    <Field label="Marco Ordenador" className='w-[300px]' >
       <Select
         defaultValue="Mdea"
         value={value}
         onChange={handleChange}
         disabled={isLoading}
         icon={isLoading && <Spinner size="tiny" />}
+        
       >
         <option disabled value={-1}>
           --Seleccionar--

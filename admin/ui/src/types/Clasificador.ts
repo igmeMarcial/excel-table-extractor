@@ -5,6 +5,7 @@ export interface Clasificador {
   nivel: number
   activo: boolean;
   marcoOrdenadorId: number;
+  vigente:boolean
 }
 
 export interface ClasificadorMarcoOrdenador {

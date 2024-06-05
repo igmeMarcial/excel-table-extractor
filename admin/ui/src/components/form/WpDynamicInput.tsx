@@ -26,9 +26,10 @@ const WpDynamicInput = ({
 }: WpDynamicInputProps) => {
   value = value || '';
   // TEXT
-  if (type === 'text') {
+  if (type === 'text' || type === 'number') {
     return (
       <Input
+        type={type}
         name={fieldName}
         value={value as string}
         onChange={(e, data) => onChange(data.value, fieldName, e)}

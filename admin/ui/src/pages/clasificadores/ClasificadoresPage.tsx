@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
 import MainLayout from '../../layout/MainLayout';
 import { Button } from '@fluentui/react-components';
-import { Table, TableProps, Tooltip } from 'antd';
-import { EditFilled, Add24Filled } from '@fluentui/react-icons';
-
+import { Modal, Table, TableProps, Tooltip, Empty } from 'antd';
+import { EditRegular, Add24Filled } from '@fluentui/react-icons';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import RowDeteteButton from '../../components/RowDeleteButton';
 import ClasificadorEditorModal from './ClasificadorEditorModal';
 import MarcoOrdenadorSelect from './MarcoOrdenadorSelect';
@@ -16,14 +16,17 @@ interface Clasificador {
   numeral: string;
   nombre: string;
 }
+
 const ClasificadoresPage = () => {
   const [marcoOrdenador, setMarcoOrdenador] = useState<number>(-1);
+  const [modal, contextHolder] = Modal.useModal();
   const modalWindowRef = useRef(null);
   const { data: clasificadores, isFetching } =
     useGetClasificadoresByMarcoOrdenadorIdQuery(marcoOrdenador, {
       skip: marcoOrdenador === -1,
     });
-    const [deleteClasificador, { isLoading: isDeleting }] = useDeleteClasificadorMutation();
+  const [deleteClasificador, { isLoading: isDeleting }] =
+    useDeleteClasificadorMutation();
   const handleEdit = async (record: Clasificador) => {
     modalWindowRef.current?.open({ record });
   };
@@ -34,7 +37,7 @@ const ClasificadoresPage = () => {
           <Button
             onClick={() => handleEdit(record)}
             appearance="subtle"
-            icon={<EditFilled />}
+            icon={<EditRegular />}
           />
         </Tooltip>
 
@@ -42,11 +45,32 @@ const ClasificadoresPage = () => {
       </div>
     );
   };
-  const handleDelete = async (record: any) => {
-    if(record.id){
-      try{
+  const handleDelete = (record: any) => {
+    console.log('click en delete');
+    modal.confirm({
+      title: 'Confirmar eliminación',
+      icon: <ExclamationCircleOutlined />,
+      content: (
+        <div>
+          ¿Está seguro que desea eliminar esta clasificador {record.id}?
+          <br />
+          <b>{record.name}</b>
+        </div>
+      ),
+      okText: 'Si, eliminar',
+      okButtonProps: {
+        danger: true,
+      },
+      onOk: () => {
+        handleConfirmDelete(record);
+      },
+    });
+  };
+  const handleConfirmDelete = async (record: any) => {
+    if (record.id) {
+      try {
         await deleteClasificador(record.id);
-      }catch(error){
+      } catch (error) {
         console.error(error);
       }
     }
@@ -89,24 +113,31 @@ const ClasificadoresPage = () => {
   ];
   return (
     <MainLayout>
-      <div className="flex px-10 pt-4 pb-6 gap-2">
-        <div className="w-[300px]  px-[2.5rem]">
-          <MarcoOrdenadorSelect onChange={setMarcoOrdenador} />
-        </div>
-        <div className="flex items-end">
-          <Button
-            style={{ color: '#2271B1' }}
-            appearance="subtle"
-            icon={<Add24Filled />}
-            onClick={handleRegister}
-          >
-            Registrar
-          </Button>
-        </div>
+      <div className="flex px-10 pt-4 pb-6 gap-2 justify-between items-end">
+        <MarcoOrdenadorSelect onChange={setMarcoOrdenador} />
+        <Button
+          style={{ color: '#2271B1' }}
+          appearance="subtle"
+          icon={<Add24Filled />}
+          onClick={handleRegister}
+        >
+          Registrar
+        </Button>
       </div>
-
       <div>
         <Table
+          locale={{
+            emptyText: (
+              <Empty
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                description={
+                  marcoOrdenador !== -1
+                    ? 'No hay datos'
+                    : 'Selecciona un Marco Ordenador'
+                }
+              />
+            ),
+          }}
           className="mx-10"
           dataSource={clasificadores}
           columns={columns}
@@ -117,6 +148,7 @@ const ClasificadoresPage = () => {
           rowKey={(record) => record.id}
           scroll={{ y: 460 }}
         />
+        {contextHolder}
       </div>
       <ClasificadorEditorModal ref={modalWindowRef} />
     </MainLayout>
