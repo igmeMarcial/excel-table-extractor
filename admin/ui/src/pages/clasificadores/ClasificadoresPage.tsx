@@ -9,6 +9,10 @@ import ClasificadorEditorModal from './ClasificadorEditorModal';
 import MarcoOrdenadorSelect from './MarcoOrdenadorSelect';
 import { useGetClasificadoresByMarcoOrdenadorIdQuery } from '../../app/services/marco-ordenador';
 import { useDeleteClasificadorMutation } from '../../app/services/clasificador';
+import {
+  renderArchivedChecks,
+  renderChecks,
+} from '../estadisticas/EstadisticasPageList';
 
 interface Clasificador {
   id: number;
@@ -104,9 +108,25 @@ const ClasificadoresPage = () => {
       dataIndex: 'nombre',
     },
     {
+      key: 'activo',
+      title: 'Activo',
+      align: 'center',
+      dataIndex: 'activo',
+      width: 100,
+      render: renderChecks,
+    },
+    {
+      key: 'vigente',
+      title: 'Vigente',
+      align: 'center',
+      dataIndex: 'vigente',
+      width: 100,
+      render: renderArchivedChecks,
+    },
+    {
       key: 'actions',
       title: 'Acciones',
-      width: 120,
+      width: 90,
       fixed: 'right',
       render: renderActions,
     },

@@ -149,6 +149,7 @@ const EstadisticaMultipleImportWindow = forwardRef<
   const hasSelection = selectedRowKeys.length > 0;
   const updateListaEstadisticas = (estadisticasWb) => {
     const listaEstadisticas = estadisticasWb.getListaEstadisticas();
+    console.log(listaEstadisticas);
     // Set keys
     listaEstadisticas.forEach((item, index) => {
       item.key = item.id;
@@ -183,6 +184,7 @@ const EstadisticaMultipleImportWindow = forwardRef<
     }
     const row = getRowByKey(rowKey);
     const model = getEstadisticaModelByKey(rowKey);
+    console.log(model);
     if (model) {
       // Si no se pudo determinar el rango de valores
       const graficos = model.graficos || [];

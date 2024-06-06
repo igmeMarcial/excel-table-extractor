@@ -38,6 +38,7 @@ export interface FichaTecnicaFields {
 
 export interface Estadistica extends EstadisticaBaseFields, FichaTecnicaFields {
   datos?: Cell[][]
+  datosGrafico?:Cell[][]
   datosInformacion?: DatosInformacion
   graficos?: Grafico[]
   // Presentacion

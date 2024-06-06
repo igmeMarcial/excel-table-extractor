@@ -15,6 +15,7 @@ import { ChartDataRanges } from '../../types/ChartDataRanges';
 
 const estadisticaDefaultModel: Estadistica = {
   datos: [],
+  datosGrafico:[],
   datosInformacion: {},
   presentacionTablaFormato: {},
   graficos: [
@@ -240,6 +241,7 @@ export const selectTitulo = (state: RootState) => state.estadisticaForm.titulo;
 export const selectEstadisticaValues = (state: RootState): Estadistica => state.estadisticaForm.estadisticaRawModel;
 export const selectFichaTecnica = (state: RootState): Estadistica => state.estadisticaForm.estadisticaRawModel;
 export const selectEstadisticaDatos = (state: RootState) => state.estadisticaForm.estadisticaRawModel.datos;
+export const selectEstadisticaDatosGrafico = (state:RootState)=> state.estadisticaForm.estadisticaRawModel.datosGrafico;
 export const selectIsCreationMode = (state: RootState) => state.estadisticaForm.isCreationMode;
 export const selectActiveTab = (state: RootState) => state.estadisticaForm.activeTab;
 export const selectPostValues = (state: RootState) => state.estadisticaForm.estadisticaRawModel;

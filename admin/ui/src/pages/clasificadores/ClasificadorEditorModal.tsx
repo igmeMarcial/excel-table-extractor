@@ -147,7 +147,7 @@ const ClasificadorEditorModal = forwardRef<MarcoOrdenadorWindowRef>(
                   onTouched={handleTouched}
                   valueField="id"
                   textRenderer={(option) =>
-                    `${option.numeral} ${option.nombre}`
+                    `${option.sigla} - ${option.nombre}`
                   }
                   value={String(dataForm['marcoOrdenadorId'])}
                   validationErrors={{ required: false }}

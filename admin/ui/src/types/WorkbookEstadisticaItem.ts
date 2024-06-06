@@ -4,5 +4,7 @@ export interface WorkbookEstadisticaItem {
   hojaDatos: string;
   hojaFicha: string;
   rangoDatos: string;
+  rangoDatosGrafico?:string;
   confirmarRangoDatos?: boolean
+
 }

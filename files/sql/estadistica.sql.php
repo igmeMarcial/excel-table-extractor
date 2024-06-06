@@ -33,6 +33,7 @@ return "CREATE TABLE {tablePrefix}estadistica (
     clasificacion_ocde             VARCHAR(14),
     clasificacion_pna              VARCHAR(14),
     datos                          TEXT,
+    datos_grafico                  TEXT,
     pres_tabla_titulo              VARCHAR(500),
     pres_tabla_subtitulo           VARCHAR(255),
     pres_tabla_nota                TEXT,

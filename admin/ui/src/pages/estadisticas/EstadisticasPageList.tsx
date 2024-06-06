@@ -5,8 +5,8 @@ import { Button } from '@fluentui/react-components';
 import {
   CheckmarkCircleFilled,
   CircleRegular,
-  EditFilled,
-  EarthFilled,
+  EditRegular,
+  EarthRegular,
 } from '@fluentui/react-icons';
 import dayjs from 'dayjs';
 
@@ -22,6 +22,22 @@ interface ColDataType {
   name: string;
   modified: number;
 }
+export const renderChecks = (_, record) => {
+  return (
+    <div>
+      {record.activo ? (
+        <CheckmarkCircleFilled /> // Si activo es verdadero
+      ) : (
+        <CircleRegular /> // Si activo es falso
+      )}
+    </div>
+  );
+};
+export const renderArchivedChecks = (_, record) => {
+  return (
+    <div>{record.vigente ? <CheckmarkCircleFilled /> : <CircleRegular />}</div>
+  );
+};
 
 const EstadisticasPageList = forwardRef((props, ref) => {
   const { data = [], isLoading } = useGetEstadisticasQuery();
@@ -61,40 +77,19 @@ const EstadisticasPageList = forwardRef((props, ref) => {
       return values.some((value) => value.toLowerCase().includes(lowerText));
     });
   };
-  const renderChecks = (_, record) => {
-    return (
-      <div>
-        {record.activo ? (
-          <CheckmarkCircleFilled /> // Si activo es verdadero
-        ) : (
-          <CircleRegular /> // Si activo es falso
-        )}
-      </div>
-    );
-  };
-  const renderArchivedChecks = (_, record) => {
-    return (
-      <div>
-        {record.vigente ? (
-          <CheckmarkCircleFilled /> 
-        ) : (
-          <CircleRegular /> 
-        )}
-      </div>
-    );
-  };
+
   const renderActions = (_, record) => {
     const newUrl = builNavPathUrl(location, 'indicador-editor', record.id);
     return (
       <div className="flex">
         <Link to={getEstadisticaPublicUrl(record.id)} target="_blank">
           <Tooltip title="Ir a vista pública">
-            <Button appearance="subtle" icon={<EarthFilled />}></Button>
+            <Button appearance="subtle" icon={<EarthRegular />}></Button>
           </Tooltip>
         </Link>
         <Link to={newUrl} onClick={onClickLink}>
           <Tooltip title="Editar">
-            <Button appearance="subtle" icon={<EditFilled />} />
+            <Button appearance="subtle" icon={<EditRegular />} />
           </Tooltip>
         </Link>
         <RowDeteteButton onClick={() => handleDelete(record)} />

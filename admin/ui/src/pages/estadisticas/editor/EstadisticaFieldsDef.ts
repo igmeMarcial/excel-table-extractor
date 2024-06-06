@@ -166,6 +166,10 @@ export const DATOS_FIELDS_DEF: Record<string, FieldDef> = {
     controlType: 'table',
     required: true,
   },
+  datosGrafico: {
+    label: 'Datos de grafico',
+    controlType: 'table',
+  },
   presentacionTablaElaboracion: {
     label: 'Elaboración',
     controlType: 'textarea',

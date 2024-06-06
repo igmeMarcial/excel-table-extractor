@@ -212,7 +212,6 @@ export class TablaDatosHelper {
   }
 
   sonValoresContiguos(valores: Cell[][]): boolean {
-    console.log(valores)
     const startValueColIndex = valores[0][0].c;
     const startValueRowIndex = valores[0][0].r;
     return valores.every((row, rowIndex) => {

@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   selectEstadisticaDatos,
+  selectEstadisticaDatosGrafico,
   selectEstadisticaValues,
   selectValidationErrors,
   setEstadisticaFieldValue,
@@ -90,6 +91,7 @@ const getFieldPlaceholder = (
 
 const EstadisticaEditorTabDatos = () => {
   const data = useAppSelector(selectEstadisticaDatos);
+  const dataGrafico = useAppSelector(selectEstadisticaDatosGrafico) || [];
   const validationErrors = useAppSelector(selectValidationErrors);
   return (
     <form>
@@ -107,6 +109,18 @@ const EstadisticaEditorTabDatos = () => {
               style={{ borderColor: '#b3b3b3' }}
             >
               <Datasheet data={data} />
+            </div>
+          </WpField>
+          <WpField
+            fieldDef={DATOS_FIELDS_DEF.datosGrafico}
+            fieldName="datosGrafico"
+            validationErrors={validationErrors.datos}
+          >
+            <div
+              className="p-3 border border-solid rounded overflow-hidden"
+              style={{ borderColor: '#b3b3b3' }}
+            >
+              <Datasheet data={dataGrafico} />
             </div>
           </WpField>
           <Field fieldName="presentacionTablaNota" />

@@ -1,5 +1,5 @@
 import * as XLSX from 'xlsx'
-import { FICHA_TECNICA_NRO_CAMPO_RANGO_DATOS } from '../config/constantes'
+import { FICHA_TECNICA_NRO_CAMPO_RANGO_DATOS, FICHA_TECNICA_NRO_CAMPO_RANGO_DATOS_GRAFICO } from '../config/constantes'
 import GraficoHelper from '../helpers/GraficoHelper'
 import TablaDatosHelper from '../helpers/TablaDatosHelper'
 import { FICHA_FIELDS_MAP } from '../config/ficha-fields-map'
@@ -93,6 +93,7 @@ export class EstadisticasWorkbook {
           hojaDatos: null,
           hojaFicha: null,
           rangoDatos: null,
+          rangoDatosGrafico:null,
         }
         item.hojaFicha = sheetName
         item.nombre = this.getNombreEstadistica(sheetName)
@@ -100,12 +101,21 @@ export class EstadisticasWorkbook {
           sheetName,
           FICHA_TECNICA_NRO_CAMPO_RANGO_DATOS
         )
+        //rango datos grafico
+        item.rangoDatosGrafico= this.getCampoFichaTecnicaPorNumero(sheetName,FICHA_TECNICA_NRO_CAMPO_RANGO_DATOS_GRAFICO)
         if (!item.rangoDatos) {
           const datosSheetName = this.getHojaDatosSheetName(id)
           // Determinar rango de datos
           const rangoDatos = this.determinarRangoDatos(datosSheetName)
           item.rangoDatos = encodeCellRange(rangoDatos)
           item.confirmarRangoDatos = true
+        }
+        if(!item.rangoDatosGrafico){
+            // const datosSheetName = this.getHojaDatosSheetName(id)
+            // console.log(datosSheetName)
+            // const rangoDatos = this.determinarRangoDatos(datosSheetName)
+          // console.log(rangoDatos)
+          // item.rangoDatosGrafico = encodeCellRange(rangoDatos)
         }
         out.set(id, item)
         return
@@ -120,6 +130,7 @@ export class EstadisticasWorkbook {
           hojaDatos: null,
           hojaFicha: null,
           rangoDatos: null,
+          rangoDatosGrafico:null,
         }
         item.hojaDatos = sheetName
         out.set(id, item)
@@ -291,6 +302,7 @@ export class EstadisticasWorkbook {
     workbookItem: WorkbookEstadisticaItem,
     indiceClasificadores: IndiceClasificadores
   ): Estadistica {
+    console.log(workbookItem)
     const out: Estadistica = {
       ...this.getCamposFichaTecnica(
         workbookItem.hojaFicha,
@@ -302,6 +314,11 @@ export class EstadisticasWorkbook {
     out.datos = this.getSheetCellsRange(workbookItem.hojaDatos, rangoDatos)
     out.datosInformacion = TablaDatosHelper.getInformacion(out.datos || [])
     out.graficos = [GraficoHelper.getGraficoDefecto(out)]
+    if (workbookItem.rangoDatosGrafico) {
+    const rangoDatosGrafico = decodeCellRange(workbookItem.rangoDatosGrafico);
+    out.datosGrafico = this.getSheetCellsRange(workbookItem.hojaDatos, rangoDatosGrafico);
+  }
+  console.log(out)
     return out
   }
   getSheetCellsRange(sheetName: string, range: CellRange): Cell[][] {

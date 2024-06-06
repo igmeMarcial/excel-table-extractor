@@ -81,6 +81,7 @@ const EstadisticaImportWindow = forwardRef<
         camposFichaSheetName,
         indiceClasificadores
       );
+      console.log(camposFichaTecnica);
       dispath(setEstadisticaFields(camposFichaTecnica));
     }
   };
